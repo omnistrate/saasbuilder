@@ -1,0 +1,57 @@
+import Head from "next/head";
+import { Manrope } from "next/font/google";
+import { Box, Stack } from "@mui/material";
+import Footer from "../Footer";
+import Logo from "../Logo";
+
+import BackgroundImg from "public/assets/images/non-dashboard/wave-background.svg";
+import NoLogoImage from "public/assets/images/logos/no-logo.png";
+import Image from "next/image";
+
+const manrope = Manrope({ subsets: ["latin"] });
+
+const CenterContentLayout = ({
+  orgName,
+  orgLogoURL,
+  showLogo,
+  children,
+  pageTitle,
+}) => {
+  return (
+    <>
+      {pageTitle && (
+        <Head>
+          <title>{pageTitle}</title>
+        </Head>
+      )}
+      <Box
+        height="100%"
+        className={manrope.className}
+        sx={{
+          position: "relative", // For the Footer
+          display: "grid",
+          placeItems: "center",
+          backgroundImage: `url(${BackgroundImg.src})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <Stack gap="32px" maxWidth="480px" component="form">
+          {showLogo && (
+            <Box textAlign="center">
+              {orgLogoURL ? (
+                <Logo src={orgLogoURL} alt={orgName} />
+              ) : (
+                <Image src={NoLogoImage} />
+              )}
+            </Box>
+          )}
+          {children}
+        </Stack>
+        <Footer orgName={orgName} />
+      </Box>
+    </>
+  );
+};
+
+export default CenterContentLayout;

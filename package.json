@@ -1,0 +1,70 @@
+{
+  "name": "omnistrate-access-ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js",
+    "lint": "next lint",
+    "format:check": "prettier --check --ignore-path .prettierignore .",
+    "format:fix": "prettier --write --ignore-path .gitignore .",
+    "find:unused": "next-unused"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/server": "^11.10.0",
+    "@emotion/styled": "^11.10.5",
+    "@material-ui/core": "^4.12.4",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/lab": "^5.0.0-alpha.116",
+    "@mui/material": "^5.10.13",
+    "@mui/x-data-grid": "^5.17.18",
+    "@reduxjs/toolkit": "^1.9.1",
+    "@tanstack/react-query": "^4.36.1",
+    "ansi-to-react": "^6.1.6",
+    "axios": "^1.2.2",
+    "clipboardy": "^3.0.0",
+    "crypto-js": "^4.2.0",
+    "date-fns": "^2.29.3",
+    "dompurify": "^3.0.6",
+    "formik": "^2.2.9",
+    "immer": "^9.0.18",
+    "js-cookie": "^3.0.1",
+    "jwt-decode": "^4.0.0",
+    "lodash": "^4.17.21",
+    "next": "13.5.6",
+    "next-plugin-yaml": "^1.0.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.10",
+    "nprogress": "^0.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.9.0",
+    "react-infinite-scroller": "^1.2.6",
+    "react-redux": "^8.0.5",
+    "react-use-websocket": "^4.3.1",
+    "recharts": "^2.7.2",
+    "sass": "^1.56.1",
+    "swagger-ui-react": "^5.4.2",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.2",
+    "eslint": "^8.56.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "next-unused": "^0.0.6",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.1.0"
+  },
+  "dockerfile": {
+    "secrets": [
+      "PROVIDER_EMAIL",
+      "PROVIDER_HASHED_PASS",
+      "MAIL_USER_EMAIL",
+      "MAIL_USER_PASSWORD"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "ignorePatterns": ["node_modules/*"],
+  "plugins": ["react", "react-hooks", "import"],
+  "extends": [
+    "next/core-web-vitals"
+    // "eslint:recommended",
+    // "plugin:react/recommended"
+  ],
+  "rules": {
+    "no-use-before-define": [
+      "warn",
+      {
+        "functions": false
+      }
+    ],
+    "no-unused-vars": "warn",
+    "react/jsx-uses-vars": "warn",
+    "no-duplicate-imports": "warn",
+    "react/jsx-no-undef": "warn",
+    "no-var": "warn",
+    "prefer-const": "warn",
+    "react/self-closing-comp": "warn",
+    "react/no-unescaped-entities": "warn",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off"
+  }
+}

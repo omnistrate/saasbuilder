@@ -1,0 +1,128 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Manrope", Arial, sans-serif;
+  color: #111827;
+  background: white;
+  height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+#__next {
+  height: 100%;
+}
+
+img {
+  display: inline-block;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-sb {
+  justify-content: space-between;
+}
+
+.pl-4 {
+  padding-left: 16px !important;
+}
+
+.mw-100 {
+  max-width: 100%;
+}
+
+.sleek-scroll {
+  /* Foreground, Background */
+  scrollbar-color: #575757 #111827;
+}
+
+.sleek-scroll::-webkit-scrollbar {
+  width: 7px;
+  /* Mostly for vertical scrollbars */
+  height: 10px;
+  /* Mostly for horizontal scrollbars */
+}
+
+.sleek-scroll::-webkit-scrollbar-thumb {
+  /* Foreground */
+  background: #575757;
+  border-radius: 6px;
+  border: 1px solid #111827;
+}
+
+.sleek-scroll::-webkit-scrollbar-track {
+  /* Background */
+  background: #111827;
+  border-radius: 6px;
+}
+
+.sleek-scroll-form {
+  /* Foreground, Background */
+  scrollbar-color: #eaecf0 #98a2b3;
+}
+
+.sleek-scroll-form::-webkit-scrollbar {
+  width: 8px;
+  /* Mostly for vertical scrollbars */
+  height: 10px;
+  /* Mostly for horizontal scrollbars */
+}
+
+.sleek-scroll-form::-webkit-scrollbar-thumb {
+  /* Foreground */
+  background: #eaecf0;
+  border-radius: 6px;
+  border: 0px solid #98a2b3;
+}
+
+.sleek-scroll-form::-webkit-scrollbar-track {
+  /* Background */
+  background: #98a2b3;
+  border-radius: 6px;
+}
+
+.bg {
+  background-image: url("../public/assets/images/dashboard/background_access.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 500;
+  position: absolute;
+
+  top: 0;
+  left: 0;
+}
