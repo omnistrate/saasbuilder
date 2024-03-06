@@ -35,7 +35,6 @@ const SignupPage = (props) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const snackbar = useSnackbar();
 
-
   const formik = useFormik({
     initialValues: {
       name: "",

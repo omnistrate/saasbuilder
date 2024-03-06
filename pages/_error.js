@@ -7,6 +7,8 @@ import { SubmitButton } from "src/components/NonDashboardComponents/FormElements
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 
 export const getServerSideProps = async () => {
+  const response = await getProviderOrgDetails();
+
   return {
     props: {
       orgSupportEmail: response.data.orgSupportEmail || response.data.email,
