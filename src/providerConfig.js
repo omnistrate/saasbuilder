@@ -37,5 +37,3 @@ export const styleConfig = {
 //   primaryTextColor: "#FFFFFF", // Outlined Button Text
 //   primaryHoverColor: "#7F56D9", // Outlined Button Hover
 // };
-
-export default providerConfig;

@@ -87,7 +87,6 @@ const SigninPage = (props) => {
       pageTitle="Sign in"
       orgName={orgName}
       orgLogoURL={orgLogoURL}
-      showArrow
     >
       <PageHeading>Login to your account</PageHeading>
 

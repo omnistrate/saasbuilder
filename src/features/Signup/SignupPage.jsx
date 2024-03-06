@@ -14,6 +14,7 @@ import SubmitButton from "components/NonDashboardComponents/FormElementsV2/Submi
 import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
 import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
 import SignupNotification from "components/NonDashboardComponents/SignupNotification";
+import useSnackbar from "src/hooks/useSnackbar";
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -33,7 +34,6 @@ const SignupPage = (props) => {
   const { org, orgUrl, email, userSource } = router.query;
   const [showSuccess, setShowSuccess] = useState(false);
   const snackbar = useSnackbar();
-
 
   const formik = useFormik({
     initialValues: {
