@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box } from "@mui/material";
 
 const ReChartContainer = (props) => {
   const { height = 300, sx = {}, children, ...restProps } = props;
