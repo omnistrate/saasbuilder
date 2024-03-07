@@ -2,7 +2,6 @@ import { Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
 import useSnackbar from "src/hooks/useSnackbar";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 import PageDescription from "components/NonDashboardComponents/PageDescription";
@@ -12,7 +11,6 @@ import FieldContainer from "components/NonDashboardComponents/FormElementsV2/Fie
 import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
 import CenterContentLayout from "components/NonDashboardComponents/Layout/CenterContentLayout";
 import { customerUserResetPassword } from "src/api/customer-user";
-import NoLogoImage from "public/assets/images/logos/no-logo.png";
 
 const resetPasswordValidationSchema = Yup.object({
   email: Yup.string()
@@ -73,7 +71,6 @@ const ResetPasswordPage = (props) => {
           instructions.
         </PageDescription>
       </Stack>
-
       <FieldContainer>
         <FieldLabel required>Registered Email</FieldLabel>
         <TextField
@@ -87,7 +84,6 @@ const ResetPasswordPage = (props) => {
           helperText={touched.email && errors.email}
         />
       </FieldContainer>
-
       <SubmitButton
         type="submit"
         onClick={formik.handleSubmit}

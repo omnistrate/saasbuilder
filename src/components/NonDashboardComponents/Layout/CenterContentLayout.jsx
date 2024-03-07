@@ -3,7 +3,6 @@ import { Manrope } from "next/font/google";
 import { Box, Stack } from "@mui/material";
 import Footer from "../Footer";
 import Logo from "../Logo";
-
 import BackgroundImg from "public/assets/images/non-dashboard/wave-background.svg";
 import NoLogoImage from "public/assets/images/logos/no-logo.png";
 import Image from "next/image";
@@ -36,7 +35,7 @@ const CenterContentLayout = ({
           backgroundRepeat: "no-repeat",
         }}
       >
-        <Stack gap="32px" maxWidth="480px" component="form">
+        <Stack gap="32px" maxWidth="480px">
           {showLogo && (
             <Box textAlign="center">
               {orgLogoURL ? (
