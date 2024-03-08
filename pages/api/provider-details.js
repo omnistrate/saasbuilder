@@ -7,7 +7,9 @@ export default async function handleGetProviderDetails(
   if (nextRequest.method === "GET") {
     try {
       const response = await getProviderOrgDetails();
-      nextResponse.status(200).send({ ...response.data });
+
+      const faviconURL = response?.data?.orgFavIconURL;
+      nextResponse.status(200).send({ providerOrgFaviconURL: faviconURL });
     } catch (error) {
       console.error(error);
       let defaultErrorMessage = "Something went wrong. Please retry";
