@@ -33,6 +33,12 @@ const ResetPasswordPage = (props) => {
           "Reset password link sent to the registered email"
         );
       },
+      onError: (error) => {
+        if (error.response.data && error.response.data.message) {
+          const errorMessage = error.response.data.message;
+          snackbar.showError(errorMessage);
+        }
+      },
     }
   );
 
