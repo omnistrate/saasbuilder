@@ -1,0 +1,68 @@
+version: '3.9'
+x-omnistrate-integrations:
+  - omnistrateLogging
+  - omnistrateMetrics
+services:
+  SaaSBuilder:
+    image: sharmaamits/saasbuilder:1.0.3
+    ports:
+      - '8080:8080'
+    environment:
+      - PROVIDER_EMAIL=$var.providerEmail
+      - PROVIDER_HASHED_PASS=$var.providerPassword
+      - YOUR_SAAS_DOMAIN_URL=$sys.network.externalClusterEndpoint
+      - MAIL_USER_EMAIL=$var.senderEmail
+      - MAIL_USER_PASSWORD=$var.senderPassword
+    x-omnistrate-compute:
+      instanceTypes:
+        - cloudProvider: aws
+          apiParam: instanceType
+        - cloudProvider: gcp
+          apiParam: instanceType
+    x-omnistrate-capabilities:
+      httpReverseProxy:
+        targetPort: 8080
+      enableMultiZone: true
+      autoscaling:
+        maxReplicas: 10
+        minReplicas: 2
+        idleMinutesBeforeScalingDown: 2
+        idleThreshold: 20
+        overUtilizedMinutesBeforeScalingUp: 3
+        overUtilizedThreshold: 80
+    x-omnistrate-api-params:
+      - key: instanceType
+        description: Instance Type
+        name: Instance Type
+        type: String
+        modifiable: true
+        required: true
+        export: true
+      - key: providerEmail
+        description: Service provider Omnistrate email address
+        name: Omnistrate email
+        type: String
+        modifiable: true
+        required: true
+        export: true
+      - key: providerPassword
+        description: Service provider Omnistrate account password
+        name: Omnistrate password
+        type: String
+        modifiable: true
+        required: true
+        export: false
+      - key: senderEmail
+        description: email address to communicate to customers
+        name: SMTS email address
+        type: String
+        modifiable: true
+        required: true
+        export: true
+      - key: senderPassword
+        description: Password to authorize against the SMTS provider
+        name: SMTS password
+        type: String
+        modifiable: true
+        required: true
+        export: false
