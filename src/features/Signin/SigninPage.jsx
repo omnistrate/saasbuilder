@@ -38,7 +38,7 @@ const SigninPage = (props) => {
         formik.resetForm();
         const jwtToken = data.data.jwtToken;
         if (jwtToken) {
-          Cookies.set("token", jwtToken);
+          Cookies.set("token", jwtToken, { sameSite: "Strict", secure: true });
           axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
           router.push("/product-tiers");
         }
