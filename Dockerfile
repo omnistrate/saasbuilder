@@ -4,8 +4,6 @@
 ARG NODE_VERSION=20.11.0
 FROM node:${NODE_VERSION}-slim as base
 
-LABEL fly_launch_runtime="Next.js"
-
 # Next.js app lives here
 WORKDIR /app
 
@@ -29,21 +27,8 @@ RUN yarn install --frozen-lockfile --production=false
 # Copy application code
 COPY --link . .
 
-ARG NEXT_PUBLIC_BACKEND_BASE_DOMAIN
-ARG NEXT_PUBLIC_ENV
-ARG NEXT_PUBLIC_DOMAIN_URL
 # Build application
-RUN --mount=type=secret,id=PROVIDER_EMAIL \
-    --mount=type=secret,id=PROVIDER_HASHED_PASS \
-    --mount=type=secret,id=MAIL_USER_EMAIL \
-    --mount=type=secret,id=MAIL_USER_PASSWORD \
-    --mount=type=secret,id=NEXT_PUBLIC_DOMAIN_URL \
-    PROVIDER_EMAIL="$(cat /run/secrets/PROVIDER_EMAIL)" \
-    PROVIDER_HASHED_PASS="$(cat /run/secrets/PROVIDER_HASHED_PASS)" \
-    MAIL_USER_EMAIL="$(cat /run/secrets/MAIL_USER_EMAIL)" \
-    MAIL_USER_PASSWORD="$(cat /run/secrets/MAIL_USER_PASSWORD)" \
-    NEXT_PUBLIC_DOMAIN_URL="$(cat /run/secrets/NEXT_PUBLIC_DOMAIN_URL)" \
-    yarn run build
+RUN yarn run build
 
 # Remove development dependencies
 RUN yarn install --production=true
@@ -52,9 +37,20 @@ RUN yarn install --production=true
 # Final stage for app image
 FROM base
 
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
 # Copy built application
 COPY --from=build /app /app
 
+#RUN chown -R nextjs:nodejs /app && chmod +x /app/entrypoint.sh
+
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
+
+USER nextjs
+
+
 CMD [ "yarn", "run", "start" ]
