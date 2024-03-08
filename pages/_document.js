@@ -8,7 +8,7 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           {/* PWA primary color */}
-          <link rel="icon" href="" id="favico"/>
+          <link rel="icon" href="" id="provider-favicon"/>
           <meta httpEquiv="cache-control" content="no-cache" />
           <meta httpEquiv="expires" content="0" />
           <meta httpEquiv="pragma" content="no-cache" />      
