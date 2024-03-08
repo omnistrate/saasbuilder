@@ -12,6 +12,7 @@
     "find:unused": "next-unused"
   },
   "dependencies": {
+    "@curvenote/ansi-to-react": "^7.0.0",
     "@emotion/react": "^11.10.5",
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.5",
@@ -22,7 +23,6 @@
     "@mui/x-data-grid": "^5.17.18",
     "@reduxjs/toolkit": "^1.9.1",
     "@tanstack/react-query": "^4.36.1",
-    "ansi-to-react": "^6.1.6",
     "axios": "^1.2.2",
     "clipboardy": "^3.0.0",
     "crypto-js": "^4.2.0",
