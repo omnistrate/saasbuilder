@@ -1,12 +1,12 @@
 function getOrgInviteUserMailContent(inviteUserEventObj) {
   const signUpURL = encodeURI(
-    `${process.env.NEXT_PUBLIC_DOMAIN_URL}/signup?org=${encodeURIComponent(
+    `${process.env.YOUR_SAAS_DOMAIN_URL}/signup?org=${encodeURIComponent(
       inviteUserEventObj.orgName
     )}&orgUrl=${encodeURI(
       inviteUserEventObj.orgURL
     )}&email=${encodeURIComponent(inviteUserEventObj.userEmail)}`
   );
-  const signInURL = `${process.env.NEXT_PUBLIC_DOMAIN_URL}/signin`;
+  const signInURL = `${process.env.YOUR_SAAS_DOMAIN_URL}/signin`;
 
   const userName = inviteUserEventObj.eventPayload.inviting_user_name;
   const serviceName = inviteUserEventObj.eventPayload.service_name;
@@ -20,7 +20,7 @@ function getOrgInviteUserMailContent(inviteUserEventObj) {
     <body>
       <p>Hello,</p>
       <p>You've been invited to join ${userName}'s subscription on ${serviceName} service.</p>
-      <p>Please login to your account ${signInURL} to accept the invitationn</p>
+      <p>Please login to your account ${signInURL} to accept the invitation</p>
       <p>Thanks</p>
     </body>
   </html>`;

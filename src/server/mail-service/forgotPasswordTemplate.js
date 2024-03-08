@@ -5,7 +5,7 @@ function getResetPasswordMailContent(resetPasswordEventObj) {
 
   const resetPasswordPageURL = encodeURI(
     `${
-      process.env.NEXT_PUBLIC_DOMAIN_URL
+      process.env.YOUR_SAAS_DOMAIN_URL
     }/change-password?email=${encodeURIComponent(
       email
     )}&token=${encodeURIComponent(token)}`
