@@ -1,4 +1,4 @@
-import Ansi from "ansi-to-react";
+import Ansi from "@curvenote/ansi-to-react";
 import { Box, Stack } from "@mui/material";
 import React, { useState, useTransition } from "react";
 import { DisplayText, Text } from "../../Typography/Typography";

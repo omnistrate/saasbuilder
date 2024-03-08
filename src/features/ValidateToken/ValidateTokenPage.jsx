@@ -43,7 +43,6 @@ const ValidateTokenPage = (props) => {
           router.push("/signin");
         })
         .catch(() => {
-          snackbar.showError("Validation Failed, Please try again..");
           router.push("/signup");
         });
     }

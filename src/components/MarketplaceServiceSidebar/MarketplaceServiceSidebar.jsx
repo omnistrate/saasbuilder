@@ -130,6 +130,7 @@ function MarketplaceServiceSidebar(props) {
         <SidebarListItem
           key={navItem.text}
           textColor={styleConfig.sidebarTextColor}
+          disabledColor={styleConfig.sidebarIconDisabledColor}
           {...navItem}
         />
       ))}

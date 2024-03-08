@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "../../Typography/Typography";
-import { Box } from "@material-ui/core";
+import { Box } from "@mui/material";
 import {
   CartesianGrid,
   Legend,
