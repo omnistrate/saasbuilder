@@ -4,10 +4,10 @@ function getSignUpMailContent(signUpEventObj) {
 
   // [username, provider] = email.split("@");
   //const encodedEmail = encodeURIComponent(username + `+${orgID}@` + provider);
-  console.log("Base domain", process.env.NEXT_PUBLIC_DOMAIN_URL)
+  console.log("Base domain", process.env.YOUR_SAAS_DOMAIN_URL)
   const activationURL = encodeURI(
     `${
-      process.env.NEXT_PUBLIC_DOMAIN_URL
+      process.env.YOUR_SAAS_DOMAIN_URL
     }/validate-token?email=${encodeURIComponent(
       email
     )}&token=${encodeURIComponent(signUpEventObj.eventPayload.token)}`
