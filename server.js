@@ -12,7 +12,14 @@ const handle = app.getRequestHandler();
 
 
 app.prepare().then(() => {
-  startMailServiceCron();
+
+  //start the mail service cron job only if 
+  //a)NODE_INDEX environment variable is not present
+  //b)NODE_INDEX environment variable === 0
+  if(process.env.NODE_INDEX === undefined || process.env.NODE_INDEX === 0 || process.env.NODE_INDEX === '0'){
+    startMailServiceCron();
+  }
+ 
   createServer(async (req, res) => {
     try {
       // Be sure to pass `true` as the second argument to `url.parse`.
