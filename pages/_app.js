@@ -17,6 +17,7 @@ import "../styles/quill-editor.css";
 import "../styles/nprogress.css";
 import { theme as dashboardTheme } from "../styles/theme";
 import _ from "lodash";
+import ProviderFavicon from "src/components/ProviderFavicon/ProviderFavicon";
 
 NProgress.configure({
   trickleSpeed: 50,
@@ -143,11 +144,12 @@ export default function App(props) {
       <CacheProvider value={emotionCache}>
         <Provider store={store}>
           <QueryClientProvider client={queryQlient}>
+          <ProviderFavicon/>
             <SnackbarProvider>
               <NotificationBarProvider>
                 <ThemeProvider
                   theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}
-                >
+                > 
                   <Component {...pageProps} />
                 </ThemeProvider>
               </NotificationBarProvider>
