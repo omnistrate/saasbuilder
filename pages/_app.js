@@ -101,7 +101,7 @@ export default function App(props) {
       }
       config.params = { endpoint: originalRequestURL };
 
-      config.baseURL = process.env.NEXT_PUBLIC_DOMAIN_URL;
+      config.baseURL = '';
       config.url = "/api/action";
       config.method = "post";
 
