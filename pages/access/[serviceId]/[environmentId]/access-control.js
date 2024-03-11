@@ -282,7 +282,6 @@ function AccessControl() {
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     subscriptionData?.id
   );
   if (isServiceOfferingLoading || isLoadingSubscription || !service) {

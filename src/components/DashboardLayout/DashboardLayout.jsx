@@ -22,7 +22,6 @@ export default function DashboardLayout(props) {
     customLogo,
     marketplacePage,
     enableConsumptionLinks,
-    servicePlanUrlLink,
     serviceApiId,
     serviceLogoURL,
     apiDocsurl,
@@ -55,7 +54,6 @@ export default function DashboardLayout(props) {
         open={open}
         SidebarUI={SidebarUI}
         enableConsumptionLinks={enableConsumptionLinks}
-        servicePlanUrlLink={servicePlanUrlLink}
         serviceApiId={serviceApiId}
         accessPage={accessPage}
         currentSubscription={currentSubscription}
@@ -70,7 +68,6 @@ export default function DashboardLayout(props) {
           open={open}
           SidebarUI={SidebarUI}
           enableConsumptionLinks={enableConsumptionLinks}
-          servicePlanUrlLink={servicePlanUrlLink}
           serviceApiId={serviceApiId}
           notificationBarHeight={notificationBarHeight}
           serviceName={serviceName}

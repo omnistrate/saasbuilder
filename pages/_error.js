@@ -29,7 +29,7 @@ function Error(props) {
             ? `If the issue persists please reach out at ${orgSupportEmail}`
             : ""}
         </Description>
-        <Link href={"/"}>
+        <Link href="/product-tiers">
           <SubmitButton sx={{ marginTop: "40px" }}>Go to Home</SubmitButton>
         </Link>
       </Box>

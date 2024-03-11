@@ -169,7 +169,6 @@ function Dashboard(props) {
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     subscriptionData?.id
   );
 

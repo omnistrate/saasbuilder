@@ -38,7 +38,7 @@ export default function SideDrawer(props) {
     subscriptionId,
   } = props;
 
-  const homeRoute = "/";
+  const homeRoute = "/product-tiers";
 
   const { hasEllipsis, textElementRef } = useIsEllipsisActive();
 
