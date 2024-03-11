@@ -8,15 +8,14 @@ To get started with the SaaSBuilder open-source project, begin by configuring yo
 
 ### Pre-requisites
 - Before starting, ensure your SaaS offering is already configured on the Omnistrate platform; for guidance, refer to this instructional video [here](https://www.youtube.com/watch?v=oYhxQIjdbAc).
-- Make your service is marked public for customer access
+- Make sure your service is marked public for customer access
 - Update your Omnistrate profile with essential service and SaasBuilder configurations, including your organization's description, support email, logo, and favicon URLs. 
 
 These details are crucial as they will be presented to customers accessing your application, enhancing brand visibility and support accessibility.  
 
-![Alt text](https://drive.google.com/uc?id=1ZcxfwS1cqRNbpdGTnUSj_-SGZ4FwFosE2 "Organization config")
+![Alt text](https://drive.google.com/uc?id=1ZcxfwS1cqRNbpdGTnUSj_-SGZ4FwFosE "Organization config")
 
 ![Alt text](https://drive.google.com/uc?id=1h7Lnp_-1P-dOdD1ri0QZPi2Rd_U1LUK9 "SaaSBuilder config")
-
 
 | Service Provider Details    | Description |
 | -------- | ------- |
@@ -71,7 +70,9 @@ Deploying on the Omnistrate Platform can follow two main paths: without code cus
 
 ### Without Code Customizations
 For users looking to deploy the SaaSBuilder quickly and without modifications, the straightforward approach involves using a predefined Docker compose [yaml](https://github.com/omnistrate/saasbuilder/blob/master/saasbuilder-docker-compose.yaml). This method facilitates the creation and launching of your service on the Omnistrate platform, utilizing the SaaSBuilder's existing setup and allowing for basic, provided customizations. It's an efficient path for rapid deployment, capitalizing on the built-in configurations of SaaSBuilder.
-For a video guide covering all the below steps, you can follow it [here](https://www.loom.com/share/58d0019c307646868dae2ba9bc56f727?sid=bab3b5f7-b6b8-4669-9dff-e53ee74dd3cc)
+
+For a video guide covering all the below steps, you can follow it [here](https://www.loom.com/share/58d0019c307646868dae2ba9bc56f727?sid=bab3b5f7-b6b8-4669-9dff-e53ee74dd3cc). The manual steps are listed below - 
+
 - Copy the contents of the saasbuilder-docker-compose.yaml
 - Login to Omnistrate and navigate to "Build Your SaSS" and "Your Compose Spec" tab
 - Paste the content of saasbuilder-docker-compose.yaml in the yaml editor and provide name, description (logo image is optional and wont be seen by your customers).
