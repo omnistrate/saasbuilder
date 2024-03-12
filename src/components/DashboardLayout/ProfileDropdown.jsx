@@ -24,6 +24,7 @@ import EllipsisTooltipText from "../Tooltip/EllipsisTooltip";
 import { getSettingsRoute } from "src/utils/route/settings/settings";
 import { styleConfig } from "src/providerConfig";
 import ArrowRight from "./Icons/ArrowRight";
+import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
 
 function ProfileDropdown(props) {
   const {
@@ -159,7 +160,7 @@ function ProfileDropdown(props) {
           ]}
         <MenuItem key="Subscriptions">
           <DropdownMenuLink href="/subscriptions">
-            <BillingIcon />
+            <SubscriptionsIcon />
             <Text weight="medium" size="small" color="#344054">
               Subscriptions
             </Text>
