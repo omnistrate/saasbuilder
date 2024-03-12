@@ -9,7 +9,7 @@ const withProviderTokenExpirationHanding = require("../utils/withProviderTokenEx
 function customerUserSignUp(payload) {
   return axios.post("/customer-user-signup", payload).catch((error) => {
     console.log("Sign up error");
-    if (error.respons && error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       throw new ProviderAuthError();
     } else {
       throw error;

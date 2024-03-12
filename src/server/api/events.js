@@ -4,8 +4,8 @@ const withProviderTokenExpirationHanding = require("../utils/withProviderTokenEx
 
 function getEventsList() {
   return axios.get("/fleet/events").catch((error) => {
-   console.log("List events error");
-    if (error.response.status === 401) {
+    console.log("List events error");
+    if (error.response && error.response.status === 401) {
       throw new ProviderAuthError();
     } else {
       throw error;
@@ -16,7 +16,7 @@ function getEventsList() {
 function acknowledgeEvent(eventID) {
   return axios.delete(`/fleet/events/${eventID}`).catch((error) => {
     console.log("Acknowledge event error");
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       throw new ProviderAuthError();
     } else {
       throw error;
