@@ -124,6 +124,7 @@ function ProfileForm(props) {
               <TextField
                 name="orgURL"
                 required
+                type="url"
                 id="orgURL"
                 placeholder="Organization Website URL"
                 value={formik.values.orgURL}
