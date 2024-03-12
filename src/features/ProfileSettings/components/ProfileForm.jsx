@@ -6,19 +6,22 @@ import {
   TableRow,
   styled,
 } from "@mui/material";
-import React from "react";
-import { Text } from "src/components/Typography/Typography";
-import Form from "src/components/FormElements/Form/Form";
-import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
-import TextField from "src/components/FormElements/TextField/TextField";
-import Button from "src/components/Button/Button";
-import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
+import { useMutation } from "@tanstack/react-query";
+import * as Yup from "yup";
+
+import { Text } from "components/Typography/Typography";
+import Form from "components/FormElements/Form/Form";
+import FieldLabel from "components/FormElements/FieldLabel/FieldLabel";
+import TextField from "components/FormElements/TextField/TextField";
+import Button from "components/Button/Button";
+import ErrorLabel from "components/ErrorLabel/ErrorLabel";
+
 import useSnackbar from "src/hooks/useSnackbar";
 import { updateProfile } from "src/api/users";
 
 function ProfileForm(props) {
-  const { refetch, selectUser } = props;
+  const { refetch, selectUser = {} } = props;
   const snackbar = useSnackbar();
 
   const updateProfileMutation = useMutation((data) => {
@@ -42,7 +45,6 @@ function ProfileForm(props) {
   const formik = useFormik({
     initialValues: {
       name: selectUser.name,
-      email: selectUser.email,
       orgName: selectUser.orgName,
       orgDescription: selectUser.orgDescription,
       orgURL: selectUser.orgURL,
@@ -50,10 +52,28 @@ function ProfileForm(props) {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
+      // Remove Empty Fields
+      for (const key in values) {
+        if (!values[key]) {
+          delete values[key];
+        }
+      }
+
       updateProfileMutation.mutate(values);
     },
-    validateOnChange: false,
+    validationSchema: Yup.object({
+      name: Yup.string().required("Name is required"),
+      orgName: Yup.string().required("Org Name is required"),
+      orgDescription: Yup.string(),
+      orgURL: Yup.string().matches(
+        /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+        "Please enter a valid URL"
+      ),
+    }),
   });
+
+  const { values, handleChange, handleBlur, touched, errors } = formik;
+
   return (
     <>
       <Box sx={{ marginBottom: "20px" }}>
@@ -73,15 +93,15 @@ function ProfileForm(props) {
             <TableCell>
               <TextField
                 name="name"
-                required
                 id="name"
-                placeholder="name"
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
+                placeholder="Name"
+                value={values.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 mt="12px"
                 sx={{ maxWidth: "800px !important" }}
               />
+              <ErrorLabel>{touched.name && errors.name}</ErrorLabel>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -92,7 +112,7 @@ function ProfileForm(props) {
               <TextField
                 readonly
                 disabled
-                value={formik.values.orgId}
+                value={values.orgId}
                 mt="12px"
                 sx={{ maxWidth: "800px !important" }}
               />
@@ -105,20 +125,21 @@ function ProfileForm(props) {
             <TableCell>
               <TextField
                 name="orgName"
-                required
                 id="orgName"
                 placeholder="Organization Name"
-                value={formik.values.orgName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
+                value={values.orgName}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 mt="12px"
                 sx={{ maxWidth: "800px !important" }}
+                disabled={selectUser.roleType !== "root"}
               />
+              <ErrorLabel>{touched.orgName && errors.orgName}</ErrorLabel>
             </TableCell>
           </TableRow>
           <TableRow>
             <TableCell sx={{ width: "280px !important" }}>
-              <FieldLabel required>Organization Website URL</FieldLabel>
+              <FieldLabel>Organization Website URL</FieldLabel>
             </TableCell>
             <TableCell>
               <TextField
@@ -127,18 +148,19 @@ function ProfileForm(props) {
                 type="url"
                 id="orgURL"
                 placeholder="Organization Website URL"
-                value={formik.values.orgURL}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
+                value={values.orgURL}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 mt="12px"
                 sx={{ maxWidth: "800px !important" }}
+                disabled={selectUser.roleType !== "root"}
               />
+              <ErrorLabel>{touched.orgURL && errors.orgURL}</ErrorLabel>
             </TableCell>
           </TableRow>
         </Table>
 
         <Box display="flex" alignItems="center" mt="20px">
-          <Box />
           <Header2 align="right">
             <Button
               variant="contained"
@@ -148,7 +170,7 @@ function ProfileForm(props) {
                 marginRight: "20px",
               }}
               type="submit"
-              disabled={updateProfileMutation.isLoading}
+              disabled={updateProfileMutation.isLoading || !formik.dirty}
             >
               Save
               {updateProfileMutation.isLoading && (

@@ -241,7 +241,6 @@ function MarketplaceService() {
               productTierId,
               selectedResource?.id,
               instanceId,
-              currentSource,
               subscriptionData?.id
             );
 
@@ -1241,7 +1240,6 @@ function MarketplaceService() {
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     subscriptionData?.id
   );
 

@@ -1,5 +1,5 @@
 //Save the provider token
-let providerToken = null;
+let providerToken;
 
 function setProviderToken(token) {
   providerToken = token;

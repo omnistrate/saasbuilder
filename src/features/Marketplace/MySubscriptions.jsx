@@ -76,7 +76,6 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
         getResourceRouteWithoutEnv(
           selectedSubscription.serviceId,
           selectedSubscription.productTierId,
-          "marketplace",
           selectedSubscription.id
         )
       );
@@ -107,12 +106,7 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
             }}
             onClick={() => {
               router.push(
-                getResourceRouteWithoutEnv(
-                  serviceId,
-                  productTierId,
-                  "marketplace",
-                  id
-                )
+                getResourceRouteWithoutEnv(serviceId, productTierId, id)
               );
             }}
             startIcon={
@@ -148,7 +142,7 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
     },
     {
       field: "productTierName",
-      headerName: "Product Tier",
+      headerName: "Service Plan",
       flex: 1,
       minWidth: 150,
       align: "center",

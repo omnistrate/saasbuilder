@@ -8,10 +8,10 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           {/* PWA primary color */}
-          <link rel="icon" href="" id="provider-favicon"/>
+          <link rel="icon" href="" id="provider-favicon" />
           <meta httpEquiv="cache-control" content="no-cache" />
           <meta httpEquiv="expires" content="0" />
-          <meta httpEquiv="pragma" content="no-cache" />      
+          <meta httpEquiv="pragma" content="no-cache" />
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
@@ -31,7 +31,6 @@ export default class MyDocument extends Document {
           {this.props.emotionStyleTags}
         </Head>
         <body>
-          <script async type="text/javascript" src="/static/koala.js" ></script>
           <Main />
           <NextScript />
         </body>

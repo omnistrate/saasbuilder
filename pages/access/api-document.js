@@ -14,10 +14,7 @@ import Image from "../../src/components/Image/Image";
 import SideDrawerRight from "../../src/components/SideDrawerRight/SideDrawerRight";
 import { AccessSupport } from "../../src/components/Access/AccessSupport";
 
-import {
-  getAPIDocsRoute,
-  getMarketplaceRoute,
-} from "../../src/utils/route/access/accessRoute";
+import { getAPIDocsRoute } from "../../src/utils/route/access/accessRoute";
 import useSubscription from "../../src/hooks/query/useSubscription";
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
@@ -78,18 +75,10 @@ export default function ApiDocument(props) {
 
   let isLoading = serviceApiSpecData.isLoading || serviceApiSpecData.isIdle;
 
-  const servicePlanUrlLink = getMarketplaceRoute(
-    serviceId,
-    environmentId,
-    productTierId,
-    currentSource
-  );
-
   const serviceAPIDocsLink = getAPIDocsRoute(
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     subscriptionId || subscriptionData?.id
   );
 
@@ -108,7 +97,6 @@ export default function ApiDocument(props) {
         serviceId={serviceId}
         serviceApiId={serviceOffering?.serviceAPIID}
         enableConsumptionLinks
-        servicePlanUrlLink={servicePlanUrlLink}
         apiDocsurl={serviceAPIDocsLink}
         isActive
         SidebarUI={

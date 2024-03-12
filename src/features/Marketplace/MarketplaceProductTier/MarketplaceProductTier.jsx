@@ -31,7 +31,7 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
     return (
       <>
         <Head>
-          <title>Product Tiers</title>
+          <title>Service Plans</title>
         </Head>
         <DashboardLayout
           noSidebar
@@ -54,7 +54,7 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
   return (
     <>
       <Head>
-        <title>Product Tiers</title>
+        <title>Service Plans</title>
       </Head>
       <DashboardLayout
         noSidebar

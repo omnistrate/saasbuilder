@@ -25,38 +25,34 @@ export function getDashboardRoute(
   serviceId,
   environmentId,
   productTierId,
-  currentSource = "marketplace",
   subscriptionId = ""
 ) {
-  return `/access/${serviceId}/${environmentId}/dashboard?productTierId=${productTierId}&source=${currentSource}&subscriptionId=${subscriptionId}`;
+  return `/access/${serviceId}/${environmentId}/dashboard?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }
 
 export function getEventRoute(
   serviceId,
   environmentId,
   productTierId,
-  currentSource = "marketplace",
   subscriptionId = ""
 ) {
-  return `/access/${serviceId}/${environmentId}/events?productTierId=${productTierId}&source=${currentSource}&subscriptionId=${subscriptionId}`;
+  return `/access/${serviceId}/${environmentId}/events?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }
 export function getAccessContorlRoute(
   serviceId,
   environmentId,
   productTierId,
-  currentSource = "marketplace",
   subscriptionId = ""
 ) {
-  return `/access/${serviceId}/${environmentId}/access-control?productTierId=${productTierId}&source=${currentSource}&subscriptionId=${subscriptionId}`;
+  return `/access/${serviceId}/${environmentId}/access-control?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }
 export function getResourceRoute(
   serviceId,
   environmentId,
   productTierId,
-  currentSource = "marketplace",
   subscriptionId
 ) {
-  let url = `/access/service/${serviceId}?environmentId=${environmentId}&productTierId=${productTierId}&source=${currentSource}`;
+  let url = `/access/service/${serviceId}?environmentId=${environmentId}&productTierId=${productTierId}`;
   if (subscriptionId) {
     url += `&subscriptionId=${subscriptionId}`;
   }
@@ -66,10 +62,9 @@ export function getResourceRoute(
 export function getResourceRouteWithoutEnv(
   serviceId,
   productTierId,
-  currentSource = "marketplace",
   subscriptionId = ""
 ) {
-  return `/access/service/${serviceId}?productTierId=${productTierId}&source=${currentSource}&subscriptionId=${subscriptionId}`;
+  return `/access/service/${serviceId}?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }
 
 export function getResourceInstancesRoute(
@@ -77,10 +72,9 @@ export function getResourceInstancesRoute(
   environmentId,
   productTierId,
   resourceId,
-  currentSource = "marketplace",
   subscriptionId = ""
 ) {
-  return `/access/service/${serviceId}?environmentId=${environmentId}&resourceId=${resourceId}&productTierId=${productTierId}&source=${currentSource}&subscriptionId=${subscriptionId}`;
+  return `/access/service/${serviceId}?environmentId=${environmentId}&resourceId=${resourceId}&productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }
 
 export function getResourceInstancesDetailsRoute(
@@ -89,10 +83,9 @@ export function getResourceInstancesDetailsRoute(
   productTierId,
   resourceId,
   resourceInstanceId,
-  currentSource = "marketplace",
   subscriptionId = ""
 ) {
-  return `/access/${serviceId}/${environmentId}/${resourceId}/${resourceInstanceId}?productTierId=${productTierId}&source=${currentSource}&subscriptionId=${subscriptionId}`;
+  return `/access/${serviceId}/${environmentId}/${resourceId}/${resourceInstanceId}?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }
 
 export function getResourceInstancesDetailswithKeyRoute(
@@ -102,17 +95,12 @@ export function getResourceInstancesDetailswithKeyRoute(
   resourceId,
   resourceInstanceId,
   key,
-  currentSource = "marketplace",
   subscriptionId = ""
 ) {
-  return `/access/${serviceId}/${environmentId}/${resourceId}/${resourceInstanceId}?productTierId=${productTierId}&view=${key}&source=${currentSource}&subscriptionId=${subscriptionId}`;
+  return `/access/${serviceId}/${environmentId}/${resourceId}/${resourceInstanceId}?productTierId=${productTierId}&view=${key}&subscriptionId=${subscriptionId}`;
 }
 
-export function getMarketplaceRoute(
-  serviceId,
-  environmentId,
-  productTierId,
-) {
+export function getMarketplaceRoute(serviceId, environmentId, productTierId) {
   return `/product-tiers?serviceId=${serviceId}&environmentId=${environmentId}&productTierId=${productTierId}`;
 }
 
@@ -120,8 +108,7 @@ export function getAPIDocsRoute(
   serviceId,
   environmentId,
   productTierId,
-  currentSource = "marketplace",
   subscriptionId = ""
 ) {
-  return `/access/api-document?serviceId=${serviceId}&environmentId=${environmentId}&productTierId=${productTierId}&source=${currentSource}&subscriptionId=${subscriptionId}`;
+  return `/access/api-document?serviceId=${serviceId}&environmentId=${environmentId}&productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }

@@ -141,7 +141,7 @@ function SingleProductTierPlanCard(props) {
           )}
           <Tooltip
             placement="top"
-            title="Service setup in progress. This product tier will become available once the service is ready"
+            title="Service setup in progress. This service plan will become available once the service is ready"
             isVisible={!isServiceModelReady}
           >
             <span>
@@ -163,7 +163,7 @@ function SingleProductTierPlanCard(props) {
                   !isServiceModelReady
                 }
               >
-                {isMarketplacePage ? "Dashboard" : "Product Tier Dashboard"}
+                {isMarketplacePage ? "Dashboard" : "Service Plan Dashboard"}
               </Button>{" "}
             </span>
           </Tooltip>
