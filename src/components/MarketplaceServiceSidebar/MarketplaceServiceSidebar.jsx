@@ -74,28 +74,24 @@ function MarketplaceServiceSidebar(props) {
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     currentSubscription?.id
   );
   const eventUrlLink = getEventRoute(
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     currentSubscription?.id
   );
   const dashboardUrlLink = getDashboardRoute(
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     currentSubscription?.id
   );
   const resourceUrlLink = getResourceRoute(
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     currentSubscription?.id
   );
 

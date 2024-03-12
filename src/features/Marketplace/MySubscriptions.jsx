@@ -76,7 +76,6 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
         getResourceRouteWithoutEnv(
           selectedSubscription.serviceId,
           selectedSubscription.productTierId,
-          "marketplace",
           selectedSubscription.id
         )
       );
@@ -107,12 +106,7 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
             }}
             onClick={() => {
               router.push(
-                getResourceRouteWithoutEnv(
-                  serviceId,
-                  productTierId,
-                  "marketplace",
-                  id
-                )
+                getResourceRouteWithoutEnv(serviceId, productTierId, id)
               );
             }}
             startIcon={

@@ -153,7 +153,6 @@ function Events() {
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     subscriptionData?.id
   );
 

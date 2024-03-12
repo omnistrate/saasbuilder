@@ -107,7 +107,6 @@ function ResourceInstance() {
     environmentId,
     productTierId,
     resourceId,
-    currentSource,
     subscriptionData?.id
   );
 
@@ -213,7 +212,6 @@ function ResourceInstance() {
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     subscriptionData?.id
   );
 
@@ -288,7 +286,6 @@ function ResourceInstance() {
                     resourceId,
                     resourceInstanceId,
                     key,
-                    currentSource,
                     subscriptionData?.id
                   )
                 );
