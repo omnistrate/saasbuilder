@@ -62,13 +62,13 @@ yarn install
 
 3. Configure .env.local: Create a .env.local file in the root directory. Populate it with necessary environment variables
 
-| Environment Variables | Description                                                                                 |
-| --------------------- | ------------------------------------------------------------------------------------------- |
-| PROVIDER_EMAIL        | Omnistrate account email                                                                    |
-| PROVIDER_HASHED_PASS  | Omnistrate account password hashed using SHA256                                             |
-| YOUR_SAAS_DOMAIN_URL  | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com |
-| MAIL_USER_EMAIL       | Gmail account to be used to send mails (signup, reset password etc) to your customers       |
-| MAIL_USER_PASSWORD    | Gmail account app password                                                                  |
+| Environment Variables | Description                                                                                                                                           |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PROVIDER_EMAIL        | Service provider Omnistrate email address                                                                                                             |
+| PROVIDER_HASHED_PASS  | Service provider Omnistrate account password hashed using SHA256                                                                                      |
+| YOUR_SAAS_DOMAIN_URL  | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000 |
+| MAIL_USER_EMAIL       | Gmail account to be used to send mails (signup, reset password etc) to your customers                                                                 |
+| MAIL_USER_PASSWORD    | Gmail account app password                                                                                                                            |
 
 4. Run the development server:
 
