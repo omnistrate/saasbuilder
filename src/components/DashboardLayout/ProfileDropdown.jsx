@@ -24,6 +24,7 @@ import EllipsisTooltipText from "../Tooltip/EllipsisTooltip";
 import { getSettingsRoute } from "src/utils/route/settings/settings";
 import { styleConfig } from "src/providerConfig";
 import ArrowRight from "./Icons/ArrowRight";
+import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
 
 function ProfileDropdown(props) {
   const {
@@ -134,14 +135,7 @@ function ProfileDropdown(props) {
             </Text>
           </DropdownMenuLink>
         </MenuItem>
-        <MenuItem
-          key="Change Password"
-          sx={{
-            ...(accessPage || marketplacePage
-              ? { borderBottom: "1px solid #EAECF0" }
-              : {}),
-          }}
-        >
+        <MenuItem key="Change Password">
           <DropdownMenuLink
             sx={{ display: "contents" }}
             href={`${settingsPath}?view=Password`}
@@ -155,11 +149,7 @@ function ProfileDropdown(props) {
         </MenuItem>
         {!accessPage &&
           !marketplacePage && [
-            <MenuItem
-              key="Billing"
-              sx={{ borderBottom: "1px solid #EAECF0" }}
-              disabled={!isReadAllowed}
-            >
+            <MenuItem key="Billing" disabled={!isReadAllowed}>
               <DropdownMenuLink href="/billing">
                 <BillingIcon />
                 <Text weight="medium" size="small" color="#344054">
@@ -168,6 +158,14 @@ function ProfileDropdown(props) {
               </DropdownMenuLink>
             </MenuItem>,
           ]}
+        <MenuItem key="Subscriptions">
+          <DropdownMenuLink href="/subscriptions">
+            <SubscriptionsIcon />
+            <Text weight="medium" size="small" color="#344054">
+              Subscriptions
+            </Text>
+          </DropdownMenuLink>
+        </MenuItem>
         {accessPage && currentSubscription?.id && (
           <MenuItem
             sx={{
@@ -199,26 +197,6 @@ function ProfileDropdown(props) {
                   {getEnumFromUserRoleString(currentSubscription?.roleType)})
                 </Text>
               </Stack>
-              {accessPage && (
-                <Link
-                  href="/subscriptions"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    padding: "8px 14px 8px 0px",
-                    transition: "padding 0.3s ease",
-                    "&:hover": {
-                      paddingLeft: "10px",
-                    },
-                  }}
-                >
-                  <ArrowRight />
-                  <Text weight="medium" size="small" color="#10AA50">
-                    View all Subscriptions
-                  </Text>
-                </Link>
-              )}
             </Box>
           </MenuItem>
         )}

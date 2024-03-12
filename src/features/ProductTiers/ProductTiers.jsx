@@ -58,14 +58,14 @@ function ProductTiers(props) {
   const subscribeMutation = useMutation(createSubscriptions, {
     onSuccess: async () => {
       await refetchSubscriptions();
-      snackbar.showSuccess("Product Tier subscribed successfully!.");
+      snackbar.showSuccess("Service Plan subscribed successfully!.");
     },
   });
 
   const unSubscribeMutation = useMutation(deleteSubscription, {
     onSuccess: async () => {
       await refetchSubscriptions();
-      snackbar.showSuccess("Product Tier unsubscribed.");
+      snackbar.showSuccess("Service Plan unsubscribed.");
       handleDeleteDialogClose();
     },
   });
@@ -117,7 +117,7 @@ function ProductTiers(props) {
                 fontSize: "30px",
               }}
             >
-              No Product Tiers
+              No Service Plans
             </div>
             <div
               justifyContent="center"
@@ -160,7 +160,7 @@ function ProductTiers(props) {
   return (
     <Box>
       <Stack justifyContent="center">
-        <ProductTiersHeading>Product Tier Plans</ProductTiersHeading>
+        <ProductTiersHeading>Service Plans</ProductTiersHeading>
       </Stack>
 
       <Box marginTop={"30px"}>
@@ -252,7 +252,7 @@ function ProductTiers(props) {
         formData={deleteFormik}
         open={isDeleteDialogOpen}
         handleClose={handleDeleteDialogClose}
-        title="Unsubscribe Product Tier "
+        title="Unsubscribe Service Plan"
         subtitle={`Are you sure you want to unsubscribe ?`}
         message={
           "To confirm unsubscribe Service, please enter <b> unsubscribe </b>, in the field below:"
