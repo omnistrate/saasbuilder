@@ -8,8 +8,8 @@ const withProviderTokenExpirationHanding = require("../utils/withProviderTokenEx
 //If the server still returns a 401(invalid JWT token), throw a provider auth error which can be used to send appropriate response to the client
 function customerUserSignUp(payload) {
   return axios.post("/customer-user-signup", payload).catch((error) => {
-    console.log("Sign up error", error)
-    if (error.response.status === 401) {
+    console.log("Sign up error");
+    if (error.response && error.response.status === 401) {
       throw new ProviderAuthError();
     } else {
       throw error;
@@ -19,8 +19,8 @@ function customerUserSignUp(payload) {
 
 function customerUserSignIn(payload) {
   return axios.post("/customer-user-signin", payload).catch((error) => {
-    console.log("Sign in error", error)
-    if (error.response.status === 401) {
+    console.log("Sign in error");
+    if (error.response && error.response.status === 401) {
       throw new ProviderAuthError();
     } else {
       throw error;
@@ -30,8 +30,8 @@ function customerUserSignIn(payload) {
 
 function customerUserResetPassword(payload) {
   return axios.post("/customer-reset-password", payload).catch((error) => {
-    if (error.response.status === 401) {
-    console.log("Reset password error", error)
+    if (error.response && error.response.status === 401) {
+      console.log("Reset password error");
       throw new ProviderAuthError();
     } else {
       throw error;
@@ -41,8 +41,8 @@ function customerUserResetPassword(payload) {
 
 function getProviderOrgDetails() {
   return axios.get("/user").catch((error) => {
-  console.log("getProviderOrgDetails error", error)
-    if (error.response.status === 401) {
+    console.log("getProviderOrgDetails error");
+    if (error.response && error.response.status === 401) {
       throw new ProviderAuthError();
     } else {
       throw error;
