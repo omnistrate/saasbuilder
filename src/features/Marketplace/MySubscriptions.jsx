@@ -148,7 +148,7 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
     },
     {
       field: "productTierName",
-      headerName: "Product Tier",
+      headerName: "Service Plan",
       flex: 1,
       minWidth: 150,
       align: "center",
