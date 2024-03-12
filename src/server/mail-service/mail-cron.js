@@ -32,7 +32,6 @@ function startMailServiceCron() {
       await mailTransporter.verify();
 
       //Fetch all events
-      console.log("Fetching events");
       const eventsResponse = await getEventsList();
       const events = eventsResponse.data.events || [];
       console.log("Events", events);
@@ -77,7 +76,6 @@ function startMailServiceCron() {
               .then(async () => {
                 //call backend api
                 await acknowledgeEvent(event.eventID);
-                console.log("Event acknowledged", event);
               });
 
             mailPromises.push(mailPromise);

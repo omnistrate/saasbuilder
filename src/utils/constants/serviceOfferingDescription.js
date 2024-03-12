@@ -4,8 +4,6 @@ export const getServiceOfferingDesciption = (value) => {
   }
 
   const strippedString = value.replace(/(<([^>]+)>)/gi, "");
-  console.log(value);
-  console.log(strippedString);
   return strippedString;
 };
 

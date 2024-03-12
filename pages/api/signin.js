@@ -1,8 +1,6 @@
 import { customerUserSignIn } from "src/server/api/customer-user";
 
 export default async function handleSignIn(nextRequest, nextResponse) {
-  console.log("Request body", nextRequest.body);
-
   if (nextRequest.method === "POST") {
     try {
       const response = await customerUserSignIn(nextRequest.body);
@@ -15,7 +13,6 @@ export default async function handleSignIn(nextRequest, nextResponse) {
         error.name === "ProviderAuthError" ||
         error?.response?.status === undefined
       ) {
-        
         nextResponse.status(500).send({
           message: defaultErrorMessage,
         });

@@ -11,17 +11,13 @@ function withProviderTokenExpirationHanding(callbackFn) {
 
     const providerAuthToken = getProviderToken();
     if (!providerAuthToken) {
-      console.log("Auth token not present");
       const authTokenResponse = await fetchProviderAuthToken();
       const token = authTokenResponse.data.jwtToken;
       setProviderToken(token);
       axios.defaults.headers.Authorization = "Bearer " + token;
-      console.log("Fetched auth token, axios config", axios.defaults.headers);
       //call the callback fn again
       response = await callbackFn(...args);
-      console.log("Callback function success");
     } else {
-      console.log("Auth token present");
       try {
         response = await callbackFn(...args);
       } catch (error) {
@@ -30,21 +26,14 @@ function withProviderTokenExpirationHanding(callbackFn) {
         //if callback fails due to some other reason, or if the refetch JWT token fails, throw error
 
         if (error.response?.status === 401) {
-          console.log("Callback api failed with 401, refetching token");
           //Provider JWT token is expired. Refetch JWT and set in memory and axios
           //If this api fails, en error should be thrown automatically
           const authTokenResponse = await fetchProviderAuthToken();
           const token = authTokenResponse.data.jwtToken;
           setProviderToken(token);
           axios.defaults.headers.Authorization = "Bearer " + token;
-          console.log(
-            "Refetched auth token, axios config",
-            axios.defaults.headers
-          );
-
           //call the callback fn again
           response = await callbackFn(...args);
-          console.log("Callback function recall success");
         } else {
           throw error;
         }
