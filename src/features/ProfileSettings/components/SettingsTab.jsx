@@ -13,7 +13,18 @@ export default function SettingsTab(props) {
   const { currentTab, router } = props;
 
   const handleChangeTab = (view) => {
-    router.push(`${router.pathname}?view=${view}`);
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          view: view,
+        },
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    );
   };
 
   return (
