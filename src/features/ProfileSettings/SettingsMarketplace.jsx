@@ -10,6 +10,7 @@ import UserInfoBanner from "./components/UserInfoBanner";
 import ProfileForm from "./components/ProfileForm";
 import Head from "next/head";
 import NoLogoImage from "public/assets/images/logos/no-logo.png";
+import { tabs } from "./constants";
 
 function SettingsMarketplace({ orgLogoURL, orgName }) {
   const router = useRouter();
@@ -30,7 +31,6 @@ function SettingsMarketplace({ orgLogoURL, orgName }) {
     <DashboardLayout
       sx={{ padding: 0 }}
       noSidebar
-      // SidebarUI={<MarketplaceServiceSidebar />}
       marketplacePage
       serviceLogoURL={orgLogoURL || NoLogoImage}
       serviceName={orgName}
@@ -47,10 +47,11 @@ function SettingsMarketplace({ orgLogoURL, orgName }) {
             currentTab={currentTab}
             router={router}
           />
-          {currentTab === "Profile" && (
+          {currentTab === tabs.password ? (
+            <PasswordForm />
+          ) : (
             <ProfileForm refetch={refetch} selectUser={selectUser} />
           )}
-          {currentTab === "Password" && <PasswordForm />}
         </>
       )}
     </DashboardLayout>
