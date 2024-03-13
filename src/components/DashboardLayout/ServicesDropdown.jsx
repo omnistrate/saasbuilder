@@ -107,7 +107,7 @@ const ServicesDropdown = () => {
                   // color={styleConfig.nineDotMenuTextColor}
                   color="#6E717F"
                 >
-                  {service.serviceName}
+                  {service.productTierName}
                 </Text>
               </Stack>
             </MenuItem>
