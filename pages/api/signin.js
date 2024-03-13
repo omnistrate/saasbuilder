@@ -9,13 +9,13 @@ export default async function handleSignIn(nextRequest, nextResponse) {
       nextResponse.status(200).send({ ...response.data });
     } catch (error) {
       console.error(error);
-      let defaultErrorMessage = "Something went wrong. Please retry";
+      let defaultErrorMessage =
+        "Failed to sign in. Either the credentials are incorrect or the user does not exist";
 
       if (
         error.name === "ProviderAuthError" ||
         error?.response?.status === undefined
       ) {
-        
         nextResponse.status(500).send({
           message: defaultErrorMessage,
         });
