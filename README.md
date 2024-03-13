@@ -48,37 +48,49 @@ These details are crucial as they will be presented to customers accessing your 
 
 To build and run the SaaS Builder locally
 
-1. Clone the Repository: Use Git to clone the repository to your local machine.
+1. You'll need Node.js installed on your system. Download the latest LTS version (20.11.1 as of March 13, 2024) from https://nodejs.org/. Check the node version to confirm successful installation.
+
+```bash
+node --version
+```
+
+2. Visit the Yarn website: Go to https://classic.yarnpkg.com/lang/en/docs/install/ and follow platform-specific instructions for your operating system (Linux, macOS, Windows) to install yarn classic (1.x). Check the yarn version (1.22.19 as of March 13, 2024) to confirm successful installation.
+
+```bash
+yarn --version
+```
+
+3. Clone the Repository: Use Git to clone the repository to your local machine.
 
 ```bash
 git clone https://github.com/omnistrate/saasbuilder.git
 ```
 
-2. Install dependencies with yarn
+4. Install dependencies with yarn
 
 ```bash
 yarn install
 ```
 
-3. Configure .env.local: Create a .env.local file in the root directory. Populate it with necessary environment variables
+5. Configure .env.local: Create a .env.local file in the root directory. Populate it with necessary environment variables
 
 | Environment Variables | Description                                                                                                                                           |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | PROVIDER_EMAIL        | Service provider Omnistrate email address                                                                                                             |
 | PROVIDER_HASHED_PASS  | Service provider Omnistrate account password hashed using SHA256                                                                                      |
 | YOUR_SAAS_DOMAIN_URL  | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000 |
-| MAIL_USER_EMAIL       | Gmail account to be used to send mails (signup, reset password etc) to your customers                                                                 |
+| MAIL_USER_EMAIL       | Gmail account to be used to send mails (signup, reset password etc) to your customers. Check the following [section](#how-to-configure-google-account-for-sending-out-emails) for instructions to configure gmail account for sending out the emails.                                                                 |
 | MAIL_USER_PASSWORD    | Gmail account app password                                                                                                                            |
 
-4. Run the development server:
+6. Run the development server:
 
 ```bash
 yarn dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) with your browser to access the app locally
+7. Open [http://localhost:3000](http://localhost:3000) with your browser to access the app locally
 
-## Deploy on Omnistrate Platform
+## Deploy on Omnistrate Platform and configure your domain
 
 Deploying on the Omnistrate Platform can follow two main paths: without code customizations and with code customizations.
 
@@ -89,21 +101,36 @@ For users looking to deploy the SaaSBuilder quickly and without modifications, t
 For a video guide covering all the below steps, you can follow it [here](https://www.loom.com/share/58d0019c307646868dae2ba9bc56f727?sid=bab3b5f7-b6b8-4669-9dff-e53ee74dd3cc). The manual steps are listed below -
 
 - Copy the contents of the saasbuilder-docker-compose.yaml
-- Login to Omnistrate and navigate to "Build Your SaSS" and "Your Compose Spec" tab
+- Login to Omnistrate and navigate to "Build Your SaaS" and "Your Compose Spec" tab
 - Paste the content of saasbuilder-docker-compose.yaml in the yaml editor and provide name, description (logo image is optional and wont be seen by your customers).
-- Start by copying the content from the saasbuilder-docker-compose.yaml.
-- Log into Omnistrate, navigate to "Build Your SaaS" and select the "Your Compose Spec" tab.
-- Paste the yaml content into the editor, adding a service name and description. (Logos are optional.)
-- Choose your service model: Provider Hosted or Omnistrate Hosted, to create your service.
+- Choose your service model i.e. Provider Hosted, to create your service.
 - Follow the prompt to launch an instance of the SaaSBuilder Service.
 - Specify instance details: type, Omnistrate account and password, SMTP email and password, and hosting domain.
 - Post-creation, navigate to the "Network" tab, copy the cluster endpoint.
 - Access the SaaSBuilder App through the copied endpoint to reach the login page.
-- Register as an end user to begin consuming services.
+- Once you have confirmed that you can access the SaaSBuilder app. You are ready to configure your domain.
+  - First, contact Omnistrate support and share your domain name that you want to use for the SaaSBuilder App along with the cluster endpoint for the SaaSBuilder App. Omnistrate team will be able to use this data and do the necessary configurations in Omnistrate Platform.
+  - Second, login to your DNS provider/domain registrar portal (where you bought your domain). Find the DNS section for your domain and add two CNAME records as follows - 
+  
+    - Type - CNAME
+    - Name - @
+    - Target - SaaSBuilder cluster endpoint
+    - TTL - Leave as default or as suggested by your DNS provider
+    - Proxy Status - DNS only (do not enable proxying)
+    
+    and
+
+    - Type - CNAME
+    - Name - www
+    - Target - SaaSBuilder cluster endpoint
+    - TTL - Leave as default or as suggested by your DNS provider
+    - Proxy Status - DNS only (do not enable proxying)
+  
+- Access your domain and confirm that SaaSBuilder app is not available on your domain.
 
 ### With Code Customizations
 
-For users looking to customize the SaaSBuilder, this option involves customizing the code after forking the SaaSBuilder repository. You'll make necessary changes, build and push your Docker image to a repository, update the Docker compose file to use your new image, and then create and launch your service on Omnistrate. This method allows for significant level of customization and flexibility however it is important to remember that maintaining your forked repository in sync with the master branch is your responsibility.
+For users looking to customize the SaaSBuilder, this option involves customizing the code after forking the SaaSBuilder repository. You'll make necessary changes, build and push your Docker image to a repository, update the Docker compose file to use your new image, and then create and launch your service on Omnistrate. This method allows for significant level of customization and flexibility however it is important to remember that maintaining your forked repository and keeping it in sync with the master branch is your responsibility.
 
 - After you have made all the customization code changes, you need to build a docker image and push it to your own repo. The dockerfile is already [available](https://github.com/omnistrate/saasbuilder/blob/master/Dockerfile), you could use the same.
 
@@ -115,23 +142,46 @@ docker build -t yourorg/yoursaasbuilder:1.0.0 .
 docker push yourorg/yoursaasbuilder:1.0.0
 ```
 
-- After you have pushed the docker image, you need to refer to it in your docker compose spec
+- Once you have pushed the docker image, you need to refer to it in your docker compose spec
 
-- Once you have updated the docker compose spec, you will use it to create a service in Omnistrate. Rest of the steps are same as those defined in the "Without Code Customization" [section](#without-code-customizations) above.
+- After updating the docker compose spec, you will use it to create a service in Omnistrate. Rest of the steps are same as those defined in the "Without Code Customization" [section](#without-code-customizations) above.
 
-## Configure Your Custom Domain
 
-To configure a custom domain for your service hosted on Omnistrate, you'll need to perform two main actions.
+## Troubleshooting/FAQ
 
-- First, contact Omnistrate support to inform about your domain details, ensuring it can be configured in Omnistrate.
-- Second, configure a CNAME record in your domain's DNS settings to point to the Omnistrate hosted service's name. This process involves accessing your domain registrar's or DNS provider's control panel and adding the CNAME record and map it to the Global endpoint of the SaasBuilder hosted in Omnistrate. Detailed instructions for this process are typically provided by the DNS hosting service or your domain registrar.
+#### What should I do if I encounter a yarn install error?
+    Ensure your node and yarn versions meet the project's requirements. Try clearing your yarn cache with yarn cache clean and reinstalling dependencies.
 
-<!-- ## Troubleshooting/FAQ
-Q1: What should I do if I encounter a yarn install error?
-A1: Ensure your node and yarn versions meet the project's requirements. Try clearing your yarn cache with yarn cache clean and reinstalling dependencies.
+#### How do I resolve Docker compose deployment errors?
+    Verify that your Docker environment is set up correctly. Ensure the Docker daemon is running and your docker-compose.yml file points to the correct image tags. Review the Docker and project logs for specific error messages.
 
-Q2: How do I resolve Docker compose deployment errors?
-A2: Verify that your Docker environment is set up correctly. Ensure the Docker daemon is running and your docker-compose.yml file points to the correct image tags. Review the Docker and project logs for specific error messages. -->
+#### How to configure Google Account for sending out emails?
+    Configuring Google Account for sending ou emails is a two step process. First the account must have a 2-Step Verification enabled, and second, the app password needs to be set. If the Google Account you are using, already has 2-Step Verification configured, you may skip Step 1, and start with Step 2.
+  
+  - Step 1 - Setup 2-Step Verification
+    1. Visit Your Google Account by navigating to https://myaccount.google.com and log in.
+    2. Navigate to Security by clicking on "Security" in the left navigation menu.
+    3. Scroll down to find the "Signing in to Google" section and click on "2-Step Verification."
+    4. Click on "Get Started."
+    5. Follow the on-screen prompts to configure your 2-Step Verification method. Google offers various options like text messages, voice calls, or authenticator apps.
+
+    ![Alt text](https://drive.google.com/uc?id=1_xZudcroEPfiYV456UtwuY1-_K7FfHEQ "Configured Account with 2-Step Verification")
+
+  - Step 2 - Setup App Password
+    1. Once 2-Step Verification is configured, follow the below instructions.
+    2. While still in the "Signing in to Google" section of your account security, locate and click "App Passwords"
+    3. If for some reason you can't locate it, you can follow this link - https://myaccount.google.com/apppasswords make sure it is configured for the same Google Account, in case you have multiple Google Accounts opened in your browser.
+   
+    ![Alt text](https://drive.google.com/uc?id=1TNKc7u0zLcozw95OIMbFUf22EBL5ocAY "Create App Password")
+
+    4. Provide name of the app, say SaasBuilder.
+    5. Click "Create."
+    6. Google will display a 16-character password something like "fasb nxpq lfnr chtn"
+    7. Copy this password and **remove in between spaces** (e.g. fasbnxpqlfnrchtn) to use it instead of your regular Google Account password.
+
+    ![Alt text](https://drive.google.com/uc?id=1N_COKw_GX9rwgpdLKWzrchaclfamK6JH "Copy App Password")
+
+    8. Treat the app password like your regular password and store it securely.
 
 ## Contributing
 
