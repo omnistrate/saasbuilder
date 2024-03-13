@@ -76,6 +76,7 @@ function startMailServiceCron() {
               .then(async () => {
                 //call backend api
                 await acknowledgeEvent(event.eventID);
+                console.log("Event acknowledged", event);
               });
 
             mailPromises.push(mailPromise);

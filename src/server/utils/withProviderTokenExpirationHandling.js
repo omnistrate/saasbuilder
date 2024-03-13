@@ -10,8 +10,7 @@ function withProviderTokenExpirationHanding(callbackFn) {
     let response = null;
 
     const providerAuthToken = getProviderToken();
-    console.log("Provider Auth token", providerAuthToken);
-    
+
     if (!providerAuthToken) {
       const authTokenResponse = await fetchProviderAuthToken();
       const token = authTokenResponse.data.jwtToken;
