@@ -32,7 +32,6 @@ function startMailServiceCron() {
       await mailTransporter.verify();
 
       //Fetch all events
-      console.log("Fetching events");
       const eventsResponse = await getEventsList();
       const events = eventsResponse.data.events || [];
       console.log("Events", events);
