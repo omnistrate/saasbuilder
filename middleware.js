@@ -33,7 +33,7 @@ export async function middleware(request) {
     }
 
     if (request.nextUrl.pathname.startsWith("/signin")) {
-      return NextResponse.redirect(new URL("/product-tiers", request.url));
+      return NextResponse.redirect(new URL("/service-plans", request.url));
     }
   } catch (error) {
     console.log(error);

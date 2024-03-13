@@ -63,7 +63,7 @@ function FourHundredFourPage() {
               Please visit our homepage to get where you need to go. <br />
             </Description>
 
-            <Link href="/product-tiers">
+            <Link href="/service-plans">
               <SubmitButton sx={{ marginTop: "40px" }}>
                 Take me there
               </SubmitButton>
