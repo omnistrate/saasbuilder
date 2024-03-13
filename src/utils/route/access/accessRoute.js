@@ -13,11 +13,11 @@ export function getMarketplaceProductTierRoute(
   serviceType
 ) {
   if (serviceId && environmentId && serviceType)
-    return `/product-tiers?serviceId=${serviceId}&environmentId=${environmentId}&serviceType=${serviceType}`;
+    return `/service-plans?serviceId=${serviceId}&environmentId=${environmentId}&serviceType=${serviceType}`;
   if (serviceId && environmentId)
-    return `/product-tiers?serviceId=${serviceId}&environmentId=${environmentId}`;
+    return `/service-plans?serviceId=${serviceId}&environmentId=${environmentId}`;
   if (serviceId) {
-    return `/product-tiers?serviceId=${serviceId}`;
+    return `/service-plans?serviceId=${serviceId}`;
   }
 }
 
@@ -101,7 +101,7 @@ export function getResourceInstancesDetailswithKeyRoute(
 }
 
 export function getMarketplaceRoute(serviceId, environmentId, productTierId) {
-  return `/product-tiers?serviceId=${serviceId}&environmentId=${environmentId}&productTierId=${productTierId}`;
+  return `/service-plans?serviceId=${serviceId}&environmentId=${environmentId}&productTierId=${productTierId}`;
 }
 
 export function getAPIDocsRoute(
