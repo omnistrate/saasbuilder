@@ -10,6 +10,8 @@ function withProviderTokenExpirationHanding(callbackFn) {
     let response = null;
 
     const providerAuthToken = getProviderToken();
+    console.log("Provider Auth token", providerAuthToken);
+    
     if (!providerAuthToken) {
       const authTokenResponse = await fetchProviderAuthToken();
       const token = authTokenResponse.data.jwtToken;
@@ -24,8 +26,8 @@ function withProviderTokenExpirationHanding(callbackFn) {
         console.log("Callback api error", error);
         //if callback fails because of a 401 error, refetch the provider JWT token update it in the app memory and update the axios config. Then retry the callback
         //if callback fails due to some other reason, or if the refetch JWT token fails, throw error
-
-        if (error.response?.status === 401) {
+        if (error.name === "ProviderAuthError") {
+          console.log("Callback api failed with 401, refetching token");
           //Provider JWT token is expired. Refetch JWT and set in memory and axios
           //If this api fails, en error should be thrown automatically
           const authTokenResponse = await fetchProviderAuthToken();
