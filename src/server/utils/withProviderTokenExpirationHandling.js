@@ -12,6 +12,7 @@ function withProviderTokenExpirationHanding(callbackFn) {
     const providerAuthToken = getProviderToken();
 
     if (!providerAuthToken) {
+      console.log("Auth token not present");
       const authTokenResponse = await fetchProviderAuthToken();
       const token = authTokenResponse.data.jwtToken;
       setProviderToken(token);
@@ -19,6 +20,7 @@ function withProviderTokenExpirationHanding(callbackFn) {
       //call the callback fn again
       response = await callbackFn(...args);
     } else {
+      console.log("Auth token present");
       try {
         response = await callbackFn(...args);
       } catch (error) {
