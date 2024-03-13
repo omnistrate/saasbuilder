@@ -110,7 +110,7 @@ docker push yourorg/yoursaasbuilder:1.0.0
 
 - Once you have pushed the docker image, you need to refer to it in your docker compose spec
 
-- After updating the docker compose spec, you will use it to create a service in Omnistrate. Rest of the steps are same as those defined in the "Without Code Customization" [section](#without-code-customizations) above.
+- After updating the docker compose spec, you will use it to create a service in Omnistrate. Rest of the steps are same as those defined in the "Without Code Customization" [section](#without-code-customizations).
 
 ### Without Code Customizations
 
