@@ -2,6 +2,7 @@ const { createServer } = require("http");
 const { parse } = require("url");
 const next = require("next");
 const { startMailServiceCron } = require("./src/server/mail-service/mail-cron");
+const verifyEnvrionmentVariables = require("./src/server/utils/verifyEnvironmentVariables");
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -10,16 +11,23 @@ const port = dev ? 3000 : 8080;
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
-
-app.prepare().then(() => {
-
-  //start the mail service cron job only if 
-  //a)NODE_INDEX environment variable is not present
-  //b)NODE_INDEX environment variable === 0
-  if(process.env.NODE_INDEX === undefined || process.env.NODE_INDEX === 0 || process.env.NODE_INDEX === '0'){
-    startMailServiceCron();
+app.prepare().then(async () => {
+  //check if all required environement variables are available
+  const isVerified = await verifyEnvrionmentVariables();
+  
+  if (isVerified) {
+    if (
+      process.env.NODE_INDEX === undefined ||
+      process.env.NODE_INDEX === 0 ||
+      process.env.NODE_INDEX === "0"
+    ) {
+      //start the mail service cron job only if
+      //a)NODE_INDEX environment variable is not present
+      //b)NODE_INDEX environment variable === 0
+      startMailServiceCron();
+    }
   }
- 
+
   createServer(async (req, res) => {
     try {
       // Be sure to pass `true` as the second argument to `url.parse`.
@@ -40,4 +48,6 @@ app.prepare().then(() => {
     .listen(port, () => {
       console.log(`> Ready on http://${hostname}:${port}`);
     });
+
+
 });
