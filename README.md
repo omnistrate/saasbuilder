@@ -109,8 +109,8 @@ For a video guide covering all the below steps, you can follow it [here](https:/
 - Post-creation, navigate to the "Network" tab, copy the cluster endpoint.
 - Access the SaaSBuilder App through the copied endpoint to reach the login page.
 - Once you have confirmed that you can access the SaaSBuilder app. You are ready to configure your domain.
-  - First, contact Omnistrate support and share your domain name that you want to use for the SaaSBuilder App along with the cluster endpoint for the SaaSBuilder App. Omnistrate team will be able to use this data and do the necessary configurations in Omnistrate Platform.
-  - Second, login to your DNS provider/domain registrar portal (where you bought your domain). Find the DNS section for your domain and add two CNAME records as follows - 
+  - Contact Omnistrate support and share your domain name that you want to use for the SaaSBuilder App along with the cluster endpoint for the SaaSBuilder App. Omnistrate team will be able to use this data and do the necessary configurations in Omnistrate Platform.
+  - Login to your DNS provider/domain registrar portal (where you bought your domain). Find the DNS section for your domain and add two CNAME records as follows - 
   
     - Type - CNAME
     - Name - @
@@ -126,7 +126,7 @@ For a video guide covering all the below steps, you can follow it [here](https:/
     - TTL - Leave as default or as suggested by your DNS provider
     - Proxy Status - DNS only (do not enable proxying)
   
-- Access your domain and confirm that SaaSBuilder app is not available on your domain.
+- Access your domain and confirm that SaaSBuilder app is now available on your domain.
 
 ### With Code Customizations
 
@@ -150,26 +150,29 @@ docker push yourorg/yoursaasbuilder:1.0.0
 ## Troubleshooting/FAQ
 
 #### What should I do if I encounter a yarn install error?
-    Ensure your node and yarn versions meet the project's requirements. Try clearing your yarn cache with yarn cache clean and reinstalling dependencies.
+
+Ensure your node and yarn versions meet the project's requirements. Try clearing your yarn cache with yarn cache clean and reinstalling dependencies.
 
 #### How do I resolve Docker compose deployment errors?
-    Verify that your Docker environment is set up correctly. Ensure the Docker daemon is running and your docker-compose.yml file points to the correct image tags. Review the Docker and project logs for specific error messages.
+
+Verify that your Docker environment is set up correctly. Ensure the Docker daemon is running and your docker-compose.yml file points to the correct image tags. Review the Docker and project logs for specific error messages.
 
 #### How to configure Google Account for sending out emails?
-    Configuring Google Account for sending out emails is a two step process. First the account must have a 2-Step Verification enabled, and second, the app password needs to be set. If the Google Account you are using, already has 2-Step Verification configured, you may skip Step 1, and start with Step 2.
+
+Configuring Google Account for sending out emails is a two step process. First the account must have a 2-Step Verification enabled, and second, the app password needs to be set. If the Google Account you are using, already has 2-Step Verification configured, you may skip Step 1, and start with Step 2.
   
-  - Step 1 - Setup 2-Step Verification
+  - Step 1 - Enable 2-Step Verification
     1. Visit Your Google Account by navigating to https://myaccount.google.com and log in.
     2. Navigate to Security by clicking on "Security" in the left navigation menu.
-    3. Scroll down to find the "Signing in to Google" section and click on "2-Step Verification."
+    3. Scroll down to find the "How you sign in to Google" section and click on "2-Step Verification."
     4. Click on "Get Started."
     5. Follow the on-screen prompts to configure your 2-Step Verification method. Google offers various options like text messages, voice calls, or authenticator apps.
 
     ![Alt text](https://drive.google.com/uc?id=1_xZudcroEPfiYV456UtwuY1-_K7FfHEQ "Configured Account with 2-Step Verification")
 
-  - Step 2 - Setup App Password
-    1. Once 2-Step Verification is configured, follow the below instructions.
-    2. While still in the "Signing in to Google" section of your account security, locate and click "App Passwords"
+  - Step 2 - Create App Password
+    1. Once 2-Step Verification is configured, follow the below instructions to create App Password.
+    2. While still in the "How you sign in to Google" ->  "2-Step Verification" section of your account security, locate and click "App Passwords"
     3. If for some reason you can't locate it, you can follow this link - https://myaccount.google.com/apppasswords make sure it is configured for the same Google Account, in case you have multiple Google Accounts opened in your browser.
    
     ![Alt text](https://drive.google.com/uc?id=1TNKc7u0zLcozw95OIMbFUf22EBL5ocAY "Create App Password")
