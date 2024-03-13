@@ -91,7 +91,7 @@ const ServicesDropdown = () => {
               sx={{
                 p: "15px 16px",
                 textWrap: "wrap",
-                wordBreak: "break-all",
+                wordBreak: "break-word",
               }}
             >
               <Stack direction="row" alignItems="center" gap="8px">
