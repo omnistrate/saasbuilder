@@ -156,7 +156,7 @@ docker push yourorg/yoursaasbuilder:1.0.0
     Verify that your Docker environment is set up correctly. Ensure the Docker daemon is running and your docker-compose.yml file points to the correct image tags. Review the Docker and project logs for specific error messages.
 
 #### How to configure Google Account for sending out emails?
-    Configuring Google Account for sending ou emails is a two step process. First the account must have a 2-Step Verification enabled, and second, the app password needs to be set. If the Google Account you are using, already has 2-Step Verification configured, you may skip Step 1, and start with Step 2.
+    Configuring Google Account for sending out emails is a two step process. First the account must have a 2-Step Verification enabled, and second, the app password needs to be set. If the Google Account you are using, already has 2-Step Verification configured, you may skip Step 1, and start with Step 2.
   
   - Step 1 - Setup 2-Step Verification
     1. Visit Your Google Account by navigating to https://myaccount.google.com and log in.
