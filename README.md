@@ -116,7 +116,6 @@ For a video guide covering all the below steps, you can follow it [here](https:/
     - Name - @
     - Target - SaaSBuilder cluster endpoint
     - TTL - Leave as default or as suggested by your DNS provider
-    - Proxy Status - DNS only (do not enable proxying)
     
     and
 
@@ -124,7 +123,6 @@ For a video guide covering all the below steps, you can follow it [here](https:/
     - Name - www
     - Target - SaaSBuilder cluster endpoint
     - TTL - Leave as default or as suggested by your DNS provider
-    - Proxy Status - DNS only (do not enable proxying)
   
 - Access your domain and confirm that SaaSBuilder app is now available on your domain.
 
