@@ -1,15 +1,15 @@
+import { useMemo, useState } from "react";
+import { useRouter } from "next/router";
 import { Box, Stack } from "@mui/material";
 
 import Menu from "../Menu/Menu";
 import useOrgServiceOfferings from "src/features/Marketplace/PublicServices/hooks/useOrgServiceOfferings";
 
 import NineDotMenu from "./Icons/NineDotMenu";
-import { useState } from "react";
 import MenuItem from "../MenuItem/MenuItem";
 import { Text } from "../Typography/Typography";
 import { styleConfig } from "src/providerConfig";
 import CubeIcon from "./Icons/CubeIcon";
-import { useRouter } from "next/router";
 import { getMarketplaceProductTierRoute } from "src/utils/route/access/accessRoute";
 import { marketplaceServicePageTypes } from "src/features/Marketplace/constants/marketplaceServicePageTypes";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
@@ -19,6 +19,23 @@ const ServicesDropdown = () => {
   const { serviceId } = router.query;
   const { data: serviceOfferingsData, isFetching } = useOrgServiceOfferings();
   const [anchorEl, setAnchorEl] = useState(null);
+
+  // Filter Service Offerings to Remove Duplicates - Case when Same Service Has Multiple Plans
+  const filteredServiceOfferings = useMemo(() => {
+    if (!serviceOfferingsData?.length) {
+      return [];
+    }
+
+    const uniqueServiceIds = new Set();
+    return serviceOfferingsData.filter((el) => {
+      if (uniqueServiceIds.has(el.serviceId)) {
+        return false;
+      }
+
+      uniqueServiceIds.add(el.serviceId);
+      return true;
+    });
+  }, [serviceOfferingsData]);
 
   const openMenu = (e) => {
     e.stopPropagation();
@@ -83,7 +100,7 @@ const ServicesDropdown = () => {
             <LoadingSpinnerSmall />
           </Box>
         ) : (
-          serviceOfferingsData?.map((service, index) => (
+          filteredServiceOfferings.map((service, index) => (
             <MenuItem
               key={index}
               onClick={() => redirectToProductPage(service)}
