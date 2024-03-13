@@ -94,6 +94,24 @@ yarn dev
 
 Deploying on the Omnistrate Platform can follow two main paths: without code customizations and with code customizations.
 
+### With Code Customizations
+
+For users looking to customize the SaaSBuilder, this option involves customizing the code after forking the SaaSBuilder repository. You'll make necessary changes, build and push your Docker image to a repository, update the Docker compose file to use your new image, and then create and launch your service on Omnistrate. This method allows for significant level of customization and flexibility however it is important to remember that maintaining your forked repository and keeping it in sync with the master branch is your responsibility.
+
+- After you have made all the customization code changes, you need to build a docker image and push it to your own repo. The dockerfile is already [available](https://github.com/omnistrate/saasbuilder/blob/master/Dockerfile), you could use the same.
+
+```bash
+docker build -t yourorg/yoursaasbuilder:1.0.0 .
+```
+
+```bash
+docker push yourorg/yoursaasbuilder:1.0.0
+```
+
+- Once you have pushed the docker image, you need to refer to it in your docker compose spec
+
+- After updating the docker compose spec, you will use it to create a service in Omnistrate. Rest of the steps are same as those defined in the "Without Code Customization" [section](#without-code-customizations) above.
+
 ### Without Code Customizations
 
 For users looking to deploy the SaaSBuilder quickly and without modifications, the straightforward approach involves using a predefined Docker compose [yaml](https://github.com/omnistrate/saasbuilder/blob/master/saasbuilder-docker-compose.yaml). This method facilitates the creation and launching of your service on the Omnistrate platform, utilizing the SaaSBuilder's existing setup and allowing for basic, provided customizations. It's an efficient path for rapid deployment, capitalizing on the built-in configurations of SaaSBuilder.
@@ -127,25 +145,6 @@ For a video guide covering all the below steps, you can follow it [here](https:/
     - Proxy Status - DNS only (do not enable proxying)
   
 - Access your domain and confirm that SaaSBuilder app is not available on your domain.
-
-### With Code Customizations
-
-For users looking to customize the SaaSBuilder, this option involves customizing the code after forking the SaaSBuilder repository. You'll make necessary changes, build and push your Docker image to a repository, update the Docker compose file to use your new image, and then create and launch your service on Omnistrate. This method allows for significant level of customization and flexibility however it is important to remember that maintaining your forked repository and keeping it in sync with the master branch is your responsibility.
-
-- After you have made all the customization code changes, you need to build a docker image and push it to your own repo. The dockerfile is already [available](https://github.com/omnistrate/saasbuilder/blob/master/Dockerfile), you could use the same.
-
-```bash
-docker build -t yourorg/yoursaasbuilder:1.0.0 .
-```
-
-```bash
-docker push yourorg/yoursaasbuilder:1.0.0
-```
-
-- Once you have pushed the docker image, you need to refer to it in your docker compose spec
-
-- After updating the docker compose spec, you will use it to create a service in Omnistrate. Rest of the steps are same as those defined in the "Without Code Customization" [section](#without-code-customizations) above.
-
 
 ## Troubleshooting/FAQ
 
