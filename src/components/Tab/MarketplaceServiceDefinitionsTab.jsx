@@ -74,9 +74,8 @@ const Tabs = styled(MuiTabs)({
 });
 
 const Tab = styled(MuiTab)({
-  paddingTop: 20,
+  padding: 25,
   paddingBottom: 20,
-  minWidth: "12%",
   fontSize: "16px",
   fontWeight: 500,
   lineHeight: "24px",
