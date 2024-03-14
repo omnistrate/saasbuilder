@@ -44,28 +44,6 @@ export const CardTitle = styled("h2")(() => ({
   color: "#111827",
 }));
 
-const OutlinedBtn = styled(SubmitButton)(() => ({
-  border: "1px solid #D1D5DB",
-  boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-  borderRadius: "6px",
-  padding: "10px 24px",
-  color: "#374151",
-  backgroundColor: "white",
-  fontSize: 18,
-  fontSize: 18,
-  lineHeight: "28px",
-  fontWeight: 500,
-  "&:hover": {
-    backgroundColor: "white",
-  },
-  [`&.${buttonClasses.outlined}`]: {},
-}));
-
-export const OutlinedButton = (props) => {
-  const { children, ...restProps } = props;
-  return <OutlinedBtn {...restProps}>{children}</OutlinedBtn>;
-};
-
 export const Link = styled(NextLink, {
   shouldForwardProp: (prop) => prop !== "underlined",
 })(({ underlined }) => ({
