@@ -1,11 +1,7 @@
 import {
   InputBase,
   styled,
-  TextField,
   inputBaseClasses,
-  Grid,
-  Button,
-  ButtonBase,
   Box,
   IconButton,
   InputAdornment,
@@ -15,21 +11,6 @@ import NextLink from "next/link";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
-import { LoadingButton } from "@mui/lab";
-
-export const ContainerBorderLeft = styled("div")(({ theme }) => ({
-  position: "relative",
-  marginLeft: 20,
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    borderLeft: "3px solid #117189",
-    left: -20,
-    height: 60,
-    top: "50%",
-    transform: "translateY(-47%)",
-  },
-}));
 
 export const Heading = styled("h1")(({ theme }) => ({
   fontSize: 36,
@@ -63,37 +44,6 @@ export const CardTitle = styled("h2")(() => ({
   color: "#111827",
 }));
 
-export const SubmitButton = styled(LoadingButton)(() => ({
-  backgroundColor: "#004D40",
-  padding: "10px 24px",
-  borderRadius: "8px",
-  color: "white",
-  textTransform: "none",
-  fontSize: 18,
-  lineHeight: "28px",
-  fontWeight: 500,
-  "&:hover": {
-    backgroundColor: "#004D40",
-  },
-  ".MuiCircularProgress-circle": {
-    color: "#FFF",
-  },
-}));
-
-export const UpdatePasswordButton = styled(LoadingButton)(({ theme }) => ({
-  borderRadius: 8,
-  padding: "8px 16px",
-  textTransform: "none",
-  color: "#FFF",
-  backgroundColor: theme.palette.primary[600],
-  "&:hover": {
-    backgroundColor: theme.palette.primary[600],
-  },
-  ".MuiCircularProgress-circle": {
-    color: "#FFF",
-  },
-}));
-
 const OutlinedBtn = styled(SubmitButton)(() => ({
   border: "1px solid #D1D5DB",
   boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
@@ -125,8 +75,6 @@ export const Link = styled(NextLink, {
   fontWeight: 400,
   textDecoration: underlined ? "underline" : "none",
 }));
-
-const InputWrapper = styled(Box)(() => {});
 
 const ErrorMessage = styled(Box)(({ theme }) => ({
   color: theme.palette.error.main,

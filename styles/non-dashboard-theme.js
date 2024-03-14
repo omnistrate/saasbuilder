@@ -1,9 +1,11 @@
 import { createTheme } from "@mui/material/styles";
+import { styleConfig } from "src/providerConfig";
 
 export const theme = createTheme({
   palette: {
     primary: {
-      main: "#062229",
+      main: styleConfig.primaryColor,
+      hover: styleConfig.primaryHoverColor,
     },
     secondary: {
       main: "#004D40",
