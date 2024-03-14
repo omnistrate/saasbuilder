@@ -33,6 +33,7 @@ function FourHundredFourPage() {
         >
           <ImageContainer>
             <Image
+              priority
               src={fourZeroFourImg}
               alt="sign-up"
               style={{
