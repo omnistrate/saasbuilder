@@ -10,9 +10,15 @@ const axios = Axios.create({
   baseURL,
 });
 
-const providerToken = getProviderToken();
-if (providerToken) {
-  axios.defaults.headers.Authorization = `${Bearer} ${providerToken}`;
-}
+axios.interceptors.request.use((config) => {
+  // if (config.headers.Authorization === undefined) {
+  const providerAuthToken = getProviderToken();
+  if (providerAuthToken) {
+    config.headers.Authorization = `Bearer ${providerAuthToken}`;
+    // axios.defaults.headers["Authorization"] = `Bearer ${providerAuthToken}`;
+  }
+  // }
+  return config;
+});
 
 module.exports = axios;

@@ -10,7 +10,6 @@ function withProviderTokenExpirationHanding(callbackFn) {
     let response = null;
 
     const providerAuthToken = getProviderToken();
-    console.log("Provider Auth token", providerAuthToken);
     
     if (!providerAuthToken) {
       console.log("Auth token not present");
