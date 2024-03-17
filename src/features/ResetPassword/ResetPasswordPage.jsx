@@ -35,7 +35,12 @@ const ResetPasswordPage = (props) => {
       },
       onError: (error) => {
         if (error.response.data && error.response.data.message) {
-          const errorMessage = error.response.data.message;
+          let errorMessage = error.response.data.message;
+          if (errorMessage === "user not found: record not found") {
+            errorMessage =
+              "Something went wrong. Please check if you entered a valid email";
+          }
+
           snackbar.showError(errorMessage);
         }
       },

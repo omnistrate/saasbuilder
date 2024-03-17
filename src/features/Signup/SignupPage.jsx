@@ -73,7 +73,10 @@ const SignupPage = (props) => {
       },
       onError: (error) => {
         if (error.response.data && error.response.data.message) {
-          const errorMessage = error.response.data.message;
+          let errorMessage = error.response.data.message;
+          if(errorMessage === "tenant already exists"){
+            errorMessage = "Something went wrong. Please check if you've already signed up";
+          }
           snackbar.showError(errorMessage);
         }
       },
