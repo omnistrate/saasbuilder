@@ -1,6 +1,6 @@
-const { createServer } = require("http");
-const { parse } = require("url");
 const next = require("next");
+const express = require("express");
+const path = require("path");
 const { startMailServiceCron } = require("./src/server/mail-service/mail-cron");
 const verifyEnvrionmentVariables = require("./src/server/utils/verifyEnvironmentVariables");
 
@@ -10,11 +10,14 @@ const port = dev ? 3000 : 8080;
 // when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
+const expressApp = express();
 
 app.prepare().then(async () => {
   //check if all required environement variables are available
-  const isVerified = await verifyEnvrionmentVariables();
-  
+  const { isVerified, envVariablesStatus } = await verifyEnvrionmentVariables();
+  console.log("Process env", process.env.NODE_ENV);
+  console.log("Environment variables status", envVariablesStatus);
+
   if (isVerified) {
     if (
       process.env.NODE_INDEX === undefined ||
@@ -27,27 +30,24 @@ app.prepare().then(async () => {
       startMailServiceCron();
     }
   }
-
-  createServer(async (req, res) => {
+  expressApp.set("view engine", "ejs");
+  expressApp.set("views", path.join(__dirname, "src/server/views"));
+  expressApp.use(express.static(path.join(__dirname)));
+  expressApp.use(async (request, response) => {
     try {
-      // Be sure to pass `true` as the second argument to `url.parse`.
-      // This tells it to parse the query portion of the URL.
-      const parsedUrl = parse(req.url, true);
-
-      await handle(req, res, parsedUrl);
-    } catch (err) {
-      console.error("Error occurred handling", req.url, err);
-      res.statusCode = 500;
-      res.end("internal server error");
+      console.log("Is verified", isVerified);
+      if (!isVerified) {
+        response.render("pages/setup-error", {
+          envVariablesStatus,
+        });
+      }
+      await handle(request, response);
+    } catch (error) {
+      response.status(500).send("Internal Server Error");
     }
-  })
-    .once("error", (err) => {
-      console.error(err);
-      process.exit(1);
-    })
-    .listen(port, () => {
-      console.log(`> Ready on http://${hostname}:${port}`);
-    });
+  });
 
-
+  expressApp.listen(port, () => {
+    console.log(`> Ready on http://${hostname}:${port}`);
+  });
 });
