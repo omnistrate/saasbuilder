@@ -21,7 +21,7 @@ function Error(props) {
   return (
     <Stack direction="row" justifyContent="center">
       <Box textAlign="center">
-        <ErrorImage src={errorImage} alt="error" />
+        <ErrorImage src={errorImage} alt="error" priority />
         <Title>Something went wrong!</Title>
         <Description>
           Sorry about that! Please return to the home page and try again.{" "}
