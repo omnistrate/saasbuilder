@@ -15,9 +15,8 @@ const expressApp = express();
 app.prepare().then(async () => {
   //check if all required environement variables are available
   const { isVerified, envVariablesStatus } = await verifyEnvrionmentVariables();
-  console.log("Process env", process.env.NODE_ENV);
-  console.log("Environment variables status", envVariablesStatus);
 
+  console.log("Environment variables status", envVariablesStatus);
   if (isVerified) {
     if (
       process.env.NODE_INDEX === undefined ||
@@ -35,15 +34,14 @@ app.prepare().then(async () => {
   expressApp.use(express.static(path.join(__dirname)));
   expressApp.use(async (request, response) => {
     try {
-      console.log("Is verified", isVerified);
-      if (!isVerified) {
+      if (!isVerified && process.env.NODE_ENV === "development") {
         response.render("pages/setup-error", {
           envVariablesStatus,
         });
       }
       await handle(request, response);
     } catch (error) {
-      response.status(500).send("Internal Server Error");
+      response.render("pages/error");
     }
   });
 
