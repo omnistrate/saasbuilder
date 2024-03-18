@@ -20,6 +20,7 @@ import MarketplaceServiceDefinitionsTab, {
 } from "./components/MarketplaceServiceDefinitionsTab";
 import ProductTierPlanDetailsCard from "./components/ProductTierPlanDetailsCard";
 import NoProductTierUI from "src/components/NoProductTierUI/NoProductTierUI";
+import CarouselMultiProductTierPlan from "./components/CarouselMultiProductTierPlan";
 
 function ProductTiers(props) {
   const {
@@ -184,34 +185,19 @@ function ProductTiers(props) {
             </Fragment>
           ))
         ) : (
-          <Box
-            sx={{
-              display: "flex",
-              gap: "30px",
-              marginRight: "auto",
-              marginLeft: "auto",
-              justifyContent: "center",
-            }}
-          >
-            {serviceOfferingData?.offerings?.map((offering, i) => (
-              <Fragment key={i}>
-                <MultiProductTierPlanCard
-                  offering={offering}
-                  serviceId={serviceId}
-                  subscriptionsData={subscriptionsData}
-                  selectedProductTierId={selectedProductTierId}
-                  setSelectedProductTierId={setSelectedProductTierId}
-                  source={source}
-                  isUserFromServiceOrg={isUserFromServiceOrg}
-                  subscribeMutation={subscribeMutation}
-                  unSubscribeMutation={unSubscribeMutation}
-                  handleNavigateToDashboard={handleNavigateToDashboard}
-                  handleUnsubscribeClick={handleDeleteDialogOpen}
-                  isMarketplacePage={true}
-                />
-              </Fragment>
-            ))}
-          </Box>
+          <CarouselMultiProductTierPlan
+            serviceOfferingData={serviceOfferingData}
+            serviceId={serviceId}
+            subscriptionsData={subscriptionsData}
+            selectedProductTierId={selectedProductTierId}
+            setSelectedProductTierId={setSelectedProductTierId}
+            source={source}
+            isUserFromServiceOrg={isUserFromServiceOrg}
+            subscribeMutation={subscribeMutation}
+            unSubscribeMutation={unSubscribeMutation}
+            handleNavigateToDashboard={handleNavigateToDashboard}
+            handleDeleteDialogOpen={handleDeleteDialogOpen}
+          />
         )}
       </Box>
 
