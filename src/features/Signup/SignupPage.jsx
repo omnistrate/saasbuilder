@@ -15,6 +15,7 @@ import TextField from "components/NonDashboardComponents/FormElementsV2/TextFiel
 import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
 import SignupNotification from "components/NonDashboardComponents/SignupNotification";
 import useSnackbar from "src/hooks/useSnackbar";
+import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -23,10 +24,7 @@ const signupValidationSchema = Yup.object({
     .required("Email is required"),
   password: Yup.string()
     .required("Password is required")
-    .matches(
-      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
-      "Password must be at least 8 characters and include a mix of uppercase, lowercase, a number, and a special character."
-    ),
+    .matches(passwordRegex, passwordText),
   confirmPassword: Yup.string()
     .required("Re-enter your password")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),

@@ -13,6 +13,7 @@ import styled from "@emotion/styled";
 import Button from "src/components/Button/Button";
 import { updatePassword } from "src/api/users";
 import useLogout from "src/hooks/useLogout";
+import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 
 function ChangePassword() {
   const snackbar = useSnackbar();
@@ -64,10 +65,7 @@ function ChangePassword() {
       currentpassword: Yup.string().required("Password is required"),
       password: Yup.string()
         .required("Password is required")
-        .matches(
-          /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
-          "Password must be at least 8 characters and include a mix of uppercase, lowercase, a number, and a special character."
-        ),
+        .matches(passwordRegex, passwordText),
       confirmpassword: Yup.string()
         .required("Password is required")
         .oneOf([Yup.ref("password"), null], "Passwords must match"),
