@@ -21,7 +21,12 @@ const signupValidationSchema = Yup.object({
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
-  password: Yup.string().required("Password is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .matches(
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
+      "Password must be at least 8 characters and include a mix of uppercase, lowercase, a number, and a special character."
+    ),
   confirmPassword: Yup.string()
     .required("Re-enter your password")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),

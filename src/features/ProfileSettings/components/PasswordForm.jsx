@@ -62,7 +62,12 @@ function ChangePassword() {
     //   validationSchema: createImageRegistryValidationSchema,
     validationSchema: Yup.object({
       currentpassword: Yup.string().required("Password is required"),
-      password: Yup.string().required("Password is required"),
+      password: Yup.string()
+        .required("Password is required")
+        .matches(
+          /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
+          "Password must be at least 8 characters and include a mix of uppercase, lowercase, a number, and a special character."
+        ),
       confirmpassword: Yup.string()
         .required("Password is required")
         .oneOf([Yup.ref("password"), null], "Passwords must match"),

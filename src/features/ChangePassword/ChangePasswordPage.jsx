@@ -16,7 +16,12 @@ import PasswordField from "components/NonDashboardComponents/FormElementsV2/Pass
 import CenterContentLayout from "components/NonDashboardComponents/Layout/CenterContentLayout";
 
 const changePasswordValidationSchema = Yup.object({
-  password: Yup.string().required("Password is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .matches(
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
+      "Password must be at least 8 characters and include a mix of uppercase, lowercase, a number, and a special character."
+    ),
   confirmPassword: Yup.string()
     .required("Password is required")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
