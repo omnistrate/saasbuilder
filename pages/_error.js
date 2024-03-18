@@ -3,8 +3,8 @@ import errorImage from "../public/assets/images/error.png";
 import Image from "next/image";
 import { Box, Stack } from "@mui/material";
 import Link from "next/link";
-import { SubmitButton } from "src/components/NonDashboardComponents/FormElements/FormElements";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
+import Button from "components/Button/Button";
 
 export const getServerSideProps = async () => {
   const response = await getProviderOrgDetails();
@@ -30,7 +30,9 @@ function Error(props) {
             : ""}
         </Description>
         <Link href="/service-plans">
-          <SubmitButton sx={{ marginTop: "40px" }}>Go to Home</SubmitButton>
+          <Button variant="contained" size="xlarge" sx={{ marginTop: "40px" }}>
+            Go to Home
+          </Button>
         </Link>
       </Box>
     </Stack>
