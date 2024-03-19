@@ -95,14 +95,25 @@ function DashboardHeader(props) {
       }}
     >
       <Stack direction="row" alignItems="center">
-        <Stack direction="row" alignItems="center" gap="10px" width="255px">
+        <Stack direction="row" alignItems="center" gap="10px" pr="16px">
           <Image
             src={serviceLogoURL || placeholderService}
             height={28}
             width={40}
             style={{ maxHeight: "28px", width: "auto", maxWidth: "180px" }}
           />
-          <Text color={styleConfig.navbarTextColor}>{serviceName}</Text>
+          <Text
+            color={styleConfig.navbarTextColor}
+            sx={{
+              minWidth: "200px",
+              maxWidth: "260px",
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {serviceName}
+          </Text>
         </Stack>
 
         <Box

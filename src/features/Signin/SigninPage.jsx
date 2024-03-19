@@ -40,7 +40,7 @@ const SigninPage = (props) => {
         if (jwtToken) {
           Cookies.set("token", jwtToken, { sameSite: "Strict", secure: true });
           axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
-          router.push("/product-tiers");
+          router.push("/service-plans");
         }
       },
       onError: (error) => {

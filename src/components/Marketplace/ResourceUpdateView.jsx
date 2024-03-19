@@ -252,8 +252,6 @@ function ResourceUpdateView(props) {
                             const returnVal = formData.values.requestParams[
                               param.key
                             ].find((val) => {
-                              console.log(",,,,,,val,,,,,,,", val);
-                              console.log(",,,,,,valInList,,,,,,,", valInList);
                               return val === valInList;
                             });
                             return returnVal;

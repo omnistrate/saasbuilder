@@ -12,9 +12,11 @@ import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
 import styled from "@emotion/styled";
 import Button from "src/components/Button/Button";
 import { updatePassword } from "src/api/users";
+import useLogout from "src/hooks/useLogout";
 
 function ChangePassword() {
   const snackbar = useSnackbar();
+  const { logout } = useLogout();
 
   const createChangePasswordMutation = useMutation(
     (values) => {
@@ -26,8 +28,9 @@ function ChangePassword() {
     },
     {
       onSuccess: (response) => {
-        snackbar.showSuccess("Updated password");
+        snackbar.showSuccess("Updated password successfully!");
         formik.resetForm();
+        logout();
       },
       onError: (error) => {
         if (

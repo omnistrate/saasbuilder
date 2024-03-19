@@ -4,7 +4,6 @@ function getSignUpMailContent(signUpEventObj) {
 
   // [username, provider] = email.split("@");
   //const encodedEmail = encodeURIComponent(username + `+${orgID}@` + provider);
-  console.log("Base domain", process.env.YOUR_SAAS_DOMAIN_URL)
   const activationURL = encodeURI(
     `${
       process.env.YOUR_SAAS_DOMAIN_URL

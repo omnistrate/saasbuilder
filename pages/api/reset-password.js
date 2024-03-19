@@ -1,8 +1,6 @@
 import { customerUserResetPassword } from "src/server/api/customer-user";
 
 export default async function handleResetPassword(nextRequest, nextResponse) {
-  console.log("Request body", nextRequest.body);
-
   if (nextRequest.method === "POST") {
     try {
       const response = await customerUserResetPassword(nextRequest.body);

@@ -3,8 +3,8 @@ import errorImage from "../public/assets/images/error.png";
 import Image from "next/image";
 import { Box, Stack } from "@mui/material";
 import Link from "next/link";
-import { SubmitButton } from "src/components/NonDashboardComponents/FormElements/FormElements";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
+import Button from "components/Button/Button";
 
 export const getServerSideProps = async () => {
   const response = await getProviderOrgDetails();
@@ -21,7 +21,7 @@ function Error(props) {
   return (
     <Stack direction="row" justifyContent="center">
       <Box textAlign="center">
-        <ErrorImage src={errorImage} alt="error" />
+        <ErrorImage src={errorImage} alt="error" priority />
         <Title>Something went wrong!</Title>
         <Description>
           Sorry about that! Please return to the home page and try again.{" "}
@@ -29,8 +29,10 @@ function Error(props) {
             ? `If the issue persists please reach out at ${orgSupportEmail}`
             : ""}
         </Description>
-        <Link href="/product-tiers">
-          <SubmitButton sx={{ marginTop: "40px" }}>Go to Home</SubmitButton>
+        <Link href="/service-plans">
+          <Button variant="contained" size="xlarge" sx={{ marginTop: "40px" }}>
+            Go to Home
+          </Button>
         </Link>
       </Box>
     </Stack>
