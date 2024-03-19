@@ -7,13 +7,21 @@ import { getProviderOrgDetails } from "src/server/api/customer-user";
 import Button from "components/Button/Button";
 
 export const getServerSideProps = async () => {
-  const response = await getProviderOrgDetails();
+  try {
+    const response = await getProviderOrgDetails();
 
-  return {
-    props: {
-      orgSupportEmail: response.data.orgSupportEmail || response.data.email,
-    },
-  };
+    return {
+      props: {
+        orgSupportEmail: response.data.orgSupportEmail || response.data.email,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        orgSupportEmail: "",
+      },
+    };
+  }
 };
 
 function Error(props) {
