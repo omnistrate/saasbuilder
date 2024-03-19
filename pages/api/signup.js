@@ -19,8 +19,13 @@ export default async function handleSignup(nextRequest, nextResponse) {
           message: defaultErrorMessage,
         });
       } else {
+        let responseErrorMessage = error.response?.data?.message;
+
+        if (responseErrorMessage === "tenant already exists") {
+          nextResponse.status(200).send();
+        }
         nextResponse.status(error.response?.status || 500).send({
-          message: error.response?.data?.message || defaultErrorMessage,
+          message: responseErrorMessage || defaultErrorMessage,
         });
       }
     }

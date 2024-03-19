@@ -17,8 +17,14 @@ export default async function handleResetPassword(nextRequest, nextResponse) {
           message: defaultErrorMessage,
         });
       } else {
+        let responseErrorMessage = error.response?.data?.message;
+
+        if (responseErrorMessage === "user not found: record not found") {
+            nextResponse.status(200).send()
+        }
+
         nextResponse.status(error.response?.status || 500).send({
-          message: error.response?.data?.message || defaultErrorMessage,
+          message: responseErrorMessage || defaultErrorMessage,
         });
       }
     }

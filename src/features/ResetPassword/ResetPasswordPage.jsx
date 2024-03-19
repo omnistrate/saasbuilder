@@ -30,17 +30,12 @@ const ResetPasswordPage = (props) => {
       onSuccess: (data) => {
         formik.resetForm();
         snackbar.showSuccess(
-          "Reset password link sent to the registered email"
+          "If an account associated with this email exists, you will be sent a link to reset your password"
         );
       },
       onError: (error) => {
         if (error.response.data && error.response.data.message) {
           let errorMessage = error.response.data.message;
-          if (errorMessage === "user not found: record not found") {
-            errorMessage =
-              "Something went wrong. Please check if you entered a valid email";
-          }
-
           snackbar.showError(errorMessage);
         }
       },

@@ -18,7 +18,8 @@ const SignupNotification = ({ isVisible }) => {
         visibility: isVisible ? "visible" : "hidden",
       }}
     >
-      Sign up Successful. Please check your mail for verification
+      Thank you for signing up! Please check your email for a link to continue
+      the registration process
     </Box>
   );
 };
