@@ -48,6 +48,7 @@ const CarouselMultiProductTierPlan = (props) => {
                   unSubscribeMutation={unSubscribeMutation}
                   handleNavigateToDashboard={handleNavigateToDashboard}
                   handleUnsubscribeClick={handleDeleteDialogOpen}
+                  isMarketplacePage={true}
                 />
               </Fragment>
             );
