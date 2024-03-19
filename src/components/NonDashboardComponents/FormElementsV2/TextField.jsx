@@ -30,7 +30,7 @@ const TextField = ({ type, endAdornment, ...restProps }) => {
         sx: {
           position: "absolute",
           left: "0px",
-          bottom: "-24px",
+          bottom: -24,
         },
       }}
       {...restProps}
