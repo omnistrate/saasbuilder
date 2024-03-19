@@ -20,7 +20,7 @@ function getOrgInviteUserMailContent(inviteUserEventObj) {
     <body>
       <p>Hello,</p>
       <p>You've been invited to join ${userName}'s subscription on ${serviceName} service.</p>
-      <p>Please login to your account ${signInURL} to accept the invitation</p>
+      <p>Please login to your account <a href="${signInURL}">here</a> to accept the invitation</p>
       <p>Thanks</p>
     </body>
   </html>`;
