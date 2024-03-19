@@ -9,17 +9,6 @@ import Container from "src/components/NonDashboardComponents/Container/Container
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
 
-// Checks if the String is Empty Because of the Quill Editor
-// - <h1><br></h1> - Not Valid (Basically Empty)
-// - <p><br></p> - Not Valid (Baically Empty)
-// - Other similar cases - Not Valid
-// - Anything else - Valid
-
-const isValidText = (str) => {
-  const regex = /^(?:<(\w+)>\s*(?:<br\s*\/?>|\/?>\s*<br\s*>)\s*<\/\1>)$/im;
-  return !regex.test(str);
-};
-
 export const getServerSideProps = async () => {
   const response = await getProviderOrgDetails();
 
@@ -229,7 +218,7 @@ function PrivacyPolicy(props) {
           alt="privacy-policy"
           priority
         />
-        {orgPrivacyPolicy && isValidText(orgPrivacyPolicy) ? (
+        {orgPrivacyPolicy && orgPrivacyPolicy !== "<p><br></p>" ? (
           <Box
             sx={{ marginTop: "30px" }}
             dangerouslySetInnerHTML={{
