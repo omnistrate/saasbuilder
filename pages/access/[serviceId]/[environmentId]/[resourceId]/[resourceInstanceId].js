@@ -27,6 +27,7 @@ import {
 } from "../../../../../src/utils/route/access/accessRoute";
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
+import { checkIfResouceIsBYOA } from "src/utils/access/byoaResource";
 
 function ResourceInstance() {
   const router = useRouter();
@@ -59,6 +60,11 @@ function ResourceInstance() {
       resourceKey = resource.urlKey;
     }
   }
+
+  const isResourceBYOA = useMemo(() => {
+    return checkIfResouceIsBYOA(resourceId);
+  }, [resourceId]);
+
   useEffect(() => {
     if (source) {
       setCurrentSource(source);
@@ -112,7 +118,8 @@ function ResourceInstance() {
 
   const tabs = getTabs(
     resourceInstanceData?.isMetricsEnabled,
-    resourceInstanceData?.isLogsEnabled
+    resourceInstanceData?.isLogsEnabled,
+    resourceInstanceData?.active
   );
 
   let pageTitle = "Resource";
@@ -199,15 +206,7 @@ function ResourceInstance() {
     productTierId,
     currentSource
   );
-  const modelType = serviceOffering?.serviceModelType;
-  let deploymentHeader = "";
-  if (modelType === "CUSTOMER_HOSTED") {
-    deploymentHeader = "Provider Account";
-  } else if (modelType === "OMNISTRATE_HOSTED") {
-    deploymentHeader = "Omnistrate Account";
-  } else if (modelType === "BYOA") {
-    deploymentHeader = "Bring Your Own Account (BYOA)";
-  }
+
   const serviceAPIDocsLink = getAPIDocsRoute(
     serviceId,
     environmentId,
@@ -269,14 +268,15 @@ function ResourceInstance() {
         modifiedAt={resourceInstanceData?.modifiedAt}
         networkType={resourceInstanceData?.networkType}
         healthStatusPercent={resourceInstanceData?.healthStatusPercent}
+        isResourceBYOA={isResourceBYOA}
       />
       <Tabs value={currentTab} sx={{ marginTop: "28px" }}>
-        {Object.entries(tabs).map(([key, label]) => {
+        {Object.entries(tabs).map(([key, value]) => {
           return (
             <Tab
               key={key}
-              label={label}
-              value={label}
+              label={getTabLabel(value, isResourceBYOA)}
+              value={value}
               onClick={() => {
                 router.push(
                   getResourceInstancesDetailswithKeyRoute(
@@ -376,7 +376,7 @@ function ResourceInstance() {
 
 export default ResourceInstance;
 
-function getTabs(isMetricsEnabled, isLogsEnabled) {
+function getTabs(isMetricsEnabled, isLogsEnabled, isActive) {
   const tabs = {
     resourceInstanceDetails: "Resource Instance Details",
     connectivity: "Connectivity",
@@ -385,5 +385,25 @@ function getTabs(isMetricsEnabled, isLogsEnabled) {
   if (isMetricsEnabled) tabs["metrics"] = "Metrics";
   if (isLogsEnabled) tabs["logs"] = "Logs";
 
+  if (!isActive) {
+    delete tabs.connectivity;
+    delete tabs.nodes;
+  }
+
   return tabs;
+}
+
+const TAB_LABEL_MAP = {
+  "Resource Instance Details": "Resource Instance Details",
+  Connectivity: "Connectivity",
+  Nodes: "Nodes",
+  Metrics: "Metrics",
+  Logs: "Logs",
+};
+
+function getTabLabel(value, isResourceBYOA) {
+  if (value === "Resource Instance Details" && isResourceBYOA) {
+    return "Account Instance Details";
+  }
+  return TAB_LABEL_MAP[value];
 }

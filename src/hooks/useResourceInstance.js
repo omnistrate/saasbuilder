@@ -67,19 +67,21 @@ export default function useResourceInstance(
         let metricsSocketURL = "";
         let logsSocketURL = "";
 
-        const topologyDetails = data.detailedNetworkTopology[resourceId];
+        const topologyDetails = data?.detailedNetworkTopology?.[resourceId];
         const nodeEndpointsList = [];
         const availabilityZonesList = [];
         const nodes = [];
-        const globalEndpoints = {
-          primary: {
+        const globalEndpoints = {};
+
+        if (topologyDetails) {
+          globalEndpoints.primary = {
             resourceName: topologyDetails.resourceName,
             endpoint: topologyDetails.clusterEndpoint
               ? topologyDetails.clusterEndpoint
               : "",
-          },
-          others: [],
-        };
+          };
+          globalEndpoints.others = [];
+        }
 
         const productTierFeatures = data?.productTierFeatures;
 
@@ -91,7 +93,7 @@ export default function useResourceInstance(
           isMetricsEnabled = true;
         }
 
-        if (topologyDetails.nodes) {
+        if (topologyDetails?.nodes) {
           topologyDetails.nodes.forEach((node) => {
             const nodeId = node.id;
             const endpoint = node.endpoint;
@@ -128,12 +130,12 @@ export default function useResourceInstance(
         let modifiedAt = data.last_modified_at;
 
         const topologyDetailsOtherThanMain = Object.entries(
-          data.detailedNetworkTopology
-        ).filter(([resourceId, topologyDetails]) => {
+          data.detailedNetworkTopology ?? {}
+        )?.filter(([resourceId, topologyDetails]) => {
           return topologyDetails.main === false;
         });
 
-        topologyDetailsOtherThanMain.forEach(
+        topologyDetailsOtherThanMain?.forEach(
           ([resourceId, topologyDetails]) => {
             const { resourceKey } = topologyDetails;
             if (resourceKey === "omnistrateobserv") {
@@ -191,24 +193,28 @@ export default function useResourceInstance(
         );
 
         // Initial value already has the main resource. So, if 'main' is true, then don't add any value to the Array
-        const clusterPorts = Object.values(data.detailedNetworkTopology).reduce(
-          (accumulator, topologyDetails) => {
-            if (topologyDetails.main) return accumulator;
-            return [
-              ...accumulator,
+
+        let clusterPorts;
+        if (data?.detailedNetworkTopology) {
+          clusterPorts = Object.values(data.detailedNetworkTopology).reduce(
+            (accumulator, topologyDetails) => {
+              if (topologyDetails.main) return accumulator;
+              return [
+                ...accumulator,
+                {
+                  resourceName: topologyDetails?.resourceName,
+                  ports: processClusterPorts(topologyDetails?.clusterPorts),
+                },
+              ];
+            },
+            [
               {
                 resourceName: topologyDetails?.resourceName,
                 ports: processClusterPorts(topologyDetails?.clusterPorts),
               },
-            ];
-          },
-          [
-            {
-              resourceName: topologyDetails?.resourceName,
-              ports: processClusterPorts(topologyDetails?.clusterPorts),
-            },
-          ]
-        );
+            ]
+          );
+        }
 
         let healthStatusPercent = 0;
 
@@ -232,13 +238,13 @@ export default function useResourceInstance(
           networkType: data.network_type,
           connectivity: {
             networkType: _.capitalize(data.network_type),
-            clusterEndpoint: topologyDetails.clusterEndpoint,
+            clusterEndpoint: topologyDetails?.clusterEndpoint,
             nodeEndpoints: nodeEndpoints,
             ports: clusterPorts,
             availabilityZones: availabilityZones,
-            publiclyAccessible: topologyDetails.publiclyAccessible,
-            privateNetworkCIDR: topologyDetails.privateNetworkCIDR,
-            privateNetworkId: topologyDetails.privateNetworkID,
+            publiclyAccessible: topologyDetails?.publiclyAccessible,
+            privateNetworkCIDR: topologyDetails?.privateNetworkCIDR,
+            privateNetworkId: topologyDetails?.privateNetworkID,
             globalEndpoints: globalEndpoints,
           },
           nodes: nodes,
@@ -248,6 +254,7 @@ export default function useResourceInstance(
           metricsSocketURL: metricsSocketURL,
           logsSocketURL: logsSocketURL,
           healthStatusPercent: healthStatusPercent,
+          active: data?.active,
         };
         //console.log("Final", final);
         return final;

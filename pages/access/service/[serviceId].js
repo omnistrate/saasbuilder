@@ -92,6 +92,11 @@ import { getAwsBootstrapArn } from "src/utils/accountConfig/accountConfig";
 import GradientProgressBar from "src/components/GradientProgessBar/GradientProgressBar";
 import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
 import Head from "next/head";
+import CopyButton from "src/components/Button/CopyButton";
+import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
+import Tooltip from "src/components/Tooltip/Tooltip";
+import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
+import DeleteAccountConfigConfirmationDialog from "src/components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
 
 const instanceStatuses = {
   FAILED: "FAILED",
@@ -116,8 +121,16 @@ function MarketplaceService() {
   const [cloudProviderResource, setCloudProviderResource] = useState(null);
 
   const [isOrgIdModalOpen, setIsOrgIdModalOpen] = useState(false);
-  //this is required to show some extra text on CLoudProviderAccountModal on creation
+  //this is required to show some extra text on CloudProviderAccountModal on creation
   const [isAccountCreation, setIsAccountCreation] = useState(false);
+
+  const [isCloudFormation, setIsCloudFormation] = useState(false); //false implies cloud provider account created using terraform
+  const [cloudProvider, setCloudProvider] = useState("");
+  const [cloudFormationTemplateUrl, setCloudFormationTemplateUrl] =
+    useState("");
+  const [accountConfigStatus, setAccountConfigStatus] = useState("");
+  const [accountConfigId, setAccountConfigId] = useState("");
+  //this is required to show some extra text on CloudProviderAccountModal on creation
 
   const [isCreateInstanceSchemaFetching, setIsCreateInstanceSchemaFetching] =
     useState(false);
@@ -145,6 +158,13 @@ function MarketplaceService() {
   const [selectedResourceInstances, setSelectedResourceInstances] = useState(
     []
   );
+
+  let isCurrentResourceBYOA = false;
+  if (
+    selectedResource?.id &&
+    selectedResource.id.includes("r-injectedaccountconfig")
+  )
+    isCurrentResourceBYOA = true;
 
   const [isConfirmationDialog, setIsConfirmationDialog] = useState(false);
   const [requestParams, setRequestParams] = useState({});
@@ -224,7 +244,7 @@ function MarketplaceService() {
         field: "id",
         headerName: "ID",
         flex: 0.9,
-        minWidth: 190,
+        minWidth: 200,
         align: "center",
         headerAlign: "center",
         renderCell: (params) => {
@@ -234,31 +254,23 @@ function MarketplaceService() {
           const instanceIdDisplay = isCurrentResourceBYOA
             ? "account-" + instanceId
             : instanceId;
-          if (isActive) {
-            const resourceInstanceUrlLink = getResourceInstancesDetailsRoute(
-              serviceId,
-              environmentId,
-              productTierId,
-              selectedResource?.id,
-              instanceId,
-              subscriptionData?.id
-            );
+          const resourceInstanceUrlLink = getResourceInstancesDetailsRoute(
+            serviceId,
+            environmentId,
+            productTierId,
+            selectedResource?.id,
+            instanceId,
+            subscriptionData?.id
+          );
 
-            return (
+          return (
+            <Box display="flex" gap="8px" alignItems="center">
               <GridCellExpand
                 href={resourceInstanceUrlLink}
                 value={instanceIdDisplay ?? ""}
                 width={params.colDef.computedWidth}
               />
-            );
-          }
-          return (
-            <Box
-              component="span"
-              sx={{ color: "#6941C6", fontWeight: 500 }}
-              title={instanceIdDisplay}
-            >
-              {instanceIdDisplay}
+              <CopyButton text={instanceIdDisplay} />
             </Box>
           );
         },
@@ -308,19 +320,17 @@ function MarketplaceService() {
         minWidth: 155,
         renderCell: (params) => {
           const region = params.row.region;
-          return !isCurrentResourceBYOA ? (
+          return !isCurrentResourceBYOA && region ? (
             <GridCellExpand
               value={region}
               startIcon={<RegionIcon />}
               width={params.colDef.computedWidth}
-              textStyles={{ marginBottom: "10px" }}
             />
           ) : (
             <GridCellExpand
               value={"Global"}
               startIcon={<RegionIcon />}
               width={params.colDef.computedWidth}
-              textStyles={{ marginBottom: "10px" }}
             />
           );
         },
@@ -406,7 +416,12 @@ function MarketplaceService() {
               <AzureLogo />
             ) : params.row.cloud_provider === "gcp" ? (
               <GcpLogo />
-            ) : null
+            ) : (
+              <GridCellExpand
+                value={"Everywhere"}
+                width={params.colDef.computedWidth}
+              />
+            )
           ) : (
             <AwsLogo />
           );
@@ -1040,12 +1055,6 @@ function MarketplaceService() {
   };
 
   const isSingleInstanceSelected = selectedResourceInstances.length === 1;
-  let isCurrentResourceBYOA = false;
-  if (
-    selectedResource?.id &&
-    selectedResource.id.includes("r-injectedaccountconfig")
-  )
-    isCurrentResourceBYOA = true;
 
   let isStartActionEnabled = false;
   let isStopActionEnabled = false;
@@ -1748,17 +1757,27 @@ function MarketplaceService() {
                   />
                 }
               />
-              <ConfirmationDialog
-                open={isConfirmationDialog}
-                handleClose={handleConfirmationClose}
-                formData={deleteformik}
-                title={`Do you want to delete this ${selectedResource.name} instance?`}
-                subtitle={`Are you sure you want to delete - ${selectedResourceInstances[0]?.id}?`}
-                message={`To confirm deletion, please enter <b>deleteme</b>, in the field below:`}
-                buttonLabel="Confirm"
-                isLoading={deleteResourceInstanceMutation.isLoading}
-                isDeleteEnable={true}
-              />
+              {isCurrentResourceBYOA ? (
+                <DeleteAccountConfigConfirmationDialog
+                  open={isConfirmationDialog}
+                  handleClose={handleConfirmationClose}
+                  formData={deleteformik}
+                  title="Delete Confirmation"
+                  isLoading={deleteResourceInstanceMutation.isLoading}
+                />
+              ) : (
+                <ConfirmationDialog
+                  open={isConfirmationDialog}
+                  handleClose={handleConfirmationClose}
+                  formData={deleteformik}
+                  title={`Do you want to delete this ${selectedResource.name} instance?`}
+                  subtitle={`Are you sure you want to delete - ${selectedResourceInstances[0]?.id}?`}
+                  message={`To confirm deletion, please enter <b>deleteme</b>, in the field below:`}
+                  buttonLabel="Confirm"
+                  isLoading={deleteResourceInstanceMutation.isLoading}
+                  isDeleteEnable={true}
+                />
+              )}
             </>
           )}
         </Card>

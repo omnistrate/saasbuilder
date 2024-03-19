@@ -153,60 +153,6 @@ function CreateResourceInstanceForm(props) {
       </P>
 
       <Form onSubmit={formData.handleSubmit} sx={{ width: "100%" }}>
-        {/* {isBYOA && (
-          <>
-            <FieldDescription sx={{ mt: "24px", minHeight: "40px" }}>
-              {downloadTerraformKitMutation.isLoading ? (
-                <Stack
-                  mt="8px"
-                  direction="row"
-                  alignItems="center"
-                  fontSize={12}
-                >
-                  Downloading Terraform. Please wait..{" "}
-                  <LoadingSpinnerSmall
-                    sx={{ color: "black", ml: "16px" }}
-                    size={12}
-                  />
-                </Stack>
-              ) : (
-                <Box>
-                  <Box
-                    sx={{
-                      textDecoration: "underline",
-                      color: "blue",
-                      marginRight: "6px",
-                      cursor: "pointer",
-                    }}
-                    component="span"
-                    onClick={() => {
-                      downloadTerraformKitMutation.mutate();
-                    }}
-                  >
-                    Click here
-                  </Box>
-                  to download the terraform kit to configure Role/Service
-                  Account access
-                </Box>
-              )}
-            </FieldDescription>
-            <FieldDescription sx={{ mt: "8px" }}>
-              <Link
-                style={{
-                  textDecoration: "underline",
-                  color: "blue",
-                }}
-                href="https://www.youtube.com/watch?v=xLjrQOiT1Y0&ab_channel=Omnistrate"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Watch this video
-              </Link>{" "}
-              to learn how to setup BYOA
-            </FieldDescription>
-          </>
-        )} */}
-
         {cloudProviderFieldExists && (
           <FieldContainer>
             <FieldLabel required>Cloud Provider</FieldLabel>
@@ -544,7 +490,10 @@ function CreateResourceInstanceForm(props) {
                     </Select>
                   </FieldContainer>
                 );
-              } else if (param.custom == true) {
+              } else if (
+                param.custom === true ||
+                param.key === "cloud_provider_native_network_id"
+              ) {
                 return (
                   <FieldContainer key={param.key}>
                     {param.required == true ? (
@@ -552,8 +501,28 @@ function CreateResourceInstanceForm(props) {
                     ) : (
                       <FieldLabel>{param.displayName}</FieldLabel>
                     )}
+
                     <FieldDescription sx={{ mt: "5px" }}>
                       {param.description}
+                      {param.key === "cloud_provider_native_network_id" && (
+                        <>
+                          {param?.description && <br />}
+                          If you'd like to deploy within your VPC, enter its ID.
+                          Please ensure your VPC meets the{" "}
+                          <Link
+                            style={{
+                              textDecoration: "underline",
+                              color: "blue",
+                            }}
+                            href="https://docs.omnistrate.com/usecases/byoa/?#bring-your-own-vpc-byo-vpc"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            prerequisites
+                          </Link>
+                          .{" "}
+                        </>
+                      )}
                     </FieldDescription>
                     <TextField
                       id={`requestParams.${param.key}`}
@@ -563,7 +532,7 @@ function CreateResourceInstanceForm(props) {
                       sx={{ marginTop: "16px" }}
                       modifiable={param.modifiable}
                       required={param.required == true ? "required" : ""}
-                    ></TextField>
+                    />
                   </FieldContainer>
                 );
               }

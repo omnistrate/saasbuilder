@@ -26,6 +26,7 @@ import {
 } from "../../../utils/isAllowedByRBAC";
 import { useSelector } from "react-redux";
 import { selectUserrootData } from "../../../slices/userDataSlice";
+import Card from "src/components/Card/Card";
 
 export default function NodesTable(props) {
   const {
@@ -228,6 +229,16 @@ export default function NodesTable(props) {
 
   if (selectedNode && selectedNode.status === "RUNNING") {
     isFailoverEnabled = true;
+  }
+
+  if (!nodes?.length) {
+    return (
+      <Card sx={{ minHeight: "500px", marginTop: "54px" }}>
+        <Stack direction="row" justifyContent="center" marginTop="200px">
+          <Text size="xlarge">No Nodes data</Text>
+        </Stack>
+      </Card>
+    );
   }
 
   return (
