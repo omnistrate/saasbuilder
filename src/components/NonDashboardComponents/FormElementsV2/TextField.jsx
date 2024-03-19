@@ -1,6 +1,6 @@
 import { TextField as MuiTextField } from "@mui/material";
 
-const TextField = ({ type, endAdornment, bottom = -24, ...restProps }) => {
+const TextField = ({ type, endAdornment, ...restProps }) => {
   return (
     <MuiTextField
       fullWidth
@@ -30,7 +30,7 @@ const TextField = ({ type, endAdornment, bottom = -24, ...restProps }) => {
         sx: {
           position: "absolute",
           left: "0px",
-          bottom: bottom,
+          bottom: -24,
         },
       }}
       {...restProps}
