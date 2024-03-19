@@ -16,6 +16,7 @@ import PasswordField from "components/NonDashboardComponents/FormElementsV2/Pass
 import SignupNotification from "components/NonDashboardComponents/SignupNotification";
 import useSnackbar from "src/hooks/useSnackbar";
 import { passwordRegex, passwordText } from "src/utils/passwordRegex";
+import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -118,6 +119,8 @@ const SignupPage = (props) => {
 
   const { values, touched, errors, handleChange, handleBlur } = formik;
 
+  console.log("formik ===", touched, errors);
+
   return (
     <>
       <SignupNotification isVisible={showSuccess} />
@@ -130,7 +133,7 @@ const SignupPage = (props) => {
 
         <Stack component="form" gap="32px" autoComplete="off">
           {/* Signup Form */}
-          <Stack gap="30px">
+          <Stack gap="10px">
             <FieldContainer>
               <FieldLabel required>Name</FieldLabel>
               <TextField
@@ -141,8 +144,10 @@ const SignupPage = (props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.name && errors.name}
-                helperText={touched.name && errors.name}
               />
+              <FieldError sx={{ paddingLeft: "13px" }}>
+                {touched.name && errors.name}
+              </FieldError>
             </FieldContainer>
 
             <FieldContainer>
@@ -155,9 +160,11 @@ const SignupPage = (props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.email && errors.email}
-                helperText={touched.email && errors.email}
                 disabled={email ? true : false}
               />
+              <FieldError sx={{ paddingLeft: "13px" }}>
+                {touched.email && errors.email}
+              </FieldError>
             </FieldContainer>
 
             <FieldContainer>
@@ -171,8 +178,10 @@ const SignupPage = (props) => {
                 onBlur={handleBlur}
                 disabled={org ? true : false}
                 error={touched.legalcompanyname && errors.legalcompanyname}
-                helperText={touched.legalcompanyname && errors.legalcompanyname}
               />
+              <FieldError sx={{ paddingLeft: "13px" }}>
+                {touched.legalcompanyname && errors.legalcompanyname}
+              </FieldError>
             </FieldContainer>
 
             <FieldContainer>
@@ -185,14 +194,14 @@ const SignupPage = (props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.companyurl && errors.companyurl}
-                helperText={touched.companyurl && errors.companyurl}
                 disabled={orgUrl ? true : false}
               />
+              <FieldError sx={{ paddingLeft: "13px" }}>
+                {touched.companyurl && errors.companyurl}
+              </FieldError>
             </FieldContainer>
 
-            <FieldContainer
-              mb={errors.password !== "Password is required" ? "20px" : ""}
-            >
+            <FieldContainer>
               <FieldLabel required>Password</FieldLabel>
               <PasswordField
                 name="password"
@@ -203,12 +212,13 @@ const SignupPage = (props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.password && errors.password}
-                helperText={touched.password && errors.password}
-                bottom={errors.password !== "Password is required" ? -44 : -24}
               />
+              <FieldError sx={{ paddingLeft: "13px" }}>
+                {touched.password && errors.password}
+              </FieldError>
             </FieldContainer>
 
-            <FieldContainer sx={{ paddingTop: "20px" }}>
+            <FieldContainer>
               <FieldLabel required>Confirm Password</FieldLabel>
               <PasswordField
                 name="confirmPassword"
@@ -218,8 +228,10 @@ const SignupPage = (props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.confirmPassword && errors.confirmPassword}
-                helperText={touched.confirmPassword && errors.confirmPassword}
               />
+              <FieldError sx={{ paddingLeft: "13px" }}>
+                {touched.confirmPassword && errors.confirmPassword}
+              </FieldError>
             </FieldContainer>
           </Stack>
 

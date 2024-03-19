@@ -1,8 +1,8 @@
 import { Stack } from "@mui/material";
 
-const FieldContainer = ({ children, mb = "" }) => {
+const FieldContainer = ({ children, ...restprop }) => {
   return (
-    <Stack mb={mb} gap="10px">
+    <Stack sx={{ ...restprop }} gap="10px">
       {children}
     </Stack>
   );
