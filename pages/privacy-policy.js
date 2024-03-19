@@ -12,11 +12,12 @@ import DOMPurify from "isomorphic-dompurify";
 // Checks if the String is Empty Because of the Quill Editor
 // - <h1><br></h1> - Not Valid (Basically Empty)
 // - <p><br></p> - Not Valid (Baically Empty)
+// - Other similar cases - Not Valid
 // - Anything else - Valid
 
 const isValidText = (str) => {
-  const pattern = /<\w+[^>]*><br\s*\/>\s*<\/\w+>/i;
-  return pattern.test(str);
+  const regex = /^(?:<(\w+)>\s*(?:<br\s*\/?>|\/?>\s*<br\s*>)\s*<\/\1>)$/im;
+  return !regex.test(str);
 };
 
 export const getServerSideProps = async () => {
