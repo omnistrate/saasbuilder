@@ -30,7 +30,7 @@ const ResetPasswordPage = (props) => {
       onSuccess: (data) => {
         formik.resetForm();
         snackbar.showSuccess(
-          "Reset password link sent to the registered email"
+          "If an account associated with this email exists, you will be sent a link to reset your password"
         );
       },
       onError: (error) => {
