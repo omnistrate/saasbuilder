@@ -13,6 +13,7 @@ import styled from "@emotion/styled";
 import Button from "src/components/Button/Button";
 import { updatePassword } from "src/api/users";
 import useLogout from "src/hooks/useLogout";
+import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 
 function ChangePassword() {
   const snackbar = useSnackbar();
@@ -62,7 +63,9 @@ function ChangePassword() {
     //   validationSchema: createImageRegistryValidationSchema,
     validationSchema: Yup.object({
       currentpassword: Yup.string().required("Password is required"),
-      password: Yup.string().required("Password is required"),
+      password: Yup.string()
+        .required("Password is required")
+        .matches(passwordRegex, passwordText),
       confirmpassword: Yup.string()
         .required("Password is required")
         .oneOf([Yup.ref("password"), null], "Passwords must match"),

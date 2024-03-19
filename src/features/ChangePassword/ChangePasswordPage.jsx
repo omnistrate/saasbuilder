@@ -14,9 +14,13 @@ import FieldContainer from "components/NonDashboardComponents/FormElementsV2/Fie
 import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
 import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
 import CenterContentLayout from "components/NonDashboardComponents/Layout/CenterContentLayout";
+import { passwordRegex, passwordText } from "src/utils/passwordRegex";
+import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
 
 const changePasswordValidationSchema = Yup.object({
-  password: Yup.string().required("Password is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .matches(passwordRegex, passwordText),
   confirmPassword: Yup.string()
     .required("Password is required")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
@@ -78,7 +82,7 @@ const ChangePasswordPage = (props) => {
       {email && token && (
         <Stack component="form" gap="32px">
           {/* Update Password Form */}
-          <Stack gap="30px">
+          <Stack gap="20px">
             <FieldContainer>
               <FieldLabel required>New Password</FieldLabel>
               <PasswordField
@@ -89,8 +93,10 @@ const ChangePasswordPage = (props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.password && errors.password}
-                helperText={touched.password && errors.password}
               />
+              <FieldError sx={{ paddingLeft: "13px" }}>
+                {touched.password && errors.password}
+              </FieldError>
             </FieldContainer>
 
             <FieldContainer>
@@ -103,8 +109,10 @@ const ChangePasswordPage = (props) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.confirmPassword && errors.confirmPassword}
-                helperText={touched.confirmPassword && errors.confirmPassword}
               />
+              <FieldError sx={{ paddingLeft: "13px" }}>
+                {touched.confirmPassword && errors.confirmPassword}
+              </FieldError>
             </FieldContainer>
           </Stack>
 
