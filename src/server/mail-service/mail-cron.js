@@ -88,7 +88,7 @@ function startMailServiceCron() {
 
       await Promise.all(mailPromises)
         .then((responses) => {
-          if (mailPromises.length === events.length)
+          if (mailPromises.length === events.length && events.length > 0)
             console.log("All mails sent and events acknowledged");
         })
         .finally(() => {

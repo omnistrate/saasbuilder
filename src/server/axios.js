@@ -4,15 +4,18 @@ const Axios = require("axios");
 const { baseURL } = require("../axios");
 const { getProviderToken } = require("./providerToken");
 
-//The server axios is different from the client axios instance
-//This will use service provider's JWT token for auth
+//The server uses a separate axios instance 
+//This instance will use service provider's JWT token for auth
 const axios = Axios.create({
   baseURL,
 });
 
-const providerToken = getProviderToken();
-if (providerToken) {
-  axios.defaults.headers.Authorization = `${Bearer} ${providerToken}`;
-}
+axios.interceptors.request.use((config) => {
+  const providerAuthToken = getProviderToken();
+  if (providerAuthToken) {
+    config.headers.Authorization = `Bearer ${providerAuthToken}`;
+  }
+  return config;
+});
 
 module.exports = axios;
