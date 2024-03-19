@@ -191,11 +191,16 @@ const DefaultPrivacyPolicy = ({ orgName, orgSupportEmail }) => {
 function PrivacyPolicy(props) {
   const { orgName, orgSupportEmail, orgPrivacyPolicy } = props;
 
+  const pageTitle = orgName ? `Privacy Policy - ${orgName}` : "Privacy Policy";
+  const metaDescription = orgName
+    ? `Privacy Policy - ${orgName}`
+    : "Privacy Policy";
+
   return (
     <>
       <Head>
-        <title>Privacy policy - {orgName}</title>
-        <meta name="description" content={`Privacy policy - ${orgName}`} />
+        <title>{pageTitle}</title>
+        <meta name="description" content={metaDescription} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container
