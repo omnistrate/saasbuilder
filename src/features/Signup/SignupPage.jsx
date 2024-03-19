@@ -190,7 +190,9 @@ const SignupPage = (props) => {
               />
             </FieldContainer>
 
-            <FieldContainer>
+            <FieldContainer
+              mb={errors.password !== "Password is required" ? "20px" : ""}
+            >
               <FieldLabel required>Password</FieldLabel>
               <PasswordField
                 name="password"
@@ -202,10 +204,11 @@ const SignupPage = (props) => {
                 onBlur={handleBlur}
                 error={touched.password && errors.password}
                 helperText={touched.password && errors.password}
+                bottom={errors.password !== "Password is required" ? -44 : -24}
               />
             </FieldContainer>
 
-            <FieldContainer>
+            <FieldContainer sx={{ paddingTop: "20px" }}>
               <FieldLabel required>Confirm Password</FieldLabel>
               <PasswordField
                 name="confirmPassword"

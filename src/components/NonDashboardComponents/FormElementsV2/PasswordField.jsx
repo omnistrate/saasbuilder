@@ -3,12 +3,15 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import React, { useState } from "react";
 import TextField from "./TextField";
 
-const PasswordField = ({ ...restProps }) => {
+const PasswordField = ({ bottom, ...restProps }) => {
   const [showPassword, setShowPassword] = useState(false);
+
+  console.log("Password is required ", restProps);
 
   return (
     <TextField
       type={showPassword ? "text" : "password"}
+      bottom={bottom}
       endAdornment={
         <InputAdornment position="end">
           <IconButton
