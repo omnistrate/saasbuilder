@@ -73,8 +73,7 @@ const SignupPage = (props) => {
       },
       onError: (error) => {
         if (error.response.data && error.response.data.message) {
-          let errorMessage = error.response.data.message;
-
+          const errorMessage = error.response.data.message;
           snackbar.showError(errorMessage);
         }
       },
