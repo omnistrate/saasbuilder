@@ -267,11 +267,19 @@ const DefaultTermsOfUse = ({ orgName }) => {
 function TermsOfService(props) {
   const { orgName, orgTermsOfUse } = props;
 
+  const pageTitle = orgName
+    ? `Terms and Conditions - ${orgName}`
+    : "Terms and Conditions";
+
+  const metaDescription = orgName
+    ? `Terms and Condtions - ${orgName}`
+    : "Terms and Conditions";
+
   return (
     <>
       <Head>
-        <title>Terms of use - {orgName}</title>
-        <meta name="description" content={`Terms of use - ${orgName}`} />
+        <title>{pageTitle}</title>
+        <meta name="description" content={metaDescription} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container
@@ -287,16 +295,7 @@ function TermsOfService(props) {
           },
         }}
       >
-        <Title>Terms of Use</Title>
-        <SectionDescription sx={{ marginTop: "27px" }}>
-          Welcome to {orgName} ({`"${orgName},"`} "we," or "us"). Your use of
-          this website (the "Site"), the services made available on the Site,
-          and access to services via API (together "Services") are all subject
-          to these Terms of Service (these "Terms"). By using any of our
-          Services, you agree to be bound by, and use our Services in compliance
-          with, these Terms. IF YOU DO NOT AGREE TO THESE TERMS, DO NOT USE OUR
-          SERVICES.
-        </SectionDescription>
+        <Title>Terms and Conditions</Title>
         <StyledImage src={termsImg} alt="privacy-policy" />
         {orgTermsOfUse && orgTermsOfUse !== "<p><br></p>" ? (
           <Box
