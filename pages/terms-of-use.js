@@ -7,6 +7,16 @@ import Link from "next/link";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
 
+// Checks if the String is Empty Because of the Quill Editor
+// - <h1><br></h1> - Not Valid (Basically Empty)
+// - <p><br></p> - Not Valid (Baically Empty)
+// - Anything else - Valid
+
+const isValidText = (str) => {
+  const pattern = /<\w+[^>]*><br\s*\/>\s*<\/\w+>/i;
+  return pattern.test(str);
+};
+
 export const getServerSideProps = async () => {
   const response = await getProviderOrgDetails();
 
@@ -294,7 +304,7 @@ function TermsOfService(props) {
           SERVICES.
         </SectionDescription>
         <StyledImage src={termsImg} alt="privacy-policy" />
-        {orgTermsOfUse && orgTermsOfUse !== "<p><br></p>" ? (
+        {orgTermsOfUse && isValidText(orgTermsOfUse) ? (
           <Box
             sx={{ marginTop: "30px" }}
             dangerouslySetInnerHTML={{
