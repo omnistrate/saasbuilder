@@ -189,7 +189,7 @@ const DefaultPrivacyPolicy = ({ orgName, orgSupportEmail }) => {
           sx={{ fontWeight: 700, textDecoration: "underline" }}
         >
           <Link href={`mailto:${orgSupportEmail}`} style={{ color: "#2970FF" }}>
-            &nbsp;{orgSupportEmail}.com
+            &nbsp;{orgSupportEmail}
           </Link>
         </Box>
         .

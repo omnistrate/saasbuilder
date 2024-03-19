@@ -264,7 +264,11 @@ const DefaultTermsOfUse = ({ orgName }) => {
       <SectionHeading>Privacy Policy</SectionHeading>
       <SectionDescription>
         Our collection and use of your information is governed by our Privacy
-        Policy, available <Link href="/privacy-policy">here</Link>.
+        Policy, available{" "}
+        <Link href="/privacy-policy" style={{ color: "#2970FF" }}>
+          here
+        </Link>
+        .
       </SectionDescription>
     </>
   );
