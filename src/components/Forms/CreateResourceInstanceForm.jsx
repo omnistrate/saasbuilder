@@ -3,6 +3,7 @@ import {
   Chip,
   CircularProgress,
   Hidden,
+  Link,
   MenuItem,
   OutlinedInput,
   Radio,
@@ -24,8 +25,8 @@ import { describeServiceOfferingResource } from "../../api/serviceOffering";
 import { selectCloudProviders } from "../../slices/providerSlice";
 import Select from "../FormElements/Select/Select";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-import Link from "next/link";
 import useResourcesInstanceIds from "../../hooks/useResourcesInstanceIds";
+import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -47,12 +48,10 @@ function CreateResourceInstanceForm(props) {
     serviceId,
     selectedResourceKey,
     isBYOA,
-    downloadTerraformKitMutation,
     setRequestParams,
     cloudProviderAccounts,
     service,
     subscriptionId,
-    handleOrgIdModalOpen,
   } = props;
 
   const [isSchemaLoading, setIsSchemaLoading] = useState(true);
@@ -247,6 +246,33 @@ function CreateResourceInstanceForm(props) {
           ) : (
             ""
           )}
+
+          {isBYOA && (
+            <FieldContainer key="Account Configuration Method">
+              <FieldLabel required> Account Configuration Method</FieldLabel>
+
+              <FieldDescription sx={{ mt: "5px" }}>
+                Choose between CloudFormation and Terraform to configure your
+                cloud provider account
+              </FieldDescription>
+              <Select
+                sx={{ display: "block", marginTop: "16px" }}
+                id="configMethod"
+                name="configMethod"
+                onChange={formData.handleChange}
+                value={formData.values.configMethod ?? ""}
+                required
+                input={<OutlinedInput />}
+              >
+                {Object.values(ACCOUNT_CREATION_METHODS).map((confgiMethod) => (
+                  <MenuItem key={confgiMethod} value={confgiMethod}>
+                    {confgiMethod}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FieldContainer>
+          )}
+
           {createSchema.map((param) => {
             if (isBYOA && param.key === "aws_bootstrap_role_arn") {
               return null;
@@ -273,23 +299,20 @@ function CreateResourceInstanceForm(props) {
                     <MenuItem disabled value="">
                       <em>None</em>
                     </MenuItem>
-
-                    {[...cloudProviderAccounts]
-                      ?.filter(
-                        (obj) => obj.type === formData.values.cloud_provider
-                      )
-                      .map(
-                        (cloudProviderAccount) =>
-                          cloudProviderAccount.type ===
-                            formData.values.cloud_provider && (
-                            <MenuItem
-                              key={cloudProviderAccount.id}
-                              value={cloudProviderAccount.id}
-                            >
-                              {cloudProviderAccount.id}
-                            </MenuItem>
+                    {[
+                      ...(cloudProviderFieldExists
+                        ? cloudProviderAccounts?.filter(
+                            (obj) => obj.type === formData.values.cloud_provider
                           )
-                      )}
+                        : cloudProviderAccounts),
+                    ].map((cloudProviderAccount) => (
+                      <MenuItem
+                        key={cloudProviderAccount.id}
+                        value={cloudProviderAccount.id}
+                      >
+                        {cloudProviderAccount.id}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FieldContainer>
               );

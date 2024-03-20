@@ -159,13 +159,6 @@ function MarketplaceService() {
     []
   );
 
-  let isCurrentResourceBYOA = false;
-  if (
-    selectedResource?.id &&
-    selectedResource.id.includes("r-injectedaccountconfig")
-  )
-    isCurrentResourceBYOA = true;
-
   const [isConfirmationDialog, setIsConfirmationDialog] = useState(false);
   const [requestParams, setRequestParams] = useState({});
   const [selectedResource, setSelectedResource] = useState({
@@ -174,6 +167,14 @@ function MarketplaceService() {
     name: "",
     isDeprecated: false,
   });
+
+  let isCurrentResourceBYOA = false;
+  if (
+    selectedResource?.id &&
+    selectedResource.id.includes("r-injectedaccountconfig")
+  )
+    isCurrentResourceBYOA = true;
+
   const regionNames = useSelector(selectAllRegions);
   const isUnmounted = useRef(false);
   const router = useRouter();
@@ -284,7 +285,54 @@ function MarketplaceService() {
         minWidth: 155,
         renderCell: (params) => {
           const status = params.row.status;
-          return <StatusChip status={status} />;
+          const showInstructions =
+            isCurrentResourceBYOA &&
+            [
+              "VERIFYING",
+              "PENDING",
+              "PENDING_DEPENDENCY",
+              "UNKNOWN",
+              "DEPLOYING",
+            ].includes(status);
+          return (
+            <Stack
+              direction={"row"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              gap="4px"
+            >
+              <StatusChip status={status} />
+              {showInstructions && (
+                <Tooltip
+                  title={
+                    <Text sx={{ padding: "4px", color: "white" }}>
+                      click here to view account <br /> configuration
+                      instructions
+                    </Text>
+                  }
+                  placement="top-start"
+                >
+                  <Box
+                    sx={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    onClick={() => {
+                      const row = params?.row;
+                      setCloudProvider("aws");
+                      setCloudFormationTemplateUrl(
+                        row?.result_params?.cloudformation_url
+                      );
+                      handleOrgIdModalOpen();
+                    }}
+                  >
+                    <ViewInstructionsIcon />
+                  </Box>
+                </Tooltip>
+              )}
+            </Stack>
+          );
         },
       },
       {
@@ -574,7 +622,9 @@ function MarketplaceService() {
       productTierKey: service?.productTierURLKey,
       resourceKey: selectedResource.key,
       subscriptionId: subscriptionData?.id,
-      //createSchema: {}
+      ...(isCurrentResourceBYOA
+        ? { configMethod: ACCOUNT_CREATION_METHODS.CLOUDFORMATION }
+        : {}),
     },
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -648,9 +698,7 @@ function MarketplaceService() {
           //remove the field from payload if it has an empty value ("", )
           for (let key in data.requestParams) {
             let value = data.requestParams[key];
-            // if (typeof value === "string" && !value.trim()) {
-            //   delete data.requestParams[key];
-            // }
+
             if (value === undefined) {
               delete data.requestParams[key];
             }
@@ -707,14 +755,40 @@ function MarketplaceService() {
           payload.requestParams.aws_bootstrap_role_arn =
             getAwsBootstrapArn(aws_account_id);
         }
+        if (payload.configMethod === ACCOUNT_CREATION_METHODS.CLOUDFORMATION) {
+          setIsCloudFormation(true);
+          setCloudProvider("aws");
+        }
       }
       return createResourceInstance(payload);
     },
     {
       onSuccess: async (response) => {
-        //resourceInstanceQuery.refetch();
         if (selectedResource?.id.includes("r-injectedaccountconfig")) {
+          const resourceInstanceId = response?.data?.id;
+          const resourceInstanceResponse = await getResourceInstanceDetails(
+            service.serviceProviderId,
+            service.serviceURLKey,
+            service.serviceAPIVersion,
+            service.serviceEnvironmentURLKey,
+            service.serviceModelURLKey,
+            service.productTierURLKey,
+            selectedResource.key,
+            resourceInstanceId,
+            subscriptionData?.id
+          );
+
+          const resourceInstance = resourceInstanceResponse.data;
+
+          const url = resourceInstance?.result_params?.cloudformation_url;
+          if (url) {
+            setCloudFormationTemplateUrl(url);
+          }
+
           snackbar.showSuccess("Cloud Provider Account Created");
+          setAccountConfigStatus(resourceInstance?.status);
+          setAccountConfigId(resourceInstance?.id);
+
           handleOrgIdModalOpen();
           setIsAccountCreation(true);
         } else {
@@ -729,9 +803,16 @@ function MarketplaceService() {
     }
   );
 
+  //reset the cloudprovider instructions modal props once user closes the Modal
+
   useEffect(() => {
     if (!isOrgIdModalOpen) {
       setIsAccountCreation(false);
+      setIsCloudFormation(false);
+      setCloudProvider("");
+      setCloudFormationTemplateUrl("");
+      setAccountConfigStatus("");
+      setAccountConfigId("");
     }
   }, [isOrgIdModalOpen]);
 
@@ -1099,17 +1180,6 @@ function MarketplaceService() {
       }
     }
   }
-
-  // if (selectedResourceInstances.length > 0) {
-  //   const isNoInstanceWithStatusDeleting = selectedResourceInstances.every(
-  //     (resourceInstance) =>
-  //       resourceInstance.status !== instanceStatuses.DELETING
-  //   );
-
-  //   if (isNoInstanceWithStatusDeleting) {
-  //     isDeleteActionEnabled = true;
-  //   }
-  // }
 
   //--------------------modify Service Component instance---------------------------
   const updateformik = useFormik({
@@ -1550,17 +1620,6 @@ function MarketplaceService() {
             alignItems="center"
             marginBottom={1.5}
           >
-            {isCurrentResourceBYOA && (
-              <Button
-                variant="outlined"
-                onClick={handleOrgIdModalOpen}
-                sx={{ marginRight: 2 }}
-                // disabled={resourceInstanceList.length == 0}
-              >
-                Account Configuration Instructions
-              </Button>
-            )}
-
             <Button
               variant="outlined"
               disabled={resourceInstanceList.length == 0}
@@ -1823,8 +1882,17 @@ function MarketplaceService() {
           handleClose={handleOrgIdModalClose}
           open={isOrgIdModalOpen}
           isAccountCreation={isAccountCreation}
+          isCloudFormation={isCloudFormation}
+          cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+          cloudProvider={cloudProvider}
           isAccessPage={true}
           downloadTerraformKitMutation={downloadTerraformKitMutation}
+          accountConfigStatus={accountConfigStatus}
+          accountConfigId={accountConfigId}
+          service={service}
+          selectedResourceKey={selectedResource.key}
+          subscriptionId={subscriptionData?.id}
+          setCloudFormationTemplateUrl={setCloudFormationTemplateUrl}
         />
       </DashboardLayout>
     );
