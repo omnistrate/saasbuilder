@@ -71,3 +71,9 @@ export default async function handleAction(nextRequest, nextResponse) {
   //respond with 500 by default
   nextResponse.status(500).send({ message: defaultErrorMessage });
 }
+
+export const config = {
+  api: {
+    responseLimit: false,
+  },
+}
