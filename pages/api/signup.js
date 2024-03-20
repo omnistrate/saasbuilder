@@ -1,7 +1,6 @@
 import { customerUserSignUp } from "src/server/api/customer-user";
 
 export default async function handleSignup(nextRequest, nextResponse) {
-  console.log("Request body", nextRequest.body);
 
   if (nextRequest.method === "POST") {
     try {

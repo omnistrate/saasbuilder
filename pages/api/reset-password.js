@@ -6,7 +6,6 @@ export default async function handleResetPassword(nextRequest, nextResponse) {
       const response = await customerUserResetPassword(nextRequest.body);
       nextResponse.status(200).send();
     } catch (error) {
-      console.error(error);
       let defaultErrorMessage = "Something went wrong. Please retry";
 
       if (
