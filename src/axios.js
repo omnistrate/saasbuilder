@@ -7,7 +7,6 @@ const baseDomain =
 const baseURL = baseDomain + "/2022-09-01-00";
 
 const axios = Axios.create({
-  baseURL,
   headers: {
     Authorization: "Bearer " + Cookies.get("token"),
   },
