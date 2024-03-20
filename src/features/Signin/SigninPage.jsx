@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useMutation } from "@tanstack/react-query";
 import { Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import crypto from "crypto-js";
 import axios from "src/axios";
 import Cookies from "js-cookie";
 import * as Yup from "yup";
@@ -21,7 +20,7 @@ const createSigninValidationSchema = Yup.object({
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
-  hashedPassword: Yup.string().required("Password is required"),
+  password: Yup.string().required("Password is required"),
 });
 
 const SigninPage = (props) => {
@@ -59,22 +58,11 @@ const SigninPage = (props) => {
   const formik = useFormik({
     initialValues: {
       email: "",
-      hashedPassword: "",
+      password: "",
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      let data = {};
-
-      for (let key in values) {
-        if (values[key]) {
-          data[key] = values[key];
-          if (key === "hashedPassword") {
-            data.hashedPassword = crypto
-              .SHA256(values[key])
-              .toString(crypto.enc.Hex);
-          }
-        }
-      }
+      let data = { ...values };
       signInMutation.mutate(data);
     },
     validationSchema: createSigninValidationSchema,
@@ -110,14 +98,14 @@ const SigninPage = (props) => {
           <FieldContainer>
             <FieldLabel required>Password</FieldLabel>
             <PasswordField
-              name="hashedPassword"
-              id="hashedPassword"
+              name="password"
+              id="password"
               placeholder="Enter your password"
-              value={values.hashedPassword}
+              value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.hashedPassword && errors.hashedPassword}
-              helperText={touched.hashedPassword && errors.hashedPassword}
+              error={touched.password && errors.password}
+              helperText={touched.password && errors.password}
             />
           </FieldContainer>
 
