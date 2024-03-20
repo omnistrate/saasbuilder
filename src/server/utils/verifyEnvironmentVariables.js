@@ -17,10 +17,16 @@ const environmentVariableStatuses = {
 async function verifyEnvrionmentVariables() {
   let areProviderCredentialsVerified = false;
   let areMailCredentialsVerified = false;
+  /*Sign in to to provider account can be done using 
+    a)omnistrate account password
+    b)omnistrate account hashed password (to be deprecated soon)
+    isUsingHashedPassword indicates which method is being used
+  */
+  let isUsingHashedPassword = false;
 
   const envVariablesStatus = {
     PROVIDER_EMAIL: environmentVariableStatuses.NotDefined,
-    PROVIDER_HASHED_PASS: environmentVariableStatuses.NotDefined,
+    PROVIDER_PASSWORD: environmentVariableStatuses.NotDefined,
     YOUR_SAAS_DOMAIN_URL: environmentVariableStatuses.NotDefined,
     MAIL_USER_EMAIL: environmentVariableStatuses.NotDefined,
     MAIL_USER_PASSWORD: environmentVariableStatuses.NotDefined,
@@ -40,6 +46,21 @@ async function verifyEnvrionmentVariables() {
     }
   );
 
+  if (undefinedEnvironmentVariables.includes("PROVIDER_PASSWORD")) {
+    //Check if PROVIDER_HASHED_PASS is available instead
+    //If available, replace PROVIDER_PASSWORD with PROVIDER_HASHED_PASS
+    if (process.env.PROVIDER_HASHED_PASS !== undefined) {
+      delete envVariablesStatus.PROVIDER_PASSWORD;
+      envVariablesStatus["PROVIDER_HASHED_PASS"] =
+        environmentVariableStatuses.Unverified;
+      const providerPasswordIndex = undefinedEnvironmentVariables.findIndex(
+        (envVarName) => envVarName === "PROVIDER_PASSWORD"
+      );
+      undefinedEnvironmentVariables.splice(providerPasswordIndex, 1);
+      isUsingHashedPassword = true;
+    }
+  }
+
   if (undefinedEnvironmentVariables.length === 0) {
     console.log("All environment variables are available");
   } else {
@@ -50,12 +71,14 @@ async function verifyEnvrionmentVariables() {
   }
 
   const providerEmail = process.env.PROVIDER_EMAIL;
-  const providerHashedPassword = process.env.PROVIDER_HASHED_PASS;
+  const providerPassword = isUsingHashedPassword
+    ? process.env.PROVIDER_HASHED_PASS
+    : process.env.PROVIDER_PASSWORD;
   const saasURL = process.env.YOUR_SAAS_DOMAIN_URL;
   const mailUserEmail = process.env.MAIL_USER_EMAIL;
   const mailUserPassword = process.env.MAIL_USER_PASSWORD;
 
-  if (providerEmail && providerHashedPassword) {
+  if (providerEmail && providerPassword) {
     try {
       const authTokenResponse = await fetchProviderAuthToken();
       const token = authTokenResponse.data.jwtToken;
@@ -64,15 +87,18 @@ async function verifyEnvrionmentVariables() {
 
       envVariablesStatus["PROVIDER_EMAIL"] =
         environmentVariableStatuses.Verified;
-      envVariablesStatus["PROVIDER_HASHED_PASS"] =
-        environmentVariableStatuses.Verified;
+
+      envVariablesStatus[
+        isUsingHashedPassword ? "PROVIDER_HASHED_PASS" : "PROVIDER_PASSWORD"
+      ] = environmentVariableStatuses.Verified;
 
       console.log("Provider credentials verification success");
     } catch (error) {
       envVariablesStatus["PROVIDER_EMAIL"] =
         environmentVariableStatuses.Invalid;
-      envVariablesStatus["PROVIDER_HASHED_PASS"] =
-        environmentVariableStatuses.Invalid;
+      envVariablesStatus[
+        isUsingHashedPassword ? "PROVIDER_HASHED_PASS" : "PROVIDER_PASSWORD"
+      ] = environmentVariableStatuses.Invalid;
 
       console.log("Provider credentials verification failure");
     }
@@ -114,12 +140,12 @@ async function verifyEnvrionmentVariables() {
 
   return {
     isVerified: areMailCredentialsVerified && areProviderCredentialsVerified,
-    envVariablesStatus: Object.entries(envVariablesStatus).map(
-      ([envVarName, envVarStatus]) => ({
+    envVariablesStatus: Object.entries(envVariablesStatus)
+      .map(([envVarName, envVarStatus]) => ({
         name: envVarName,
         status: envVarStatus,
-      })
-    ),
+      }))
+      .sort((envVarOne, envVarTwo) => (envVarOne.name <= envVarTwo.name ? -1 : 1)),
   };
 }
 
