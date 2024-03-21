@@ -68,7 +68,7 @@ function startMailServiceCron() {
           if (mailContent) {
             const mailPromise = mailTransporter
               .sendMail({
-                from: `"${mailContent.senderName}" ${process.env.MAIL_USER_EMAIL}`,
+                from: `"${mailContent.senderName}" ${process.env.MAIL_FROM}`,
                 to: mailContent.recepientEmail,
                 subject: mailContent.subject,
                 html: mailContent.message,

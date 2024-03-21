@@ -65,7 +65,8 @@
       "PROVIDER_EMAIL",
       "PROVIDER_HASHED_PASS",
       "MAIL_USER_EMAIL",
-      "MAIL_USER_PASSWORD"
+      "MAIL_USER_PASSWORD",
+      "MAIL_FROM"
     ]
   }
 }
