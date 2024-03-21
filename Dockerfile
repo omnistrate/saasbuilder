@@ -45,7 +45,7 @@ RUN adduser --system --uid 1001 nextjs
 # Copy built application
 COPY --from=build /app /app
 
-#RUN chown -R nextjs:nodejs /app && chmod +x /app/entrypoint.sh
+RUN chown -R nextjs:nodejs /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
@@ -53,4 +53,4 @@ EXPOSE 3000
 USER nextjs
 
 
-CMD [ "yarn", "run", "start" ]
+CMD [ "node", "server.js" ]
