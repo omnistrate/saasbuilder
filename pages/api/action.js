@@ -57,7 +57,7 @@ export default async function handleAction(nextRequest, nextResponse) {
           else nextResponse.send();
         }
       } catch (error) {
-        console.error("Action Route error", error);
+        console.error("Action Route error", error?.response?.data);
         const errorCode = error?.response?.status || 500;
         const errorMessage =
           error?.response?.data?.message || defaultErrorMessage;
@@ -76,4 +76,4 @@ export const config = {
   api: {
     responseLimit: false,
   },
-}
+};

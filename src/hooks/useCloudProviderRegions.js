@@ -68,7 +68,7 @@ function useCloudProviderRegions(serviceId, serviceModelId) {
       onSuccess: async () => {},
       onError: (error) => {
         dispatch(setRegionsLoadingStatus(loadingStatuses.error));
-        console.error(error);
+        console.error(error?.response?.data);
       },
     }
   );

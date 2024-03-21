@@ -94,7 +94,7 @@ function useServiceOfferingResourceInstances(
       refetchOnWindowFocus: false,
       refetchInterval: 60000,
       onError: (error) => {
-        console.error(error);
+        console.error(error?.response?.data);
       },
       select: (response) => {
         return { numResourceInstances: response.length };

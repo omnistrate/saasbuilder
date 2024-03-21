@@ -119,8 +119,6 @@ const SignupPage = (props) => {
 
   const { values, touched, errors, handleChange, handleBlur } = formik;
 
-  console.log("formik ===", touched, errors);
-
   return (
     <>
       <SignupNotification isVisible={showSuccess} />
