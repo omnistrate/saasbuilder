@@ -36,7 +36,7 @@ export async function middleware(request) {
       return NextResponse.redirect(new URL("/service-plans", request.url));
     }
   } catch (error) {
-    console.log(error);
+    console.log("Middleware Error", error?.response?.data);
     redirectToSignIn();
   }
 }
