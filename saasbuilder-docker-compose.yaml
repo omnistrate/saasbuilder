@@ -4,12 +4,12 @@ x-omnistrate-integrations:
   - omnistrateMetrics
 services:
   SaaSBuilder:
-    image: sharmaamits/saasbuilder:1.0.9
+    image: sharmaamits/saasbuilder:1.0.10
     ports:
       - '8080:8080'
     environment:
       - PROVIDER_EMAIL=$var.providerEmail
-      - PROVIDER_HASHED_PASS=$var.providerPassword
+      - PROVIDER_PASSWORD=$var.providerPassword
       - YOUR_SAAS_DOMAIN_URL=$sys.network.externalClusterEndpoint
       - MAIL_USER_EMAIL=$var.senderEmail
       - MAIL_USER_PASSWORD=$var.senderPassword
