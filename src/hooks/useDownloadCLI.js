@@ -17,7 +17,7 @@ function useDownloadCLI() {
         saveBlob(blob, "cli");
       },
       onError: (error) => {
-        console.error("Error", error);
+        console.error("Error", error?.response?.data);
       },
     }
   );

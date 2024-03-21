@@ -19,7 +19,7 @@ function customerUserSignUp(payload) {
 
 function customerUserSignIn(payload) {
   return axios.post("/customer-user-signin", payload).catch((error) => {
-    console.log("Sign in error");
+    console.log("Sign in error", error.response.data.message);
     if (error.response && error.response.status === 401) {
       throw new ProviderAuthError();
     } else {

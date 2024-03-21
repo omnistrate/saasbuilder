@@ -96,7 +96,7 @@ function startMailServiceCron() {
         });
     } catch (error) {
       isRunning = false;
-      console.error(error);
+      console.error(error?.response?.data);
     }
   }
   //run cron job after every 30 seconds

@@ -146,7 +146,6 @@ function AccessControl() {
         refetch();
       },
       onError: (error) => {
-        console.error(error);
         snackbar.showError("Failed to delete user");
       },
     }
