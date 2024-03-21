@@ -132,7 +132,6 @@ function AccessControl() {
       formik.resetForm();
       refetch();
     } catch (error) {
-      console.log(error);
       snackbar.showError("Failed to send invites");
     }
   });
