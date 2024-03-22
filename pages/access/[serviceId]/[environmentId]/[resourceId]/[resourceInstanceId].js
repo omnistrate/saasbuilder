@@ -1,30 +1,30 @@
 import { useRouter } from "next/router";
-import DashboardLayout from "../../../../../src/components/DashboardLayout/DashboardLayout";
-import MarketplaceServiceSidebar from "../../../../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
-import useServiceOffering from "../../../../../src/hooks/useServiceOffering";
-import ResourceInstanceOverview from "../../../../../src/components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
-import LoadingSpinner from "../../../../../src/components/LoadingSpinner/LoadingSpinner";
-import { Tabs, Tab } from "../../../../../src/components/Tab/Tab";
+import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
+import MarketplaceServiceSidebar from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
+import useServiceOffering from "src/hooks/useServiceOffering";
+import ResourceInstanceOverview from "src/components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import { Tabs, Tab } from "src/components/Tab/Tab";
 import { useEffect, useMemo, useState } from "react";
-import NodesTable from "../../../../../src/components/ResourceInstance/NodesTable/NodesTable";
+import NodesTable from "src/components/ResourceInstance/NodesTable/NodesTable";
 import { Stack } from "@mui/material";
-import Button from "../../../../../src/components/Button/Button";
+import Button from "src/components/Button/Button";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import Connectivity from "../../../../../src/components/ResourceInstance/Connectivity/Connectivity";
-import useResourceInstance from "../../../../../src/hooks/useResourceInstance";
-import Metrics from "../../../../../src/components/ResourceInstance/Metrics/Metrics";
-import Logs from "../../../../../src/components/ResourceInstance/Logs/Logs";
-import ResourceInstanceDetails from "../../../../../src/components/ResourceInstance/ResourceInstanceDetails/ResourceInstanceDetails";
-import useServiceOfferingResourceSchema from "../../../../../src/hooks/useServiceOfferingResourceSchema";
+import Connectivity from "src/components/ResourceInstance/Connectivity/Connectivity";
+import useResourceInstance from "src/hooks/useResourceInstance";
+import Metrics from "src/components/ResourceInstance/Metrics/Metrics";
+import Logs from "src/components/ResourceInstance/Logs/Logs";
+import ResourceInstanceDetails from "src/components/ResourceInstance/ResourceInstanceDetails/ResourceInstanceDetails";
+import useServiceOfferingResourceSchema from "src/hooks/useServiceOfferingResourceSchema";
 import Head from "next/head";
-import SideDrawerRight from "../../../../../src/components/SideDrawerRight/SideDrawerRight";
-import { AccessSupport } from "../../../../../src/components/Access/AccessSupport";
+import SideDrawerRight from "src/components/SideDrawerRight/SideDrawerRight";
+import { AccessSupport } from "src/components/Access/AccessSupport";
 import {
   getAPIDocsRoute,
   getMarketplaceRoute,
   getResourceInstancesDetailswithKeyRoute,
   getResourceInstancesRoute,
-} from "../../../../../src/utils/route/access/accessRoute";
+} from "src/utils/route/access/accessRoute";
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import { checkIfResouceIsBYOA } from "src/utils/access/byoaResource";

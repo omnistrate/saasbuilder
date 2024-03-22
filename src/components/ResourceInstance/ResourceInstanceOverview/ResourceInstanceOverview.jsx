@@ -1,8 +1,8 @@
 import { Box, Stack } from "@mui/material";
-import AwsLogo from "../../Logos/AwsLogo/AwsLogo";
-import GcpLogo from "../../Logos/GcpLogo/GcpLogo";
+import AwsLogo from "src/components/Logos/AwsLogo/AwsLogo";
+import GcpLogo from "src/components/Logos/GcpLogo/GcpLogo";
 import ResourceInstanceStatusChip from "../ResourceInstanceStatusChip/ResourceInstanceStatusChip";
-import { Text } from "../../Typography/Typography";
+import { Text } from "src/components/Typography/Typography";
 import _ from "lodash";
 import {
   Table,
@@ -13,7 +13,7 @@ import {
   CellTitle,
 } from "components/InfoTable/InfoTable";
 import GradientProgressBar from "src/components/GradientProgessBar/GradientProgressBar";
-import RegionIcon from "../../Region/RegionIcon";
+import RegionIcon from "src/components/Region/RegionIcon";
 
 function ResourceInstanceOverview(props) {
   const {
