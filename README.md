@@ -20,13 +20,15 @@ These details are crucial as they will be presented to customers accessing your 
 
 ![Alt text](https://drive.google.com/uc?id=1h7Lnp_-1P-dOdD1ri0QZPi2Rd_U1LUK9 "SaaSBuilder config")
 
-| Service Provider Details   | Description                                                |
-| -------------------------- | ---------------------------------------------------------- |
-| Organization Name          | Name of your organization                                  |
-| Organization Description   | Description of your organization                           |
-| Organization Support Email | Email address to which customers can reach out for support |
-| Organization Logo URL      | Your organization's logo URL                               |
-| Organization Favicon URL   | Your organization's favicon URL                            |
+| Service Provider Details    | Description                                                |
+| --------------------------  | ---------------------------------------------------------- |
+| Organization Name           | Name of your organization                                  |
+| Organization Description    | Description of your organization                           |
+| Organization Support Email  | Email address to which customers can reach out for support |
+| Organization Logo URL       | Your organization's logo URL                               |
+| Organization Favicon URL    | Your organization's favicon URL                            |
+| Organization Privacy Policy | Your organization's privacy policy for SaaSBuilder         |
+| Organization Terms of use   | Your organization's terms of use for SaaSBuilder           |
 
 ### Customizations
 
@@ -76,8 +78,8 @@ yarn install
 
 | Environment Variables | Description                                                                                                                                           |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PROVIDER_EMAIL        | Service provider Omnistrate email address                                                                                                             |
-| PROVIDER_HASHED_PASS  | Service provider Omnistrate account password hashed using SHA256                                                                                      |
+| PROVIDER_EMAIL        | Service provider's Omnistrate email address                                                                                                             |
+| PROVIDER_PASSWORD  | Service provider's Omnistrate account password                                                                                      |
 | YOUR_SAAS_DOMAIN_URL  | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000 |
 | MAIL_USER_EMAIL       | Gmail account to be used to send mails (signup, reset password etc) to your customers. Check the following [section](#how-to-configure-google-account-for-sending-out-emails) for instructions to configure gmail account for sending out the emails.                                                                 |
 | MAIL_USER_PASSWORD    | Gmail account app password                                                                                                                            |
@@ -150,10 +152,6 @@ For a video guide covering all the below steps, you can follow it [here](https:/
 
 Ensure your node and yarn versions meet the project's requirements. Try clearing your yarn cache with yarn cache clean and reinstalling dependencies.
 
-#### How do I resolve Docker compose deployment errors?
-
-Verify that your Docker environment is set up correctly. Ensure the Docker daemon is running and your docker-compose.yml file points to the correct image tags. Review the Docker and project logs for specific error messages.
-
 #### How to configure Google Account for sending out emails?
 
 Configuring Google Account for sending out emails is a two step process. First the account must have a 2-Step Verification enabled, and second, the app password needs to be set. If the Google Account you are using, already has 2-Step Verification configured, you may skip Step 1, and start with Step 2.
@@ -182,6 +180,27 @@ Configuring Google Account for sending out emails is a two step process. First t
     ![Alt text](https://drive.google.com/uc?id=1N_COKw_GX9rwgpdLKWzrchaclfamK6JH "Copy App Password")
 
     8. Treat the app password like your regular password and store it securely.
+
+#### How do I resolve "node version not compatible" errors?
+
+Ensure that you have the correct Node.js version installed. SaaSBuilder requires Node.js version 20.11.1 as mentioned in the guide. You can check your current Node version by running node --version in your terminal. If the version is incorrect, download and install the correct version from Node.js [official website](https://nodejs.org/).
+
+
+#### What if my organization details do not appear correctly on the SaaSBuilder platform?
+
+Double-check that you've correctly updated your Omnistrate profile with your organization's details, including the description, support email, logo, and favicon URLs. These details are crucial for presenting your organization correctly to customers. Refer to the provided instructional video for guidance on updating these details on the Omnistrate platform.
+
+#### What should I do if I encounter issues deploying on the Omnistrate Platform?
+
+Review the deployment steps outlined in the [deploy section](#deploy-on-omnistrate-platform-and-configure-your-domain) to ensure all steps were followed correctly. If deploying with code customizations, ensure your forked repository is up to date and your Docker image is correctly built and pushed. For issues specific to the Omnistrate Platform, contact Omnistrate support for assistance.
+
+#### What to do if emails are not being sent to customers?
+
+Verify the configuration of your Google Account for sending out emails, ensuring that 2-Step Verification is enabled and an App Password is generated and used. Double-check the MAIL_USER_EMAIL and MAIL_USER_PASSWORD environment variables to ensure they match your Gmail account and App Password.
+
+#### How can I get more direct support or report an issue not covered by the README?
+
+If the README or existing issues do not cover your problem, open a new issue on the GitHub repository with a detailed description, steps to reproduce, environment details, and any necessary screenshots or videos. For direct support, contact Omnistrate support with your query.
 
 ## Contributing
 

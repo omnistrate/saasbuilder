@@ -65,13 +65,5 @@
     "next-unused": "^0.0.6",
     "nodemon": "^3.1.0",
     "prettier": "^3.1.0"
-  },
-  "dockerfile": {
-    "secrets": [
-      "PROVIDER_EMAIL",
-      "PROVIDER_HASHED_PASS",
-      "MAIL_USER_EMAIL",
-      "MAIL_USER_PASSWORD"
-    ]
   }
 }
