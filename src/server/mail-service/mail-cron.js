@@ -6,6 +6,7 @@ const { getOrgRevokeUserMailContent } = require("./orgRevokeUserTemplate");
 const { eventTypes } = require("./constants");
 const { getEventsList, acknowledgeEvent } = require("../api/events");
 const { getResetPasswordMailContent } = require("./forgotPasswordTemplate");
+const { getInvoiceCreatedTemplate } = require("./invoiceCreatedTemplate");
 
 let isRunning = false;
 
@@ -58,6 +59,11 @@ function startMailServiceCron() {
 
             case eventTypes.ResetPassword: {
               mailContent = getResetPasswordMailContent(event);
+              break;
+            }
+
+            case eventTypes.InvoiceCreated: {
+              mailContent = getInvoiceCreatedTemplate(event);
               break;
             }
 
