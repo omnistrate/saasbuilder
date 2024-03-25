@@ -3,16 +3,19 @@ function getInvoiceCreatedTemplate(invoiceCreatedEventObj) {
   const invoiceId = invoiceCreatedEventObj.eventPayload.invoice_id;
   const orgName = invoiceCreatedEventObj.orgName;
 
-  const subject = `Invoice generated - Pay up!`;
+  const subject = `${orgName} new invoice ${invoiceId} is now available`;
   const signInURL = `${process.env.YOUR_SAAS_DOMAIN_URL}/signin`;
 
   const message = `
       <html>
         <body>
           <p>Hello,</p>
-          <p></p>
-          <p>Please login to your account <a href="${signInURL}">here</a> to view the invoice</p>
-          <p>Thanks</p>
+          <p>
+            A new invoice for your ${orgName} subscription has been generated. You can review and access your invoice by logging into your account <a href="${signInURL}">here</a>.
+          </p>         
+          <p>Thank you for your continued business.</p>
+          <p>Sincerely,</p>
+          <p>${orgName} team</p>
         </body>
       </html>`;
 
@@ -34,18 +37,3 @@ module.exports = {
   getInvoiceCreatedTemplate,
 };
 
-// {
-//   eventID: "e-123456",
-//   eventPayload: {
-//     user_id: "user-12345",
-//     user_email: "abc@example.com",
-//     invoice_id: "invoice_12345",
-//   },
-//   eventType: "InvoiceCreated",
-//   orgID: "o-123456",
-//   orgName: "Acme Corp",
-//   orgURL: "https://acme.com",
-//   time: "2023-01-10T00:00:00Z",
-//   userEmail: "abc@example.com",
-//   userID: "u-123456",
-// },
