@@ -11,6 +11,7 @@ import ProfileForm from "./components/ProfileForm";
 import Head from "next/head";
 import NoLogoImage from "public/assets/images/logos/no-logo.png";
 import { tabs } from "./constants";
+import BillingAddress from "./components/BillingAddress";
 
 function SettingsMarketplace({ orgLogoURL, orgName }) {
   const router = useRouter();
@@ -47,10 +48,12 @@ function SettingsMarketplace({ orgLogoURL, orgName }) {
             currentTab={currentTab}
             router={router}
           />
-          {currentTab === tabs.password ? (
-            <PasswordForm />
-          ) : (
+          {currentTab === tabs.profile && (
             <ProfileForm refetch={refetch} selectUser={selectUser} />
+          )}
+          {currentTab === tabs.password && <PasswordForm />}
+          {currentTab === tabs.billingAddress && (
+            <BillingAddress refetch={refetch} selectUser={selectUser} />
           )}
         </>
       )}
