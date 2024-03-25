@@ -16,14 +16,12 @@ import Link from "next/link";
 import { selectUserrootData } from "src/slices/userDataSlice";
 import { useSelector } from "react-redux";
 import { Text } from "../Typography/Typography";
-import ViewSubscriptionsIcon from "../Icons/ProfileDropDown/ViewSubscriptionsIcon";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
 import ProfileUser from "../Icons/ProfileDropDown/ProfileUser";
 import EllipsisTooltipText from "../Tooltip/EllipsisTooltip";
 import { getSettingsRoute } from "src/utils/route/settings/settings";
 import { styleConfig } from "src/providerConfig";
-import ArrowRight from "./Icons/ArrowRight";
 import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
 
 function ProfileDropdown(props) {
@@ -57,6 +55,9 @@ function ProfileDropdown(props) {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+
+
   return (
     <Box sx={{ display: "flex", gap: "11px", alignItems: "center" }}>
       <UserName>{Object.values(userAllData)[0]?.name}</UserName>
@@ -200,6 +201,18 @@ function ProfileDropdown(props) {
             </Box>
           </MenuItem>
         )}
+        <MenuItem
+          key="Billing"
+          sx={{ borderBottom: "1px solid #EAECF0" }}
+          disabled={!isReadAllowed}
+        >
+          <DropdownMenuLink href="/billing">
+            <BillingIcon />
+            <Text weight="medium" size="small" color="#344054">
+              Billing
+            </Text>
+          </DropdownMenuLink>
+        </MenuItem>
         <MenuItem
           onClick={() => {
             logout();

@@ -26,3 +26,7 @@ export const updateProfile = async (userId, data) => {
 export const updatePassword = (payload) => {
   return axios.post(`/update-password`, payload);
 };
+
+export const getBillingDetails = (userId) => {
+  return axios.get(`/resource-instance/user/${userId}/billing-details`)
+}
