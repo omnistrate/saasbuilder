@@ -19,10 +19,7 @@ function BillingPage() {
   const userData = useSelector(selectUserrootData);
   const userId = userData?.id;
 
-  const {
-    isLoading,
-    data: billingDetails 
-  } = billingDetailsQuery;
+  const { isLoading, data: billingDetails } = billingDetailsQuery;
 
   let paymentConfigured = billingDetails?.paymentConfigured;
 
@@ -43,28 +40,31 @@ function BillingPage() {
     return <LoadingSpinner />;
   }
 
-  //   if (billingDetailsQuery.error) {
-  //     const errorMessage = billingDetailsQuery.error?.response?.data?.message;
-  //     let errorDisplayText =
-  //       "Please subscribe to a service to start using billing";
-  //     if (errorMessage) {
-  //       if (
-  //         errorMessage === "Your provider has not enabled billing for the user."
-  //       ) {
-  //       }
+  if (billingDetailsQuery.error) {
+    const errorMessage = billingDetailsQuery.error?.response?.data?.message;
+    let errorDisplayText =
+      "Something went wrong. Try refreshing the page. If the issue persists please contact support for assistance";
 
-  //       if (
-  //         errorMessage === "Your provider has not enabled billing for the user."
-  //       ) {
-  //       }
-  //     }
+    if (errorMessage) {
+      if (
+        errorMessage === "Your provider has not enabled billing for the user."
+      ) {
+        errorDisplayText =
+          "Billing has not been configured. Please contact support for assistance";
+      }
 
-  //     return (
-  //       <Stack p={3} pt="200px" alignItems="center" justifyContent="center">
-  //         <DisplayText>{errorDisplayText}</DisplayText>
-  //       </Stack>
-  //     );
-  //   }
+      if (errorMessage === "You have not been subscribed to a service yet.") {
+        errorDisplayText =
+          "Please subscribe to a service to start using billing";
+      }
+    }
+
+    return (
+      <Stack p={3} pt="200px" alignItems="center" justifyContent="center">
+        <DisplayText>{errorDisplayText}</DisplayText>
+      </Stack>
+    );
+  }
 
   return (
     <>
