@@ -21,16 +21,7 @@ function BillingPage() {
 
   const {
     isLoading,
-    data: billingDetails = {
-      billingEmbedURL:
-        "https://console.paigo.tech/embedded/public/668d7cca-8293-458a-aa4b-5f0c5aa75f30?template=template1&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvcmctZWgzZGd5MGZzZiIsImJ1c2luZXNzSUQiOiJxeHByNjhoMmdoLXNhbmRib3giLCJpYXQiOjE3MTEyMDc1MDEsImV4cCI6MTcxMTgxMjMwMX0._N0uhs4gDjKXk_M2AkPZyfnrFVtUsQ_tnElaQ9vs0I0#%7B%7B%20urlparams.token%20%7D%7D=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvcmctZWgzZGd5MGZzZiIsImJ1c2luZXNzSUQiOiJxeHByNjhoMmdoLXNhbmRib3giLCJpYXQiOjE3MTEyMDc1MDEsImV4cCI6MTcxMTgxMjMwMX0._N0uhs4gDjKXk_M2AkPZyfnrFVtUsQ_tnElaQ9vs0I0",
-
-      name: "John Dae",
-      paymentConfigured: false,
-      paymentInfoPortalURL:
-        "https://billing.stripe.com/p/session/test_YWNjdF8xT3FsczVKdGNnOWdMeXNBLF9QbjZXb2Zia3pqam9xeG1jYXpCbmhwT2ZURHNPWEdr01003NOB3evU",
-      userId: "user-abcd1234",
-    },
+    data: billingDetails 
   } = billingDetailsQuery;
 
   let paymentConfigured = billingDetails?.paymentConfigured;
@@ -119,7 +110,7 @@ function BillingPage() {
           onLoad={() => {
             setIsIframeLoading(false);
           }}
-          src={billingDetails.billingEmbedURL}
+          src={billingDetails?.billingEmbedURL}
           style={{ width: "100%", height: 900, border: "none" }}
         />
       </Box>
