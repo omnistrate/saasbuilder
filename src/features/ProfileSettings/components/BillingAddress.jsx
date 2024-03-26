@@ -104,97 +104,6 @@ function ProfileForm(props) {
         <Table>
           <TableRow>
             <TableCell sx={{ width: "280px !important" }}>
-              <FieldLabel required>Country</FieldLabel>
-            </TableCell>
-            <TableCell>
-              <Autocomplete
-                options={countriesAlpha3}
-                value={currentCountry}
-                getOptionLabel={(option) => {
-                  console.log("Returning option name for", option);
-                  if (option.name) return option.name;
-                  return "Select a country";
-                }}
-                onChange={(e, newValue) => {
-                  formik.setFieldValue(
-                    "address.country",
-                    newValue["alpha-3"].toLowerCase()
-                  );
-                }}
-                // onBlur={(e) => {
-                //   formik.setFieldTouched("address.country", true);
-                // }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select a country" />
-                )}
-                sx={{ maxWidth: "800px !important" }}
-              />
-              <ErrorLabel>
-                {touched.address?.country && errors.address?.country}
-              </ErrorLabel>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell sx={{ width: "280px !important" }}>
-              <FieldLabel required>State</FieldLabel>
-            </TableCell>
-            <TableCell>
-              <TextField
-                name="address.state"
-                id="address.state"
-                value={values.address.state}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                mt="12px"
-                sx={{ maxWidth: "800px !important" }}
-              />
-              <ErrorLabel>
-                {touched.address?.state && errors.address?.state}
-              </ErrorLabel>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell sx={{ width: "280px !important" }}>
-              <FieldLabel required>City</FieldLabel>
-            </TableCell>
-            <TableCell>
-              <TextField
-                name="address.city"
-                id="address.city"
-                value={values.address.city}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                mt="12px"
-                sx={{ maxWidth: "800px !important" }}
-                disabled={selectUser.roleType !== "root"}
-              />
-              <ErrorLabel>
-                {touched.address?.city && errors.address?.city}
-              </ErrorLabel>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell sx={{ width: "280px !important" }}>
-              <FieldLabel required>Zipcode</FieldLabel>
-            </TableCell>
-            <TableCell>
-              <TextField
-                name="address.zip"
-                id="address.zip"
-                value={values.address.zip}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                mt="12px"
-                sx={{ maxWidth: "800px !important" }}
-                disabled={selectUser.roleType !== "root"}
-              />
-              <ErrorLabel>
-                {touched.address?.zip && errors.address?.zip}
-              </ErrorLabel>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell sx={{ width: "280px !important" }}>
               <FieldLabel required>Address Line 1</FieldLabel>
             </TableCell>
             <TableCell>
@@ -233,8 +142,97 @@ function ProfileForm(props) {
               </ErrorLabel>
             </TableCell>
           </TableRow>
+          <TableRow>
+            <TableCell sx={{ width: "280px !important" }}>
+              <FieldLabel required>City</FieldLabel>
+            </TableCell>
+            <TableCell>
+              <TextField
+                name="address.city"
+                id="address.city"
+                value={values.address.city}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                mt="12px"
+                sx={{ maxWidth: "800px !important" }}
+                disabled={selectUser.roleType !== "root"}
+              />
+              <ErrorLabel>
+                {touched.address?.city && errors.address?.city}
+              </ErrorLabel>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell sx={{ width: "280px !important" }}>
+              <FieldLabel required>State</FieldLabel>
+            </TableCell>
+            <TableCell>
+              <TextField
+                name="address.state"
+                id="address.state"
+                value={values.address.state}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                mt="12px"
+                sx={{ maxWidth: "800px !important" }}
+              />
+              <ErrorLabel>
+                {touched.address?.state && errors.address?.state}
+              </ErrorLabel>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell sx={{ width: "280px !important" }}>
+              <FieldLabel required>Country</FieldLabel>
+            </TableCell>
+            <TableCell>
+              <Autocomplete
+                options={countriesAlpha3}
+                value={currentCountry}
+                getOptionLabel={(option) => {
+                  if (option.name) return option.name;
+                  return "Select a country";
+                }}
+                onChange={(e, newValue) => {
+                  formik.setFieldValue(
+                    "address.country",
+                    newValue["alpha-3"].toLowerCase()
+                  );
+                }}
+                // onBlur={(e) => {
+                //   formik.setFieldTouched("address.country", true);
+                // }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select a country" />
+                )}
+                sx={{ maxWidth: "800px !important" }}
+              />
+              <ErrorLabel>
+                {touched.address?.country && errors.address?.country}
+              </ErrorLabel>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell sx={{ width: "280px !important" }}>
+              <FieldLabel required>Zipcode</FieldLabel>
+            </TableCell>
+            <TableCell>
+              <TextField
+                name="address.zip"
+                id="address.zip"
+                value={values.address.zip}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                mt="12px"
+                sx={{ maxWidth: "800px !important" }}
+                disabled={selectUser.roleType !== "root"}
+              />
+              <ErrorLabel>
+                {touched.address?.zip && errors.address?.zip}
+              </ErrorLabel>
+            </TableCell>
+          </TableRow>
         </Table>
-
         <Box display="flex" alignItems="center" mt="20px">
           <Header2 align="right">
             <Button
