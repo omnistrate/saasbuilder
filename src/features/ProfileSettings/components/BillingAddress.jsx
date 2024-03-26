@@ -82,7 +82,8 @@ function ProfileForm(props) {
 
     if (alpha3Code) {
       const match = countriesAlpha3.find(
-        (country) => country["alpha-3"] === alpha3Code
+        (country) =>
+          country["alpha-3"].toLowerCase() === alpha3Code.toLowerCase()
       );
       return match;
     }
@@ -115,7 +116,10 @@ function ProfileForm(props) {
                   return "Select a country";
                 }}
                 onChange={(e, newValue) => {
-                  formik.setFieldValue("address.country", newValue["alpha-3"]);
+                  formik.setFieldValue(
+                    "address.country",
+                    newValue["alpha-3"].toLowerCase()
+                  );
                 }}
                 // onBlur={(e) => {
                 //   formik.setFieldTouched("address.country", true);
