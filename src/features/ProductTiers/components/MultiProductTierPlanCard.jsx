@@ -7,6 +7,7 @@ import { Text } from "src/components/Typography/Typography";
 import { findSubscriptionByPriority } from "src/utils/access/findSubscription";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { parseOfferingDescriptionDom } from "src/utils/constants/serviceOfferingDescription";
+import SubscriptionRequestPendingSnack from "./SubscriptionRequestPendingSnack";
 
 function MultiProductTierPlanCard(props) {
   const {
@@ -22,6 +23,8 @@ function MultiProductTierPlanCard(props) {
     handleNavigateToDashboard,
     handleUnsubscribeClick,
     isMarketplacePage,
+    subscriptionRequests,
+    cancelSubscriptionRequestMutation,
   } = props;
 
   const isSelected = selectedProductTierId === offering?.productTierID;
@@ -32,19 +35,26 @@ function MultiProductTierPlanCard(props) {
     offering?.productTierID
   );
 
-  const hasAlreadySubscribedAsRoot = existingSubscription?.roleType === "root";
+  const pendingRequest = subscriptionRequests?.find(
+    (item) =>
+      item?.productTierId === offering?.productTierID &&
+      item?.serviceId === serviceId &&
+      item?.status === "PENDING"
+  );
 
-  // const hasAlreadySubscribed = findSubscriptionByPriority(
-  //   subscriptionsData,
-  //   serviceId,
-  //   offering?.productTierID
-  // );
+  const pendingRequestExists = !!pendingRequest;
+
+  const hasAlreadySubscribedAsRoot = existingSubscription?.roleType === "root";
 
   const handleSubscribeClick = () => {
     subscribeMutation.mutate({
       productTierId: offering?.productTierID,
       serviceId,
     });
+  };
+
+  const handleCancelPendingRequest = () => {
+    cancelSubscriptionRequestMutation.mutate(pendingRequest?.id);
   };
 
   const handleSelectProductTier = () => {
@@ -66,7 +76,7 @@ function MultiProductTierPlanCard(props) {
         opacity: isSelected ? 1.0 : 0.5,
         border: isSelected ? "2px solid #53389E;" : "auto",
         width: "100%",
-        maxWidth: "350px",
+        maxWidth: "400px",
         minWidth: "300px",
         mb: "20px",
       }}
@@ -80,6 +90,11 @@ function MultiProductTierPlanCard(props) {
           pointerEvents: !isSelected ? "none" : "auto",
         }}
       >
+        {pendingRequestExists && (
+          <Box marginBottom={"16px"}>
+            <SubscriptionRequestPendingSnack />
+          </Box>
+        )}
         <Box display="flex" justifyContent="center">
           <Tooltip title={offering?.productTierName}>
             <Text
@@ -99,7 +114,7 @@ function MultiProductTierPlanCard(props) {
           </Tooltip>
         </Box>
         <Divider sx={{ mt: "18px" }} />
-        <Box sx={{ padding: "18px" }}>
+        <Box>
           <Box
             sx={{
               display: "flex",
@@ -134,7 +149,7 @@ function MultiProductTierPlanCard(props) {
                   variant="outlined"
                   sx={{
                     minWidth: "150px",
-                    color: "#8D0E00 !important",
+                    color: "##B42318 !important",
                   }}
                   disabled={
                     subscribeMutation.isLoading || unSubscribeMutation.isLoading
@@ -146,12 +161,29 @@ function MultiProductTierPlanCard(props) {
                     <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
                   )}
                 </Button>
+              ) : pendingRequestExists ? (
+                <Button
+                  variant="outlined"
+                  sx={{ minWidth: "170px", color: "#B42318 !important" }}
+                  onClick={handleCancelPendingRequest}
+                  disabled={
+                    subscribeMutation.isLoading ||
+                    unSubscribeMutation.isLoading ||
+                    cancelSubscriptionRequestMutation.isLoading
+                  }
+                >
+                  Cancel Subscribe Request
+                  {isSelected &&
+                    cancelSubscriptionRequestMutation.isLoading && (
+                      <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
+                    )}
+                </Button>
               ) : (
                 <Button
                   variant="outlined"
                   sx={{
                     minWidth: "150px",
-                    color: "#8D0E00 !important",
+                    color: "#344054 !important",
                   }}
                   onClick={handleSubscribeClick}
                   disabled={
