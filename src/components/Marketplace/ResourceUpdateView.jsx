@@ -7,7 +7,7 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Button from "../Button/Button";
 import FieldContainer from "../FormElements/FieldContainer/FieldContainer";
 import FieldDescription from "../FormElements/FieldDescription/FieldDescription";
@@ -44,6 +44,17 @@ function ResourceUpdateView(props) {
 
   const [viewParams, setCreateSchema] = useState([]);
 
+  const [nonModifiableviewParams, setNonModifiableParamsSchema] = useState([]);
+
+  const shouldDisableEdit = useMemo(() => {
+    const editableFieds = viewParams?.filter((param) => param?.custom);
+    if (editableFieds?.length > 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }, [viewParams]);
+
   useEffect(() => {
     async function getSchema() {
       const schema = await describeServiceOfferingResource(
@@ -54,10 +65,17 @@ function ResourceUpdateView(props) {
 
       schema.data.apis.forEach((api) => {
         if (api.verb === "UPDATE") {
-          if (api.inputParameters) {
-            setCreateSchema(api.inputParameters);
-          } else {
-            // console.log("NULLL");
+          if (api.inputParameters?.length > 0) {
+            setCreateSchema(
+              api.inputParameters?.filter((item) => item?.modifiable)
+            );
+          }
+        } else if (api.verb === "CREATE") {
+          let filteredInputParams = api.inputParameters?.filter(
+            (item) => item?.custom && !item?.modifiable
+          );
+          if (filteredInputParams?.length) {
+            setNonModifiableParamsSchema(filteredInputParams);
           }
         }
       });
@@ -97,82 +115,89 @@ function ResourceUpdateView(props) {
               value={formData.values.id}
             />
           </FieldContainer>
-          <FieldContainer>
-            <FieldLabel>Cloud Provider</FieldLabel>
-            <FieldDescription sx={{ mt: "5px" }}>
-              Cloud Provider of resource instance
-            </FieldDescription>
-            <TextField
-              id="cloud_provider"
-              name="cloud_provider"
-              disabled="true"
-              value={
-                isCurrentResourceBYOA
-                  ? "Amazon Web Services"
-                  : formData.values.cloud_provider
-              }
-              sx={{ marginTop: "16px" }}
-            />
-          </FieldContainer>
+          {(isCurrentResourceBYOA || formData.values.cloud_provider) && (
+            <FieldContainer>
+              <FieldLabel>Cloud Provider</FieldLabel>
+              <FieldDescription sx={{ mt: "5px" }}>
+                Cloud Provider of resource instance
+              </FieldDescription>
+              <TextField
+                id="cloud_provider"
+                name="cloud_provider"
+                disabled="true"
+                value={
+                  isCurrentResourceBYOA
+                    ? "Amazon Web Services"
+                    : formData.values.cloud_provider
+                }
+                sx={{ marginTop: "16px" }}
+              />
+            </FieldContainer>
+          )}
           {!isCurrentResourceBYOA && (
             <>
-              <FieldContainer>
-                <FieldLabel required>Region</FieldLabel>
-                <Select
-                  sx={{ marginTop: "16px" }}
-                  id="region"
-                  name="region"
-                  disabled="true"
-                  displayEmpty
-                  /*multiple*/
-                  value={formData.values.region}
-                  // value={formData.values.region}
-                  onChange={formData.handleChange}
-                  input={<OutlinedInput />}
-                >
-                  <MenuItem disabled value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {[...regions]
-                    .sort(function (a, b) {
-                      if (a.code < b.code) return -1;
-                      else if (a.code > b.code) {
-                        return 1;
-                      }
-                      return -1;
-                    })
-                    .map((region) => (
-                      <MenuItem key={region.code} value={region.code}>
-                        {region.cloudProviderName} - {region.code}
+              {formData.values.region && (
+                <FieldContainer>
+                  <FieldLabel required>Region</FieldLabel>
+                  <Select
+                    sx={{ marginTop: "16px" }}
+                    id="region"
+                    name="region"
+                    disabled="true"
+                    displayEmpty
+                    /*multiple*/
+                    value={formData.values.region}
+                    // value={formData.values.region}
+                    onChange={formData.handleChange}
+                    input={<OutlinedInput />}
+                  >
+                    <MenuItem disabled value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {[...regions]
+                      .sort(function (a, b) {
+                        if (a.code < b.code) return -1;
+                        else if (a.code > b.code) {
+                          return 1;
+                        }
+                        return -1;
+                      })
+                      .map((region) => (
+                        <MenuItem key={region.code} value={region.code}>
+                          {region.cloudProviderName} - {region.code}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                  <ErrorLabel></ErrorLabel>
+                </FieldContainer>
+              )}
+
+              {formData.values.network_type && (
+                <FieldContainer>
+                  <FieldLabel>Network Type</FieldLabel>
+                  <FieldDescription sx={{ mt: "5px" }}>
+                    Type of Network
+                  </FieldDescription>
+                  <Select
+                    id="network_type"
+                    name="network_type"
+                    disabled="true"
+                    value={formData.values.network_type}
+                    onChange={formData.handleChange}
+                    sx={{ marginTop: "16px" }}
+                  >
+                    {["PUBLIC"].map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
                       </MenuItem>
                     ))}
-                </Select>
-                <ErrorLabel></ErrorLabel>
-              </FieldContainer>
-              <FieldContainer>
-                <FieldLabel>Network Type</FieldLabel>
-                <FieldDescription sx={{ mt: "5px" }}>
-                  Type of Network
-                </FieldDescription>
-                <Select
-                  id="network_type"
-                  name="network_type"
-                  disabled="true"
-                  value={formData.values.network_type}
-                  onChange={formData.handleChange}
-                  sx={{ marginTop: "16px" }}
-                >
-                  {["PUBLIC"].map((option) => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <ErrorLabel>
-                  {formData.touched.network_type &&
-                    formData.errors.network_type}
-                </ErrorLabel>
-              </FieldContainer>
+                  </Select>
+                  <ErrorLabel>
+                    {formData.touched.network_type &&
+                      formData.errors.network_type}
+                  </ErrorLabel>
+                </FieldContainer>
+              )}
             </>
           )}
 
@@ -187,7 +212,7 @@ function ResourceUpdateView(props) {
             {viewParams.map((param) => {
               if (param.custom == true && param.type == "Boolean") {
                 return (
-                  <FieldContainer key={param.displayName}>
+                  <FieldContainer key={param.key}>
                     {param.required == true ? (
                       <FieldLabel required>{param.displayName}</FieldLabel>
                     ) : (
@@ -287,7 +312,7 @@ function ResourceUpdateView(props) {
               ) {
                 const options = param.options ? param.options : [""];
                 return (
-                  <FieldContainer key={param.displayName}>
+                  <FieldContainer key={param.key}>
                     {param.required == true ? (
                       <FieldLabel required>{param.displayName}</FieldLabel>
                     ) : (
@@ -348,6 +373,178 @@ function ResourceUpdateView(props) {
                 );
               }
             })}
+
+            {/* show non modifiable params in disabled mode */}
+            {nonModifiableviewParams.map((param) => {
+              if (param.custom == true && param.type == "Boolean") {
+                return (
+                  <FieldContainer key={param.key}>
+                    {param.required == true ? (
+                      <FieldLabel required>{param.displayName}</FieldLabel>
+                    ) : (
+                      <FieldLabel>{param.displayName}</FieldLabel>
+                    )}
+                    <FieldDescription sx={{ mt: "5px" }}>
+                      {param.description}
+                    </FieldDescription>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      id={`requestParams.${param.key}`}
+                      name={`requestParams.${param.key}`}
+                      value={formData.values.requestParams[param.key]}
+                      onChange={formData.handleChange}
+                      sx={{ marginTop: "16px" }}
+                      //modifiable={param.modifiable}
+                      required={param.required == true ? "required" : ""}
+                      disabled
+                    >
+                      <FormControlLabel
+                        value={true}
+                        control={<Radio />}
+                        label="True"
+                        disabled
+                      />
+                      <FormControlLabel
+                        value={false}
+                        control={<Radio />}
+                        label="False"
+                        disabled
+                      />
+                    </RadioGroup>
+                  </FieldContainer>
+                );
+              } else if (
+                param.custom == true &&
+                param.options !== undefined &&
+                param.isList === true
+              ) {
+                const options = param.options ? param.options : [""];
+
+                return (
+                  <FieldContainer key={param.key}>
+                    {param.required == true ? (
+                      <FieldLabel required>{param.displayName}</FieldLabel>
+                    ) : (
+                      <FieldLabel>{param.displayName}</FieldLabel>
+                    )}
+                    <FieldDescription sx={{ mt: "5px" }}>
+                      {param.description}
+                    </FieldDescription>
+                    <Select
+                      disabled
+                      multiple
+                      fullWidth
+                      sx={{ display: "block", marginTop: "16px" }}
+                      id={`requestParams.${param.key}`}
+                      name={`requestParams.${param.key}`}
+                      renderValue={(selectedList) => {
+                        if (selectedList.length === 0) {
+                          return <em>None</em>;
+                        }
+                        const plist = selectedList
+                          .map((valInList) => {
+                            const returnVal = formData.values.requestParams[
+                              param.key
+                            ].find((val) => {
+                              return val === valInList;
+                            });
+                            return returnVal;
+                          })
+                          .join(", ");
+                        return (
+                          <Box
+                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                          >
+                            {plist.split(",").map((value) => (
+                              <Chip key={value} label={value} />
+                            ))}
+                          </Box>
+                        );
+                      }}
+                      value={formData.values.requestParams[param.key] || []}
+                      onChange={formData.handleChange}
+                      //modifiable={param.modifiable}
+                      required={param.required == true ? "required" : ""}
+                    >
+                      {options.map((option) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FieldContainer>
+                );
+              } else if (
+                param.custom == true &&
+                param.options !== undefined &&
+                param.isList === false
+              ) {
+                const options = param.options ? param.options : [""];
+                return (
+                  <FieldContainer key={param.key}>
+                    {param.required == true ? (
+                      <FieldLabel required>{param.displayName}</FieldLabel>
+                    ) : (
+                      <FieldLabel>{param.displayName}</FieldLabel>
+                    )}
+                    <FieldDescription sx={{ mt: "5px" }}>
+                      {param.description}
+                    </FieldDescription>
+                    <Select
+                      disabled
+                      fullWidth
+                      MenuProps={MenuProps}
+                      id={`requestParams.${param.key}`}
+                      name={`requestParams.${param.key}`}
+                      value={formData.values.requestParams[param.key] || []}
+                      renderValue={(selectedVal) => {
+                        return (
+                          <Box
+                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                          >
+                            {<Chip key={selectedVal} label={selectedVal} />}
+                          </Box>
+                        );
+                      }}
+                      onChange={formData.handleChange}
+                      modifiable={param.modifiable}
+                      sx={{ marginTop: "16px" }}
+                      required={param.required == true ? "required" : ""}
+                    >
+                      {options.map((option) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FieldContainer>
+                );
+              } else if (param.custom == true) {
+                return (
+                  <FieldContainer key={param.key}>
+                    {param.required == true ? (
+                      <FieldLabel required>{param.displayName}</FieldLabel>
+                    ) : (
+                      <FieldLabel>{param.displayName}</FieldLabel>
+                    )}
+                    <FieldDescription sx={{ mt: "5px" }}>
+                      {param.description}
+                    </FieldDescription>
+                    <TextField
+                      disabled
+                      id={`requestParams.${param.key}`}
+                      name={`requestParams.${param.key}`}
+                      value={formData.values.requestParams[param.key]}
+                      onChange={formData.handleChange}
+                      sx={{ marginTop: "16px" }}
+                      modifiable={param.modifiable}
+                      required={param.required == true ? "required" : ""}
+                    />
+                  </FieldContainer>
+                );
+              }
+            })}
           </Box>
         </>
         {
@@ -366,7 +563,7 @@ function ResourceUpdateView(props) {
               variant="contained"
               size="xsmall"
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || shouldDisableEdit}
             >
               Update {serviceName} Instance{" "}
               {isLoading && (

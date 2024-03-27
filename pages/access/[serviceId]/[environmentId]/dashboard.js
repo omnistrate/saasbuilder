@@ -23,6 +23,7 @@ import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscription
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
 import Head from "next/head";
+import useServiceHealth from "src/hooks/query/useServiceHealth";
 
 const pageTitle = "Dashboard";
 
@@ -44,6 +45,8 @@ function Dashboard(props) {
   );
   const { data: subscriptionData = {}, isLoading: isLoadingSubscription } =
     subscriptionQuery;
+
+  const serviceHealthQuery = useServiceHealth();
 
   const { isLoading: isEventsLoading, isRefetching: isEventsRefetching } =
     useServiceOfferingEvents(
@@ -232,6 +235,7 @@ function Dashboard(props) {
         <title>{pageTitle}</title>
       </Head>
       <Statistics
+        serviceHealthQuery={serviceHealthQuery}
         numResourceInstances={numResourceInstances}
         numResources={serviceOffering?.resourceParameters.length}
       />

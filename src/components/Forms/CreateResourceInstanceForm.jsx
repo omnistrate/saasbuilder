@@ -3,6 +3,7 @@ import {
   Chip,
   CircularProgress,
   Hidden,
+  Link,
   MenuItem,
   OutlinedInput,
   Radio,
@@ -24,8 +25,8 @@ import { describeServiceOfferingResource } from "../../api/serviceOffering";
 import { selectCloudProviders } from "../../slices/providerSlice";
 import Select from "../FormElements/Select/Select";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-import Link from "next/link";
 import useResourcesInstanceIds from "../../hooks/useResourcesInstanceIds";
+import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -47,12 +48,10 @@ function CreateResourceInstanceForm(props) {
     serviceId,
     selectedResourceKey,
     isBYOA,
-    downloadTerraformKitMutation,
     setRequestParams,
     cloudProviderAccounts,
     service,
     subscriptionId,
-    handleOrgIdModalOpen,
   } = props;
 
   const [isSchemaLoading, setIsSchemaLoading] = useState(true);
@@ -153,60 +152,6 @@ function CreateResourceInstanceForm(props) {
       </P>
 
       <Form onSubmit={formData.handleSubmit} sx={{ width: "100%" }}>
-        {/* {isBYOA && (
-          <>
-            <FieldDescription sx={{ mt: "24px", minHeight: "40px" }}>
-              {downloadTerraformKitMutation.isLoading ? (
-                <Stack
-                  mt="8px"
-                  direction="row"
-                  alignItems="center"
-                  fontSize={12}
-                >
-                  Downloading Terraform. Please wait..{" "}
-                  <LoadingSpinnerSmall
-                    sx={{ color: "black", ml: "16px" }}
-                    size={12}
-                  />
-                </Stack>
-              ) : (
-                <Box>
-                  <Box
-                    sx={{
-                      textDecoration: "underline",
-                      color: "blue",
-                      marginRight: "6px",
-                      cursor: "pointer",
-                    }}
-                    component="span"
-                    onClick={() => {
-                      downloadTerraformKitMutation.mutate();
-                    }}
-                  >
-                    Click here
-                  </Box>
-                  to download the terraform kit to configure Role/Service
-                  Account access
-                </Box>
-              )}
-            </FieldDescription>
-            <FieldDescription sx={{ mt: "8px" }}>
-              <Link
-                style={{
-                  textDecoration: "underline",
-                  color: "blue",
-                }}
-                href="https://www.youtube.com/watch?v=xLjrQOiT1Y0&ab_channel=Omnistrate"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Watch this video
-              </Link>{" "}
-              to learn how to setup BYOA
-            </FieldDescription>
-          </>
-        )} */}
-
         {cloudProviderFieldExists && (
           <FieldContainer>
             <FieldLabel required>Cloud Provider</FieldLabel>
@@ -301,6 +246,33 @@ function CreateResourceInstanceForm(props) {
           ) : (
             ""
           )}
+
+          {isBYOA && (
+            <FieldContainer key="Account Configuration Method">
+              <FieldLabel required> Account Configuration Method</FieldLabel>
+
+              <FieldDescription sx={{ mt: "5px" }}>
+                Choose between CloudFormation and Terraform to configure your
+                cloud provider account
+              </FieldDescription>
+              <Select
+                sx={{ display: "block", marginTop: "16px" }}
+                id="configMethod"
+                name="configMethod"
+                onChange={formData.handleChange}
+                value={formData.values.configMethod ?? ""}
+                required
+                input={<OutlinedInput />}
+              >
+                {Object.values(ACCOUNT_CREATION_METHODS).map((confgiMethod) => (
+                  <MenuItem key={confgiMethod} value={confgiMethod}>
+                    {confgiMethod}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FieldContainer>
+          )}
+
           {createSchema.map((param) => {
             if (isBYOA && param.key === "aws_bootstrap_role_arn") {
               return null;
@@ -327,23 +299,20 @@ function CreateResourceInstanceForm(props) {
                     <MenuItem disabled value="">
                       <em>None</em>
                     </MenuItem>
-
-                    {[...cloudProviderAccounts]
-                      ?.filter(
-                        (obj) => obj.type === formData.values.cloud_provider
-                      )
-                      .map(
-                        (cloudProviderAccount) =>
-                          cloudProviderAccount.type ===
-                            formData.values.cloud_provider && (
-                            <MenuItem
-                              key={cloudProviderAccount.id}
-                              value={cloudProviderAccount.id}
-                            >
-                              {cloudProviderAccount.id}
-                            </MenuItem>
+                    {[
+                      ...(cloudProviderFieldExists
+                        ? cloudProviderAccounts?.filter(
+                            (obj) => obj.type === formData.values.cloud_provider
                           )
-                      )}
+                        : cloudProviderAccounts),
+                    ].map((cloudProviderAccount) => (
+                      <MenuItem
+                        key={cloudProviderAccount.id}
+                        value={cloudProviderAccount.id}
+                      >
+                        {cloudProviderAccount.id}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FieldContainer>
               );
@@ -544,7 +513,10 @@ function CreateResourceInstanceForm(props) {
                     </Select>
                   </FieldContainer>
                 );
-              } else if (param.custom == true) {
+              } else if (
+                param.custom === true ||
+                param.key === "cloud_provider_native_network_id"
+              ) {
                 return (
                   <FieldContainer key={param.key}>
                     {param.required == true ? (
@@ -552,8 +524,28 @@ function CreateResourceInstanceForm(props) {
                     ) : (
                       <FieldLabel>{param.displayName}</FieldLabel>
                     )}
+
                     <FieldDescription sx={{ mt: "5px" }}>
                       {param.description}
+                      {param.key === "cloud_provider_native_network_id" && (
+                        <>
+                          {param?.description && <br />}
+                          If you'd like to deploy within your VPC, enter its ID.
+                          Please ensure your VPC meets the{" "}
+                          <Link
+                            style={{
+                              textDecoration: "underline",
+                              color: "blue",
+                            }}
+                            href="https://docs.omnistrate.com/usecases/byoa/?#bring-your-own-vpc-byo-vpc"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            prerequisites
+                          </Link>
+                          .{" "}
+                        </>
+                      )}
                     </FieldDescription>
                     <TextField
                       id={`requestParams.${param.key}`}
@@ -563,7 +555,7 @@ function CreateResourceInstanceForm(props) {
                       sx={{ marginTop: "16px" }}
                       modifiable={param.modifiable}
                       required={param.required == true ? "required" : ""}
-                    ></TextField>
+                    />
                   </FieldContainer>
                 );
               }
