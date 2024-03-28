@@ -16,6 +16,8 @@ const CarouselMultiProductTierPlan = (props) => {
     unSubscribeMutation,
     handleNavigateToDashboard,
     handleDeleteDialogOpen,
+    subscriptionRequests,
+    cancelSubscriptionRequestMutation,
   } = props;
   const data = serviceOfferingData?.offerings || [];
   const sliderItems = data.length > 3 ? 3 : data.length;
@@ -49,6 +51,10 @@ const CarouselMultiProductTierPlan = (props) => {
                   handleNavigateToDashboard={handleNavigateToDashboard}
                   handleUnsubscribeClick={handleDeleteDialogOpen}
                   isMarketplacePage={true}
+                  subscriptionRequests={subscriptionRequests}
+                  cancelSubscriptionRequestMutation={
+                    cancelSubscriptionRequestMutation
+                  }
                 />
               </Fragment>
             );

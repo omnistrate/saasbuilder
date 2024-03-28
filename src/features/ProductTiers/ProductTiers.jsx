@@ -21,6 +21,10 @@ import MarketplaceServiceDefinitionsTab, {
 import ProductTierPlanDetailsCard from "./components/ProductTierPlanDetailsCard";
 import NoProductTierUI from "src/components/NoProductTierUI/NoProductTierUI";
 import CarouselMultiProductTierPlan from "./components/CarouselMultiProductTierPlan";
+import {
+  cancelSubscriptionRequest,
+  createSubscriptionRequest,
+} from "src/api/subscriptionRequests";
 
 function ProductTiers(props) {
   const {
@@ -30,6 +34,8 @@ function ProductTiers(props) {
     serviceOfferingData,
     subscriptionsData,
     refetchSubscriptions,
+    subscriptionRequests,
+    refetchSubscriptionRequests,
   } = props;
 
   const router = useRouter();
@@ -56,17 +62,42 @@ function ProductTiers(props) {
   const isUserFromServiceOrg =
     currentUser?.orgId === serviceOfferingData?.serviceOrgId;
 
-  const subscribeMutation = useMutation(createSubscriptions, {
-    onSuccess: async () => {
-      await refetchSubscriptions();
-      snackbar.showSuccess("Service Plan subscribed successfully!.");
+  const subscribeMutation = useMutation(
+    (payload) => {
+      if (selectedProductTier?.AutoApproveSubscription) {
+        return createSubscriptions(payload);
+      } else {
+        return createSubscriptionRequest(payload);
+      }
     },
-  });
+    {
+      onSuccess: async (res) => {
+        console.log("res", res);
+        await refetchSubscriptions();
+        await refetchSubscriptionRequests();
+        snackbar.showSuccess(
+          selectedProductTier?.AutoApproveSubscription
+            ? "Service Plan subscribed successfully!."
+            : "Request made for Service plan subscription!"
+        );
+      },
+    }
+  );
+
+  const cancelSubscriptionRequestMutation = useMutation(
+    cancelSubscriptionRequest,
+    {
+      onSuccess: async () => {
+        await refetchSubscriptionRequests();
+        snackbar.showSuccess("Subscription request cancelled");
+      },
+    }
+  );
 
   const unSubscribeMutation = useMutation(deleteSubscription, {
     onSuccess: async () => {
       await refetchSubscriptions();
-      snackbar.showSuccess("Service Plan unsubscribed.");
+      snackbar.showSuccess("Service Plan unsubscribed");
       handleDeleteDialogClose();
     },
   });
@@ -181,6 +212,10 @@ function ProductTiers(props) {
                 handleNavigateToDashboard={handleNavigateToDashboard}
                 handleUnsubscribeClick={handleDeleteDialogOpen}
                 isMarketplacePage={true}
+                subscriptionRequests={subscriptionRequests}
+                cancelSubscriptionRequestMutation={
+                  cancelSubscriptionRequestMutation
+                }
               />
             </Fragment>
           ))
@@ -197,6 +232,10 @@ function ProductTiers(props) {
             unSubscribeMutation={unSubscribeMutation}
             handleNavigateToDashboard={handleNavigateToDashboard}
             handleDeleteDialogOpen={handleDeleteDialogOpen}
+            subscriptionRequests={subscriptionRequests}
+            cancelSubscriptionRequestMutation={
+              cancelSubscriptionRequestMutation
+            }
           />
         )}
       </Box>
