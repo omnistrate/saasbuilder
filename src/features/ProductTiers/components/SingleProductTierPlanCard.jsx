@@ -160,7 +160,7 @@ function SingleProductTierPlanCard(props) {
                         cancelSubscriptionRequestMutation.isLoading
                       }
                     >
-                      Cancel Subscribe Request
+                      Cancel Subscription Request
                       {cancelSubscriptionRequestMutation.isLoading && (
                         <CircularProgress
                           size={16}
