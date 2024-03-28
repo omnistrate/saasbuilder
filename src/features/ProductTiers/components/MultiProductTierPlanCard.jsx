@@ -74,7 +74,7 @@ function MultiProductTierPlanCard(props) {
         borderRadius: "16px",
         cursor: "pointer",
         opacity: isSelected ? 1.0 : 0.5,
-        border: isSelected ? "2px solid #53389E;" : "auto",
+        border: isSelected ? "2px solid #53389E;" : "1px solid #E5E5E5",
         width: "100%",
         maxWidth: "400px",
         minWidth: "300px",
@@ -86,128 +86,147 @@ function MultiProductTierPlanCard(props) {
         display="flex"
         justifyContent="space-between"
         flexDirection="column"
+        height={"100%"}
         sx={{
           pointerEvents: !isSelected ? "none" : "auto",
         }}
       >
-        {pendingRequestExists && (
-          <Box marginBottom={"16px"}>
-            <SubscriptionRequestPendingSnack />
-          </Box>
-        )}
-        <Box display="flex" justifyContent="center">
-          <Tooltip title={offering?.productTierName}>
-            <Text
-              size="xlarge"
-              weight="bold"
-              sx={{
-                color: "#53389E",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: "1",
-                WebkitBoxOrient: "vertical",
-              }}
-            >
-              {offering?.productTierName}
-            </Text>
-          </Tooltip>
-        </Box>
-        <Divider sx={{ mt: "18px" }} />
         <Box>
-          <Box
-            sx={{
-              display: "flex",
-              width: "100%",
-              paddingTop: "18px",
-              paddingBottom: "18px",
-              flexGrow: 1,
-            }}
-          >
-            <Text
-              size="small"
-              weight="regular"
+          {pendingRequestExists && (
+            <Box marginBottom={"16px"}>
+              <SubscriptionRequestPendingSnack />
+            </Box>
+          )}
+          <Box display="flex" justifyContent="center">
+            <Tooltip title={offering?.productTierName}>
+              <Text
+                size="xlarge"
+                weight="bold"
+                sx={{
+                  color: "#53389E",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: "1",
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {offering?.productTierName}
+              </Text>
+            </Tooltip>
+          </Box>
+          <Divider sx={{ mt: "16px" }} />
+          <Box>
+            <Box
               sx={{
-                color: "#475467",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: "4",
-                WebkitBoxOrient: "vertical",
+                display: "flex",
+                width: "100%",
+                paddingTop: "18px",
+                paddingBottom: "18px",
+                flexGrow: 1,
               }}
             >
-              {parseOfferingDescriptionDom(offering?.productTierDescription)}
-            </Text>
+              <Text
+                size="small"
+                weight="regular"
+                sx={{
+                  color: "#475467",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: "4",
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {parseOfferingDescriptionDom(offering?.productTierDescription)}
+              </Text>
+            </Box>
           </Box>
         </Box>
-        <Divider sx={{ mt: "18px" }} />
-        <Box display="flex" justifyContent="center" mt={"18px"} gap={2}>
-          {!isUserFromServiceOrg && (
-            <>
-              {hasAlreadySubscribedAsRoot ? (
-                <Button
-                  variant="outlined"
-                  sx={{
-                    minWidth: "150px",
-                    color: "##B42318 !important",
-                  }}
-                  disabled={
-                    subscribeMutation.isLoading || unSubscribeMutation.isLoading
-                  }
-                  onClick={handleUnsubscribeClick}
-                >
-                  Unsubscribe
-                  {isSelected && unSubscribeMutation.isLoading && (
-                    <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
-                  )}
-                </Button>
-              ) : pendingRequestExists ? (
-                <Button
-                  variant="outlined"
-                  sx={{ minWidth: "170px", color: "#B42318 !important" }}
-                  onClick={handleCancelPendingRequest}
-                  disabled={
-                    subscribeMutation.isLoading ||
-                    unSubscribeMutation.isLoading ||
-                    cancelSubscriptionRequestMutation.isLoading
-                  }
-                >
-                  Cancel Subscribe Request
-                  {isSelected &&
-                    cancelSubscriptionRequestMutation.isLoading && (
+        <Box>
+          <Divider sx={{ mt: "12px" }} />
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems={"center"}
+            flexWrap={"wrap"}
+            mt={"18px"}
+            gap={2}
+          >
+            {!isUserFromServiceOrg && (
+              <>
+                {hasAlreadySubscribedAsRoot ? (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                      color: "##B42318 !important",
+                    }}
+                    disabled={
+                      subscribeMutation.isLoading ||
+                      unSubscribeMutation.isLoading
+                    }
+                    onClick={handleUnsubscribeClick}
+                  >
+                    Unsubscribe
+                    {isSelected && unSubscribeMutation.isLoading && (
                       <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
                     )}
-                </Button>
-              ) : (
-                <Button
-                  variant="outlined"
-                  sx={{
-                    minWidth: "150px",
-                    color: "#344054 !important",
-                  }}
-                  onClick={handleSubscribeClick}
-                  disabled={
-                    subscribeMutation.isLoading || unSubscribeMutation.isLoading
-                  }
-                >
-                  Subscribe
-                  {isSelected && subscribeMutation.isLoading && (
-                    <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
-                  )}
-                </Button>
-              )}
-            </>
-          )}
-          <Tooltip
-            placement="top"
-            title="Service setup in progress. This service plan will become available once the service is ready"
-            isVisible={!isServiceModelReady}
-          >
-            <span>
+                  </Button>
+                ) : pendingRequestExists ? (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: "0 1 1",
+                      color: "#B42318 !important",
+                    }}
+                    onClick={handleCancelPendingRequest}
+                    disabled={
+                      subscribeMutation.isLoading ||
+                      unSubscribeMutation.isLoading ||
+                      cancelSubscriptionRequestMutation.isLoading
+                    }
+                  >
+                    Cancel Subscribe Request
+                    {isSelected &&
+                      cancelSubscriptionRequestMutation.isLoading && (
+                        <CircularProgress
+                          size={16}
+                          sx={{ marginLeft: "8px" }}
+                        />
+                      )}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      color: "#344054 !important",
+                      flex: 1,
+                    }}
+                    onClick={handleSubscribeClick}
+                    disabled={
+                      subscribeMutation.isLoading ||
+                      unSubscribeMutation.isLoading
+                    }
+                  >
+                    Subscribe
+                    {isSelected && subscribeMutation.isLoading && (
+                      <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
+                    )}
+                  </Button>
+                )}
+              </>
+            )}
+            <Tooltip
+              placement="top"
+              title="Service setup in progress. This service plan will become available once the service is ready"
+              isVisible={!isServiceModelReady}
+            >
               <Button
                 variant={"contained"}
                 sx={{
-                  minWidth: "150px",
+                  flex: "1",
+                  maxWidth: "250px",
                 }}
                 endIcon={
                   source === "access" && (
@@ -224,8 +243,8 @@ function MultiProductTierPlanCard(props) {
               >
                 {isMarketplacePage ? "Dashboard" : "Service Plan Dashboard"}
               </Button>
-            </span>
-          </Tooltip>
+            </Tooltip>
+          </Box>
         </Box>
       </Box>
     </Card>
