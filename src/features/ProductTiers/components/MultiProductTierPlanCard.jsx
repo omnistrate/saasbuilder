@@ -187,7 +187,7 @@ function MultiProductTierPlanCard(props) {
                       cancelSubscriptionRequestMutation.isLoading
                     }
                   >
-                    Cancel Subscribe Request
+                    Cancel Subscription Request
                     {isSelected &&
                       cancelSubscriptionRequestMutation.isLoading && (
                         <CircularProgress
