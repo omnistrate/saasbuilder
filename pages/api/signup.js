@@ -1,14 +1,12 @@
 import { customerUserSignUp } from "src/server/api/customer-user";
 
 export default async function handleSignup(nextRequest, nextResponse) {
-  console.log("Request body", nextRequest.body);
-
   if (nextRequest.method === "POST") {
     try {
       const response = await customerUserSignUp(nextRequest.body);
       nextResponse.status(200).send();
     } catch (error) {
-      console.error(error);
+      console.error(error?.response?.data);
       let defaultErrorMessage = "Something went wrong. Please retry";
 
       if (
@@ -19,8 +17,13 @@ export default async function handleSignup(nextRequest, nextResponse) {
           message: defaultErrorMessage,
         });
       } else {
+        let responseErrorMessage = error.response?.data?.message;
+
+        if (responseErrorMessage === "tenant already exists") {
+          nextResponse.status(200).send();
+        }
         nextResponse.status(error.response?.status || 500).send({
-          message: error.response?.data?.message || defaultErrorMessage,
+          message: responseErrorMessage || defaultErrorMessage,
         });
       }
     }

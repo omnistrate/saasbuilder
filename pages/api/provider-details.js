@@ -11,7 +11,6 @@ export default async function handleGetProviderDetails(
       const faviconURL = response?.data?.orgFavIconURL;
       nextResponse.status(200).send({ providerOrgFaviconURL: faviconURL });
     } catch (error) {
-      console.error(error);
       let defaultErrorMessage = "Something went wrong. Please retry";
 
       if (

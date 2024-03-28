@@ -129,7 +129,6 @@ function useServiceOfferingEvents(
       refetchInterval: 60000,
       refetchOnWindowFocus: false,
       onError: (error) => {
-        console.error("Events api failed", error);
         dispatch(
           setEventsLoadingStatus({
             serviceId: serviceId,

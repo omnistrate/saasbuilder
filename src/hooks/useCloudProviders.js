@@ -59,7 +59,7 @@ export default function useCloudProviders(serviceId, serviceModelId) {
       onError: (error) => {
         dispatch(setProviderIdsLoadingStatus(loadingStatuses.error));
         dispatch(setProviderLoadingStatus(loadingStatuses.error));
-        console.error(error);
+        console.error(error?.response?.data);
       },
     }
   );

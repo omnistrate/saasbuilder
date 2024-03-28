@@ -672,7 +672,7 @@ function MarketplaceService() {
             createResourceInstanceMutation.mutate(data);
           }
         } catch (err) {
-          console.error("error", err);
+          console.error("error", err?.response?.data);
         } finally {
           setIsCreateInstanceSchemaFetching(false);
         }
@@ -986,7 +986,7 @@ function MarketplaceService() {
       }
     } catch (err) {
       dispatch(setResourceInstanceListLoadingStatus(loadingStatuses.error));
-      console.error("error", err);
+      console.error("error", err?.response?.data);
       if (
         resourceInfo.id === currentResourceInfo.current.resourceId &&
         resourceInfo.key === currentResourceInfo.current.resourceKey &&

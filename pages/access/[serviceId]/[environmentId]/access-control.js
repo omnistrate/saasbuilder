@@ -132,7 +132,6 @@ function AccessControl() {
       formik.resetForm();
       refetch();
     } catch (error) {
-      console.log(error);
       snackbar.showError("Failed to send invites");
     }
   });
@@ -147,7 +146,6 @@ function AccessControl() {
         refetch();
       },
       onError: (error) => {
-        console.error(error);
         snackbar.showError("Failed to delete user");
       },
     }

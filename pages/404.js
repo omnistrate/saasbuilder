@@ -7,8 +7,8 @@ import {
   CardTitle,
   Heading,
   Link,
-  SubmitButton,
 } from "../src/components/NonDashboardComponents/FormElements/FormElements";
+import Button from "components/Button/Button";
 
 function FourHundredFourPage() {
   return (
@@ -33,6 +33,7 @@ function FourHundredFourPage() {
         >
           <ImageContainer>
             <Image
+              priority
               src={fourZeroFourImg}
               alt="sign-up"
               style={{
@@ -64,9 +65,13 @@ function FourHundredFourPage() {
             </Description>
 
             <Link href="/service-plans">
-              <SubmitButton sx={{ marginTop: "40px" }}>
+              <Button
+                variant="contained"
+                size="xlarge"
+                sx={{ marginTop: "40px" }}
+              >
                 Take me there
-              </SubmitButton>
+              </Button>
             </Link>
           </Box>
         </Container>

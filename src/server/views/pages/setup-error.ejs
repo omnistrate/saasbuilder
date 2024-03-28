@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Setup Error</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        background-color: white;
+        height: 100%;
+        font-family: "Manrope", sans-serif;
+      }
+
+      .card-container {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-image: url("/public/assets/images/non-dashboard/wave-background.svg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .card {
+        box-shadow:
+          0px 4px 6px -4px #1018281a,
+          0px 10px 15px -3px #1018281a;
+        border-radius: 12px;
+        padding: 40px 20px;
+        width: 100%;
+        max-width: 536px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: white;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0px;
+        padding: 0px;
+        margin-top: 24px;
+      }
+      .list-item {
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .list-item + .list-item {
+        margin-top: 29px;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <div class="card-container">
+      <h2 style="margin-bottom: 8px">
+        Environment variable configuration error
+      </h2>
+      <p style="margin-bottom: 48px">Please configure the environment variables and restart the server</p>
+      <div class="card">
+        <div class="card-content">
+          <div style="text-align: center">
+            <img
+              src="/public/assets/images/setup-error.png"
+              alt="setup-error"
+            />
+          </div>
+
+          <ul>
+            <% envVariablesStatus.forEach(function(envVariable){ %>
+            <li class="list-item" title="<%= envVariable.status %>">
+              <img src="/public/assets/icons/<%= envVariable.status === 'Verified' ? 'check.png' : envVariable.status === 'Not Defined' ? 'cross.png' : 'alert.png'  %>" alt="status" />
+              <span><%= envVariable.name %></span>
+            </li>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -176,7 +176,7 @@ function ProfileDropdown(props) {
           >
             <Box sx={{ padding: "12px 16px" }}>
               <Text size="small" color="#344054">
-                Subscribed ID
+                Subscription ID
               </Text>
               <Stack
                 direction={"row"}

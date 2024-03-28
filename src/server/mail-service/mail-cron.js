@@ -89,7 +89,7 @@ function startMailServiceCron() {
 
       await Promise.all(mailPromises)
         .then((responses) => {
-          if (mailPromises.length === events.length)
+          if (mailPromises.length === events.length && events.length > 0)
             console.log("All mails sent and events acknowledged");
         })
         .finally(() => {
@@ -97,7 +97,7 @@ function startMailServiceCron() {
         });
     } catch (error) {
       isRunning = false;
-      console.error(error);
+      console.error(error?.response?.data);
     }
   }
   //run cron job after every 30 seconds

@@ -6,7 +6,6 @@ export default async function handleSignIn(nextRequest, nextResponse) {
       const response = await customerUserSignIn(nextRequest.body);
       nextResponse.status(200).send({ ...response.data });
     } catch (error) {
-      console.error(error);
       let defaultErrorMessage =
         "Failed to sign in. Either the credentials are incorrect or the user does not exist";
 
@@ -15,6 +14,12 @@ export default async function handleSignIn(nextRequest, nextResponse) {
         error?.response?.status === undefined
       ) {
         nextResponse.status(500).send({
+          message: defaultErrorMessage,
+        });
+      } else if (
+        error.response?.data?.message === "wrong user email or password"
+      ) {
+        nextResponse.status(400).send({
           message: defaultErrorMessage,
         });
       } else {

@@ -4,7 +4,6 @@ import { Text } from "src/components/Typography/Typography";
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import crypto from "crypto-js";
 import useSnackbar from "src/hooks/useSnackbar";
 import Form from "src/components/FormElements/Form/Form";
 import { PasswordInput } from "src/components/NonDashboardComponents/FormElements/FormElements";
@@ -13,6 +12,7 @@ import styled from "@emotion/styled";
 import Button from "src/components/Button/Button";
 import { updatePassword } from "src/api/users";
 import useLogout from "src/hooks/useLogout";
+import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 
 function ChangePassword() {
   const snackbar = useSnackbar();
@@ -22,7 +22,7 @@ function ChangePassword() {
     (values) => {
       const payload = {
         password: values.password,
-        currentPasswordHash: values.currentPasswordHash,
+        currentPassword: values.currentPassword,
       };
       return updatePassword(payload);
     },
@@ -46,24 +46,25 @@ function ChangePassword() {
 
   const formik = useFormik({
     initialValues: {
-      currentpassword: "",
-      currentPasswordHash: "",
+      currentPassword: "",
       password: "",
-      confirmpassword: "",
+      confirmPassword: "",
     },
     onSubmit: (values) => {
-      values.currentPasswordHash = crypto
-        .SHA256(values["currentpassword"])
-        .toString(crypto.enc.Hex);
-
-      createChangePasswordMutation.mutate(values);
+      const payload = {
+        currentPassword: values.currentPassword,
+        password: values.password,
+      };
+      createChangePasswordMutation.mutate(payload);
     },
     validateOnChange: false,
     //   validationSchema: createImageRegistryValidationSchema,
     validationSchema: Yup.object({
-      currentpassword: Yup.string().required("Password is required"),
-      password: Yup.string().required("Password is required"),
-      confirmpassword: Yup.string()
+      currentPassword: Yup.string().required("Current Password is required"),
+      password: Yup.string()
+        .required("Password is required")
+        .matches(passwordRegex, passwordText),
+      confirmPassword: Yup.string()
         .required("Password is required")
         .oneOf([Yup.ref("password"), null], "Passwords must match"),
     }),
@@ -85,18 +86,18 @@ function ChangePassword() {
         <Box display="flex" alignItems="center" mt="20px">
           <FieldLabel required>Current Password</FieldLabel>
           <PasswordInput
-            name="currentpassword"
+            name="currentPassword"
             required
-            id="currentpassword"
+            id="currentPassword"
             placeholder="Current Password*"
-            value={formik.values.currentpassword}
+            value={formik.values.currentPassword}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             sx={{ marginLeft: "150px", width: "600px" }}
             error={
-              formik.touched.currentpassword && formik.errors.currentpassword
+              formik.touched.currentPassword && formik.errors.currentPassword
             }
-            errorMsg={formik.errors.currentpassword}
+            errorMsg={formik.errors.currentPassword}
             fullWidth
             mt="12px"
           />
@@ -123,18 +124,18 @@ function ChangePassword() {
         <Box display="flex" alignItems="center">
           <FieldLabel required>Confirm New Password</FieldLabel>
           <PasswordInput
-            name="confirmpassword"
-            id="confirmpassword"
+            name="confirmPassword"
+            id="confirmPassword"
             required
             placeholder="Confirm New Password*"
-            value={formik.values.confirmpassword}
+            value={formik.values.confirmPassword}
             onChange={formik.handleChange}
             sx={{ marginLeft: "110px", width: "600px" }}
             onBlur={formik.handleBlur}
             error={
-              formik.touched.confirmpassword && formik.errors.confirmpassword
+              formik.touched.confirmPassword && formik.errors.confirmPassword
             }
-            errorMsg={formik.errors.confirmpassword}
+            errorMsg={formik.errors.confirmPassword}
             fullWidth
             mt="12px"
           />
