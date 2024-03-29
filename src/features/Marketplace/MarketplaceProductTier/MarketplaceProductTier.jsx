@@ -1,4 +1,10 @@
-import { Box, Divider, Typography, styled } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  Typography,
+  styled,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
 import useServiceOfferingById from "./hooks/useServiceOfferingById";
@@ -11,6 +17,8 @@ import Head from "next/head";
 // import NoLogoImage from "public/assets/images/logos/no-logo.png";
 import placeholderService from "public/assets/images/dashboard/service/servicePlaceholder.png";
 import useSubscriptionRequests from "./hooks/useSubscriptionRequests";
+import Button from "src/components/Button/Button";
+import SubscriptionRequestPendingSnack from "src/features/ProductTiers/components/SubscriptionRequestPendingSnack";
 
 function MarketplaceProductTier({ orgLogoURL, orgName }) {
   const router = useRouter();
@@ -33,6 +41,8 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
     refetch: refetchSubscriptions,
     data: subscriptions = [],
   } = subscriptionsQuery;
+
+  const pendingRequestExists = true;
 
   if (shouldDisplayServiceNotFoundUI || shouldDisplayNoServicesUI) {
     return (
@@ -83,7 +93,86 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
           </Box>
         ) : (
           <>
-            <Title>{serviceOfferingData?.serviceName}</Title>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              sx={{ paddingTop: "20px", paddingBottom: "20px" }}
+            >
+              <Title>{serviceOfferingData?.serviceName}</Title>
+              <Box display={"flex"} flexDirection={"column"} gap="10px">
+                <>
+                  {false ? (
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        minWidth: "200px",
+                        color: "#B42318 !important",
+                      }}
+                      disabled={false}
+                      onClick={"handleUnsubscribeClick"}
+                    >
+                      Unsubscribe
+                      {false && (
+                        <CircularProgress
+                          size={16}
+                          sx={{ marginLeft: "8px" }}
+                        />
+                      )}
+                    </Button>
+                  ) : (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "4px",
+                        alignItems: "center",
+                      }}
+                    >
+                      {pendingRequestExists ? (
+                        <>
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              minWidth: "200px",
+                              color: "#B42318 !important",
+                            }}
+                            onClick={"handleCancelPendingRequest"}
+                            disabled={false}
+                          >
+                            Cancel Subscribe Request
+                            {false && (
+                              <CircularProgress
+                                size={16}
+                                sx={{ marginLeft: "8px" }}
+                              />
+                            )}
+                          </Button>
+                          <SubscriptionRequestPendingSnack />
+                        </>
+                      ) : (
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            minWidth: "200px",
+                            color: "#344054 !important",
+                          }}
+                          onClick={"handleSubscribeClick"}
+                          disabled={pendingRequestExists}
+                        >
+                          Subscribe
+                          {false && (
+                            <CircularProgress
+                              size={16}
+                              sx={{ marginLeft: "8px" }}
+                            />
+                          )}
+                        </Button>
+                      )}
+                    </Box>
+                  )}
+                </>
+              </Box>
+            </Box>
             <Divider />
             <Box mt="40px">
               <ProductTiers
