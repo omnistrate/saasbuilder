@@ -1,11 +1,11 @@
 const cron = require("node-cron");
 const nodemailer = require("nodemailer");
-const { getSignUpMailContent } = require("./signupTemplate");
-const { getOrgInviteUserMailContent } = require("./orgInviteUserTemplate");
-const { getOrgRevokeUserMailContent } = require("./orgRevokeUserTemplate");
+const { getSignUpMailContent } = require("./templates/signupTemplate");
+const { getOrgInviteUserMailContent } = require("./templates/orgInviteUserTemplate");
+const { getOrgRevokeUserMailContent } = require("./templates/orgRevokeUserTemplate");
 const { eventTypes } = require("./constants");
 const { getEventsList, acknowledgeEvent } = require("../api/events");
-const { getResetPasswordMailContent } = require("./forgotPasswordTemplate");
+const { getResetPasswordMailContent } = require("./templates/forgotPasswordTemplate");
 const {
   getApproveSubscriptionMailContent,
 } = require("./templates/approveSubscriptionRequest");
@@ -21,7 +21,7 @@ const {
 const {
   getSubscriptionTerminateMailContent,
 } = require("./templates/terminateSubscription");
-const { getInvoiceCreatedTemplate } = require("./invoiceCreatedTemplate");
+const { getInvoiceCreatedTemplate } = require("./templates/invoiceCreatedTemplate");
 
 let isRunning = false;
 
