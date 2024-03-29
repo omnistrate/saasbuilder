@@ -8,6 +8,7 @@ const eventTypes = {
   SuspendSubscription: "SuspendSubscription",
   ResumeSubscription: "ResumeSubscription",
   TerminateSubscription: "TerminateSubscription",
+  InvoiceCreated: "InvoiceCreated",
 };
 
 module.exports = { eventTypes };

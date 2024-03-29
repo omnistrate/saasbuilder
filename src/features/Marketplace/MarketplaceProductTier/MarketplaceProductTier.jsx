@@ -10,6 +10,7 @@ import NoServiceFoundUI from "../components/NoServiceFoundUI";
 import Head from "next/head";
 // import NoLogoImage from "public/assets/images/logos/no-logo.png";
 import placeholderService from "public/assets/images/dashboard/service/servicePlaceholder.png";
+import useSubscriptionRequests from "./hooks/useSubscriptionRequests";
 
 function MarketplaceProductTier({ orgLogoURL, orgName }) {
   const router = useRouter();
@@ -18,6 +19,12 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
   const serviceOfferingQuery = useServiceOfferingById(serviceId);
   const { data: serviceOfferingData, isFetching } = serviceOfferingQuery;
   const subscriptionsQuery = useUserSubscriptions();
+  const {
+    data: subscriptionRequestsData,
+    isLoading: isSubscriptionRequestLoading,
+    refetch: refetchSubscriptionRequests,
+  } = useSubscriptionRequests();
+  const subscriptionRequests = subscriptionRequestsData?.subscriptionRequests;
   const { shouldDisplayNoServicesUI, shouldDisplayServiceNotFoundUI } =
     useProductTierRedirect();
 
@@ -66,7 +73,11 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
           placeholderService
         }
       >
-        {!serviceId || !environmentId || isFetching || isSubscriptionLoading ? (
+        {!serviceId ||
+        !environmentId ||
+        isFetching ||
+        isSubscriptionLoading ||
+        isSubscriptionRequestLoading ? (
           <Box display="flex" justifyContent="center" mt="200px">
             <LoadingSpinner />
           </Box>
@@ -82,6 +93,8 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
                 serviceOfferingData={serviceOfferingData}
                 subscriptionsData={subscriptions}
                 refetchSubscriptions={refetchSubscriptions}
+                subscriptionRequests={subscriptionRequests}
+                refetchSubscriptionRequests={refetchSubscriptionRequests}
               />
             </Box>
           </>

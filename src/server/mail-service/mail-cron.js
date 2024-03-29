@@ -21,6 +21,7 @@ const {
 const {
   getSubscriptionTerminateMailContent,
 } = require("./templates/terminateSubscription");
+const { getInvoiceCreatedTemplate } = require("./invoiceCreatedTemplate");
 
 let isRunning = false;
 
@@ -98,6 +99,10 @@ function startMailServiceCron() {
 
             case eventTypes.TerminateSubscription: {
               mailContent = getSubscriptionTerminateMailContent(event);
+            }
+
+            case eventTypes.InvoiceCreated: {
+              mailContent = getInvoiceCreatedTemplate(event);
               break;
             }
 

@@ -7,6 +7,7 @@ import { DisplayText, Text } from "src/components/Typography/Typography";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { parseOfferingDescriptionDom } from "src/utils/constants/serviceOfferingDescription";
 import { findSubscriptionByPriority } from "src/utils/access/findSubscription";
+import SubscriptionRequestPendingSnack from "./SubscriptionRequestPendingSnack";
 
 function SingleProductTierPlanCard(props) {
   const {
@@ -20,6 +21,8 @@ function SingleProductTierPlanCard(props) {
     handleNavigateToDashboard,
     handleUnsubscribeClick,
     isMarketplacePage,
+    subscriptionRequests,
+    cancelSubscriptionRequestMutation,
   } = props;
 
   const existingSubscription = findSubscriptionByPriority(
@@ -28,11 +31,14 @@ function SingleProductTierPlanCard(props) {
     offering?.productTierID
   );
 
-  // const hasAlreadySubscribed = findSubscriptionByPriority(
-  //   subscriptionsData,
-  //   serviceId,
-  //   offering?.productTierID
-  // );
+  const pendingRequest = subscriptionRequests?.find(
+    (item) =>
+      item?.productTierId === offering?.productTierID &&
+      item?.serviceId === serviceId &&
+      item?.status === "PENDING"
+  );
+
+  const pendingRequestExists = !!pendingRequest;
 
   const hasAlreadySubscribedAsRoot = existingSubscription?.roleType === "root";
 
@@ -41,6 +47,10 @@ function SingleProductTierPlanCard(props) {
       productTierId: offering?.productTierID,
       serviceId,
     });
+  };
+
+  const handleCancelPendingRequest = () => {
+    cancelSubscriptionRequestMutation.mutate(pendingRequest?.id);
   };
 
   const isServiceModelReady = offering.serviceModelStatus === "READY";
@@ -77,9 +87,11 @@ function SingleProductTierPlanCard(props) {
           <Box
             sx={{
               display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
               width: "100%",
               paddingTop: "6px",
-              paddingBottom: "32px",
+              paddingBottom: "24px",
               flexGrow: 1,
             }}
           >
@@ -97,11 +109,17 @@ function SingleProductTierPlanCard(props) {
             >
               {parseOfferingDescriptionDom(offering?.productTierDescription)}
             </Text>
+            {pendingRequestExists && (
+              <Box sx={{ marginTop: "12px" }}>
+                <SubscriptionRequestPendingSnack />
+              </Box>
+            )}
           </Box>
         </Box>
         <Box
           display="flex"
           justifyContent={"center"}
+          alignItems={"center"}
           flexDirection="column"
           gap={2}
           flexShrink={0}
@@ -111,7 +129,7 @@ function SingleProductTierPlanCard(props) {
               {hasAlreadySubscribedAsRoot ? (
                 <Button
                   variant="outlined"
-                  sx={{ minWidth: "150px", color: "#8D0E00 !important" }}
+                  sx={{ minWidth: "200px", color: "#B42318 !important" }}
                   disabled={
                     subscribeMutation.isLoading || unSubscribeMutation.isLoading
                   }
@@ -123,19 +141,54 @@ function SingleProductTierPlanCard(props) {
                   )}
                 </Button>
               ) : (
-                <Button
-                  variant="outlined"
-                  sx={{ minWidth: "150px", color: "#8D0E00 !important" }}
-                  onClick={handleSubscribeClick}
-                  disabled={
-                    subscribeMutation.isLoading || unSubscribeMutation.isLoading
-                  }
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "4px",
+                    alignItems: "center",
+                  }}
                 >
-                  Subscribe
-                  {subscribeMutation.isLoading && (
-                    <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
+                  {pendingRequestExists ? (
+                    <Button
+                      variant="outlined"
+                      sx={{ minWidth: "200px", color: "#B42318 !important" }}
+                      onClick={handleCancelPendingRequest}
+                      disabled={
+                        subscribeMutation.isLoading ||
+                        unSubscribeMutation.isLoading ||
+                        cancelSubscriptionRequestMutation.isLoading
+                      }
+                    >
+                      Cancel Subscription Request
+                      {cancelSubscriptionRequestMutation.isLoading && (
+                        <CircularProgress
+                          size={16}
+                          sx={{ marginLeft: "8px" }}
+                        />
+                      )}
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outlined"
+                      sx={{ minWidth: "200px", color: "#344054 !important" }}
+                      onClick={handleSubscribeClick}
+                      disabled={
+                        subscribeMutation.isLoading ||
+                        unSubscribeMutation.isLoading ||
+                        pendingRequestExists
+                      }
+                    >
+                      Subscribe
+                      {subscribeMutation.isLoading && (
+                        <CircularProgress
+                          size={16}
+                          sx={{ marginLeft: "8px" }}
+                        />
+                      )}
+                    </Button>
                   )}
-                </Button>
+                </Box>
               )}
             </>
           )}
@@ -148,7 +201,7 @@ function SingleProductTierPlanCard(props) {
               <Button
                 variant={"contained"}
                 sx={{
-                  minWidth: "150px",
+                  minWidth: "200px",
                 }}
                 endIcon={
                   source === "access" && (
