@@ -16,6 +16,12 @@ export default async function handleSignIn(nextRequest, nextResponse) {
         nextResponse.status(500).send({
           message: defaultErrorMessage,
         });
+      } else if (
+        error.response?.data?.message === "wrong user email or password"
+      ) {
+        nextResponse.status(400).send({
+          message: defaultErrorMessage,
+        });
       } else {
         nextResponse.status(error.response?.status || 500).send({
           message: error.response?.data?.message || defaultErrorMessage,

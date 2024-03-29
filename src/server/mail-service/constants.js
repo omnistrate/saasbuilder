@@ -3,6 +3,11 @@ const eventTypes = {
   InviteUser: "InviteUser",
   RevokeUserRole: "RevokeUserRole",
   ResetPassword: "ResetPassword",
+  ApproveSubscriptionRequest: "ApproveSubscriptionRequest",
+  DenySubscriptionRequest: "DenySubscriptionRequest",
+  SuspendSubscription: "SuspendSubscription",
+  ResumeSubscription: "ResumeSubscription",
+  TerminateSubscription: "TerminateSubscription",
   InvoiceCreated: "InvoiceCreated",
 };
 
