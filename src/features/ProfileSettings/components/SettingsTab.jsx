@@ -3,11 +3,7 @@ import Box from "@mui/material/Box";
 import MuiTabs, { tabsClasses } from "@mui/material/Tabs";
 import MuiTab, { tabClasses } from "@mui/material/Tab";
 import styled from "@emotion/styled";
-
-export const tabs = {
-  profile: "Profile",
-  password: "Password",
-};
+import { tabs } from "../constants";
 
 export default function SettingsTab(props) {
   const { currentTab, router } = props;
@@ -46,6 +42,13 @@ export default function SettingsTab(props) {
           value={tabs.profile}
           onClick={() => {
             handleChangeTab(tabs.profile);
+          }}
+        />
+        <Tab
+          label={tabs.billingAddress}
+          value={tabs.billingAddress}
+          onClick={() => {
+            handleChangeTab(tabs.billingAddress);
           }}
         />
         <Tab
