@@ -18,7 +18,6 @@ import ErrorLabel from "components/ErrorLabel/ErrorLabel";
 import useSnackbar from "src/hooks/useSnackbar";
 import { updateProfile } from "src/api/users";
 
-
 function ProfileForm(props) {
   const { refetch, selectUser = {} } = props;
   const snackbar = useSnackbar();
@@ -65,7 +64,7 @@ function ProfileForm(props) {
       orgName: Yup.string().required("Org Name is required"),
       orgDescription: Yup.string(),
       orgURL: Yup.string().matches(
-        /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+        /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]{1,3})*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
         "Please enter a valid URL"
       ),
     }),
