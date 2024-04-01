@@ -1,4 +1,4 @@
-import {styled } from "@mui/material";
+import { styled } from "@mui/material";
 import {
   CellDescription,
   CellSubtext,
@@ -12,6 +12,8 @@ import {
 import formatDateUTC from "../../../utils/formatDateUTC";
 import React from "react";
 import Link from "next/link";
+import capitalize from "lodash/capitalize";
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 
 function ResourceInstanceDetails(props) {
   const {
@@ -35,6 +37,7 @@ function ResourceInstanceDetails(props) {
       return {
         ...match,
         value: resultParameters[key],
+        key,
       };
     })
     .filter((param) => {
@@ -46,6 +49,22 @@ function ResourceInstanceDetails(props) {
         "private_network_id",
       ].includes(param.key);
     });
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          mt: "54px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <LoadingSpinner />
+      </Box>
+    );
+  }
+
   return (
     <TableContainer
       sx={{
@@ -127,14 +146,23 @@ function ResourceInstanceDetails(props) {
             return (
               <TableRow key={parameter.key}>
                 <TableCell sx={{ verticalAlign: "baseline" }}>
-                  <CellTitle>{parameter.displayName}</CellTitle>
+                  <CellTitle>
+                    {capitalize(parameter.displayName) || parameter.key}
+                  </CellTitle>
                   <CellSubtext>{parameter.description}</CellSubtext>
                 </TableCell>
                 <TableCell
                   align="right"
                   sx={{ width: "50%", verticalAlign: "baseline" }}
                 >
-                  <CellDescription>{parameter.value}</CellDescription>
+                  <CellDescription
+                    sx={{
+                      wordBreak: "break-word",
+                      paddingLeft: "30px",
+                    }}
+                  >
+                    {parameter.value}
+                  </CellDescription>
                 </TableCell>
               </TableRow>
             );

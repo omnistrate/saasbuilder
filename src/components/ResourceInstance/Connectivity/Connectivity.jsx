@@ -1,4 +1,4 @@
-import { Box, Stack, styled } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import {
   CellDescription,
   CellSubtext,
@@ -18,8 +18,7 @@ import Button from "../../Button/Button";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-
+import Card from "src/components/Card/Card";
 
 function Connectivity(props) {
   const {
@@ -53,6 +52,9 @@ function Connectivity(props) {
 
   const otherEndpoints = globalEndpoints?.others;
 
+  const noConnectivityData =
+    !globalEndpoints?.primary && !otherEndpoints?.length && !ports?.length;
+
   const [isEndpointsExpanded, setIsEndpointsExpanded] = useState(false);
   const [isPortsExpanded, setIsPortsExpanded] = useState(false);
 
@@ -72,6 +74,16 @@ function Connectivity(props) {
     setAvailabilityZones(availabilityZone);
   }, [nodes]);
 
+  if (noConnectivityData) {
+    return (
+      <Card mt="54px" sx={{ minHeight: "500px" }}>
+        <Stack direction="row" justifyContent="center" marginTop="200px">
+          <Text size="xlarge">No Connectivity data</Text>
+        </Stack>
+      </Card>
+    );
+  }
+
   return (
     <TableContainer
       sx={{
@@ -82,8 +94,8 @@ function Connectivity(props) {
         <TableBody>
           <TableRow>
             <TableCell>
-              <CellTitle>Network Type</CellTitle>
-              <CellSubtext>Type of Network</CellSubtext>
+              <CellTitle>Network type</CellTitle>
+              <CellSubtext>Type of network</CellSubtext>
             </TableCell>
             <TableCell align="right" sx={{ width: "50%" }}>
               <CellDescription>{networkType}</CellDescription>
@@ -91,7 +103,7 @@ function Connectivity(props) {
           </TableRow>
           <TableRow>
             <TableCell sx={{ verticalAlign: "baseline" }}>
-              <CellTitle>Global Endpoint</CellTitle>
+              <CellTitle>Global endpoint</CellTitle>
               <CellSubtext>
                 The global endpoint of the {sectionLabel.toLowerCase()}
               </CellSubtext>
@@ -243,7 +255,7 @@ function Connectivity(props) {
           {privateNetworkCIDR && (
             <TableRow>
               <TableCell>
-                <CellTitle>Private Network CIDR</CellTitle>
+                <CellTitle>Private network CIDR</CellTitle>
                 <CellSubtext>
                   The private network CIDR of the {sectionLabel.toLowerCase()}
                 </CellSubtext>
@@ -256,7 +268,7 @@ function Connectivity(props) {
           {privateNetworkCIDR && (
             <TableRow>
               <TableCell>
-                <CellTitle>Private Network ID</CellTitle>
+                <CellTitle>Private network ID</CellTitle>
                 <CellSubtext>
                   The private network ID of the {sectionLabel.toLowerCase()}
                 </CellSubtext>
@@ -315,13 +327,3 @@ const ResourceGlobalEndpoint = (props) => {
     </Stack>
   );
 };
-
-
-
-const LinkResourceInstance = styled(Link)(({ theme }) => ({
-  display: "flex",
-  color: "#6941C6",
-  fontWeight: 500,
-  gap: 2,
-  alignItems: "center",
-}));

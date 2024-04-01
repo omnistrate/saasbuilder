@@ -1,12 +1,8 @@
-import { Box, Stack, chipClasses } from "@mui/material";
-import { Column, InfoCardContainer } from "../../InfoCard/InfoCard";
-import AwsLogo from "../../Logos/AwsLogo/AwsLogo";
-import GcpLogo from "../../Logos/GcpLogo/GcpLogo";
+import { Box, Stack } from "@mui/material";
+import AwsLogo from "src/components/Logos/AwsLogo/AwsLogo";
+import GcpLogo from "src/components/Logos/GcpLogo/GcpLogo";
 import ResourceInstanceStatusChip from "../ResourceInstanceStatusChip/ResourceInstanceStatusChip";
-import regionIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/region.svg";
-import dateIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/date.svg";
-import Image from "next/image";
-import { Text } from "../../Typography/Typography";
+import { Text } from "src/components/Typography/Typography";
 import _ from "lodash";
 import {
   Table,
@@ -17,6 +13,7 @@ import {
   CellTitle,
 } from "components/InfoTable/InfoTable";
 import GradientProgressBar from "src/components/GradientProgessBar/GradientProgressBar";
+import RegionIcon from "src/components/Region/RegionIcon";
 
 function ResourceInstanceOverview(props) {
   const {
@@ -29,12 +26,17 @@ function ResourceInstanceOverview(props) {
     networkType,
     context,
     healthStatusPercent,
+    isResourceBYOA,
   } = props;
 
   let sectionLabel = "Resource";
 
   if (context === "inventory") {
     sectionLabel = "Service Component ";
+  }
+
+  if (isResourceBYOA) {
+    sectionLabel = "Account";
   }
 
   return (
@@ -111,9 +113,10 @@ function ResourceInstanceOverview(props) {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    color: "#475467",
                   }}
                 >
-                  <Box sx={{ color: "#475467" }}>{resourceInstanceId}</Box>
+                  {resourceInstanceId}
                 </Box>
               </TableCell>
 
@@ -124,7 +127,12 @@ function ResourceInstanceOverview(props) {
                   alignItems={"center"}
                   gap={"10px"}
                 >
-                  <ResourceInstanceStatusChip status={status} />
+                  {" "}
+                  {status ? (
+                    <ResourceInstanceStatusChip status={status} />
+                  ) : (
+                    <Box sx={{ color: "#475467" }}>NA</Box>
+                  )}
                 </Stack>
               </TableCell>
 
@@ -134,14 +142,14 @@ function ResourceInstanceOverview(props) {
                   justifyContent={"center"}
                   alignItems="center"
                 >
-                  <Image src={regionIcon} alt="region" />
+                  <RegionIcon />
                   <Box
                     component="span"
                     ml="5.5px"
                     fontWeight={500}
                     color="#101828"
                   >
-                    {region}
+                    {region ?? "Global"}
                   </Box>
                 </Stack>
               </TableCell>
@@ -155,6 +163,9 @@ function ResourceInstanceOverview(props) {
                 >
                   {cloudProvider === "aws" && <AwsLogo />}
                   {cloudProvider === "gcp" && <GcpLogo />}
+                  {!cloudProvider && (
+                    <Box sx={{ color: "#475467" }}>Everywhere</Box>
+                  )}
                 </Stack>
               </TableCell>
               <TableCell>
