@@ -13,6 +13,7 @@ services:
       - YOUR_SAAS_DOMAIN_URL=$sys.network.externalClusterEndpoint
       - MAIL_USER_EMAIL=$var.senderEmail
       - MAIL_USER_PASSWORD=$var.senderPassword
+      - MAIL_FROM=$var.senderFrom
     x-omnistrate-compute:
       instanceTypes:
         - cloudProvider: aws
