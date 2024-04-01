@@ -95,6 +95,13 @@ function DashboardHeader(props) {
       }}
     >
       <Stack direction="row" alignItems="center">
+        <Box
+          pr="20px"
+          sx={{ display: "flex", direction: "row", alignItems: "center" }}
+        >
+          <ServicesDropdown />
+        </Box>
+
         <Stack direction="row" alignItems="center" gap="10px" pr="16px">
           <Image
             src={serviceLogoURL || placeholderService}
@@ -115,13 +122,6 @@ function DashboardHeader(props) {
             {serviceName}
           </Text>
         </Stack>
-
-        <Box
-          pl="20px"
-          borderLeft={`1px solid ${styleConfig.navbarBorderColor}`}
-        >
-          <ServicesDropdown />
-        </Box>
       </Stack>
 
       <ProfileDropdown
