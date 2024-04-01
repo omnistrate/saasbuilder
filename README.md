@@ -21,7 +21,7 @@ These details are crucial as they will be presented to customers accessing your 
 ![Alt text](https://drive.google.com/uc?id=1h7Lnp_-1P-dOdD1ri0QZPi2Rd_U1LUK9 "SaaSBuilder config")
 
 | Service Provider Details    | Description                                                |
-| --------------------------  | ---------------------------------------------------------- |
+| --------------------------- | ---------------------------------------------------------- |
 | Organization Name           | Name of your organization                                  |
 | Organization Description    | Description of your organization                           |
 | Organization Support Email  | Email address to which customers can reach out for support |
@@ -76,13 +76,14 @@ yarn install
 
 5. Configure .env.local: Create a .env.local file in the root directory. Populate it with necessary environment variables
 
-| Environment Variables | Description                                                                                                                                           |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PROVIDER_EMAIL        | Service provider's Omnistrate email address                                                                                                             |
-| PROVIDER_PASSWORD  | Service provider's Omnistrate account password                                                                                      |
-| YOUR_SAAS_DOMAIN_URL  | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000 |
-| MAIL_USER_EMAIL       | Gmail account to be used to send mails (signup, reset password etc) to your customers. Check the following [section](#how-to-configure-google-account-for-sending-out-emails) for instructions to configure gmail account for sending out the emails.                                                                 |
-| MAIL_USER_PASSWORD    | Gmail account app password                                                                                                                            |
+| Environment Variables | Description                                                                                                                                                                                                                                           |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PROVIDER_EMAIL        | Service provider's Omnistrate email address                                                                                                                                                                                                           |
+| PROVIDER_PASSWORD     | Service provider's Omnistrate account password                                                                                                                                                                                                        |
+| YOUR_SAAS_DOMAIN_URL  | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000                                                                                                 |
+| MAIL_USER_EMAIL       | Gmail account to be used to authenticate to send mails (signup, reset password etc) to your customers. Check the following [section](#how-to-configure-google-account-for-sending-out-emails) for instructions to configure gmail account for sending out the emails. |
+| MAIL_USER_PASSWORD    | Gmail account app password |
+| MAIL_FROM | Gmail account from which emails will be sent (might be different than MAIL_USER_EMAIL). If this environment variable is not configured, the mails will be sent using MAIL_USER_EMAIL |
 
 6. Run the development server:
 
@@ -129,21 +130,22 @@ For a video guide covering all the below steps, you can follow it [here](https:/
 - Post-creation, navigate to the "Network" tab, copy the cluster endpoint.
 - Access the SaaSBuilder App through the copied endpoint to reach the login page.
 - Once you have confirmed that you can access the SaaSBuilder app. You are ready to configure your domain.
+
   - Contact Omnistrate support and share your domain name that you want to use for the SaaSBuilder App along with the cluster endpoint for the SaaSBuilder App. Omnistrate team will be able to use this data and do the necessary configurations in Omnistrate Platform.
-  - Login to your DNS provider/domain registrar portal (where you bought your domain). Find the DNS section for your domain and add two CNAME records as follows - 
-  
+  - Login to your DNS provider/domain registrar portal (where you bought your domain). Find the DNS section for your domain and add two CNAME records as follows -
+
     - Type - CNAME
     - Name - @
     - Target - SaaSBuilder cluster endpoint
     - TTL - Leave as default or as suggested by your DNS provider
-    
+
     and
 
     - Type - CNAME
     - Name - www
     - Target - SaaSBuilder cluster endpoint
     - TTL - Leave as default or as suggested by your DNS provider
-  
+
 - Access your domain and confirm that SaaSBuilder app is now available on your domain.
 
 ## Troubleshooting/FAQ
@@ -155,36 +157,37 @@ Ensure your node and yarn versions meet the project's requirements. Try clearing
 #### How to configure Google Account for sending out emails?
 
 Configuring Google Account for sending out emails is a two step process. First the account must have a 2-Step Verification enabled, and second, the app password needs to be set. If the Google Account you are using, already has 2-Step Verification configured, you may skip Step 1, and start with Step 2.
-  
-  - Step 1 - Enable 2-Step Verification
-    1. Visit Your Google Account by navigating to https://myaccount.google.com and log in.
-    2. Navigate to Security by clicking on "Security" in the left navigation menu.
-    3. Scroll down to find the "How you sign in to Google" section and click on "2-Step Verification."
-    4. Click on "Get Started."
-    5. Follow the on-screen prompts to configure your 2-Step Verification method. Google offers various options like text messages, voice calls, or authenticator apps.
 
-    ![Alt text](https://drive.google.com/uc?id=1_xZudcroEPfiYV456UtwuY1-_K7FfHEQ "Configured Account with 2-Step Verification")
+- Step 1 - Enable 2-Step Verification
 
-  - Step 2 - Create App Password
-    1. Once 2-Step Verification is configured, follow the below instructions to create App Password.
-    2. While still in the "How you sign in to Google" ->  "2-Step Verification" section of your account security, locate and click "App Passwords"
-    3. If for some reason you can't locate it, you can follow this link - https://myaccount.google.com/apppasswords make sure it is configured for the same Google Account, in case you have multiple Google Accounts opened in your browser.
-   
-    ![Alt text](https://drive.google.com/uc?id=1TNKc7u0zLcozw95OIMbFUf22EBL5ocAY "Create App Password")
+  1. Visit Your Google Account by navigating to https://myaccount.google.com and log in.
+  2. Navigate to Security by clicking on "Security" in the left navigation menu.
+  3. Scroll down to find the "How you sign in to Google" section and click on "2-Step Verification."
+  4. Click on "Get Started."
+  5. Follow the on-screen prompts to configure your 2-Step Verification method. Google offers various options like text messages, voice calls, or authenticator apps.
 
-    4. Provide name of the app, say SaasBuilder.
-    5. Click "Create."
-    6. Google will display a 16-character password something like "fasb nxpq lfnr chtn"
-    7. Copy this password and **remove in between spaces** (e.g. fasbnxpqlfnrchtn) to use it instead of your regular Google Account password.
+  ![Alt text](https://drive.google.com/uc?id=1_xZudcroEPfiYV456UtwuY1-_K7FfHEQ "Configured Account with 2-Step Verification")
 
-    ![Alt text](https://drive.google.com/uc?id=1N_COKw_GX9rwgpdLKWzrchaclfamK6JH "Copy App Password")
+- Step 2 - Create App Password
 
-    8. Treat the app password like your regular password and store it securely.
+  1. Once 2-Step Verification is configured, follow the below instructions to create App Password.
+  2. While still in the "How you sign in to Google" -> "2-Step Verification" section of your account security, locate and click "App Passwords"
+  3. If for some reason you can't locate it, you can follow this link - https://myaccount.google.com/apppasswords make sure it is configured for the same Google Account, in case you have multiple Google Accounts opened in your browser.
+
+  ![Alt text](https://drive.google.com/uc?id=1TNKc7u0zLcozw95OIMbFUf22EBL5ocAY "Create App Password")
+
+  4. Provide name of the app, say SaasBuilder.
+  5. Click "Create."
+  6. Google will display a 16-character password something like "fasb nxpq lfnr chtn"
+  7. Copy this password and **remove in between spaces** (e.g. fasbnxpqlfnrchtn) to use it instead of your regular Google Account password.
+
+  ![Alt text](https://drive.google.com/uc?id=1N_COKw_GX9rwgpdLKWzrchaclfamK6JH "Copy App Password")
+
+  8. Treat the app password like your regular password and store it securely.
 
 #### How do I resolve "node version not compatible" errors?
 
 Ensure that you have the correct Node.js version installed. SaaSBuilder requires Node.js version 20.11.1 as mentioned in the guide. You can check your current Node version by running node --version in your terminal. If the version is incorrect, download and install the correct version from Node.js [official website](https://nodejs.org/).
-
 
 #### What if my organization details do not appear correctly on the SaaSBuilder platform?
 

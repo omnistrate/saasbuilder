@@ -1,11 +1,17 @@
 const cron = require("node-cron");
 const nodemailer = require("nodemailer");
 const { getSignUpMailContent } = require("./templates/signupTemplate");
-const { getOrgInviteUserMailContent } = require("./templates/orgInviteUserTemplate");
-const { getOrgRevokeUserMailContent } = require("./templates/orgRevokeUserTemplate");
+const {
+  getOrgInviteUserMailContent,
+} = require("./templates/orgInviteUserTemplate");
+const {
+  getOrgRevokeUserMailContent,
+} = require("./templates/orgRevokeUserTemplate");
 const { eventTypes } = require("./constants");
 const { getEventsList, acknowledgeEvent } = require("../api/events");
-const { getResetPasswordMailContent } = require("./templates/forgotPasswordTemplate");
+const {
+  getResetPasswordMailContent,
+} = require("./templates/forgotPasswordTemplate");
 const {
   getApproveSubscriptionMailContent,
 } = require("./templates/approveSubscriptionRequest");
@@ -21,7 +27,9 @@ const {
 const {
   getSubscriptionTerminateMailContent,
 } = require("./templates/terminateSubscription");
-const { getInvoiceCreatedTemplate } = require("./templates/invoiceCreatedTemplate");
+const {
+  getInvoiceCreatedTemplate,
+} = require("./templates/invoiceCreatedTemplate");
 
 let isRunning = false;
 
@@ -111,9 +119,14 @@ function startMailServiceCron() {
           }
 
           if (mailContent) {
+            //use address configured in MAIL_FROM. If not configured fallback to MAIL_USER_EMAIL
+            const fromEmailAddress =
+              process.env.MAIL_FROM || process.env.MAIL_USER_EMAIL;
+
             const mailPromise = mailTransporter
               .sendMail({
-                from: `"${mailContent.senderName}" ${process.env.MAIL_USER_EMAIL}`,
+                from: `"${mailContent.senderName}" <${fromEmailAddress}>`,
+                replyTo: fromEmailAddress,
                 to: mailContent.recepientEmail,
                 subject: mailContent.subject,
                 html: mailContent.message,
