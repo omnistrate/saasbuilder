@@ -58,7 +58,7 @@ const ServicesDropdown = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
       <NineDotMenu onClick={openMenu} style={{ cursor: "pointer" }} />
       <Menu
         anchorEl={anchorEl}
