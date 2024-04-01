@@ -10,7 +10,6 @@ export default function ProductTierPlanDetailsCard(props) {
         mt={4}
         sx={{
           minHeight: "400px",
-          maxHeight: "600px",
           border: " 1px solid #EAECF0",
           boxShadow:
             "0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10)",
