@@ -13,6 +13,7 @@ services:
       - YOUR_SAAS_DOMAIN_URL=$sys.network.externalClusterEndpoint
       - MAIL_USER_EMAIL=$var.senderEmail
       - MAIL_USER_PASSWORD=$var.senderPassword
+      - MAIL_FROM=$var.senderFrom
     x-omnistrate-compute:
       instanceTypes:
         - cloudProvider: aws
@@ -53,7 +54,7 @@ services:
         required: true
         export: false
       - key: senderEmail
-        description: email address to communicate to customers
+        description: email address to login to the SMTS provider
         name: SMTS email address
         type: String
         modifiable: true
@@ -66,3 +67,10 @@ services:
         modifiable: true
         required: true
         export: false
+      - key: senderFrom
+        description: email address from the field From to communicate to customers
+        name: Email address
+        type: String
+        modifiable: true
+        required: false
+        export: true  
