@@ -16,7 +16,7 @@ function useBillingDetails() {
       return response.data;
     },
     //refetch after 50 mins
-    refetchInterval: 3000,
+    refetchInterval: 3000000,
   });
 
   return billingDetailsQuery;
