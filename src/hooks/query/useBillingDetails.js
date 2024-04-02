@@ -15,6 +15,8 @@ function useBillingDetails() {
     select: (response) => {
       return response.data;
     },
+    //refetch after 50 mins
+    refetchInterval: 3000000,
   });
 
   return billingDetailsQuery;
