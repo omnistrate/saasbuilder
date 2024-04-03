@@ -76,7 +76,7 @@ export default function App(props) {
 
   axios.interceptors.request.use((config) => {
     if (!config.url.startsWith("/api")) {
-     // console.log("Axios request original config", _.cloneDeep(config));
+      // console.log("Axios request original config", _.cloneDeep(config));
 
       //the original request url
       const originalRequestURL = config.url;
@@ -85,7 +85,6 @@ export default function App(props) {
       //the original request payload
       const originalRequestPayload = _.cloneDeep(config.data);
       const orignalRequestQueryParams = _.cloneDeep(config.params);
-
 
       //requestMetaData is the payload that will be sent to the next js endpoint
       //it contains information about the original request
@@ -102,12 +101,12 @@ export default function App(props) {
       }
       config.params = { endpoint: originalRequestURL };
 
-      config.baseURL = '';
+      config.baseURL = "";
       config.url = "/api/action";
       config.method = "post";
 
       config.data = requestMetaData;
-     // console.log("Axios request final config", config);
+      // console.log("Axios request final config", config);
     }
     return config;
   });
@@ -125,12 +124,18 @@ export default function App(props) {
         const status = String(error.response.status);
         if (status.startsWith("4") || status.startsWith("5")) {
           const message = error.response.data.message;
-          if (message) {
-            setSnackbarMsg(message);
-            setIsOpen(true);
-          } else {
-            setSnackbarMsg("Something went wrong please try again later");
-            setIsOpen(true);
+          const ignoredMessages = [
+            "You have not been subscribed to a service yet.",
+            "Your provider has not enabled billing for the user.",
+          ];
+          if (!ignoredMessages.includes(message)) {
+            if (message) {
+              setSnackbarMsg(message);
+              setIsOpen(true);
+            } else {
+              setSnackbarMsg("Something went wrong please try again later");
+              setIsOpen(true);
+            }
           }
         }
       }
@@ -144,12 +149,12 @@ export default function App(props) {
       <CacheProvider value={emotionCache}>
         <Provider store={store}>
           <QueryClientProvider client={queryQlient}>
-          <ProviderFavicon/>
+            <ProviderFavicon />
             <SnackbarProvider>
               <NotificationBarProvider>
                 <ThemeProvider
                   theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}
-                > 
+                >
                   <Component {...pageProps} />
                 </ThemeProvider>
               </NotificationBarProvider>
