@@ -14,6 +14,7 @@ services:
       - MAIL_USER_EMAIL=$var.senderEmail
       - MAIL_USER_PASSWORD=$var.senderPassword
       - MAIL_FROM=$var.senderFrom
+      - GOOGLE_ANALYTICS_TAG_ID=$var.googleAnalyticsTagID
     x-omnistrate-compute:
       instanceTypes:
         - cloudProvider: aws
@@ -73,4 +74,11 @@ services:
         type: String
         modifiable: true
         required: false
-        export: true  
+        export: true
+      - key: googleAnalyticsTagID
+        description: Google Analytics tag ID
+        name: Google Analytics tag ID
+        type: String
+        modifiable: true
+        required: false
+        export: true        
