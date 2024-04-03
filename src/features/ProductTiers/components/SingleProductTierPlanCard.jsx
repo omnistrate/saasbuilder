@@ -8,6 +8,7 @@ import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { parseOfferingDescriptionDom } from "src/utils/constants/serviceOfferingDescription";
 import { findSubscriptionByPriority } from "src/utils/access/findSubscription";
 import SubscriptionRequestPendingSnack from "./SubscriptionRequestPendingSnack";
+import SubscriptionSuspendedSnack from "./SubscriptionSuspendedSnack";
 
 function SingleProductTierPlanCard(props) {
   const {
@@ -41,6 +42,8 @@ function SingleProductTierPlanCard(props) {
   const pendingRequestExists = !!pendingRequest;
 
   const hasAlreadySubscribedAsRoot = existingSubscription?.roleType === "root";
+
+  const isSubscriptionSuspended = existingSubscription?.status === "SUSPENDED";
 
   const handleSubscribeClick = () => {
     subscribeMutation.mutate({
@@ -112,6 +115,11 @@ function SingleProductTierPlanCard(props) {
             {pendingRequestExists && (
               <Box sx={{ marginTop: "12px" }}>
                 <SubscriptionRequestPendingSnack />
+              </Box>
+            )}
+            {isSubscriptionSuspended && (
+              <Box sx={{ marginTop: "12px" }}>
+                <SubscriptionSuspendedSnack />
               </Box>
             )}
           </Box>
