@@ -8,6 +8,7 @@ import { findSubscriptionByPriority } from "src/utils/access/findSubscription";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { parseOfferingDescriptionDom } from "src/utils/constants/serviceOfferingDescription";
 import SubscriptionRequestPendingSnack from "./SubscriptionRequestPendingSnack";
+import SubscriptionSuspendedSnack from "./SubscriptionSuspendedSnack";
 
 function MultiProductTierPlanCard(props) {
   const {
@@ -45,6 +46,8 @@ function MultiProductTierPlanCard(props) {
   const pendingRequestExists = !!pendingRequest;
 
   const hasAlreadySubscribedAsRoot = existingSubscription?.roleType === "root";
+
+  const isSubscriptionSuspended = existingSubscription?.status === "SUSPENDED";
 
   const handleSubscribeClick = () => {
     subscribeMutation.mutate({
@@ -93,8 +96,20 @@ function MultiProductTierPlanCard(props) {
       >
         <Box>
           {pendingRequestExists && (
-            <Box marginBottom={"16px"}>
+            <Box
+              marginBottom={"16px"}
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
               <SubscriptionRequestPendingSnack />
+            </Box>
+          )}
+
+          {isSubscriptionSuspended && (
+            <Box
+              marginBottom={"16px"}
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <SubscriptionSuspendedSnack />
             </Box>
           )}
           <Box display="flex" justifyContent="center">

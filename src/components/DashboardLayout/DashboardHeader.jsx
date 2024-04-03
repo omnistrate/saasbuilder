@@ -9,11 +9,11 @@ import { closedWidth, drawerWidth } from "./SideDrawer";
 import ProfileDropdown from "./ProfileDropdown";
 import { selectUserData } from "src/slices/userDataSlice";
 import { Text } from "../Typography/Typography";
-import providerConfig, { styleConfig } from "src/providerConfig";
+import  { styleConfig } from "src/providerConfig";
 import Image from "next/image";
-import NineDotMenu from "./Icons/NineDotMenu";
 import ServicesDropdown from "./ServicesDropdown";
 import placeholderService from "public/assets/images/dashboard/service/servicePlaceholder.png";
+import useBillingDetails from "src/hooks/query/useBillingDetails";
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) =>
@@ -73,6 +73,8 @@ function DashboardHeader(props) {
   } = props;
 
   useUserData();
+  //prefetch billing data
+  useBillingDetails();
   const userAllData = useSelector(selectUserData);
   const { logout } = useLogout();
 

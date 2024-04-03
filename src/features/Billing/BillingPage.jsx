@@ -7,34 +7,15 @@ import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import Card from "src/components/Card/Card";
 import { useState } from "react";
-import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-import { getBillingDetails } from "src/api/users";
-import { useSelector } from "react-redux";
-import { selectUserrootData } from "src/slices/userDataSlice";
+import Link from "next/link";
 
 function BillingPage() {
-  const [isFetchingPortalURL, setIsFetchingPortalURL] = useState(false);
   const [isIframeLoading, setIsIframeLoading] = useState(true);
   const billingDetailsQuery = useBillingDetails();
-  const userData = useSelector(selectUserrootData);
-  const userId = userData?.id;
 
   const { isLoading, data: billingDetails } = billingDetailsQuery;
 
   let paymentConfigured = billingDetails?.paymentConfigured;
-
-  function fetchPortalURL() {
-    setIsFetchingPortalURL(true);
-    getBillingDetails(userId)
-      .then((response) => {
-        const portalURL = response.data.paymentInfoPortalURL;
-        window.open(portalURL, "_blank");
-      })
-      .catch(() => {})
-      .finally(() => {
-        setIsFetchingPortalURL(false);
-      });
-  }
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -92,16 +73,17 @@ function BillingPage() {
               bgColor={paymentConfigured === true ? "#F9F5FF" : "#f3f3f1"}
             />
           </Box>
-          <Button variant="outlined" onClick={fetchPortalURL}>
-            Configure Payment Method
-            <ArrowOutwardIcon
-              sx={{
-                marginLeft: "6px",
-                fontSize: "18px",
-              }}
-            />
-            {isFetchingPortalURL && <LoadingSpinnerSmall />}
-          </Button>
+          <Link href={billingDetails?.paymentInfoPortalURL} target="_blank">
+            <Button variant="outlined">
+              Configure Payment Method
+              <ArrowOutwardIcon
+                sx={{
+                  marginLeft: "6px",
+                  fontSize: "18px",
+                }}
+              />
+            </Button>
+          </Link>
         </Stack>
       </Card>
       <Box mt={3}>

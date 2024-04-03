@@ -14,6 +14,7 @@ services:
       - MAIL_USER_EMAIL=$var.senderEmail
       - MAIL_USER_PASSWORD=$var.senderPassword
       - MAIL_FROM=$var.senderFrom
+      - GOOGLE_ANALYTICS_TAG_ID=$var.googleAnalyticsTagID
       - MAIL_PROVIDER=$var.mailProvider
       - MAIL_SMTP_SERVICE=$var.mailSmtpService
       - MAIL_SMTP_HOST=$var.mailSmtpHost
@@ -78,6 +79,13 @@ services:
         modifiable: true
         required: false
         export: true  
+      - key: googleAnalyticsTagID
+        description: Google Analytics tag ID
+        name: Google Analytics tag ID
+        type: String
+        modifiable: true
+        required: false
+        export: true        
       - key: mailProvider
         description: Mail provider
         name: Mail provider
@@ -110,4 +118,3 @@ services:
         required: true
         export: true
         defaultValue: 587
-        
