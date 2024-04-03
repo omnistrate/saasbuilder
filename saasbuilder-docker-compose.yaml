@@ -14,6 +14,10 @@ services:
       - MAIL_USER_EMAIL=$var.senderEmail
       - MAIL_USER_PASSWORD=$var.senderPassword
       - MAIL_FROM=$var.senderFrom
+      - MAIL_PROVIDER=$var.mailProvider
+      - MAIL_SMTP_SERVICE=$var.mailSmtpService
+      - MAIL_SMTP_HOST=$var.mailSmtpHost
+      - MAIL_SMTP_PORT=$var.mailSmtpPort
     x-omnistrate-compute:
       instanceTypes:
         - cloudProvider: aws
@@ -74,3 +78,36 @@ services:
         modifiable: true
         required: false
         export: true  
+      - key: mailProvider
+        description: Mail provider
+        name: Mail provider
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: gmail
+      - key: mailSmtpService
+        description: SMTP service
+        name: SMTP service
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: gmail
+      - key: mailSmtpHost
+        description: SMTP host
+        name: SMTP host
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: smtp.gmail.com
+      - key: mailSmtpPort
+        description: SMTP port
+        name: SMTP port
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: 587
+        
