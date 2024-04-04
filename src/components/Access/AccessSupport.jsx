@@ -74,7 +74,9 @@ export const AccessSupport = (props) => {
                 className={"ql-editor"}
                 sx={{ wordBreak: "break-word" }}
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(service?.productTierDescription),
+                  __html: DOMPurify.sanitize(
+                    service?.productTierPlanDescription
+                  ),
                 }}
               ></Box>
             </Box>
