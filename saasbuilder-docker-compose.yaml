@@ -69,16 +69,18 @@ services:
         required: true
         export: false
       - key: senderFrom
-        description: email address from the field From to communicate to customers
-        name: Email address
+        description: Add a separate From email address if different from Sender email address, otherwise leave blank
+        name: From Email address
         type: String
         modifiable: true
         required: false
         export: true
+        defaultValue: From Email address        
       - key: googleAnalyticsTagID
-        description: Google Analytics tag ID
+        description: Add Google Analytics tag ID, leave blank if you dont have any
         name: Google Analytics tag ID
         type: String
         modifiable: true
+        required: false
         required: false
         export: true        
