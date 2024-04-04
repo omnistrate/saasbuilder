@@ -5,14 +5,14 @@ function getSubscriptionSuspendedMailContent(suspendSubscriptionEventObj) {
   const servicePlanName =
     suspendSubscriptionEventObj.eventPayload.product_tier_name;
 
-  const subject = `Your ${serviceName} - ${servicePlanName} subscription resumed`;
+  const subject = `Your ${serviceName} - ${servicePlanName} subscription suspended`;
 
   const message = `
               <html>
                   <body>
                       <p>Hello,</p>
-                      <p>This is to inform you that your ${servicePlanName}subscription on ${serviceName} has been suspended. To reinstate your subscription, please contact support.</p>
-                      <p>Sincerely</p>
+                      <p>This is to inform you that your ${servicePlanName} subscription on ${serviceName} has been suspended. To reinstate your subscription, please contact support.</p>
+                      <p>Sincerely,</p>
                       <p>The ${serviceName} Team</p>
                   </body>
               </html>`;

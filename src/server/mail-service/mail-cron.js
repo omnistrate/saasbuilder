@@ -107,6 +107,7 @@ function startMailServiceCron() {
 
             case eventTypes.TerminateSubscription: {
               mailContent = getSubscriptionTerminateMailContent(event);
+              break;
             }
 
             case eventTypes.InvoiceCreated: {
