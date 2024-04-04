@@ -19,7 +19,7 @@ import DiskThroughputChart from "./DiskThroughputChart";
 import NetworkThroughputChart from "./NetworkThroughputChart";
 import DiskUsageChart from "./DiskUsageChart";
 import useSnackbar from "../../../hooks/useSnackbar";
-import formatDateUTC from "../../../utils/formatDateUTC";
+import formatDateLocal from "../../../utils/formatDateLocal";
 
 const initialCpuUsage = {
   current: "",
@@ -242,7 +242,7 @@ function Metrics(props) {
 
     const metrics = data.Metrics;
 
-    const formattedDate = formatDateUTC(messageTime * 1000);
+    const formattedDate = formatDateLocal(messageTime * 1000);
 
     if (isOlderThanOneHour(messageTime)) {
       // console.log("Discard");

@@ -8,7 +8,7 @@ import { Column, InfoCardContainer } from "../InfoCard/InfoCard";
 import AwsLogo from "../Logos/AwsLogo/AwsLogo";
 import GcpLogo from "../Logos/GcpLogo/GcpLogo";
 
-import formatDateUTC from "../../utils/formatDateUTC";
+import formatDateLocal from "../../utils/formatDateLocal";
 import { Fragment } from "react";
 
 const CLOUD_PROVIDERS_MAP = {

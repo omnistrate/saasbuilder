@@ -70,7 +70,7 @@ import {
 } from "../../../src/slices/resourceInstanceListSlice";
 import { selectUserrootData } from "../../../src/slices/userDataSlice";
 import loadingStatuses from "../../../src/utils/constants/loadingStatuses";
-import formatDateUTC from "../../../src/utils/formatDateUTC";
+import formatDateLocal from "../../../src/utils/formatDateLocal";
 import {
   getEnumFromUserRoleString,
   isOperationAllowedByRBAC,
@@ -343,7 +343,7 @@ function MarketplaceService() {
         align: "center",
         headerAlign: "center",
         valueGetter: (params) => {
-          const value = formatDateUTC(params.row.created_at);
+          const value = formatDateLocal(params.row.created_at);
           return value;
         },
       },
@@ -355,7 +355,7 @@ function MarketplaceService() {
         align: "center",
         headerAlign: "center",
         valueGetter: (params) => {
-          const value = formatDateUTC(params.row.last_modified_at);
+          const value = formatDateLocal(params.row.last_modified_at);
           return value;
         },
       },
