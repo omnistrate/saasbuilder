@@ -15,6 +15,10 @@ services:
       - MAIL_USER_PASSWORD=$var.senderPassword
       - MAIL_FROM=$var.senderFrom
       - GOOGLE_ANALYTICS_TAG_ID=$var.googleAnalyticsTagID
+      - MAIL_PROVIDER=$var.mailProvider
+      - MAIL_SMTP_SERVICE=$var.mailSmtpService
+      - MAIL_SMTP_HOST=$var.mailSmtpHost
+      - MAIL_SMTP_PORT=$var.mailSmtpPort
     x-omnistrate-compute:
       instanceTypes:
         - cloudProvider: aws
@@ -74,7 +78,7 @@ services:
         type: String
         modifiable: true
         required: false
-        export: true
+        export: true  
       - key: googleAnalyticsTagID
         description: Google Analytics tag ID
         name: Google Analytics tag ID
@@ -82,3 +86,35 @@ services:
         modifiable: true
         required: false
         export: true        
+      - key: mailProvider
+        description: Mail provider
+        name: Mail provider
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: gmail
+      - key: mailSmtpService
+        description: SMTP service
+        name: SMTP service
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: gmail
+      - key: mailSmtpHost
+        description: SMTP host
+        name: SMTP host
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: smtp.gmail.com
+      - key: mailSmtpPort
+        description: SMTP port
+        name: SMTP port
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: 587

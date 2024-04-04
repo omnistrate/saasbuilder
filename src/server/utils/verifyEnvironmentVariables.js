@@ -1,6 +1,7 @@
 const { setProviderToken } = require("../providerToken");
 const { fetchProviderAuthToken } = require("./fetchProviderAuthToken");
 const nodemailer = require("nodemailer");
+const { getMailProviderConfig } = require("../mail-service/mail-provider");
 
 //Checks if all environment variables are configured
 //Verifies provider auth credentials by attempting a signin
@@ -106,16 +107,7 @@ async function verifyEnvrionmentVariables() {
 
   if (mailUserEmail && mailUserPassword) {
     try {
-      const mailTransporter = nodemailer.createTransport({
-        service: "gmail",
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.MAIL_USER_EMAIL,
-          pass: process.env.MAIL_USER_PASSWORD,
-        },
-      });
+      const mailTransporter = nodemailer.createTransport(getMailProviderConfig());
       await mailTransporter.verify();
       areMailCredentialsVerified = true;
       mailTransporter.close();
