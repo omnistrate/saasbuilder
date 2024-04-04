@@ -555,6 +555,8 @@ function CreateResourceInstanceForm(props) {
                       sx={{ marginTop: "16px" }}
                       modifiable={param.modifiable}
                       required={param.required == true ? "required" : ""}
+                      // TODO: Change logic when param.type Password is added
+                      type={param.key?.toLowerCase()?.includes("password") ? "password" : "text"}
                     />
                   </FieldContainer>
                 );
