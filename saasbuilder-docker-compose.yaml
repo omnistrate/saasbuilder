@@ -9,10 +9,7 @@ services:
       - '8080:8080'
     environment:
       - PROVIDER_EMAIL=$var.providerEmail
-      - PROVIDER_PASSWORD=$var.providerPassword
-      - MAIL_USER_EMAIL=$var.senderEmail
-      - MAIL_USER_PASSWORD=$var.senderPassword
-      - MAIL_FROM=$var.senderFrom
+      - PROVIDER_HASHED_PASS=$var.providerPassword
       - GOOGLE_ANALYTICS_TAG_ID=$var.googleAnalyticsTagID
     x-omnistrate-compute:
       instanceTypes:
@@ -65,7 +62,7 @@ services:
     image: sharmaamits/saasbuilder-mail:1.0.11
     environment:
       - PROVIDER_EMAIL=$var.providerEmail
-      - PROVIDER_PASSWORD=$var.providerPassword
+      - PROVIDER_HASHED_PASS=$var.providerPassword
       - YOUR_SAAS_DOMAIN_URL=$var.saasDomainURL
       - MAIL_USER_EMAIL=$var.senderEmail
       - MAIL_USER_PASSWORD=$var.senderPassword

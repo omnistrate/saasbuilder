@@ -13,7 +13,7 @@ const expressApp = express();
 
 app.prepare().then(async () => {
   //check if all required environment variables are available
-  const { isVerified, envVariablesStatus } = await verifyEnvironmentVariables();
+  const { areProviderCredentialsVerified, envVariablesStatus } = await verifyEnvironmentVariables();
   console.log("Environment variables status", envVariablesStatus);
 
   expressApp.set("view engine", "ejs");
@@ -21,7 +21,7 @@ app.prepare().then(async () => {
   expressApp.use(express.static(path.join(__dirname)));
   expressApp.use(async (request, response) => {
     try {
-      if (!isVerified && process.env.NODE_ENV === "development") {
+      if (!areProviderCredentialsVerified && process.env.NODE_ENV === "development") {
         response.render("pages/setup-error", {
           envVariablesStatus,
         });
