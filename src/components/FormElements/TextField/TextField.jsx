@@ -2,6 +2,8 @@ import { Box, ButtonBase, IconButton, Tooltip, styled } from "@mui/material";
 import MuiInputAdornment from "@mui/material/InputAdornment";
 import MuiTextField from "@mui/material/TextField";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { forwardRef, useState } from "react";
 import clipboard from "clipboardy";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -42,8 +44,10 @@ const StyledTextField = styled(MuiTextField, {
 }));
 
 const TextField = forwardRef(function StyledTextFieldRef(props, ref) {
-  const { copyButton, search, SelectProps, ...restProps } = props;
+  const { copyButton, search, SelectProps, type, ...restProps } = props;
   const textToCopy = props.value;
+
+  const [showPassword, setShowPassword] = useState(false);
 
   let endAdornment = "";
   let startAdornment = "";
@@ -64,9 +68,18 @@ const TextField = forwardRef(function StyledTextFieldRef(props, ref) {
     );
   }
 
+  if (type === "password") {
+    endAdornment = (
+      <InputAdornment position="end">
+        <ShowPasswordButton showPassword={showPassword} setShowPassword={setShowPassword} />
+      </InputAdornment>
+    );
+  }
+
   return (
     <Box display="flex">
       <StyledTextField
+        type={type === 'password' && !showPassword ? 'password' : "text"}
         fullWidth
         InputProps={{
           endAdornment,
@@ -130,6 +143,22 @@ const CopyButton = (props) => {
     </Tooltip>
   );
 };
+
+const ShowPasswordButton = (props) => {
+  const { showPassword, setShowPassword } = props;
+
+  return (
+    <Tooltip title={showPassword ? "Hide" : "Show"} placement="top">
+      <IconButton
+        aria-label={showPassword ? "Hide password" : "Show password"}
+        onClick={() => setShowPassword(!showPassword)}
+        edge="end"
+      >
+        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+      </IconButton>
+    </Tooltip>
+  );
+}
 
 const InputAdornment = styled(MuiInputAdornment)({
   height: "100%",
