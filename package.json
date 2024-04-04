@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:mail\"",
-    "build": "next build",
+    "build": "concurrently \"npm run build:frontend\" \"npm run build:mail\"",
+    "build:frontend": "next build",
+    "build:mail": "webpack --config mail-server.webpack.config.js",
     "start": "concurrently \"npm run start:frontend\" \"npm run start:mail\"",
     "lint": "next lint",
     "format:check": "prettier --check --ignore-path .prettierignore .",
@@ -13,7 +15,9 @@
     "dev:frontend": "nodemon server.js",
     "dev:mail": "nodemon mail-server.js",
     "start:frontend": "NODE_ENV=production node server.js",
-    "start:mail": "NODE_ENV=production node mail-server.js"
+    "start:mail": "NODE_ENV=production node dist/mail-server/index.js",
+    "docker:frontend": "docker build -t sharmaamits/saasbuilder -f Dockerfile.frontend .",
+    "docker:mail": "docker build -t sharmaamits/saasbuilder-mail -f Dockerfile.mail ."
   },
   "dependencies": {
     "@curvenote/ansi-to-react": "^7.0.0",
@@ -58,6 +62,8 @@
     "sass": "^1.56.1",
     "sharp": "0.32.6",
     "swagger-ui-react": "^5.4.2",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
     "yup": "^0.32.11"
   },
   "devDependencies": {

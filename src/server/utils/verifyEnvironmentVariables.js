@@ -132,8 +132,6 @@ async function verifyEnvironmentVariables() {
 
   return {
     isVerified: areMailCredentialsVerified && areProviderCredentialsVerified,
-    areProviderCredentialsVerified,
-    areMailCredentialsVerified,
     envVariablesStatus: Object.entries(envVariablesStatus)
       .map(([envVarName, envVarStatus]) => ({
         name: envVarName,
