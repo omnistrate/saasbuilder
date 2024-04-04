@@ -16,8 +16,8 @@
     "dev:mail": "nodemon mail-server.js",
     "start:frontend": "NODE_ENV=production node server.js",
     "start:mail": "NODE_ENV=production node dist/mail-server/index.js",
-    "docker:frontend": "docker build -t sharmaamits/saasbuilder -f Dockerfile.frontend .",
-    "docker:mail": "docker build -t sharmaamits/saasbuilder-mail -f Dockerfile.mail ."
+    "docker:frontend": "docker build -t sharmaamits/saasbuilder -f Dockerfile.frontend --platform linux/amd64 .",
+    "docker:mail": "docker build -t sharmaamits/saasbuilder-mail -f Dockerfile.mail --platform linux/amd64 ."
   },
   "dependencies": {
     "@curvenote/ansi-to-react": "^7.0.0",
