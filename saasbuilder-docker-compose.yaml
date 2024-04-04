@@ -3,14 +3,13 @@ x-omnistrate-integrations:
   - omnistrateLogging
   - omnistrateMetrics
 services:
-  SaaSBuilder:
+  frontend:
     image: sharmaamits/saasbuilder:1.0.11
     ports:
       - '8080:8080'
     environment:
       - PROVIDER_EMAIL=$var.providerEmail
       - PROVIDER_PASSWORD=$var.providerPassword
-      - YOUR_SAAS_DOMAIN_URL=$sys.network.externalClusterEndpoint
       - MAIL_USER_EMAIL=$var.senderEmail
       - MAIL_USER_PASSWORD=$var.senderPassword
       - MAIL_FROM=$var.senderFrom
@@ -54,6 +53,53 @@ services:
         modifiable: true
         required: true
         export: false
+      - key: googleAnalyticsTagID
+        description: Google Analytics tag ID
+        name: Google Analytics tag ID
+        type: String
+        modifiable: true
+        required: false
+        export: true        
+
+  mailServer:
+    image: sharmaamits/saasbuilder-mail:1.0.11
+    environment:
+      - PROVIDER_EMAIL=$var.providerEmail
+      - PROVIDER_PASSWORD=$var.providerPassword
+      - YOUR_SAAS_DOMAIN_URL=$var.saasDomainURL
+      - MAIL_USER_EMAIL=$var.senderEmail
+      - MAIL_USER_PASSWORD=$var.senderPassword
+      - MAIL_FROM=$var.senderFrom
+    x-omnistrate-compute:
+      instanceTypes:
+        - cloudProvider: aws
+          apiParam: instanceType
+        - cloudProvider: gcp
+          apiParam: instanceType
+    x-omnistrate-capabilities:
+      enableMultiZone: true
+    x-omnistrate-api-params:
+      - key: instanceType
+        description: Instance Type
+        name: Instance Type
+        type: String
+        modifiable: true
+        required: true
+        export: true
+      - key: providerEmail
+        description: Service provider Omnistrate email address
+        name: Omnistrate email
+        type: String
+        modifiable: true
+        required: true
+        export: true
+      - key: providerPassword
+        description: Service provider Omnistrate account password
+        name: Omnistrate password
+        type: String
+        modifiable: true
+        required: true
+        export: false
       - key: senderEmail
         description: email address to login to the SMTS provider
         name: SMTS email address
@@ -75,10 +121,10 @@ services:
         modifiable: true
         required: false
         export: true
-      - key: googleAnalyticsTagID
-        description: Google Analytics tag ID
-        name: Google Analytics tag ID
+      - key: saasDomainURL
+        description: URL of the SaaS domain (e.g. https://my-saas-domain.com)
+        name: SaaS domain URL
         type: String
         modifiable: true
-        required: false
-        export: true        
+        required: true
+        export: true
