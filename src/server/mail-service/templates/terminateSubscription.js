@@ -5,7 +5,7 @@ function getSubscriptionTerminateMailContent(terminateSubsriptionEventObj) {
   const servicePlanName =
     terminateSubsriptionEventObj.eventPayload.product_tier_name;
 
-  const subject = `Your ${serviceName} - ${servicePlanName} subscription resumed`;
+  const subject = `Your ${serviceName} - ${servicePlanName} subscription terminated`;
 
   const message = `
               <html>
@@ -13,7 +13,7 @@ function getSubscriptionTerminateMailContent(terminateSubsriptionEventObj) {
                       <p>Hello,</p>
                       <p>Your ${servicePlanName} subscription on ${serviceName} has been terminated. You will no longer have access to the plan's features.  If you believe this was in error, please contact support.</p>
                       <p>If you have any questions, please contact support.</p>
-                      <p>Sincerely</p>
+                      <p>Sincerely,</p>
                       <p>The ${serviceName} Team</p>
                   </body>
               </html>`;

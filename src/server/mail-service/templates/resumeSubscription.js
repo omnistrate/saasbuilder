@@ -13,7 +13,7 @@ function getSubscriptionResumedMailContent(resumeSubscriptionEventObj) {
                     <p>Hello,</p>
                     <p>Your ${servicePlanName} subscription on ${serviceName} has been resumed. You can now start to use the service again.</p>
                     <p>If you have any questions, please contact support.</p>
-                    <p>Sincerely</p>
+                    <p>Sincerely,</p>
                     <p>The ${serviceName} Team</p>
                 </body>
             </html>`;
