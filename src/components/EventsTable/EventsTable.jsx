@@ -80,7 +80,6 @@ function EventsTable(props) {
     sx = {},
     ...restProps
   } = props;
-  console.log("EventsTable -> events", events);
 
   let componentsObj = {
     NoRowsOverlay: () => {
