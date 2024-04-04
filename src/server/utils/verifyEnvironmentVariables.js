@@ -14,7 +14,7 @@ const environmentVariableStatuses = {
   Invalid: "Invalid",
 };
 
-async function verifyEnvrionmentVariables() {
+async function verifyEnvironmentVariables() {
   let areProviderCredentialsVerified = false;
   let areMailCredentialsVerified = false;
   /*Sign in to to provider account can be done using 
@@ -126,6 +126,7 @@ async function verifyEnvrionmentVariables() {
 
       console.log("Mail credentials verification success");
     } catch (error) {
+      console.error(error);
       envVariablesStatus["MAIL_USER_EMAIL"] =
         environmentVariableStatuses.Invalid;
       envVariablesStatus["MAIL_USER_PASSWORD"] =
@@ -140,6 +141,7 @@ async function verifyEnvrionmentVariables() {
 
   return {
     isVerified: areMailCredentialsVerified && areProviderCredentialsVerified,
+    areProviderCredentialsVerified,
     envVariablesStatus: Object.entries(envVariablesStatus)
       .map(([envVarName, envVarStatus]) => ({
         name: envVarName,
@@ -149,4 +151,4 @@ async function verifyEnvrionmentVariables() {
   };
 }
 
-module.exports = verifyEnvrionmentVariables;
+module.exports = verifyEnvironmentVariables;
