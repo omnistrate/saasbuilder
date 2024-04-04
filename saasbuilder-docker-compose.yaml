@@ -4,7 +4,7 @@ x-omnistrate-integrations:
   - omnistrateMetrics
 services:
   SaaSBuilder:
-    image: sharmaamits/saasbuilder:1.0.11
+    image: sharmaamits/saasbuilder:1.0.12
     ports:
       - '8080:8080'
     environment:
@@ -75,10 +75,12 @@ services:
         modifiable: true
         required: false
         export: true
+        defaultValue: Email address        
       - key: googleAnalyticsTagID
         description: Google Analytics tag ID
         name: Google Analytics tag ID
         type: String
         modifiable: true
         required: false
-        export: true        
+        export: true
+        defaultValue: Google Analytics tag ID               
