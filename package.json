@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:mail\"",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:mail\"",
     "lint": "next lint",
     "format:check": "prettier --check --ignore-path .prettierignore .",
     "format:fix": "prettier --write --ignore-path .gitignore .",
-    "find:unused": "next-unused"
+    "find:unused": "next-unused",
+    "dev:frontend": "nodemon server.js",
+    "dev:mail": "nodemon mail-server.js",
+    "start:frontend": "NODE_ENV=production node server.js",
+    "start:mail": "NODE_ENV=production node mail-server.js"
   },
   "dependencies": {
     "@curvenote/ansi-to-react": "^7.0.0",
@@ -58,6 +62,7 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.2",
+    "concurrently": "^8.2.2",
     "eslint": "^8.56.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-react": "^7.33.2",

@@ -1,8 +1,7 @@
 const next = require("next");
 const express = require("express");
 const path = require("path");
-const { startMailServiceCron } = require("./src/server/mail-service/mail-cron");
-const verifyEnvrionmentVariables = require("./src/server/utils/verifyEnvironmentVariables");
+const verifyEnvironmentVariables = require("./src/server/utils/verifyEnvironmentVariables");
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -13,22 +12,10 @@ const handle = app.getRequestHandler();
 const expressApp = express();
 
 app.prepare().then(async () => {
-  //check if all required environement variables are available
-  const { isVerified, envVariablesStatus } = await verifyEnvrionmentVariables();
-
+  //check if all required environment variables are available
+  const { isVerified, envVariablesStatus } = await verifyEnvironmentVariables();
   console.log("Environment variables status", envVariablesStatus);
-  if (isVerified) {
-    if (
-      process.env.NODE_INDEX === undefined ||
-      process.env.NODE_INDEX === 0 ||
-      process.env.NODE_INDEX === "0"
-    ) {
-      //start the mail service cron job only if
-      //a)NODE_INDEX environment variable is not present
-      //b)NODE_INDEX environment variable === 0
-      startMailServiceCron();
-    }
-  }
+
   expressApp.set("view engine", "ejs");
   expressApp.set("views", path.join(__dirname, "src/server/views"));
   expressApp.use(express.static(path.join(__dirname)));
