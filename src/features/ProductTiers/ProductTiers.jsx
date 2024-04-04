@@ -250,7 +250,7 @@ function ProductTiers(props) {
         {currentTab === tabs.description && (
           <ProductTierPlanDetailsCard
             name={currentTab}
-            description={selectedProductTier?.productTierDescription}
+            description={selectedProductTier?.productTierPlanDescription}
           />
         )}
         {currentTab === tabs.documentation && (

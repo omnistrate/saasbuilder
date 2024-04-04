@@ -5,7 +5,6 @@ import Card from "src/components/Card/Card";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { DisplayText, Text } from "src/components/Typography/Typography";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import { parseOfferingDescriptionDom } from "src/utils/constants/serviceOfferingDescription";
 import { findSubscriptionByPriority } from "src/utils/access/findSubscription";
 import SubscriptionRequestPendingSnack from "./SubscriptionRequestPendingSnack";
 import SubscriptionSuspendedSnack from "./SubscriptionSuspendedSnack";
@@ -110,7 +109,7 @@ function SingleProductTierPlanCard(props) {
                 WebkitBoxOrient: "vertical",
               }}
             >
-              {parseOfferingDescriptionDom(offering?.productTierDescription)}
+              {offering?.productTierDescription}
             </Text>
             {pendingRequestExists && (
               <Box sx={{ marginTop: "12px" }}>
