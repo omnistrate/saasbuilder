@@ -6,7 +6,6 @@ import Tooltip from "src/components/Tooltip/Tooltip";
 import { Text } from "src/components/Typography/Typography";
 import { findSubscriptionByPriority } from "src/utils/access/findSubscription";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import { parseOfferingDescriptionDom } from "src/utils/constants/serviceOfferingDescription";
 import SubscriptionRequestPendingSnack from "./SubscriptionRequestPendingSnack";
 import SubscriptionSuspendedSnack from "./SubscriptionSuspendedSnack";
 
@@ -153,7 +152,7 @@ function MultiProductTierPlanCard(props) {
                   WebkitBoxOrient: "vertical",
                 }}
               >
-                {parseOfferingDescriptionDom(offering?.productTierDescription)}
+                {offering?.productTierDescription}
               </Text>
             </Box>
           </Box>

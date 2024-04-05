@@ -4,7 +4,7 @@ x-omnistrate-integrations:
   - omnistrateMetrics
 services:
   frontend:
-    image: sharmaamits/saasbuilder:1.0.11
+    image: sharmaamits/saasbuilder:1.0.12
     ports:
       - '8080:8080'
     environment:
@@ -51,12 +51,12 @@ services:
         required: true
         export: false
       - key: googleAnalyticsTagID
-        description: Google Analytics tag ID
+        description: Add Google Analytics tag ID, leave blank if you dont have any
         name: Google Analytics tag ID
         type: String
         modifiable: true
         required: false
-        export: true        
+        export: true
 
   mailServer:
     image: sharmaamits/saasbuilder-mail:1.0.11
@@ -116,12 +116,12 @@ services:
         required: true
         export: false
       - key: senderFrom
-        description: email address from the field From to communicate to customers
-        name: Email address
+        description: Add a separate From email address if different from Sender email address, otherwise leave blank
+        name: From Email address
         type: String
         modifiable: true
         required: true
-        export: true  
+        export: true
       - key: mailProvider
         description: Mail provider
         name: Mail provider
@@ -129,7 +129,7 @@ services:
         modifiable: true
         required: true
         export: true
-        defaultValue: gmail
+        defaultValue: gmail     
       - key: mailSmtpService
         description: SMTP service
         name: SMTP service

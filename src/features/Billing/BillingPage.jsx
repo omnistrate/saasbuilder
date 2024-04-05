@@ -28,7 +28,10 @@ function BillingPage() {
 
     if (errorMessage) {
       if (
-        errorMessage === "Your provider has not enabled billing for the user."
+        errorMessage ===
+          "Your provider has not enabled billing for the user." ||
+        errorMessage ===
+          "Your provider has not enabled billing for the services."
       ) {
         errorDisplayText =
           "Billing has not been configured. Please contact support for assistance";
@@ -38,11 +41,26 @@ function BillingPage() {
         errorDisplayText =
           "Please subscribe to a service to start using billing";
       }
+
+      if (
+        errorMessage ===
+        "You have not been enrolled in a service plan with a billing plan yet."
+      ) {
+        errorDisplayText =
+          "You have not been enrolled in a service plan with a billing plan. Please contact support for assistance";
+      } else {
+        errorDisplayText = errorMessage;
+      }
     }
 
     return (
       <Stack p={3} pt="200px" alignItems="center" justifyContent="center">
-        <DisplayText>{errorDisplayText}</DisplayText>
+        <DisplayText
+          size="xsmall"
+          sx={{ wordBreak: "break-word", textAlign: "center", maxWidth: 900 }}
+        >
+          {errorDisplayText}
+        </DisplayText>
       </Stack>
     );
   }
