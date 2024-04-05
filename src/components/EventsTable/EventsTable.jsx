@@ -2,6 +2,7 @@ import { Box, CircularProgress, Stack } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { DisplayText } from "../Typography/Typography";
 import GridCellExpand from "../GridCellExpand/GridCellExpand";
+import formatDateLocal from "../../utils/formatDateLocal";
 
 const columns = [
   { field: "resourceName", headerName: "Resource Name", flex: 1 },
@@ -12,13 +13,7 @@ const columns = [
     flex: 1,
     valueGetter: (params) => {
       const time = params.row.time;
-      let formattedTime = "";
-
-      if (time) {
-        formattedTime = time.split("T").join(" ").slice(0, 19) + " UTC";
-      }
-
-      return formattedTime;
+      return formatDateLocal(time);
     },
   },
   {

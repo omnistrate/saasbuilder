@@ -3,17 +3,13 @@ x-omnistrate-integrations:
   - omnistrateLogging
   - omnistrateMetrics
 services:
-  SaaSBuilder:
+  frontend:
     image: sharmaamits/saasbuilder:1.0.12
     ports:
       - '8080:8080'
     environment:
       - PROVIDER_EMAIL=$var.providerEmail
-      - PROVIDER_PASSWORD=$var.providerPassword
-      - YOUR_SAAS_DOMAIN_URL=$sys.network.externalClusterEndpoint
-      - MAIL_USER_EMAIL=$var.senderEmail
-      - MAIL_USER_PASSWORD=$var.senderPassword
-      - MAIL_FROM=$var.senderFrom
+      - PROVIDER_HASHED_PASS=$var.providerPassword
       - GOOGLE_ANALYTICS_TAG_ID=$var.googleAnalyticsTagID
     x-omnistrate-compute:
       instanceTypes:
@@ -32,6 +28,57 @@ services:
         idleThreshold: 20
         overUtilizedMinutesBeforeScalingUp: 3
         overUtilizedThreshold: 80
+    x-omnistrate-api-params:
+      - key: instanceType
+        description: Instance Type
+        name: Instance Type
+        type: String
+        modifiable: true
+        required: true
+        export: true
+      - key: providerEmail
+        description: Service provider Omnistrate email address
+        name: Omnistrate email
+        type: String
+        modifiable: true
+        required: true
+        export: true
+      - key: providerPassword
+        description: Service provider Omnistrate account password
+        name: Omnistrate password
+        type: String
+        modifiable: true
+        required: true
+        export: false
+      - key: googleAnalyticsTagID
+        description: Google Analytics tag ID
+        name: Google Analytics tag ID
+        type: String
+        modifiable: true
+        required: false
+        export: true        
+
+  mailServer:
+    image: sharmaamits/saasbuilder-mail:1.0.11
+    environment:
+      - PROVIDER_EMAIL=$var.providerEmail
+      - PROVIDER_HASHED_PASS=$var.providerPassword
+      - YOUR_SAAS_DOMAIN_URL=$var.saasDomainURL
+      - MAIL_USER_EMAIL=$var.senderEmail
+      - MAIL_USER_PASSWORD=$var.senderPassword
+      - MAIL_FROM=$var.senderFrom
+      - MAIL_PROVIDER=$var.mailProvider
+      - MAIL_SMTP_SERVICE=$var.mailSmtpService
+      - MAIL_SMTP_HOST=$var.mailSmtpHost
+      - MAIL_SMTP_PORT=$var.mailSmtpPort
+    x-omnistrate-compute:
+      instanceTypes:
+        - cloudProvider: aws
+          apiParam: instanceType
+        - cloudProvider: gcp
+          apiParam: instanceType
+    x-omnistrate-capabilities:
+      enableMultiZone: true
     x-omnistrate-api-params:
       - key: instanceType
         description: Instance Type
@@ -73,9 +120,16 @@ services:
         name: From Email address
         type: String
         modifiable: true
-        required: false
+        required: true
         export: true
-        defaultValue: From Email address        
+      - key: mailProvider
+        description: Mail provider
+        name: Mail provider
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: gmail     
       - key: googleAnalyticsTagID
         description: Add Google Analytics tag ID, leave blank if you dont have any
         name: Google Analytics tag ID
@@ -83,4 +137,34 @@ services:
         modifiable: true
         required: false
         export: true
-        defaultValue: Google Analytics tag ID               
+      - key: mailSmtpService
+        description: SMTP service
+        name: SMTP service
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: gmail
+      - key: mailSmtpHost
+        description: SMTP host
+        name: SMTP host
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: smtp.gmail.com
+      - key: mailSmtpPort
+        description: SMTP port
+        name: SMTP port
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: 587
+      - key: saasDomainURL
+        description: URL of the SaaS domain (e.g. https://my-saas-domain.com)
+        name: SaaS domain URL
+        type: String
+        modifiable: true
+        required: true
+        export: true

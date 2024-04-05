@@ -4,7 +4,7 @@
 ARG NODE_VERSION=20.11.1
 FROM node:${NODE_VERSION}-slim as base
 
-# Next.js app lives here
+# App lives here
 WORKDIR /app
 
 # Set production environment
@@ -28,7 +28,7 @@ RUN yarn install --frozen-lockfile --production=false
 COPY --link . .
 
 # Build application
-RUN yarn run build
+RUN yarn run build:mail
 
 # Remove development dependencies
 RUN yarn install --production=true
@@ -38,7 +38,6 @@ RUN yarn install --production=true
 FROM base
 
 ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
@@ -53,4 +52,4 @@ EXPOSE 3000
 USER nextjs
 
 
-CMD [ "node", "server.js" ]
+CMD [ "node", "dist/mail-server/index.js" ]
