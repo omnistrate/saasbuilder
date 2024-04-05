@@ -139,6 +139,19 @@ function CreateResourceInstanceForm(props) {
       </Stack>
     );
 
+  // If schema fields exist: name, description, user, password, sort them in that order
+  createSchema.sort((a, b) => {
+    if (a.key.toLowerCase().includes("name")) return -1;
+    if (b.key.toLowerCase().includes("name")) return 1;
+    if (a.key.toLowerCase().includes("description")) return -1;
+    if (b.key.toLowerCase().includes("description")) return 1;
+    if (a.key.toLowerCase().includes("user")) return -1;
+    if (b.key.toLowerCase().includes("user")) return 1;
+    if (a.key.toLowerCase().includes("password")) return -1;
+    if (b.key.toLowerCase().includes("password")) return 1;
+    return 0;
+  })
+
   return (
     <Box sx={{ width: "100%" }}>
       <H6 weight="extrabold" variant="mobile">
