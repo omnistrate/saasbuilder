@@ -11,13 +11,22 @@ import Head from "next/head";
 // import NoLogoImage from "public/assets/images/logos/no-logo.png";
 import placeholderService from "public/assets/images/dashboard/service/servicePlaceholder.png";
 import useSubscriptionRequests from "./hooks/useSubscriptionRequests";
+import { useMemo } from "react";
 
 function MarketplaceProductTier({ orgLogoURL, orgName }) {
   const router = useRouter();
   const { serviceId, environmentId } = router.query;
 
   const serviceOfferingQuery = useServiceOfferingById(serviceId);
-  const { data: serviceOfferingData, isFetching } = serviceOfferingQuery;
+  const { data, isFetching } = serviceOfferingQuery;
+  const serviceOfferingData = useMemo(() => {
+    return {
+      ...data,
+      offerings: data?.offerings?.sort((a, b) =>
+        a.productTierName < b.productTierName ? -1 : 1
+      ),
+    };
+  }, [data]);
   const subscriptionsQuery = useUserSubscriptions();
   const {
     data: subscriptionRequestsData,
