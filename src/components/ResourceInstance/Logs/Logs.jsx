@@ -15,7 +15,13 @@ import InfiniteScroll from "react-infinite-scroller";
 const logsPerPage = 50;
 
 function Logs(props) {
-  const { nodes = [], socketBaseURL, instanceStatus, resourceKey } = props;
+  const {
+    nodes = [],
+    socketBaseURL,
+    instanceStatus,
+    resourceKey,
+    resourceInstanceId,
+  } = props;
   const [logs, setLogs] = useState([]);
   let selectedId = "";
 
@@ -26,9 +32,9 @@ function Logs(props) {
   const [errorMessage, setErrorMessage] = useState("");
   let logsSocketEndpoint = null;
   if (socketBaseURL && selectedNodeId) {
-    logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}`;
+    logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
   } else if (socketBaseURL && resourceKey) {
-    logsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0`;
+    logsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
   }
 
   const [isLogsSocketConnected, setIsLogsSocketConnected] = useState(false);
@@ -126,7 +132,8 @@ function Logs(props) {
       >
         <Stack direction="row" justifyContent="center" marginTop="200px">
           <Text size="xlarge">
-            Logs are not available as the instance is not running
+            Logs are not available{" "}
+            {instanceStatus !== "RUNNING" && "as the instance is not running"}
           </Text>
         </Stack>
       </Card>

@@ -49,7 +49,13 @@ const maxDataPoints = maxStorageTime / dataIncomeFrequency;
 
 function Metrics(props) {
   const snackbar = useSnackbar();
-  const { nodes = [], socketBaseURL, instanceStatus, resourceKey } = props;
+  const {
+    nodes = [],
+    socketBaseURL,
+    instanceStatus,
+    resourceKey,
+    resourceInstanceId,
+  } = props;
   let selectedId = "";
   if (nodes.length > 0) {
     selectedId = nodes[0].id;
@@ -59,9 +65,9 @@ function Metrics(props) {
 
   let metricsSocketEndpoint = null;
   if (socketBaseURL && selectedNodeId) {
-    metricsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}`;
+    metricsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
   } else if (socketBaseURL && resourceKey) {
-    metricsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0`;
+    metricsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0}&instanceId=${resourceInstanceId}`;
   }
 
   const socketOpenTime = useRef(null);
@@ -174,7 +180,11 @@ function Metrics(props) {
         <Stack direction="row" justifyContent="center" marginTop="200px">
           <Text size="xlarge">
             {errorMessage ||
-              "Metrics are not available as the instance is not running"}
+              `Metrics are not available ${
+                instanceStatus !== "RUNNING"
+                  ? "as the instance is not running"
+                  : ""
+              }`}
           </Text>
         </Stack>
       </ContainerCard>
