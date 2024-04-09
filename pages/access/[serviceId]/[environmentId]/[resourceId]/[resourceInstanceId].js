@@ -345,6 +345,7 @@ function ResourceInstance() {
       )}
       {currentTab === tabs.metrics && (
         <Metrics
+          resourceInstanceId={resourceInstanceId}
           nodes={resourceInstanceData.nodes}
           socketBaseURL={resourceInstanceData.metricsSocketURL}
           instanceStatus={resourceInstanceData?.status}
@@ -353,6 +354,7 @@ function ResourceInstance() {
       )}
       {currentTab === tabs.logs && (
         <Logs
+          resourceInstanceId={resourceInstanceId}
           nodes={resourceInstanceData.nodes}
           socketBaseURL={resourceInstanceData.logsSocketURL}
           instanceStatus={resourceInstanceData?.status}
