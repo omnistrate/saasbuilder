@@ -181,7 +181,7 @@ function Events() {
       </DashboardLayout>
     );
   }
-
+  
   return (
     <DashboardLayout
       setSupportDrawerOpen={setSupportDrawerOpen}

@@ -30,6 +30,7 @@ const {
 const {
   getInvoiceCreatedTemplate,
 } = require("./templates/invoiceCreatedTemplate");
+const { getMailProviderConfig } = require("./mail-provider");
 
 let isRunning = false;
 
@@ -42,16 +43,7 @@ function startMailServiceCron() {
     try {
       isRunning = true;
       if (mailTransporter === null) {
-        mailTransporter = nodemailer.createTransport({
-          service: "gmail",
-          host: "smtp.gmail.com",
-          port: 587,
-          secure: false,
-          auth: {
-            user: process.env.MAIL_USER_EMAIL,
-            pass: process.env.MAIL_USER_PASSWORD,
-          },
-        });
+        mailTransporter = nodemailer.createTransport(getMailProviderConfig());
       }
       await mailTransporter.verify();
 

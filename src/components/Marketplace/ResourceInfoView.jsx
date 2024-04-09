@@ -14,7 +14,7 @@ import { format } from "date-fns";
 import CalendarIcon from "../CalendarIcon/CalendarIcon";
 import { padding } from "@mui/system";
 import ErrorLabel from "../ErrorLabel/ErrorLabel";
-import formatDateUTC from "../../utils/formatDateUTC";
+import formatDateLocal from "../../utils/formatDateLocal";
 
 function ResourceInfoView(props) {
   const { data, serviceName } = props;
@@ -148,7 +148,7 @@ function ResourceInfoView(props) {
               cursor: "default",
               caretColor: "transparent",
             }}
-            value={formatDateUTC(data.created_at)}
+            value={formatDateLocal(data.created_at)}
           ></TextField>
         </FieldContainer>
         <FieldContainer>
@@ -167,7 +167,7 @@ function ResourceInfoView(props) {
               cursor: "default",
               caretColor: "transparent",
             }}
-            value={formatDateUTC(data.last_modified_at)}
+            value={formatDateLocal(data.last_modified_at)}
           ></TextField>
         </FieldContainer>
         <Box mt={5}>

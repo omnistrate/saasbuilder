@@ -9,7 +9,7 @@ import {
   TableContainer,
   TableRow,
 } from "../../InfoTable/InfoTable";
-import formatDateUTC from "../../../utils/formatDateUTC";
+import formatDateLocal from "../../../utils/formatDateLocal";
 import React from "react";
 import Link from "next/link";
 import capitalize from "lodash/capitalize";
@@ -93,7 +93,7 @@ function ResourceInstanceDetails(props) {
               align="right"
               sx={{ width: "50%", verticalAlign: "baseline" }}
             >
-              <CellDescription>{formatDateUTC(createdAt)}</CellDescription>
+              <CellDescription>{formatDateLocal(createdAt)}</CellDescription>
             </TableCell>
           </TableRow>
           <TableRow>
@@ -104,7 +104,7 @@ function ResourceInstanceDetails(props) {
               align="right"
               sx={{ width: "50%", verticalAlign: "baseline" }}
             >
-              <CellDescription>{formatDateUTC(modifiedAt)}</CellDescription>
+              <CellDescription>{formatDateLocal(modifiedAt)}</CellDescription>
             </TableCell>
           </TableRow>
 

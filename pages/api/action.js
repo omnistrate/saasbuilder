@@ -53,15 +53,15 @@ export default async function handleAction(nextRequest, nextResponse) {
               .setHeader("content-type", response.headers["content-type"])
               .send(data);
           }
-          if (data) nextResponse.send({ ...data });
-          else nextResponse.send();
+          if (data) return nextResponse.send({ ...data });
+          else return nextResponse.send();
         }
       } catch (error) {
         console.error("Action Route error", error?.response?.data);
         const errorCode = error?.response?.status || 500;
         const errorMessage =
           error?.response?.data?.message || defaultErrorMessage;
-        nextResponse.status(errorCode).send({
+          return nextResponse.status(errorCode).send({
           message: errorMessage,
         });
       }
