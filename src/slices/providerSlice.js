@@ -92,6 +92,7 @@ export const selectAzureEnabledStatus = (state) => {
   return Boolean(azure);
 };
 
+const iconMapping = { 'gcp': GcpLogo, 'aws': AwsLogo, 'azure': AzureLogo };
 export const selectCloudProviders = createSelector(
   (state) => state.provider.providers,
   (providers) => {
@@ -101,7 +102,6 @@ export const selectCloudProviders = createSelector(
       if (a.name < b.name) return -1;
       if (a.name > b.name) return 1;
       return 0;
-    const iconMapping = { 'gcp': GcpLogo, 'aws': AwsLogo, 'azure': AzureLogo };
     }).map((provider) => ({ ...provider, icon: iconMapping[provider.name] || null }));
   }
 );
