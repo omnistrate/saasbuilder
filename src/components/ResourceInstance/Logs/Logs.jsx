@@ -132,6 +132,7 @@ function Logs(props) {
       >
         <Stack direction="row" justifyContent="center" marginTop="200px">
           <Text size="xlarge">
+            Logs are not available{" "}
             {instanceStatus !== "RUNNING" && "as the instance is not running"}
           </Text>
         </Stack>
