@@ -101,7 +101,8 @@ export const selectCloudProviders = createSelector(
       if (a.name < b.name) return -1;
       if (a.name > b.name) return 1;
       return 0;
-    }).map((provider) => ({ ...provider, icon: provider.name === 'gcp' ? GcpLogo : provider.name === 'aws' ? AwsLogo : provider.name === 'azure' ? AzureLogo : null }));
+    const iconMapping = { 'gcp': GcpLogo, 'aws': AwsLogo, 'azure': AzureLogo };
+    }).map((provider) => ({ ...provider, icon: iconMapping[provider.name] || null }));
   }
 );
 
