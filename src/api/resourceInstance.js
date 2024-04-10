@@ -72,6 +72,33 @@ export const restartResourceInstance = (payload) => {
   );
 };
 
+export const openResourceInstanceInBrowser = (payload) => {
+  const queryParams = [
+    {
+      key: 'host',
+      value: payload.host,
+    },
+    {
+      key: 'port',
+      value: payload.port,
+    },
+    {
+      key: 'region',
+      value: payload.region
+    },
+    {
+      key: 'username',
+      value: payload.username
+    }
+  ]
+
+  const url = `${process.env.NEXT_PUBLIC_FALKORDB_BROWSER_URL}?${queryParams.map((param) => `${param.key}=${param.value}`).join("&")}`;
+  window.open(
+    url,
+    '_blank'
+  )
+}
+
 export const getResourceInstanceIds = (
   serviceProviderId,
   serviceKey,
