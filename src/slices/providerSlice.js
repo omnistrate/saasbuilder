@@ -1,5 +1,8 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import loadingStatuses from "../utils/constants/loadingStatuses";
+import AwsLogo from '../../public/assets/images/logos/aws.svg'
+import GcpLogo from '../../public/assets/images/logos/gcpCloud.svg'
+import AzureLogo from '../../public/assets/images/logos/azure.svg'
 
 const initialState = {
   providers: {},
@@ -89,6 +92,7 @@ export const selectAzureEnabledStatus = (state) => {
   return Boolean(azure);
 };
 
+const iconMapping = { 'gcp': GcpLogo, 'aws': AwsLogo, 'azure': AzureLogo };
 export const selectCloudProviders = createSelector(
   (state) => state.provider.providers,
   (providers) => {
@@ -98,7 +102,7 @@ export const selectCloudProviders = createSelector(
       if (a.name < b.name) return -1;
       if (a.name > b.name) return 1;
       return 0;
-    });
+    }).map((provider) => ({ ...provider, icon: iconMapping[provider.name] || null }));
   }
 );
 

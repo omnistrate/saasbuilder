@@ -9,7 +9,7 @@ export default async function handleGetProviderDetails(
       const response = await getProviderOrgDetails();
 
       const faviconURL = response?.data?.orgFavIconURL;
-      nextResponse.status(200).send({ providerOrgFaviconURL: faviconURL });
+      return nextResponse.status(200).send({ providerOrgFaviconURL: faviconURL });
     } catch (error) {
       let defaultErrorMessage = "Something went wrong. Please retry";
 
@@ -17,17 +17,17 @@ export default async function handleGetProviderDetails(
         error.name === "ProviderAuthError" ||
         error?.response?.status === undefined
       ) {
-        nextResponse.status(500).send({
+        return nextResponse.status(500).send({
           message: defaultErrorMessage,
         });
       } else {
-        nextResponse.status(error.response?.status || 500).send({
+        return nextResponse.status(error.response?.status || 500).send({
           message: error.response?.data?.message || defaultErrorMessage,
         });
       }
     }
   } else {
-    nextResponse.status(404).json({
+    return nextResponse.status(404).json({
       message: "Endpoint not found",
     });
   }

@@ -14,7 +14,7 @@ import MenuItem from "components/MenuItem/MenuItem";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 import MarketplaceHeader from "components/Headers/MarketplaceHeader";
 
-import formatDateUTC from "src/utils/formatDateUTC";
+import formatDateLocal from "src/utils/formatDateLocal";
 import DataGridHeader from "./components/DataGridHeader";
 
 import placeholderService from "public/assets/images/dashboard/service/servicePlaceholder.png";
@@ -170,7 +170,7 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
       align: "center",
       minWidth: 200,
       headerAlign: "center",
-      valueGetter: (params) => formatDateUTC(params.row.createdAt),
+      valueGetter: (params) => formatDateLocal(params.row.createdAt),
     },
     {
       fieldName: "defaultSubscription",
