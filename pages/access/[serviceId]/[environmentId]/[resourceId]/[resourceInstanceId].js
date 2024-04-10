@@ -7,7 +7,7 @@ import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import { Tabs, Tab } from "src/components/Tab/Tab";
 import { useEffect, useMemo, useState } from "react";
 import NodesTable from "src/components/ResourceInstance/NodesTable/NodesTable";
-import { Stack } from "@mui/material";
+import { Stack, Box } from "@mui/material";
 import Button from "src/components/Button/Button";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import Connectivity from "src/components/ResourceInstance/Connectivity/Connectivity";
@@ -28,6 +28,11 @@ import {
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import { checkIfResouceIsBYOA } from "src/utils/access/byoaResource";
+import OpenIcon from "src/components/Icons/Open/Open";
+import {
+  openResourceInstanceInBrowser,
+} from "../../../../../src/api/resourceInstance";
+import { useMutation } from "@tanstack/react-query";
 
 function ResourceInstance() {
   const router = useRouter();
@@ -136,6 +141,19 @@ function ResourceInstance() {
     }
   }, [router.isReady, view, tabs]);
 
+  let isOpenActionEnabled = false;
+
+  if (resourceInstanceData?.active) {
+    isOpenActionEnabled = true;
+  }
+
+  const openResourceInstanceMutation = useMutation(openResourceInstanceInBrowser, {
+    onError: (error) => {
+      snackbar.showError("Failed to open resource instance in browser");
+    },
+  });
+
+
   if (isLoading || isLoadingSubscription || !resourceInstanceData) {
     return (
       <DashboardLayout
@@ -214,6 +232,17 @@ function ResourceInstance() {
     subscriptionData?.id
   );
 
+  const handleOpenInBrowser = () => {
+    if (!isOpenActionEnabled) return;
+    const payload = {
+      host: resourceInstanceData.connectivity.globalEndpoints.others[0].endpoint,
+      port: resourceInstanceData.connectivity.ports.find(p => p.resourceName.startsWith('node'))?.ports?.split(',')[0] ?? '6379',
+      region: resourceInstanceData.region,
+      username: resourceInstanceData.resultParameters.falkordbUser,
+    }
+    openResourceInstanceMutation.mutate(payload);
+  }
+
   return (
     <DashboardLayout
       setSupportDrawerOpen={setSupportDrawerOpen}
@@ -270,31 +299,45 @@ function ResourceInstance() {
         healthStatusPercent={resourceInstanceData?.healthStatusPercent}
         isResourceBYOA={isResourceBYOA}
       />
-      <Tabs value={currentTab} sx={{ marginTop: "28px" }}>
-        {Object.entries(tabs).map(([key, value]) => {
-          return (
-            <Tab
-              key={key}
-              label={getTabLabel(value, isResourceBYOA)}
-              value={value}
-              onClick={() => {
-                router.push(
-                  getResourceInstancesDetailswithKeyRoute(
-                    serviceId,
-                    environmentId,
-                    productTierId,
-                    resourceId,
-                    resourceInstanceId,
-                    key,
-                    subscriptionData?.id
-                  )
-                );
-              }}
-              sx={{ padding: "12px !important" }}
-            />
-          );
-        })}
-      </Tabs>
+      <Box width="100%" display="flex">
+        <Tabs value={currentTab} sx={{ marginTop: "28px", width: "100%" }}>
+          {Object.entries(tabs).map(([key, value]) => {
+            return (
+              <Tab
+                key={key}
+                label={getTabLabel(value, isResourceBYOA)}
+                value={value}
+                onClick={() => {
+                  router.push(
+                    getResourceInstancesDetailswithKeyRoute(
+                      serviceId,
+                      environmentId,
+                      productTierId,
+                      resourceId,
+                      resourceInstanceId,
+                      key,
+                      subscriptionData?.id
+                    )
+                  );
+                }}
+                sx={{ padding: "12px !important" }}
+              />
+            );
+          })}
+          <Box width="100%" display="flex" justifyContent="right">
+            <Button
+              variant="contained"
+              size="medium"
+              sx={{ ml: 1.5 }}
+              startIcon={<OpenIcon color="#FFFFFF" />}
+              onClick={handleOpenInBrowser}
+              disabled={!isOpenActionEnabled}
+            >
+              Open in Browser
+            </Button>
+          </Box>
+        </Tabs>
+      </Box>
       {currentTab === tabs.resourceInstanceDetails && (
         <ResourceInstanceDetails
           resourceInstanceId={resourceInstanceId}
