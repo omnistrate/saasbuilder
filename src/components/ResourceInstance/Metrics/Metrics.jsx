@@ -42,9 +42,10 @@ const connectionStatuses = {
   disconnected: "disconnected",
 };
 
-//store 1 hr data
-const maxStorageTime = 3600;
-const dataIncomeFrequency = 15;
+//store 4hr data
+const maxStorageTime = 3600 * 4;
+//websocket receives a new message every 60 seconds
+const dataIncomeFrequency = 60;
 const maxDataPoints = maxStorageTime / dataIncomeFrequency;
 
 function Metrics(props) {
@@ -257,15 +258,12 @@ function Metrics(props) {
     if (isOlderThanOneHour(messageTime)) {
       // console.log("Discard");
     } else {
-      //console.log("Diff", messageTime - socketOpenTime.current);
-
       if (
         socketOpenTime.current &&
-        messageTime - socketOpenTime.current >= -20 &&
+        socketOpenTime.current - messageTime <= 140 &&
         !isMetricsDataLoaded
       ) {
-        // console.log("message time", messageTime);
-        //console.log("socket open time", socketOpenTime.current);
+        //Start displaying metrics as soon as we receive data that is 2 min 10 seconds older than socket opening timestamp
         setIsMetricsDataLoaded(true);
       }
       //console.log("Data", data);
