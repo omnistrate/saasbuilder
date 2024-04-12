@@ -350,6 +350,7 @@ function ResourceInstance() {
           socketBaseURL={resourceInstanceData.metricsSocketURL}
           instanceStatus={resourceInstanceData?.status}
           resourceKey={resourceInstanceData?.resourceKey}
+          customMetrics={resourceInstanceData?.customMetrics}
         />
       )}
       {currentTab === tabs.logs && (
