@@ -83,6 +83,8 @@ export default function useResourceInstance(
           globalEndpoints.others = [];
         }
 
+        const mainResourceCustomMetrics = [];
+
         const productTierFeatures = data?.productTierFeatures;
 
         if (productTierFeatures?.LOGS?.enabled) {
@@ -91,6 +93,27 @@ export default function useResourceInstance(
 
         if (productTierFeatures?.METRICS?.enabled) {
           isMetricsEnabled = true;
+
+          const additionalMetrics =
+            productTierFeatures?.METRICS?.additionalMetrics;
+          //check if custom metrics are configured
+          if (additionalMetrics) {
+            const mainResourceKey = topologyDetails.resourceKey;
+
+            const mainResourceAdditonalMetrics =
+              additionalMetrics[mainResourceKey]?.metrics;
+            if (mainResourceAdditonalMetrics) {
+              Object.entries(mainResourceAdditonalMetrics).forEach(
+                ([metricName, labelsObj]) => {
+                  const labels = Object.keys(labelsObj || {});
+                  mainResourceCustomMetrics.push({
+                    metricName,
+                    labels,
+                  });
+                }
+              );
+            }
+          }
         }
 
         if (topologyDetails?.nodes) {
@@ -255,6 +278,7 @@ export default function useResourceInstance(
           logsSocketURL: logsSocketURL,
           healthStatusPercent: healthStatusPercent,
           active: data?.active,
+          customMetrics: mainResourceCustomMetrics,
         };
         //console.log("Final", final);
         return final;
@@ -265,46 +289,3 @@ export default function useResourceInstance(
   return resourceInstanceQuery;
 }
 
-// {
-//     "r-p8UuvixUZf": {
-//         "clusterEndpoint": "r-p8uuvixuzf.instance-x2pwx8edi.ca-central-1.aws.omnistrate.dev",
-//         "nodes": [
-//             {
-//                 "endpoint": "postgres-0.r-p8uuvixuzf.instance-x2pwx8edi.ca-central-1.aws.omnistrate.dev",
-//                 "availabilityZone": "ca-central-1a",
-//                 "ports": [
-//                     5432
-//                 ],
-//                 "id": "postgres-0",
-//                 "status": "RUNNING"
-//             }
-//         ],
-//         "clusterPorts": [
-//             5432
-//         ],
-//         "main": true,
-//         "networkingType": "",
-//         "publiclyAccessible": false,
-//         "allowedIPRanges": null
-//     }
-// }
-
-// {
-//     "id": "instance-o4bd4o16d",
-//     "status": "FAILED",
-//     "cloud_provider": "aws",
-//     "region": "ca-central-1",
-//     "network_type": "PUBLIC",
-//     "created_at": "2023-06-06 10:41:40.077378 +0000 UTC",
-//     "last_modified_at": "2023-06-20 08:08:33.851968 +0000 UTC",
-//     "result_params": {},
-//     "detailedNetworkTopology": {
-//         "r-p8UuvixUZf": {
-//             "clusterEndpoint": "",
-//             "main": true,
-//             "networkingType": "",
-//             "publiclyAccessible": false,
-//             "allowedIPRanges": null
-//         }
-//     }
-// }
