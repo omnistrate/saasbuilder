@@ -20,7 +20,11 @@ export default async function handleSignup(nextRequest, nextResponse) {
         let responseErrorMessage = error.response?.data?.message;
 
         if (responseErrorMessage === "tenant already exists") {
-          nextResponse.status(200).send();
+          nextResponse
+            .status(400)
+            .send({
+              message: `This email is already registered. You may reset your password or contact support for help`,
+            });
         }
         nextResponse.status(error.response?.status || 500).send({
           message: responseErrorMessage || defaultErrorMessage,

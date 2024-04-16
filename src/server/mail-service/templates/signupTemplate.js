@@ -12,15 +12,16 @@ function getSignUpMailContent(signUpEventObj) {
     )}&token=${encodeURIComponent(signUpEventObj.eventPayload.token)}`
   );
 
-  const subject = `Please confirm your ${signUpEventObj.orgName} registration`;
+  const subject = `Action Required: Please activate your ${signUpEventObj.orgName} account now`;
 
   const message = `
     <html>
         <body>
             <p>Hello,</p>
-            <p>Thanks for signing up.</p>
-            <p>To activate your account, please click <a href="${activationURL}">here</a> to confirm your registration</p>
-            <p>Thanks</p>
+            <p>Thanks for signing up. We're excited to have you onboard.</p>
+            <p>To begin using the service, please activate your account by clicking <a href="${activationURL}">here</a>.</p>
+            <p>Thanks,</p>
+            <p>${signUpEventObj.orgName} Team</p>
         </body>
     </html>`;
 
