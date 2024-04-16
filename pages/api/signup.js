@@ -20,7 +20,11 @@ export default async function handleSignup(nextRequest, nextResponse) {
         let responseErrorMessage = error.response?.data?.message;
 
         if (responseErrorMessage === "tenant already exists") {
-          nextResponse.status(200).send();
+          nextResponse
+            .status(400)
+            .send({
+              message: `It looks like this email address is already associated with an existing account. If you forgot your password, please use the 'Forgot Password' link to reset it. If you believe this is an error, please contact support`,
+            });
         }
         nextResponse.status(error.response?.status || 500).send({
           message: responseErrorMessage || defaultErrorMessage,
