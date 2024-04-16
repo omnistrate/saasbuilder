@@ -71,7 +71,7 @@ services:
         modifiable: true
         required: false
         export: true  
-        defaultValue: 587
+        defaultValue: '587'
       - key: senderEmail
         description: email address to login to the SMTS provider
         name: SMTS email address
