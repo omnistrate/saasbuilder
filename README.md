@@ -80,9 +80,11 @@ yarn install
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | PROVIDER_EMAIL        | Service provider's Omnistrate email address                                                                                                                                                                                                           |
 | PROVIDER_PASSWORD     | Service provider's Omnistrate account password                                                                                                                                                                                                        |
-| YOUR_SAAS_DOMAIN_URL  | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000                                                                                                 |
-| MAIL_USER_EMAIL       | Gmail account to be used to authenticate to send mails (signup, reset password etc) to your customers. Check the following [section](#how-to-configure-google-account-for-sending-out-emails) for instructions to configure gmail account for sending out the emails. |
-| MAIL_USER_PASSWORD    | Gmail account app password |
+| YOUR_SAAS_DOMAIN_URL  | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000 
+| MAIL_SMTP_HOST    | The the hostname or IP address of the mail service provider. Defaults to *smtp.gmail.com* |                                                                                                |
+| MAIL_SMTP_PORT    | The port to be used for creating the SMTP connection. Defaults to *587* |                                                                                                |
+| MAIL_USER_EMAIL       | The email account to be used to authenticate to send mails (signup, reset password etc) to your customers. Check the following [section](#how-to-configure-google-account-for-sending-out-emails) for instructions to configure gmail account for sending out the emails. |
+| MAIL_USER_PASSWORD    | The email account password |
 | MAIL_FROM | Gmail account from which emails will be sent (might be different than MAIL_USER_EMAIL). If this environment variable is not configured, the mails will be sent using MAIL_USER_EMAIL |
 | GOOGLE_ANALYTICS_TAG_ID | Google Analytics tag ID |
 

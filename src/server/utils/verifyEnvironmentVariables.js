@@ -1,3 +1,4 @@
+const { getNodeMailerConfig } = require("../mail-service/mail-config");
 const { setProviderToken } = require("../providerToken");
 const { fetchProviderAuthToken } = require("./fetchProviderAuthToken");
 const nodemailer = require("nodemailer");
@@ -106,16 +107,7 @@ async function verifyEnvrionmentVariables() {
 
   if (mailUserEmail && mailUserPassword) {
     try {
-      const mailTransporter = nodemailer.createTransport({
-        service: "gmail",
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.MAIL_USER_EMAIL,
-          pass: process.env.MAIL_USER_PASSWORD,
-        },
-      });
+      const mailTransporter = nodemailer.createTransport(getNodeMailerConfig());
       await mailTransporter.verify();
       areMailCredentialsVerified = true;
       mailTransporter.close();
@@ -145,7 +137,9 @@ async function verifyEnvrionmentVariables() {
         name: envVarName,
         status: envVarStatus,
       }))
-      .sort((envVarOne, envVarTwo) => (envVarOne.name <= envVarTwo.name ? -1 : 1)),
+      .sort((envVarOne, envVarTwo) =>
+        envVarOne.name <= envVarTwo.name ? -1 : 1
+      ),
   };
 }
 
