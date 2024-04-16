@@ -232,6 +232,32 @@ const SignupPage = (props) => {
               </FieldError>
             </FieldContainer>
           </Stack>
+          
+          <Typography
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="22px"
+            color="#A0AEC0"
+            textAlign="start"
+          >
+            By creating an account, you agree to the{" "}
+            <Link
+              target="_blank"
+              href="/terms-of-use"
+              style={{ color: "#27A376" }}
+            >
+              Terms & Conditions
+            </Link>{" "}
+            and{" "}
+            <Link
+              target="_blank"
+              href="/privacy-policy"
+              style={{ color: "#27A376" }}
+            >
+              Privacy Policy
+            </Link>
+            .
+          </Typography>
 
           {/* Login and Google Button */}
           <Stack gap="16px">
