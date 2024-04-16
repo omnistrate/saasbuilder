@@ -11,6 +11,8 @@ services:
       - PROVIDER_EMAIL=$var.providerEmail
       - PROVIDER_PASSWORD=$var.providerPassword
       - YOUR_SAAS_DOMAIN_URL=$sys.network.externalClusterEndpoint
+      - MAIL_SMTP_HOST=$var.smtpHost
+      - MAIL_SMTP_PORT=$var.smtpPort
       - MAIL_USER_EMAIL=$var.senderEmail
       - MAIL_USER_PASSWORD=$var.senderPassword
       - MAIL_FROM=$var.senderFrom
@@ -54,6 +56,20 @@ services:
         modifiable: true
         required: true
         export: false
+      - key: smtpHost
+        description: The SMTP host to be used for sending emails
+        name: SMTP Host
+        type: String
+        modifiable: true
+        required: false
+        export: true
+      - key: smtpHost
+        description: The SMTP port to connect to
+        name: SMTP Port
+        type: String
+        modifiable: true
+        required: false
+        export: true  
       - key: senderEmail
         description: email address to login to the SMTS provider
         name: SMTS email address
