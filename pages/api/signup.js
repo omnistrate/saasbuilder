@@ -23,7 +23,7 @@ export default async function handleSignup(nextRequest, nextResponse) {
           nextResponse
             .status(400)
             .send({
-              message: `It looks like this email address is already associated with an existing account. If you forgot your password, please use the 'Forgot Password' link to reset it. If you believe this is an error, please contact support`,
+              message: `This email is already registered. You may reset your password or contact support for help`,
             });
         }
         nextResponse.status(error.response?.status || 500).send({
