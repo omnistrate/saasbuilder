@@ -63,13 +63,15 @@ services:
         modifiable: true
         required: false
         export: true
-      - key: smtpHost
+        defaultValue: smtp.gmail.com
+      - key: smtpPort
         description: The SMTP port to connect to
         name: SMTP Port
         type: String
         modifiable: true
         required: false
         export: true  
+        defaultValue: 587
       - key: senderEmail
         description: email address to login to the SMTS provider
         name: SMTS email address
