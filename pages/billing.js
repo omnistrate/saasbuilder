@@ -2,6 +2,7 @@ import { getProviderOrgDetails } from "src/server/api/customer-user";
 import BillingPage from "src/features/Billing/BillingPage";
 import Head from "next/head";
 import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
+import NoLogoImage from "public/assets/images/logos/no-logo.png";
 
 export const getServerSideProps = async () => {
   const response = await getProviderOrgDetails();
