@@ -86,7 +86,7 @@ function startMailServiceCron() {
             }
 
             case eventTypes.ApproveSubscriptionRequest: {
-              mailContent = getApproveSubscriptionMailContent(event);
+              mailContent = await getApproveSubscriptionMailContent(event);
               break;
             }
 
@@ -101,7 +101,7 @@ function startMailServiceCron() {
             }
 
             case eventTypes.SuspendSubscription: {
-              mailContent = getSubscriptionSuspendedMailContent(event);
+              mailContent = await getSubscriptionSuspendedMailContent(event);
               break;
             }
 
