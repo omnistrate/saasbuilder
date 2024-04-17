@@ -25,7 +25,6 @@ import {
   updateResourceInstance,
 } from "../../../src/api/resourceInstance";
 import Button from "../../../src/components/Button/Button";
-import CalendarIcon from "../../../src/components/CalendarIcon/CalendarIcon";
 import Card from "../../../src/components/Card/Card";
 import LoadingSpinnerSmall from "../../../src/components/CircularProgress/CircularProgress";
 import DashboardLayout from "../../../src/components/DashboardLayout/DashboardLayout";
@@ -613,6 +612,7 @@ function MarketplaceService() {
       cloud_provider: "",
       network_type: "",
       region: "",
+      custom_availability_zone: "",
       requestParams: { ...requestParams },
       serviceProviderId: service?.serviceProviderId,
       serviceKey: service?.serviceURLKey,
@@ -732,6 +732,9 @@ function MarketplaceService() {
           if (isError) {
             snackbar.showError(`${requiredFieldName} is required`);
           } else {
+            values.custom_availability_zone !== "" &&
+              (data.requestParams.custom_availability_zone =
+                values.custom_availability_zone);
             createResourceInstanceMutation.mutate(data);
           }
         } catch (err) {
