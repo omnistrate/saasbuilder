@@ -69,7 +69,7 @@ function Metrics(props) {
   if (socketBaseURL && selectedNodeId) {
     metricsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
   } else if (socketBaseURL && resourceKey) {
-    metricsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0}&instanceId=${resourceInstanceId}`;
+    metricsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
   }
 
   const socketOpenTime = useRef(null);
