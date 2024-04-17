@@ -1,7 +1,10 @@
 const ejs = require("ejs");
 const path = require("path");
 
-async function getApproveSubscriptionMailContent(approveSubsriptionEventObj) {
+async function getApproveSubscriptionMailContent(
+  approveSubsriptionEventObj,
+  orgLogoURL
+) {
   const orgName = approveSubsriptionEventObj.orgName;
   const email = approveSubsriptionEventObj.userEmail;
   const serviceName = approveSubsriptionEventObj.eventPayload.service_name;
@@ -14,19 +17,19 @@ async function getApproveSubscriptionMailContent(approveSubsriptionEventObj) {
     __dirname,
     "..",
     "ejsTemplates",
-    "suspendSubscription.ejs"
+    "approveSubscriptionRequest.ejs"
   );
+
+  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
 
   const message = await ejs.renderFile(templatePath, {
     service_plan_name: servicePlanName,
     service_name: serviceName,
-    logo_url:
-      "https://static.vecteezy.com/system/resources/thumbnails/022/339/377/small/construction-building-company-logo-design-vector.jpg",
-    bottom_bg_image_url:
-      "https://cdn-icons-png.flaticon.com/512/9709/9709605.png",
-    hero_banner: "https://cdn-icons-png.flaticon.com/512/9709/9709605.png",
-    content_check_circle:
-      "https://cdn-icons-png.flaticon.com/512/9709/9709605.png",
+    logo_url: orgLogoURL,
+    bottom_bg_image_url: `${baseURL}/public/mail/bottom-bg.png`,
+    hero_banner: `${baseURL}/public/mail/cloud-hero-section.png`,
+    approve_subscription_request: `${baseURL}/public/mail/approve-subscription-request.png`,
+    get_started: `${baseURL}/signin`,
   });
 
   // const message = `

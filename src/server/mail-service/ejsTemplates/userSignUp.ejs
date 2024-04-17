@@ -82,7 +82,7 @@
                                 <tr style="width: 100%">
                                   <td
                                     data-id="__react-email-column"
-                                    style="vertical-align: top"
+                                    style="vertical-align: top; width: 250px"
                                   >
                                   <% if(logo_url){ %>
                                     <table
@@ -112,6 +112,7 @@
                                       </tbody>
                                     </table>
                                     <% } %>
+
                                     <table
                                       align="center"
                                       width="100%"
@@ -134,9 +135,9 @@
                                               padding: 12px 0 0;
                                             "
                                           >
-                                            Your subscription <br />
-                                            request<span style="color: #17de43">
-                                              approved!</span
+                                            Account activation <br />
+                                            <span style="color: #f79009"
+                                              >pending!</span
                                             >
                                           </td>
                                         </tr>
@@ -228,7 +229,7 @@
                                   >
                                     <img
                                       height="140px"
-                                      src="<%= approve_subscription_request %>"
+                                      src="<%= user_signup %>"
                                       style="
                                         display: block;
                                         outline: none;
@@ -299,20 +300,10 @@
                                                 text-align: center;
                                               "
                                             >
-                                              We&#x27;re pleased to confirm that
-                                              your subscription to the<!-- -->
-                                              <span style="font-weight: 800"
-                                                ><%= service_plan_name %></span
-                                              >
-                                              <!-- -->plan on<!-- -->
-                                              <span style="font-weight: 800"
-                                                ><%= service_name %></span
-                                              >
-                                              <!-- -->has been approved. You can
-                                              now start to use the service.
-                                              <br />
-                                              If you have any questions, please
-                                              contact support.
+                                              Thanks for <span style="font-weight:800">signing up</span>. We&#x27;re
+                                              excited to have you onboard.<br />To
+                                              begin using the service, please
+                                              activate your account.
                                             </p>
                                           </td>
                                         </tr>
@@ -342,12 +333,7 @@
                                         text-align: center;
                                       "
                                     >
-                                      Sincerely <br />
-                                      The<!-- -->
-                                      <span style="font-weight: 800"
-                                        ><%= service_name %></span
-                                      >
-                                      <!-- -->Team
+                                      Thanks!
                                     </p>
                                   </td>
                                 </tr>
@@ -403,7 +389,7 @@
                                           mso-padding-alt: 0px;
                                           mso-text-raise: 7.5px;
                                         "
-                                        >Get Started</span
+                                        >Activate Account</span
                                       ><span
                                         ><!--[if mso
                                           ]><i

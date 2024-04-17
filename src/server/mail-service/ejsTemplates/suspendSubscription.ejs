@@ -2,9 +2,15 @@
 <html dir="ltr" lang="en">
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap"
+      rel="stylesheet"
+    />
   </head>
 
-  <body style="background: #ffffff; font-family: Roboto, sans-serif">
+  <body style="background:#ffffff;font-family:&#x27;Manrope&#x27;,sans-serif">
     <table
       align="center"
       width="100%"
@@ -54,39 +60,15 @@
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
+                        padding: 32px 30px 0;
                       "
                     >
                       <tbody style="width: 100%">
                         <tr style="width: 100%">
-                          <td data-id="__react-email-column">
-                            <% if(logo_url){ %>
-                              <table
-                                align="center"
-                                width="100%"
-                                border="0"
-                                cellPadding="0"
-                                cellSpacing="0"
-                                role="presentation"
-                              >
-                                <tbody style="width: 100%">
-                                  <tr style="width: 100%">
-                                    <td data-id="__react-email-column">
-                                      <img
-                                        height="34px"
-                                        src="<%= logo_url %>"
-                                        style="
-                                          display: block;
-                                          outline: none;
-                                          border: none;
-                                          text-decoration: none;
-                                          padding: 24px 16px;
-                                        "
-                                      />
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <% } %>
+                          <td
+                            data-id="__react-email-column"
+                            style="width: 600px"
+                          >
                             <table
                               align="center"
                               width="100%"
@@ -94,26 +76,77 @@
                               cellPadding="0"
                               cellSpacing="0"
                               role="presentation"
-                              style="padding: 24px 16px"
+                              style="padding: 8px"
                             >
                               <tbody style="width: 100%">
                                 <tr style="width: 100%">
                                   <td
                                     data-id="__react-email-column"
-                                    style="
-                                      width: 60%;
-                                      font-size: 26px;
-                                      font-weight: 400;
-                                      line-height: 38px;
-                                      text-align: left;
-                                      color: #ffffff;
-                                    "
+                                    style="vertical-align: top"
                                   >
-                                    Your subscription suspended!
+                                  <% if(logo_url){ %>
+                                    <table
+                                      align="center"
+                                      width="100%"
+                                      border="0"
+                                      cellPadding="0"
+                                      cellSpacing="0"
+                                      role="presentation"
+                                    >
+                                      <tbody style="width: 100%">
+                                        <tr style="width: 100%">
+                                          <td data-id="__react-email-column">
+                                            <img
+                                              height="34px"
+                                              src="<%= logo_url %>"
+                                              style="
+                                                display: block;
+                                                outline: none;
+                                                border: none;
+                                                text-decoration: none;
+                                                padding: 16px 0 12px;
+                                              "
+                                            />
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <% } %>
+                                    <table
+                                      align="center"
+                                      width="100%"
+                                      border="0"
+                                      cellPadding="0"
+                                      cellSpacing="0"
+                                      role="presentation"
+                                    >
+                                      <tbody style="width: 100%">
+                                        <tr style="width: 100%">
+                                          <td
+                                            data-id="__react-email-column"
+                                            style="
+                                              font-family: Arial, Helvetica, sans-serif;
+                                              font-size: 26px;
+                                              font-weight: 600;
+                                              line-height: 38px;
+                                              text-align: left;
+                                              color: #ffffff;
+                                              padding: 12px 0 0;
+                                            "
+                                          >
+                                            Your subscription <br /><span
+                                              style="color: #f79009"
+                                            >
+                                              suspended!</span
+                                            >
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
                                   </td>
                                   <td
                                     data-id="__react-email-column"
-                                    style="width: 40%"
+                                    style="text-align: right"
                                   >
                                     <img
                                       height="190px"
@@ -138,14 +171,14 @@
                               cellPadding="0"
                               cellSpacing="0"
                               role="presentation"
-                              style="padding: 0 16px"
+                              style="padding: 0"
                             >
                               <tbody style="width: 100%">
                                 <tr style="width: 100%">
                                   <td
                                     data-id="__react-email-column"
                                     style="
-                                      height: 40px;
+                                      height: 30px;
                                       background: #ffffff;
                                       width: 500px;
                                       border-radius: 8px 8px 0 0;
@@ -165,7 +198,7 @@
                       cellPadding="0"
                       cellSpacing="0"
                       role="presentation"
-                      style="border-radius: 0 0 8px 8px; padding: 0 16px"
+                      style="border-radius: 0 0 8px 8px; padding: 0 30px"
                     >
                       <tbody style="width: 100%">
                         <tr style="width: 100%">
@@ -190,12 +223,41 @@
                             >
                               <tbody style="width: 100%">
                                 <tr style="width: 100%">
+                                  <td
+                                    data-id="__react-email-column"
+                                    style="margin: auto; padding-top: 40px"
+                                  >
+                                    <img
+                                      height="140px"
+                                      src="<%= approve_subscription_request %>"
+                                      style="
+                                        display: block;
+                                        outline: none;
+                                        border: none;
+                                        text-decoration: none;
+                                        margin: 0 auto;
+                                      "
+                                    />
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <table
+                              align="center"
+                              width="100%"
+                              border="0"
+                              cellPadding="0"
+                              cellSpacing="0"
+                              role="presentation"
+                            >
+                              <tbody style="width: 100%">
+                                <tr style="width: 100%">
                                   <td data-id="__react-email-column">
                                     <p
                                       style="
                                         font-size: 32px;
                                         line-height: 40px;
-                                        margin: 8px auto 0;
+                                        margin: 32px auto 0;
                                         font-weight: 800;
                                         text-align: center;
                                       "
@@ -233,21 +295,21 @@
                                               style="
                                                 font-size: 17px;
                                                 line-height: 25px;
-                                                margin: 16px auto 0;
-                                                font-weight: 300;
+                                                margin: 32px auto 0;
+                                                font-weight: 400;
                                                 text-align: center;
                                               "
                                             >
                                               This is to inform you that your<!-- -->
-                                              <span style="font-weight: 800">
-                                                <%= service_plan_name %>
-                                              </span>
-                                              <!-- -->plan subscription on<!-- -->
-                                              <span style="font-weight: 800">
-                                                <%= service_name %>
-                                              </span>
-                                              <!-- -->has been suspended. To
-                                              reinstate your subscription,
+                                              <span style="font-weight: 800"
+                                                ><%= service_plan_name %></span
+                                              >
+                                              <!-- -->subscription on<!-- -->
+                                              <span style="font-weight: 800"
+                                                ><%= service_name %></span
+                                              >
+                                              <!-- -->has been suspended.<br />
+                                              To reinstate your subscription,
                                               please contact support.
                                             </p>
                                           </td>
@@ -273,7 +335,7 @@
                                       style="
                                         font-size: 18px;
                                         line-height: 27px;
-                                        margin: 32px auto 60px;
+                                        margin: 32px auto 48px;
                                         font-weight: 800;
                                         text-align: center;
                                       "
@@ -281,8 +343,8 @@
                                       Sincerely <br />
                                       The<!-- -->
                                       <span style="font-weight: 800"
-                                        ><%= service_name %>
-                                      </span>
+                                        ><%= service_name %></span
+                                      >
                                       <!-- -->Team
                                     </p>
                                   </td>

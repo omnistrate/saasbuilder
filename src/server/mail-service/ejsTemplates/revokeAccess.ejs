@@ -82,7 +82,7 @@
                                 <tr style="width: 100%">
                                   <td
                                     data-id="__react-email-column"
-                                    style="vertical-align: top"
+                                    style="vertical-align: top; width: 250px"
                                   >
                                   <% if(logo_url){ %>
                                     <table
@@ -134,9 +134,9 @@
                                               padding: 12px 0 0;
                                             "
                                           >
-                                            Your subscription <br />
-                                            request<span style="color: #17de43">
-                                              approved!</span
+                                            Access <br />
+                                            <span style="color: #d92d20"
+                                              >revoked!</span
                                             >
                                           </td>
                                         </tr>
@@ -224,11 +224,11 @@
                                 <tr style="width: 100%">
                                   <td
                                     data-id="__react-email-column"
-                                    style="margin: auto"
+                                    style="margin: auto; padding-top: 40px"
                                   >
                                     <img
                                       height="140px"
-                                      src="<%= approve_subscription_request %>"
+                                      src="<%= revoke_access %>"
                                       style="
                                         display: block;
                                         outline: none;
@@ -299,20 +299,17 @@
                                                 text-align: center;
                                               "
                                             >
-                                              We&#x27;re pleased to confirm that
-                                              your subscription to the<!-- -->
+                                              You have been removed from<!-- -->
                                               <span style="font-weight: 800"
-                                                ><%= service_plan_name %></span
+                                                ><%= user_name %>&#x27;s</span
                                               >
-                                              <!-- -->plan on<!-- -->
+                                              <!-- -->subscription on<!-- -->
                                               <span style="font-weight: 800"
                                                 ><%= service_name %></span
                                               >
-                                              <!-- -->has been approved. You can
-                                              now start to use the service.
-                                              <br />
-                                              If you have any questions, please
-                                              contact support.
+                                              <!-- -->service. <br />
+                                              If you have any question, please
+                                              contact the subscription owner.
                                             </p>
                                           </td>
                                         </tr>
@@ -337,86 +334,13 @@
                                       style="
                                         font-size: 18px;
                                         line-height: 27px;
-                                        margin: 32px auto 0;
+                                        margin: 32px auto 48px;
                                         font-weight: 800;
                                         text-align: center;
                                       "
                                     >
-                                      Sincerely <br />
-                                      The<!-- -->
-                                      <span style="font-weight: 800"
-                                        ><%= service_name %></span
-                                      >
-                                      <!-- -->Team
+                                      Thanks!
                                     </p>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <table
-                              align="center"
-                              width="100%"
-                              border="0"
-                              cellPadding="0"
-                              cellSpacing="0"
-                              role="presentation"
-                              style="padding: 32px"
-                            >
-                              <tbody style="width: 100%">
-                                <tr style="width: 100%">
-                                  <td data-id="__react-email-column">
-                                    <a
-                                      href="<%= get_started %>"
-                                      style="
-                                        line-height: 24px;
-                                        text-decoration: none;
-                                        display: block;
-                                        max-width: 100%;
-                                        background-color: #111827;
-                                        border-radius: 5px;
-                                        color: #fff;
-                                        font-size: 16px;
-                                        font-weight: 700;
-                                        text-align: center;
-                                        width: 100%;
-                                        padding: 10px 0px 10px 0px;
-                                        cursor: pointer;
-                                      "
-                                      target="_blank"
-                                      ><span
-                                        ><!--[if mso
-                                          ]><i
-                                            style="
-                                              letter-spacing: 0px;
-                                              mso-font-width: -100%;
-                                              mso-text-raise: 15;
-                                            "
-                                            hidden
-                                            >&nbsp;</i
-                                          ><!
-                                        [endif]--></span
-                                      ><span
-                                        style="
-                                          max-width: 100%;
-                                          display: inline-block;
-                                          line-height: 120%;
-                                          mso-padding-alt: 0px;
-                                          mso-text-raise: 7.5px;
-                                        "
-                                        >Get Started</span
-                                      ><span
-                                        ><!--[if mso
-                                          ]><i
-                                            style="
-                                              letter-spacing: 0px;
-                                              mso-font-width: -100%;
-                                            "
-                                            hidden
-                                            >&nbsp;</i
-                                          ><!
-                                        [endif]--></span
-                                      ></a
-                                    >
                                   </td>
                                 </tr>
                               </tbody>
