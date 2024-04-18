@@ -4,7 +4,7 @@ import Select from "../../FormElements/Select/Select";
 import Divider from "../../Divider/Divider";
 import Card from "../../Card/Card";
 import MenuItem from "../../MenuItem/MenuItem";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import MetricCard from "./MetricCard";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
@@ -58,16 +58,16 @@ function Metrics(props) {
     resourceInstanceId,
     customMetrics = [],
   } = props;
-  let selectedId = "";
+  let firstNode = null;
   if (nodes.length > 0) {
-    selectedId = nodes[0].id;
+    firstNode = nodes[0];
   }
-  const [selectedNodeId, setSelectedNodeId] = useState(selectedId);
+  const [selectedNode, setSelectedNode] = useState(firstNode);
   const [errorMessage, setErrorMessage] = useState("");
 
   let metricsSocketEndpoint = null;
-  if (socketBaseURL && selectedNodeId) {
-    metricsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
+  if (socketBaseURL && selectedNode) {
+    metricsSocketEndpoint = `${socketBaseURL}&podName=${selectedNode.id}&instanceId=${resourceInstanceId}`;
   } else if (socketBaseURL && resourceKey) {
     metricsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
   }
@@ -177,8 +177,7 @@ function Metrics(props) {
     };
   }, []);
 
-  //initialise custom metrics data
-  useEffect(() => {
+  const initialiseCustomMetricsData = useCallback(() => {
     const initialCustomMetricData = customMetrics.reduce((acc, curr) => {
       const { metricName } = curr;
       acc[metricName] = [];
@@ -187,6 +186,10 @@ function Metrics(props) {
     setCustomMetricsChartData(initialCustomMetricData);
   }, [customMetrics]);
 
+  //initialise custom metrics data
+  useEffect(() => {
+    initialiseCustomMetricsData();
+  }, [initialiseCustomMetricsData]);
 
   if (!metricsSocketEndpoint || errorMessage) {
     return (
@@ -537,7 +540,7 @@ function Metrics(props) {
             }
           });
 
-         // console.log("Updated custom metric data", updatedData)
+          // console.log("Updated custom metric data", updatedData)
 
           return updatedData;
         });
@@ -707,7 +710,8 @@ function Metrics(props) {
     setIsMetricsDataLoaded(false);
     const { value } = event.target;
     initialiseMetricsData();
-    setSelectedNodeId(value);
+    initialiseCustomMetricsData()
+    setSelectedNode(value);
   }
 
   //console.log("Is metrics data loaded", isMetricsDataLoaded);
@@ -740,13 +744,13 @@ function Metrics(props) {
               Node ID
             </Text>
             <Select
-              value={selectedNodeId}
+              value={selectedNode}
               sx={{ marginTop: "2px" }}
               onChange={handleNodeChange}
               MenuProps={{ disableScrollLock: true }}
             >
               {nodes.map((node) => (
-                <MenuItem value={node.id} key={node.id}>
+                <MenuItem value={node} key={node.id}>
                   {node.id}
                 </MenuItem>
               ))}
@@ -836,26 +840,30 @@ function Metrics(props) {
           labels={netThroughputSendLabels}
         />
       </Box>
-      {customMetrics.map((metricInfo) => {
-        const { metricName, labels } = metricInfo;
-        if (labels.length > 0)
-          return (
-            <MultiLineChart
-              chartName={metricName}
-              data={customMetricsChartData[metricName]}
-              labels={labels}
-              key={metricName}
-            />
-          );
-        else
-          return (
-            <SingleLineChart
-              chartName={metricName}
-              data={customMetricsChartData[metricName]}
-              key={metricName}
-            />
-          );
-      })}
+      {customMetrics //show metrics for selected node resource type
+        .filter((metric) => {
+          return metric.resourceKey === selectedNode?.resourceKey;
+        })
+        .map((metricInfo) => {
+          const { metricName, labels } = metricInfo;
+          if (labels.length > 0)
+            return (
+              <MultiLineChart
+                chartName={metricName}
+                data={customMetricsChartData[metricName]}
+                labels={labels}
+                key={metricName}
+              />
+            );
+          else
+            return (
+              <SingleLineChart
+                chartName={metricName}
+                data={customMetricsChartData[metricName]}
+                key={metricName}
+              />
+            );
+        })}
     </ContainerCard>
   );
 }
