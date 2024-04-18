@@ -276,7 +276,7 @@ function CreateResourceInstanceForm(props) {
               name="requestParams.custom_availability_zone"
               displayEmpty
               /*multiple*/
-              value={formData.values.requestParams.custom_availability_zone}
+              value={formData?.values.requestParams?.custom_availability_zone}
               onChange={formData.handleChange}
               input={<OutlinedInput />}
             >

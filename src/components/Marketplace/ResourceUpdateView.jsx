@@ -207,7 +207,7 @@ function ResourceUpdateView(props) {
                     displayEmpty
                     /*multiple*/
                     value={
-                      formData.values.requestParams.custom_availability_zone
+                      formData.values?.requestParams?.custom_availability_zone
                     }
                     onChange={formData.handleChange}
                     input={<OutlinedInput />}
