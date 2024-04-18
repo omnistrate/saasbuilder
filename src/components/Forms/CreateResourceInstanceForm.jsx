@@ -272,11 +272,11 @@ function CreateResourceInstanceForm(props) {
             <FieldLabel>Custom Availability Zone</FieldLabel>
             <Select
               sx={{ marginTop: "16px" }}
-              id="custom_availability_zone"
-              name="custom_availability_zone"
+              id="requestParams.custom_availability_zone"
+              name="requestParams.custom_availability_zone"
               displayEmpty
               /*multiple*/
-              value={formData.values.custom_availability_zone}
+              value={formData.values.requestParams.custom_availability_zone}
               onChange={formData.handleChange}
               input={<OutlinedInput />}
             >
