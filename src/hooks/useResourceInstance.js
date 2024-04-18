@@ -83,7 +83,7 @@ export default function useResourceInstance(
           globalEndpoints.others = [];
         }
 
-        const mainResourceCustomMetrics = [];
+        const customMetrics = [];
 
         const productTierFeatures = data?.productTierFeatures;
 
@@ -96,24 +96,25 @@ export default function useResourceInstance(
 
           const additionalMetrics =
             productTierFeatures?.METRICS?.additionalMetrics;
-          //check if custom metrics are configured
-          if (additionalMetrics) {
-            const mainResourceKey = topologyDetails.resourceKey;
-
-            const mainResourceAdditonalMetrics =
-              additionalMetrics[mainResourceKey]?.metrics;
-            if (mainResourceAdditonalMetrics) {
-              Object.entries(mainResourceAdditonalMetrics).forEach(
-                ([metricName, labelsObj]) => {
-                  const labels = Object.keys(labelsObj || {});
-                  mainResourceCustomMetrics.push({
-                    metricName,
-                    labels,
-                  });
+            
+            //check if custom metrics are configured
+            if (additionalMetrics) {
+              Object.entries(additionalMetrics).forEach(([resourceKey, data]) => {
+                const metricsData = data?.metrics;
+                if (metricsData) {
+                  Object.entries(metricsData).forEach(
+                    ([metricName, labelsObj]) => {
+                      const labels = Object.keys(labelsObj || {});
+                      customMetrics.push({
+                        metricName,
+                        labels,
+                        resourceKey,
+                      });
+                    }
+                  );
                 }
-              );
+              });
             }
-          }
         }
 
         if (topologyDetails?.nodes) {
@@ -278,7 +279,7 @@ export default function useResourceInstance(
           logsSocketURL: logsSocketURL,
           healthStatusPercent: healthStatusPercent,
           active: data?.active,
-          customMetrics: mainResourceCustomMetrics,
+          customMetrics: customMetrics,
         };
         //console.log("Final", final);
         return final;
