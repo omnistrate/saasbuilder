@@ -11,7 +11,7 @@ import { DisplayText } from "../Typography/Typography";
 
 export const AccessSupport = (props) => {
   const { service, currentTabValue } = props;
-  const [currentTab, setCurrentTab] = useState(tabs.description);
+  const [currentTab, setCurrentTab] = useState(tabs.planDetails);
   useEffect(() => {
     if (currentTabValue) {
       setCurrentTab(currentTabValue);
@@ -67,7 +67,7 @@ export const AccessSupport = (props) => {
         />
       </Box>
       <Box sx={{ minHeight: "400px" }}>
-        {currentTab === tabs.description && (
+        {currentTab === tabs.planDetails && (
           <Box mt="40px" key={currentTab}>
             <Box className={"ql-snow"}>
               <Box
