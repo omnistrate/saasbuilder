@@ -63,6 +63,11 @@ export default function NodesTable(props) {
     view
   );
 
+  //remove serverless nodes added on frontend
+  const filteredNodes = useMemo(() => {
+    return nodes.filter((node) => !node.isServerless);
+  }, [nodes]);
+
   const columns = useMemo(
     () => [
       {
@@ -216,14 +221,14 @@ export default function NodesTable(props) {
   useEffect(() => {
     if (selectionModel.length > 0) {
       const selectedNodeId = selectionModel[0];
-      const node = nodes.find((node) => node.id === selectedNodeId);
+      const node = filteredNodes.find((node) => node.id === selectedNodeId);
       if (node) {
         setSelectedNode(node);
       }
     } else {
       setSelectedNode(null);
     }
-  }, [selectionModel, nodes]);
+  }, [selectionModel, filteredNodes]);
 
   let isFailoverEnabled = false;
 
@@ -231,7 +236,7 @@ export default function NodesTable(props) {
     isFailoverEnabled = true;
   }
 
-  if (!nodes?.length) {
+  if (!filteredNodes?.length) {
     return (
       <Card sx={{ minHeight: "500px", marginTop: "54px" }}>
         <Stack direction="row" justifyContent="center" marginTop="200px">
@@ -299,7 +304,7 @@ export default function NodesTable(props) {
           checkboxSelection
           disableColumnMenu
           columns={columns}
-          rows={nodes}
+          rows={filteredNodes}
           //rows={rows}
           components={{ NoResultsOverlay: "" }}
           rowHeight={72}
