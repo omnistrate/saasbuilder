@@ -27,6 +27,7 @@ import Select from "../FormElements/Select/Select";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import useResourcesInstanceIds from "../../hooks/useResourcesInstanceIds";
 import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
+import { PasswordField } from "../FormElementsv2/PasswordField/PasswordField";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -276,6 +277,29 @@ function CreateResourceInstanceForm(props) {
           {createSchema.map((param) => {
             if (isBYOA && param.key === "aws_bootstrap_role_arn") {
               return null;
+            }
+            if (param.type === "Password") {
+              return (
+                <FieldContainer key={param.key}>
+                  {param.required == true ? (
+                    <FieldLabel required>{param.displayName}</FieldLabel>
+                  ) : (
+                    <FieldLabel>{param.displayName}</FieldLabel>
+                  )}
+                  <FieldDescription sx={{ mt: "5px" }}>
+                    {param.description}
+                  </FieldDescription>
+                  <PasswordField
+                    sx={{ color: "#FFF" }}
+                    id={`requestParams.${param.key}`}
+                    name={`requestParams.${param.key}`}
+                    onChange={formData.handleChange}
+                    values={formData.values.requestParams[param.key]}
+                    onBlur={formData.handleBlur}
+                    required={param.required == true ? "required" : ""}
+                  />
+                </FieldContainer>
+              );
             }
             if (param.key === "cloud_provider_account_config_id") {
               return (
