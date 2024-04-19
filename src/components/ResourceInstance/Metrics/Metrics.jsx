@@ -540,8 +540,6 @@ function Metrics(props) {
             }
           });
 
-          // console.log("Updated custom metric data", updatedData)
-
           return updatedData;
         });
 
@@ -710,7 +708,7 @@ function Metrics(props) {
     setIsMetricsDataLoaded(false);
     const { value } = event.target;
     initialiseMetricsData();
-    initialiseCustomMetricsData()
+    initialiseCustomMetricsData();
     setSelectedNode(value);
   }
 
@@ -751,7 +749,7 @@ function Metrics(props) {
             >
               {nodes.map((node) => (
                 <MenuItem value={node} key={node.id}>
-                  {node.id}
+                  {node.displayName}
                 </MenuItem>
               ))}
             </Select>
@@ -842,7 +840,10 @@ function Metrics(props) {
       </Box>
       {customMetrics //show metrics for selected node resource type
         .filter((metric) => {
-          return metric.resourceKey === selectedNode?.resourceKey;
+          if (selectedNode)
+            return metric.resourceKey === selectedNode?.resourceKey;
+          //else assume it's a serverless resource and filter by the main resource key
+          else return metric.resourceKey === resourceKey;
         })
         .map((metricInfo) => {
           const { metricName, labels } = metricInfo;
