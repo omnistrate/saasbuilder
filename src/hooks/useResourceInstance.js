@@ -84,7 +84,6 @@ export default function useResourceInstance(
         }
 
         const customMetrics = [];
-
         const productTierFeatures = data?.productTierFeatures;
 
         if (productTierFeatures?.LOGS?.enabled) {
@@ -96,25 +95,25 @@ export default function useResourceInstance(
 
           const additionalMetrics =
             productTierFeatures?.METRICS?.additionalMetrics;
-            
-            //check if custom metrics are configured
-            if (additionalMetrics) {
-              Object.entries(additionalMetrics).forEach(([resourceKey, data]) => {
-                const metricsData = data?.metrics;
-                if (metricsData) {
-                  Object.entries(metricsData).forEach(
-                    ([metricName, labelsObj]) => {
-                      const labels = Object.keys(labelsObj || {});
-                      customMetrics.push({
-                        metricName,
-                        labels,
-                        resourceKey,
-                      });
-                    }
-                  );
-                }
-              });
-            }
+
+          //check if custom metrics are configured
+          if (additionalMetrics) {
+            Object.entries(additionalMetrics).forEach(([resourceKey, data]) => {
+              const metricsData = data?.metrics;
+              if (metricsData) {
+                Object.entries(metricsData).forEach(
+                  ([metricName, labelsObj]) => {
+                    const labels = Object.keys(labelsObj || {});
+                    customMetrics.push({
+                      metricName,
+                      labels,
+                      resourceKey,
+                    });
+                  }
+                );
+              }
+            });
+          }
         }
 
         if (topologyDetails?.nodes) {
@@ -138,11 +137,23 @@ export default function useResourceInstance(
               resourceName: resourceName,
               healthStatus: healthStatus,
               resourceKey: resourceKey,
+              displayName: nodeId,
             });
 
             nodeEndpointsList.push(node.endpoint);
             availabilityZonesList.push(node.availabilityZone);
           });
+        } else {
+          // assume that the resource is serverless
+          if (!resourceId.includes("r-obsrv") && data.status === "RUNNING") {
+            nodes.push({
+              id: `${topologyDetails.resourceKey}-0`,
+              displayName: `serverless-${topologyDetails.resourceKey}`,
+              isServerless: true,
+              resourceKey: topologyDetails.resourceKey,
+              resourceId,
+            });
+          }
         }
 
         const nodeEndpoints = nodeEndpointsList.join(", ");
@@ -203,8 +214,23 @@ export default function useResourceInstance(
                     resourceName: resourceName,
                     healthStatus: node.healthStatus,
                     resourceKey,
+                    displayName: nodeId,
                   });
                 });
+              } else {
+                // assume that the resource is serverless
+                if (
+                  !resourceId.includes("r-obsrv") &&
+                  data.status === "RUNNING"
+                ) {
+                  nodes.push({
+                    id: `${topologyDetails.resourceKey}-0`,
+                    displayName: `serverless-${topologyDetails.resourceKey}`,
+                    isServerless: true,
+                    resourceKey: topologyDetails.resourceKey,
+                    resourceId,
+                  });
+                }
               }
               globalEndpoints.others.push({
                 resourceName: topologyDetails.resourceName,
@@ -281,7 +307,7 @@ export default function useResourceInstance(
           active: data?.active,
           customMetrics: customMetrics,
         };
-        //console.log("Final", final);
+
         return final;
       },
     }
@@ -289,4 +315,3 @@ export default function useResourceInstance(
 
   return resourceInstanceQuery;
 }
-
