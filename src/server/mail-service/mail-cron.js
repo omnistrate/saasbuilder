@@ -30,6 +30,7 @@ const {
 const {
   getInvoiceCreatedTemplate,
 } = require("./templates/invoiceCreatedTemplate");
+const { getProviderOrgDetails } = require("../api/customer-user");
 const { getNodeMailerConfig } = require("./mail-config");
 
 let isRunning = false;
@@ -51,6 +52,9 @@ function startMailServiceCron() {
       const eventsResponse = await getEventsList();
       const events = eventsResponse.data.events || [];
       console.log("Events", events);
+      const orgDetailsResponse = await getProviderOrgDetails();
+      const orgLogoURL = orgDetailsResponse.data.orgLogoURL;
+
       let mailPromises = [];
 
       for (const event of events) {
@@ -58,52 +62,76 @@ function startMailServiceCron() {
           let mailContent = null;
           switch (event.eventType) {
             case eventTypes.CustomerSignUp: {
-              mailContent = getSignUpMailContent(event);
+              mailContent = await getSignUpMailContent(event, orgLogoURL);
               break;
             }
 
             case eventTypes.InviteUser: {
-              mailContent = getOrgInviteUserMailContent(event);
+              mailContent = await getOrgInviteUserMailContent(
+                event,
+                orgLogoURL
+              );
               break;
             }
 
             case eventTypes.RevokeUserRole: {
-              mailContent = getOrgRevokeUserMailContent(event);
+              mailContent = await getOrgRevokeUserMailContent(
+                event,
+                orgLogoURL
+              );
               break;
             }
 
             case eventTypes.ResetPassword: {
-              mailContent = getResetPasswordMailContent(event);
+              mailContent = await getResetPasswordMailContent(
+                event,
+                orgLogoURL
+              );
               break;
             }
 
             case eventTypes.ApproveSubscriptionRequest: {
-              mailContent = getApproveSubscriptionMailContent(event);
+              mailContent = await getApproveSubscriptionMailContent(
+                event,
+                orgLogoURL
+              );
               break;
             }
 
             case eventTypes.DenySubscriptionRequest: {
-              mailContent = getDenySubscriptionMailContent(event);
+              mailContent = await getDenySubscriptionMailContent(
+                event,
+                orgLogoURL
+              );
               break;
             }
 
             case eventTypes.ResumeSubscription: {
-              mailContent = getSubscriptionResumedMailContent(event);
+              mailContent = await getSubscriptionResumedMailContent(
+                event,
+                orgLogoURL
+              );
               break;
             }
 
             case eventTypes.SuspendSubscription: {
-              mailContent = getSubscriptionSuspendedMailContent(event);
+              mailContent = await getSubscriptionSuspendedMailContent(
+                event,
+                orgLogoURL
+              );
               break;
             }
 
             case eventTypes.TerminateSubscription: {
-              mailContent = getSubscriptionTerminateMailContent(event);
+              mailContent = await getSubscriptionTerminateMailContent(
+                event,
+                orgLogoURL
+              );
               break;
             }
 
             case eventTypes.InvoiceCreated: {
-              mailContent = getInvoiceCreatedTemplate(event);
+              mailContent = await getInvoiceCreatedTemplate(event, orgLogoURL);
               break;
             }
 

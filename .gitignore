@@ -36,3 +36,5 @@ package-lock.json
 .vscode/extensions.json
 
 fly.deploy.toml
+
+fly.toml

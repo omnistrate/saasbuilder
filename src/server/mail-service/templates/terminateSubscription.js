@@ -1,4 +1,10 @@
-function getSubscriptionTerminateMailContent(terminateSubsriptionEventObj) {
+const ejs = require("ejs");
+const path = require("path");
+
+async function getSubscriptionTerminateMailContent(
+  terminateSubsriptionEventObj,
+  orgLogoURL
+) {
   const orgName = terminateSubsriptionEventObj.orgName;
   const email = terminateSubsriptionEventObj.userEmail;
   const serviceName = terminateSubsriptionEventObj.eventPayload.service_name;
@@ -7,16 +13,34 @@ function getSubscriptionTerminateMailContent(terminateSubsriptionEventObj) {
 
   const subject = `Your ${serviceName} - ${servicePlanName} subscription terminated`;
 
-  const message = `
-              <html>
-                  <body>
-                      <p>Hello,</p>
-                      <p>Your ${servicePlanName} subscription on ${serviceName} has been terminated. You will no longer have access to the plan's features.  If you believe this was in error, please contact support.</p>
-                      <p>If you have any questions, please contact support.</p>
-                      <p>Sincerely,</p>
-                      <p>The ${serviceName} Team</p>
-                  </body>
-              </html>`;
+  const templatePath = path.resolve(
+    __dirname,
+    "..",
+    "ejsTemplates",
+    "terminateSubscription.ejs"
+  );
+
+  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+
+  const message = await ejs.renderFile(templatePath, {
+    service_plan_name: servicePlanName,
+    service_name: serviceName,
+    logo_url: orgLogoURL,
+    bottom_bg_image_url: `${baseURL}/public/mail/bottom-bg.png`,
+    hero_banner: `${baseURL}/public/mail/cloud-hero-section.png`,
+    terminate_subscription: `${baseURL}/public/mail/terminate-subscription.png`,
+  });
+
+  // const message = `
+  //             <html>
+  //                 <body>
+  //                     <p>Hello,</p>
+  //                     <p>Your ${servicePlanName} subscription on ${serviceName} has been terminated. You will no longer have access to the plan's features.  If you believe this was in error, please contact support.</p>
+  //                     <p>If you have any questions, please contact support.</p>
+  //                     <p>Sincerely,</p>
+  //                     <p>The ${serviceName} Team</p>
+  //                 </body>
+  //             </html>`;
 
   const recepientEmail = email;
 
