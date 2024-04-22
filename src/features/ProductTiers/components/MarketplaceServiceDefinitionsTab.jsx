@@ -8,7 +8,7 @@ export const tabs = {
   pricing: "Pricing",
   support: "Support",
   documentation: "Documentation",
-  description: "Description",
+  planDetails: "Plan Details",
 };
 
 export default function MarketplaceServiceDefinitionsTab(props) {
@@ -31,10 +31,10 @@ export default function MarketplaceServiceDefinitionsTab(props) {
         }}
       >
         <Tab
-          label={tabs.description}
-          value={tabs.description}
+          label={tabs.planDetails}
+          value={tabs.planDetails}
           onClick={() => {
-            setCurrentTab(tabs.description);
+            setCurrentTab(tabs.planDetails);
           }}
         />
         <Tab
