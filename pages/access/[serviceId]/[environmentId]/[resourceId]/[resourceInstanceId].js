@@ -351,6 +351,7 @@ function ResourceInstance() {
           instanceStatus={resourceInstanceData?.status}
           resourceKey={resourceInstanceData?.resourceKey}
           customMetrics={resourceInstanceData?.customMetrics}
+          mainResourceHasCompute={resourceInstanceData?.mainResourceHasCompute}
         />
       )}
       {currentTab === tabs.logs && (
@@ -360,6 +361,7 @@ function ResourceInstance() {
           socketBaseURL={resourceInstanceData.logsSocketURL}
           instanceStatus={resourceInstanceData?.status}
           resourceKey={resourceInstanceData?.resourceKey}
+          mainResourceHasCompute={resourceInstanceData?.mainResourceHasCompute}
         />
       )}
       <SideDrawerRight
