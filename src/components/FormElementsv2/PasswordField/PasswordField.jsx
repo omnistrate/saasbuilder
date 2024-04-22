@@ -65,35 +65,3 @@ export const PasswordField = (props) => {
     />
   );
 };
-
-export const PasswordWithOutBorderField = (props) => {
-  const { disabled = false, ...restProps } = props;
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-  const toggleVisibility = () => {
-    setIsPasswordVisible((prev) => !prev);
-  };
-
-  return (
-    <StyledTextField
-      disabled={disabled}
-      {...restProps}
-      type={isPasswordVisible ? "text" : "password"}
-      endAdornment={
-        <InputAdornment position="end">
-          <IconButton
-            size="small"
-            sx={{ marginRight: "12px" }}
-            onClick={toggleVisibility}
-          >
-            {isPasswordVisible ? (
-              <VisibilityOffOutlinedIcon sx={{ fontSize: "20px" }} />
-            ) : (
-              <VisibilityOutlinedIcon sx={{ fontSize: "20px" }} />
-            )}
-          </IconButton>
-        </InputAdornment>
-      }
-    />
-  );
-};
