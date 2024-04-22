@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import {
   CellDescription,
   CellSubtext,
@@ -14,6 +14,7 @@ import React from "react";
 import Link from "next/link";
 import capitalize from "lodash/capitalize";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import { PasswordWithOutBorderField } from "src/components/FormElementsv2/PasswordField/PasswordWithOutBorderField";
 
 function ResourceInstanceDetails(props) {
   const {
@@ -143,29 +144,50 @@ function ResourceInstanceDetails(props) {
           )} */}
 
           {resultParametersWithDescription.map((parameter, index) => {
-            return (
-              <TableRow key={parameter.key}>
-                <TableCell sx={{ verticalAlign: "baseline" }}>
-                  <CellTitle>
-                    {capitalize(parameter.displayName) || parameter.key}
-                  </CellTitle>
-                  <CellSubtext>{parameter.description}</CellSubtext>
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ width: "50%", verticalAlign: "baseline" }}
-                >
-                  <CellDescription
-                    sx={{
-                      wordBreak: "break-word",
-                      paddingLeft: "30px",
-                    }}
+            if (parameter.type === "Password") {
+              return (
+                <TableRow key={parameter.key} sx={{ width: "100%" }}>
+                  <TableCell sx={{ verticalAlign: "baseline" }}>
+                    <CellTitle>
+                      {capitalize(parameter.displayName) || parameter.key}
+                    </CellTitle>
+                    <CellSubtext>{parameter.description}</CellSubtext>
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{ width: "50%", verticalAlign: "baseline" }}
                   >
-                    {parameter.value}
-                  </CellDescription>
-                </TableCell>
-              </TableRow>
-            );
+                    <PasswordWithOutBorderField>
+                      {parameter.value}
+                    </PasswordWithOutBorderField>
+                  </TableCell>
+                </TableRow>
+              );
+            } else {
+              return (
+                <TableRow key={parameter.key}>
+                  <TableCell sx={{ verticalAlign: "baseline" }}>
+                    <CellTitle>
+                      {capitalize(parameter.displayName) || parameter.key}
+                    </CellTitle>
+                    <CellSubtext>{parameter.description}</CellSubtext>
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{ width: "50%", verticalAlign: "baseline" }}
+                  >
+                    <CellDescription
+                      sx={{
+                        wordBreak: "break-word",
+                        paddingLeft: "30px",
+                      }}
+                    >
+                      {parameter.value}
+                    </CellDescription>
+                  </TableCell>
+                </TableRow>
+              );
+            }
           })}
         </TableBody>
       </Table>

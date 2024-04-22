@@ -83,8 +83,7 @@ export default function useResourceInstance(
           globalEndpoints.others = [];
         }
 
-        const mainResourceCustomMetrics = [];
-
+        const customMetrics = [];
         const productTierFeatures = data?.productTierFeatures;
 
         if (productTierFeatures?.LOGS?.enabled) {
@@ -96,52 +95,66 @@ export default function useResourceInstance(
 
           const additionalMetrics =
             productTierFeatures?.METRICS?.additionalMetrics;
+
           //check if custom metrics are configured
           if (additionalMetrics) {
-            const mainResourceKey = topologyDetails.resourceKey;
-
-            const mainResourceAdditonalMetrics =
-              additionalMetrics[mainResourceKey]?.metrics;
-            if (mainResourceAdditonalMetrics) {
-              Object.entries(mainResourceAdditonalMetrics).forEach(
-                ([metricName, labelsObj]) => {
-                  const labels = Object.keys(labelsObj || {});
-                  mainResourceCustomMetrics.push({
-                    metricName,
-                    labels,
-                  });
-                }
-              );
-            }
+            Object.entries(additionalMetrics).forEach(([resourceKey, data]) => {
+              const metricsData = data?.metrics;
+              if (metricsData) {
+                Object.entries(metricsData).forEach(
+                  ([metricName, labelsObj]) => {
+                    const labels = Object.keys(labelsObj || {});
+                    customMetrics.push({
+                      metricName,
+                      labels,
+                      resourceKey,
+                    });
+                  }
+                );
+              }
+            });
           }
         }
+        if (topologyDetails.hasCompute) {
+          if (topologyDetails?.nodes) {
+            topologyDetails.nodes.forEach((node) => {
+              const nodeId = node.id;
+              const endpoint = node.endpoint;
+              const ports = processClusterPorts(node.ports);
+              const availabilityZone = node.availabilityZone;
+              const status = node.status;
+              const resourceName = topologyDetails.resourceName;
+              const resourceKey = topologyDetails.resourceKey;
+              const healthStatus = node.healthStatus;
+              nodes.push({
+                id: nodeId,
+                nodeId: nodeId,
+                endpoint: endpoint,
+                ports: ports,
+                availabilityZone: availabilityZone,
+                status: status,
+                searchString: `${nodeId}${endpoint}${ports}${availabilityZone}${status}`,
+                resourceName: resourceName,
+                healthStatus: healthStatus,
+                resourceKey: resourceKey,
+                displayName: nodeId,
+              });
 
-        if (topologyDetails?.nodes) {
-          topologyDetails.nodes.forEach((node) => {
-            const nodeId = node.id;
-            const endpoint = node.endpoint;
-            const ports = processClusterPorts(node.ports);
-            const availabilityZone = node.availabilityZone;
-            const status = node.status;
-            const resourceName = topologyDetails.resourceName;
-            const resourceKey = topologyDetails.resourceKey;
-            const healthStatus = node.healthStatus;
-            nodes.push({
-              id: nodeId,
-              nodeId: nodeId,
-              endpoint: endpoint,
-              ports: ports,
-              availabilityZone: availabilityZone,
-              status: status,
-              searchString: `${nodeId}${endpoint}${ports}${availabilityZone}${status}`,
-              resourceName: resourceName,
-              healthStatus: healthStatus,
-              resourceKey: resourceKey,
+              nodeEndpointsList.push(node.endpoint);
+              availabilityZonesList.push(node.availabilityZone);
             });
-
-            nodeEndpointsList.push(node.endpoint);
-            availabilityZonesList.push(node.availabilityZone);
-          });
+          } else {
+            // assume that the resource is serverless
+            if (!resourceId.includes("r-obsrv") && data.status === "RUNNING") {
+              nodes.push({
+                id: `${topologyDetails.resourceKey}-0`,
+                displayName: `serverless-${topologyDetails.resourceKey}`,
+                isServerless: true,
+                resourceKey: topologyDetails.resourceKey,
+                resourceId,
+              });
+            }
+          }
         }
 
         const nodeEndpoints = nodeEndpointsList.join(", ");
@@ -182,28 +195,45 @@ export default function useResourceInstance(
                   : "",
               });
             } else {
-              if (topologyDetails.nodes) {
-                topologyDetails.nodes.forEach((node) => {
-                  const nodeId = node.id;
-                  const endpoint = node.endpoint;
-                  const ports = processClusterPorts(node.ports);
-                  const availabilityZone = node.availabilityZone;
-                  const status = node.status;
-                  const resourceName = topologyDetails.resourceName;
-                  const resourceKey = topologyDetails.resourceKey;
-                  nodes.push({
-                    id: nodeId,
-                    nodeId: nodeId,
-                    endpoint: endpoint,
-                    ports: ports,
-                    availabilityZone: availabilityZone,
-                    status: status,
-                    searchString: `${nodeId}${endpoint}${ports}${availabilityZone}${status}`,
-                    resourceName: resourceName,
-                    healthStatus: node.healthStatus,
-                    resourceKey,
+              if (topologyDetails.hasCompute) {
+                if (topologyDetails.nodes) {
+                  topologyDetails.nodes.forEach((node) => {
+                    const nodeId = node.id;
+                    const endpoint = node.endpoint;
+                    const ports = processClusterPorts(node.ports);
+                    const availabilityZone = node.availabilityZone;
+                    const status = node.status;
+                    const resourceName = topologyDetails.resourceName;
+                    const resourceKey = topologyDetails.resourceKey;
+                    nodes.push({
+                      id: nodeId,
+                      nodeId: nodeId,
+                      endpoint: endpoint,
+                      ports: ports,
+                      availabilityZone: availabilityZone,
+                      status: status,
+                      searchString: `${nodeId}${endpoint}${ports}${availabilityZone}${status}`,
+                      resourceName: resourceName,
+                      healthStatus: node.healthStatus,
+                      resourceKey,
+                      displayName: nodeId,
+                    });
                   });
-                });
+                } else {
+                  // assume that the resource is serverless
+                  if (
+                    !resourceId.includes("r-obsrv") &&
+                    data.status === "RUNNING"
+                  ) {
+                    nodes.push({
+                      id: `${topologyDetails.resourceKey}-0`,
+                      displayName: `serverless-${topologyDetails.resourceKey}`,
+                      isServerless: true,
+                      resourceKey: topologyDetails.resourceKey,
+                      resourceId,
+                    });
+                  }
+                }
               }
               globalEndpoints.others.push({
                 resourceName: topologyDetails.resourceName,
@@ -278,9 +308,10 @@ export default function useResourceInstance(
           logsSocketURL: logsSocketURL,
           healthStatusPercent: healthStatusPercent,
           active: data?.active,
-          customMetrics: mainResourceCustomMetrics,
+          customMetrics: customMetrics,
+          mainResourceHasCompute: topologyDetails.hasCompute,
         };
-        //console.log("Final", final);
+
         return final;
       },
     }
@@ -288,4 +319,3 @@ export default function useResourceInstance(
 
   return resourceInstanceQuery;
 }
-

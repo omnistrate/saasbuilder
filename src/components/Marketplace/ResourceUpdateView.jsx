@@ -20,6 +20,7 @@ import ErrorLabel from "../ErrorLabel/ErrorLabel";
 import { describeServiceOfferingResource } from "../../api/serviceOffering";
 import Select from "../FormElements/Select/Select";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
+import { PasswordField } from "../FormElementsv2/PasswordField/PasswordField";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -265,6 +266,29 @@ function ResourceUpdateView(props) {
               ""
             )}
             {viewParams.map((param) => {
+              if (param.type === "Password") {
+                return (
+                  <FieldContainer key={param.key}>
+                    {param.required == true ? (
+                      <FieldLabel required>{param.displayName}</FieldLabel>
+                    ) : (
+                      <FieldLabel>{param.displayName}</FieldLabel>
+                    )}
+                    <FieldDescription sx={{ mt: "5px" }}>
+                      {param.description}
+                    </FieldDescription>
+                    <PasswordField
+                      sx={{ color: "#FFF" }}
+                      id={`requestParams.${param.key}`}
+                      name={`requestParams.${param.key}`}
+                      onChange={formData.handleChange}
+                      values={formData.values.requestParams[param.key]}
+                      onBlur={formData.handleBlur}
+                      required={param.required == true ? "required" : ""}
+                    />
+                  </FieldContainer>
+                );
+              }
               if (param.custom == true && param.type == "Boolean") {
                 return (
                   <FieldContainer key={param.key}>
@@ -432,6 +456,29 @@ function ResourceUpdateView(props) {
             {/* show non modifiable params in disabled mode */}
             {nonModifiableviewParams.map((param) => {
               if (param.key !== "custom_availability_zone") {
+                if (param.type === "Password") {
+                  return (
+                    <FieldContainer key={param.key}>
+                      {param.required == true ? (
+                        <FieldLabel required>{param.displayName}</FieldLabel>
+                      ) : (
+                        <FieldLabel>{param.displayName}</FieldLabel>
+                      )}
+                      <FieldDescription sx={{ mt: "5px" }}>
+                        {param.description}
+                      </FieldDescription>
+                      <PasswordField
+                        sx={{ color: "#FFF" }}
+                        id={`requestParams.${param.key}`}
+                        name={`requestParams.${param.key}`}
+                        onChange={formData.handleChange}
+                        values={formData.values.requestParams[param.key]}
+                        onBlur={formData.handleBlur}
+                        required={param.required == true ? "required" : ""}
+                      />
+                    </FieldContainer>
+                  );
+                }
                 if (param.custom == true && param.type == "Boolean") {
                   return (
                     <FieldContainer key={param.key}>
@@ -455,6 +502,12 @@ function ResourceUpdateView(props) {
                         required={param.required == true ? "required" : ""}
                         disabled
                       >
+                        <FormControlLabel
+                          value={true}
+                          control={<Radio />}
+                          label="True"
+                          disabled
+                        />
                         <FormControlLabel
                           value={true}
                           control={<Radio />}

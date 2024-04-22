@@ -21,6 +21,7 @@ function Logs(props) {
     instanceStatus,
     resourceKey,
     resourceInstanceId,
+    mainResourceHasCompute,
   } = props;
   const [logs, setLogs] = useState([]);
   let selectedId = "";
@@ -33,7 +34,7 @@ function Logs(props) {
   let logsSocketEndpoint = null;
   if (socketBaseURL && selectedNodeId) {
     logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
-  } else if (socketBaseURL && resourceKey) {
+  } else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
     logsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
   }
 
