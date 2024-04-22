@@ -57,6 +57,7 @@ function Metrics(props) {
     resourceKey,
     resourceInstanceId,
     customMetrics = [],
+    mainResourceHasCompute,
   } = props;
   let firstNode = null;
   if (nodes.length > 0) {
@@ -68,7 +69,7 @@ function Metrics(props) {
   let metricsSocketEndpoint = null;
   if (socketBaseURL && selectedNode) {
     metricsSocketEndpoint = `${socketBaseURL}&podName=${selectedNode.id}&instanceId=${resourceInstanceId}`;
-  } else if (socketBaseURL && resourceKey) {
+  } else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
     metricsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
   }
 
