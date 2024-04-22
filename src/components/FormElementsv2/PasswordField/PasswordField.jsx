@@ -34,7 +34,7 @@ const StyledTextField = styled(InputBase)(({ theme }) => ({
 }));
 
 export const PasswordField = (props) => {
-  const { disabled = false, ...restProps } = props;
+  const { disabled = false, values, ...restProps } = props;
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -46,6 +46,7 @@ export const PasswordField = (props) => {
       disabled={disabled}
       fullWidth
       {...restProps}
+      value={values}
       type={isPasswordVisible ? "text" : "password"}
       endAdornment={
         <InputAdornment position="end">
