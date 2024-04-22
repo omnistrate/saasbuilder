@@ -198,7 +198,7 @@ function ResourceUpdateView(props) {
               )}
               {formData.values.requestParams.custom_availability_zone && (
                 <FieldContainer>
-                  <FieldLabel>Custom Availability Zone</FieldLabel>
+                  <FieldLabel required>Custom Availability Zone</FieldLabel>
                   <Select
                     sx={{ marginTop: "16px" }}
                     id="requestParams.custom_availability_zone"
