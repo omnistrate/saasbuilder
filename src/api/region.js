@@ -13,9 +13,3 @@ export function getRegionIdsByCloudProviderWithParams(
 export function getRegionById(regionId) {
   return axios.get(`/region/${regionId}`);
 }
-
-export function getCloudProviderCustomRegion(cloudProviderName, regionCode) {
-  return axios.get(
-    `/availability-zone/region/code/${regionCode}/cloud-provider/${cloudProviderName}`
-  );
-}

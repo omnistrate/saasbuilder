@@ -24,10 +24,9 @@ import { useSelector } from "react-redux";
 import { describeServiceOfferingResource } from "../../api/serviceOffering";
 import { selectCloudProviders } from "../../slices/providerSlice";
 import Select from "../FormElements/Select/Select";
-import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import useResourcesInstanceIds from "../../hooks/useResourcesInstanceIds";
 import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
-import useCloudProvidersCustomRegions from "src/hooks/query/useCloudProvidersCustomRegions";
+import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -137,7 +136,7 @@ function CreateResourceInstanceForm(props) {
     (field) => field.key === "custom_availability_zone"
   );
 
-  const customAvailabilityZoneQuery = useCloudProvidersCustomRegions(
+  const customAvailabilityZoneQuery = useAvailabilityZone(
     formData.values.region,
     formData.values.cloud_provider
   );

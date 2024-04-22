@@ -19,7 +19,7 @@ import { H6, P } from "../Typography/Typography";
 import ErrorLabel from "../ErrorLabel/ErrorLabel";
 import { describeServiceOfferingResource } from "../../api/serviceOffering";
 import Select from "../FormElements/Select/Select";
-import useCloudProvidersCustomRegions from "src/hooks/query/useCloudProvidersCustomRegions";
+import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -84,7 +84,7 @@ function ResourceUpdateView(props) {
     getSchema();
   }, []);
 
-  const customAvailabilityZoneQuery = useCloudProvidersCustomRegions(
+  const customAvailabilityZoneQuery = useAvailabilityZone(
     formData.values.region,
     formData.values.cloud_provider
   );
