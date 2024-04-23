@@ -1,20 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAvailabilityZone } from "src/api/availabilityZone";
 
-
 export default function useAvailabilityZone(
-  regionCode = "ca-central-1",
-  cloudProviderName = "aws",
+  regionCode,
+  cloudProviderName,
   queryOptions = {}
 ) {
   const isQueryEnabled = Boolean(regionCode && cloudProviderName);
   const query = useQuery(
     ["cloud-providers-custom-regions", regionCode, cloudProviderName],
     async () => {
-      const response = await getAvailabilityZone(
-        cloudProviderName,
-        regionCode
-      );
+      const response = await getAvailabilityZone(cloudProviderName, regionCode);
 
       return response;
     },
