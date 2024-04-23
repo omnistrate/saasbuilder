@@ -25,7 +25,6 @@ import {
   updateResourceInstance,
 } from "../../../src/api/resourceInstance";
 import Button from "../../../src/components/Button/Button";
-import CalendarIcon from "../../../src/components/CalendarIcon/CalendarIcon";
 import Card from "../../../src/components/Card/Card";
 import LoadingSpinnerSmall from "../../../src/components/CircularProgress/CircularProgress";
 import DashboardLayout from "../../../src/components/DashboardLayout/DashboardLayout";
@@ -97,6 +96,7 @@ import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
 import DeleteAccountConfigConfirmationDialog from "src/components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
+import { cloneDeep } from "lodash";
 
 const instanceStatuses = {
   FAILED: "FAILED",
@@ -632,7 +632,7 @@ function MarketplaceService() {
       for (let key in values) {
         if (values[key]) {
           if (values[key] === "requestParams") {
-            data["requestParams"] = { ...values["requestParams"] };
+            data["requestParams"] = cloneDeep(values["requestParams"]);
           } else {
             data[key] = values[key];
           }
@@ -754,10 +754,12 @@ function MarketplaceService() {
         if (aws_account_id) {
           payload.requestParams.aws_bootstrap_role_arn =
             getAwsBootstrapArn(aws_account_id);
+          setCloudProvider("aws");
+        } else {
+          setCloudProvider("gcp");
         }
         if (payload.configMethod === ACCOUNT_CREATION_METHODS.CLOUDFORMATION) {
-          setIsCloudFormation(true);
-          setCloudProvider("aws");
+          setAccountConfigMethod("CloudFormation");
         }
       }
       return createResourceInstance(payload);
