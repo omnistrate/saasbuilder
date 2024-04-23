@@ -191,7 +191,10 @@ function CreateResourceInstanceForm(props) {
               id="cloud_provider"
               name="cloud_provider"
               value={formData.values.cloud_provider}
-              onChange={formData.handleChange}
+              onChange={(e) => {
+                formData.setFieldValue("region", "");
+                formData.handleChange(e);
+              }}
               sx={{ marginTop: "16px" }}
             >
               {cloudProviders.map((option) => (
