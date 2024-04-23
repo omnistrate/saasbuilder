@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import loadingStatuses from "../utils/constants/loadingStatuses";
 
 const initialState = {
@@ -86,14 +86,13 @@ export default eventsSlice.reducer;
 export const selectEventsLoadingStatus = (state) =>
   state.events.eventsLoadingStatus;
 
-export const selectEvents = (state) => {
-  const sortedEvents = [...Object.values(state.events.events)].sort(
-    (event1, event2) => {
+export const selectEvents = createSelector(
+  (state) => state.events.events,
+  (events) => {
+    return Object.values(events).sort((event1, event2) => {
       const time1 = new Date(event1.time);
       const time2 = new Date(event2.time);
       return time2 - time1;
-    }
-  );
-
-  return sortedEvents;
-};
+    });
+  }
+);

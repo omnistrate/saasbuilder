@@ -48,7 +48,7 @@ const SidebarListItem = ({
     </Box>
   );
 
-  return href ? (
+  return href && !isDisabled ? (
     <Link target={newTab ? "_blank" : "_self"} href={href}>
       <InnerContent />
     </Link>
