@@ -240,15 +240,19 @@ function CreateResourceInstanceForm(props) {
         {regionFieldExists && (
           <FieldContainer>
             <FieldLabel required>Region</FieldLabel>
-            <Select
+            <TextField
+              select
               sx={{ marginTop: "16px" }}
               id="region"
               name="region"
-              displayEmpty
-              /*multiple*/
               value={formData.values.region}
-              onChange={formData.handleChange}
-              input={<OutlinedInput />}
+              onChange={(e) => {
+                formData.setFieldValue(
+                  "requestParams.custom_availability_zone",
+                  ""
+                );
+                formData.handleChange(e);
+              }}
             >
               <MenuItem disabled value="">
                 <em>None</em>
@@ -266,22 +270,20 @@ function CreateResourceInstanceForm(props) {
                     {region.cloudProviderName} - {region.code}
                   </MenuItem>
                 ))}
-            </Select>
+            </TextField>
             <ErrorLabel></ErrorLabel>
           </FieldContainer>
         )}
         {customAvailabilityZoneFieldExists && (
           <FieldContainer>
             <FieldLabel required>Custom Availability Zone</FieldLabel>
-            <Select
+            <TextField
+              select
               sx={{ marginTop: "16px" }}
               id="requestParams.custom_availability_zone"
               name="requestParams.custom_availability_zone"
-              displayEmpty
-              /*multiple*/
               value={formData?.values.requestParams?.custom_availability_zone}
               onChange={formData.handleChange}
-              input={<OutlinedInput />}
             >
               <MenuItem disabled value="">
                 <em>None</em>
@@ -291,7 +293,7 @@ function CreateResourceInstanceForm(props) {
                   {region.cloudProviderName} - {region.code}
                 </MenuItem>
               ))}
-            </Select>
+            </TextField>
           </FieldContainer>
         )}
         <Box mt={isBYOA ? 2 : 4}>
