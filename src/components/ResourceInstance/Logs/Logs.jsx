@@ -19,9 +19,9 @@ function Logs(props) {
     nodes = [],
     socketBaseURL,
     instanceStatus,
-    resourceKey,
+    //resourceKey,
     resourceInstanceId,
-    mainResourceHasCompute,
+    //mainResourceHasCompute,
   } = props;
   const [logs, setLogs] = useState([]);
   let selectedId = "";
@@ -34,9 +34,10 @@ function Logs(props) {
   let logsSocketEndpoint = null;
   if (socketBaseURL && selectedNodeId) {
     logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
-  } else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
-    logsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
-  }
+  } 
+  // else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
+  //   logsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
+  // }
 
   const [isLogsSocketConnected, setIsLogsSocketConnected] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -118,7 +119,7 @@ function Logs(props) {
         //console.log("Closing socket");
       }
     };
-  }, []);
+  }, [logsSocketEndpoint]);
 
   if (!logsSocketEndpoint) {
     return (
