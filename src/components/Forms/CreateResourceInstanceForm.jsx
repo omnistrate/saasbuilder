@@ -192,7 +192,9 @@ function CreateResourceInstanceForm(props) {
               name="cloud_provider"
               value={formData.values.cloud_provider}
               onChange={(e) => {
-                formData.setFieldValue("region", "");
+                if (regionFieldExists) {
+                  formData.setFieldValue("region", "");
+                }
                 formData.handleChange(e);
               }}
               sx={{ marginTop: "16px" }}
@@ -247,10 +249,12 @@ function CreateResourceInstanceForm(props) {
               name="region"
               value={formData.values.region}
               onChange={(e) => {
-                formData.setFieldValue(
-                  "requestParams.custom_availability_zone",
-                  ""
-                );
+                if (customAvailabilityZoneFieldExists) {
+                  formData.setFieldValue(
+                    "requestParams.custom_availability_zone",
+                    ""
+                  );
+                }
                 formData.handleChange(e);
               }}
             >
