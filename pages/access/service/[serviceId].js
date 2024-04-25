@@ -728,6 +728,14 @@ function MarketplaceService() {
                 }
               }
             }
+            if (
+              param.key === "custom_availability_zone" &&
+              data.requestParams[param.key] === ""
+            ) {
+              isError = true;
+              requiredFieldName = param.displayName;
+              break;
+            }
           }
           if (isError) {
             snackbar.showError(`${requiredFieldName} is required`);
