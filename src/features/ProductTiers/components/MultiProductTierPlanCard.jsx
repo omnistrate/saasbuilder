@@ -80,6 +80,7 @@ function MultiProductTierPlanCard(props) {
         width: "100%",
         maxWidth: "400px",
         minWidth: "300px",
+        minHeight: "250px",
         mb: "20px",
       }}
       onClick={handleSelectProductTier}
