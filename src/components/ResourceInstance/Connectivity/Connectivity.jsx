@@ -101,122 +101,119 @@ function Connectivity(props) {
               <CellDescription>{networkType}</CellDescription>
             </TableCell>
           </TableRow>
-          {primaryResourceName &&
-            primaryResourceEndpoint &&
-            otherEndpoints?.length > 0 && (
-              <TableRow>
-                <TableCell sx={{ verticalAlign: "baseline" }}>
-                  <CellTitle>Global endpoint</CellTitle>
-                  <CellSubtext>
-                    The global endpoint of the {sectionLabel.toLowerCase()}
-                  </CellSubtext>
-                </TableCell>
-                <TableCell align="right" sx={{ paddingRight: 0 }}>
-                  {primaryResourceName && primaryResourceEndpoint && (
+          {((primaryResourceName && primaryResourceEndpoint) ||
+            otherEndpoints?.length > 0) && (
+            <TableRow>
+              <TableCell sx={{ verticalAlign: "baseline" }}>
+                <CellTitle>Global endpoint</CellTitle>
+                <CellSubtext>
+                  The global endpoint of the {sectionLabel.toLowerCase()}
+                </CellSubtext>
+              </TableCell>
+              <TableCell align="right" sx={{ paddingRight: 0 }}>
+                {primaryResourceName && primaryResourceEndpoint && (
+                  <ResourceGlobalEndpoint
+                    primary
+                    resourceName={primaryResourceName}
+                    text={primaryResourceEndpoint}
+                    type="endpoint"
+                  />
+                )}
+                {otherEndpoints?.length > 0 && (
+                  <>
+                    {primaryResourceName && primaryResourceEndpoint && (
+                      <Stack direction="row" justifyContent="center">
+                        <Button
+                          sx={{ color: "#6941C6", marginTop: "16px" }}
+                          endIcon={
+                            isEndpointsExpanded ? (
+                              <RemoveCircleOutlineIcon />
+                            ) : (
+                              <AddCircleOutlineIcon />
+                            )
+                          }
+                          onClick={toggleExpanded}
+                        >
+                          {isEndpointsExpanded ? "View Less" : "View More"}
+                        </Button>
+                      </Stack>
+                    )}
+                    {(isEndpointsExpanded ||
+                      (!primaryResourceName && !primaryResourceEndpoint)) &&
+                      otherEndpoints.map((obj) => {
+                        const { resourceName, endpoint } = obj;
+                        return (
+                          <ResourceGlobalEndpoint
+                            resourceName={resourceName}
+                            text={endpoint}
+                            type="endpoint"
+                            key={obj.resourceName}
+                            sx={{ marginTop: "16px" }}
+                          />
+                        );
+                      })}
+                  </>
+                )}
+              </TableCell>
+            </TableRow>
+          )}
+          {((primaryResourcePorts?.resourceName &&
+            primaryResourcePorts?.ports) ||
+            otherResourcePorts?.length > 0) && (
+            <TableRow>
+              <TableCell>
+                <CellTitle>Port(s)</CellTitle>
+              </TableCell>
+              <TableCell align="right" sx={{ paddingRight: 0 }}>
+                {primaryResourcePorts?.resourceName &&
+                  primaryResourcePorts?.ports && (
                     <ResourceGlobalEndpoint
                       primary
-                      resourceName={primaryResourceName}
-                      text={primaryResourceEndpoint}
-                      type="endpoint"
+                      resourceName={primaryResourcePorts?.resourceName}
+                      text={primaryResourcePorts?.ports}
+                      type="ports"
                     />
                   )}
-                  {otherEndpoints?.length > 0 && (
-                    <>
-                      {primaryResourceName && primaryResourceEndpoint && (
+                {otherResourcePorts.length > 0 && (
+                  <>
+                    {primaryResourcePorts?.resourceName &&
+                      primaryResourcePorts?.ports && (
                         <Stack direction="row" justifyContent="center">
                           <Button
                             sx={{ color: "#6941C6", marginTop: "16px" }}
                             endIcon={
-                              isEndpointsExpanded ? (
+                              isPortsExpanded ? (
                                 <RemoveCircleOutlineIcon />
                               ) : (
                                 <AddCircleOutlineIcon />
                               )
                             }
-                            onClick={toggleExpanded}
+                            onClick={() => setIsPortsExpanded(!isPortsExpanded)}
                           >
-                            {isEndpointsExpanded ? "View Less" : "View More"}
+                            {isPortsExpanded ? "View Less" : "View More"}
                           </Button>
                         </Stack>
                       )}
-                      {(isEndpointsExpanded ||
-                        (!primaryResourceName && !primaryResourceEndpoint)) &&
-                        otherEndpoints.map((obj) => {
-                          const { resourceName, endpoint } = obj;
-                          return (
-                            <ResourceGlobalEndpoint
-                              resourceName={resourceName}
-                              text={endpoint}
-                              type="endpoint"
-                              key={obj.resourceName}
-                              sx={{ marginTop: "16px" }}
-                            />
-                          );
-                        })}
-                    </>
-                  )}
-                </TableCell>
-              </TableRow>
-            )}
-          {primaryResourcePorts?.resourceName &&
-            primaryResourcePorts?.ports &&
-            otherResourcePorts?.length > 0 && (
-              <TableRow>
-                <TableCell>
-                  <CellTitle>Port(s)</CellTitle>
-                </TableCell>
-                <TableCell align="right" sx={{ paddingRight: 0 }}>
-                  {primaryResourcePorts?.resourceName &&
-                    primaryResourcePorts?.ports && (
-                      <ResourceGlobalEndpoint
-                        primary
-                        resourceName={primaryResourcePorts?.resourceName}
-                        text={primaryResourcePorts?.ports}
-                        type="ports"
-                      />
-                    )}
-                  {otherResourcePorts.length > 0 && (
-                    <>
-                      {primaryResourcePorts?.resourceName &&
-                        primaryResourcePorts?.ports && (
-                          <Stack direction="row" justifyContent="center">
-                            <Button
-                              sx={{ color: "#6941C6", marginTop: "16px" }}
-                              endIcon={
-                                isPortsExpanded ? (
-                                  <RemoveCircleOutlineIcon />
-                                ) : (
-                                  <AddCircleOutlineIcon />
-                                )
-                              }
-                              onClick={() =>
-                                setIsPortsExpanded(!isPortsExpanded)
-                              }
-                            >
-                              {isPortsExpanded ? "View Less" : "View More"}
-                            </Button>
-                          </Stack>
-                        )}
-                      {(isPortsExpanded ||
-                        (!primaryResourcePorts?.resourceName &&
-                          !primaryResourcePorts?.ports)) &&
-                        otherResourcePorts.map((obj) => {
-                          const { resourceName, ports } = obj;
-                          return (
-                            <ResourceGlobalEndpoint
-                              resourceName={resourceName}
-                              text={ports}
-                              type="ports"
-                              key={obj.resourceName}
-                              sx={{ marginTop: "16px" }}
-                            />
-                          );
-                        })}
-                    </>
-                  )}
-                </TableCell>
-              </TableRow>
-            )}
+                    {(isPortsExpanded ||
+                      (!primaryResourcePorts?.resourceName &&
+                        !primaryResourcePorts?.ports)) &&
+                      otherResourcePorts.map((obj) => {
+                        const { resourceName, ports } = obj;
+                        return (
+                          <ResourceGlobalEndpoint
+                            resourceName={resourceName}
+                            text={ports}
+                            type="ports"
+                            key={obj.resourceName}
+                            sx={{ marginTop: "16px" }}
+                          />
+                        );
+                      })}
+                  </>
+                )}
+              </TableCell>
+            </TableRow>
+          )}
           {/* proxt endpoint */}
           {/* {proxyEndpointDetails && proxyEndpointDetails.proxyEndpoint && (
             <TableRow>
