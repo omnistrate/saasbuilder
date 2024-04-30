@@ -33,6 +33,7 @@ const CarouselMultiProductTierPlan = (props) => {
             marginRight: "auto",
             marginLeft: "auto",
             justifyContent: "center",
+            minHeight: "250px",
           }}
         >
           {data.slice(i, i + sliderItems).map((offering, index) => {

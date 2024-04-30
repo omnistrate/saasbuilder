@@ -72,7 +72,6 @@ function ProductTiers(props) {
     },
     {
       onSuccess: async (res) => {
-        console.log("res", res);
         await refetchSubscriptions();
         await refetchSubscriptionRequests();
         snackbar.showSuccess(
