@@ -197,7 +197,7 @@ function ResourceUpdateView(props) {
                   <ErrorLabel></ErrorLabel>
                 </FieldContainer>
               )}
-              {formData.values.requestParams.custom_availability_zone && (
+              {formData.values.requestParams?.custom_availability_zone && (
                 <FieldContainer>
                   <FieldLabel required>Custom Availability Zone</FieldLabel>
                   <Select
