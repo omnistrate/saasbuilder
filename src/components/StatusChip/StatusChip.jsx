@@ -172,13 +172,17 @@ export const statusStyles = {
     backgroundColor: "#FEF3F2",
     color: "#B42318",
   },
+  UNKNOWN: {
+    backgroundColor: "#F2F4F7",
+    color: "#808080",
+  },
   Voided: {
     backgroundColor: "#FEF3F2",
     color: "#C83532",
   },
 };
 
-function getChipStyles(resourceInstanceStatus) {
+export function getChipStyles(resourceInstanceStatus) {
   let chipStyles = statusStyles[resourceInstanceStatus];
   if (!chipStyles) chipStyles = statusStyles["PENDING"];
 

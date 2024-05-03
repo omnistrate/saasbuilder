@@ -27,6 +27,7 @@ import {
 import { useSelector } from "react-redux";
 import { selectUserrootData } from "../../../slices/userDataSlice";
 import Card from "src/components/Card/Card";
+import { NodeStatus } from "./NodeStatus";
 
 export default function NodesTable(props) {
   const {
@@ -175,12 +176,21 @@ export default function NodesTable(props) {
           const status = params.row.healthStatus
             ? params.row.healthStatus
             : "UNKNOWN";
-
           return (
-            <StatusChip
-              status={status}
-              {...(status === "HEALTHY" ? { pulsateDot: true } : { dot: true })}
-            />
+            <>
+              {params.row?.detailedHealth ? (
+                <>
+                  <NodeStatus detailedHealth={params.row?.detailedHealth} />
+                </>
+              ) : (
+                <StatusChip
+                  status={status}
+                  {...(status === "HEALTHY"
+                    ? { pulsateDot: true }
+                    : { dot: true })}
+                />
+              )}
+            </>
           );
         },
         minWidth: 180,

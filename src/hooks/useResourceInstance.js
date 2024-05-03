@@ -126,6 +126,7 @@ export default function useResourceInstance(
               const resourceName = topologyDetails.resourceName;
               const resourceKey = topologyDetails.resourceKey;
               const healthStatus = node.healthStatus;
+              const detailedHealth = node.detailedHealth;
               nodes.push({
                 id: nodeId,
                 nodeId: nodeId,
@@ -138,6 +139,7 @@ export default function useResourceInstance(
                 healthStatus: healthStatus,
                 resourceKey: resourceKey,
                 displayName: nodeId,
+                detailedHealth: detailedHealth,
               });
 
               nodeEndpointsList.push(node.endpoint);
@@ -205,6 +207,7 @@ export default function useResourceInstance(
                     const status = node.status;
                     const resourceName = topologyDetails.resourceName;
                     const resourceKey = topologyDetails.resourceKey;
+                    const detailedHealth = node.detailedHealth;
                     nodes.push({
                       id: nodeId,
                       nodeId: nodeId,
@@ -217,6 +220,7 @@ export default function useResourceInstance(
                       healthStatus: node.healthStatus,
                       resourceKey,
                       displayName: nodeId,
+                      detailedHealth: detailedHealth,
                     });
                   });
                 } else {
