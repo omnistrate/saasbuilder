@@ -20,6 +20,7 @@ import useSnackbar from "../../../hooks/useSnackbar";
 import formatDateUTC from "../../../utils/formatDateUTC";
 import MultiLineChart from "./MultiLineChart";
 import SingleLineChart from "./SingleLineChart";
+import NonOmnistrateMetricsContainer from "./NonOmnistrateMetricsContainer";
 
 const initialCpuUsage = {
   current: "",
@@ -58,6 +59,7 @@ function Metrics(props) {
     resourceInstanceId,
     customMetrics = [],
     mainResourceHasCompute,
+    productTierFeatures,
   } = props;
   let firstNode = null;
   if (nodes.length > 0) {
@@ -69,7 +71,7 @@ function Metrics(props) {
   let metricsSocketEndpoint = null;
   if (socketBaseURL && selectedNode) {
     metricsSocketEndpoint = `${socketBaseURL}&podName=${selectedNode.id}&instanceId=${resourceInstanceId}`;
-  } 
+  }
   // else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
   //   metricsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
   // }
@@ -192,23 +194,6 @@ function Metrics(props) {
   useEffect(() => {
     initialiseCustomMetricsData();
   }, [initialiseCustomMetricsData]);
-
-  if (!metricsSocketEndpoint || errorMessage) {
-    return (
-      <ContainerCard>
-        <Stack direction="row" justifyContent="center" marginTop="200px">
-          <Text size="xlarge">
-            {errorMessage ||
-              `Metrics are not available ${
-                instanceStatus !== "RUNNING"
-                  ? "as the instance is not running"
-                  : ""
-              }`}
-          </Text>
-        </Stack>
-      </ContainerCard>
-    );
-  }
 
   //console.log("connectionStatus", connectionStatus);
   function initialiseMetricsData() {
@@ -720,6 +705,39 @@ function Metrics(props) {
   //   return <ConnectionFailureUI />;
   // }
 
+  if (!metricsSocketEndpoint || errorMessage) {
+    return (
+      <ContainerCard>
+        <Stack
+          sx={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <DisplayText size="xsmall" sx={{ marginTop: "12px" }}>
+            Metrics
+          </DisplayText>
+        </Stack>
+        <Divider sx={{ marginTop: "12px" }} />
+
+        <NonOmnistrateMetricsContainer
+          productTierFeatures={productTierFeatures}
+        />
+
+        <Stack direction="row" justifyContent="center" marginTop="200px">
+          <Text size="xlarge">
+            {errorMessage ||
+              `Metrics are not available ${
+                instanceStatus !== "RUNNING"
+                  ? "as the instance is not running"
+                  : ""
+              }`}
+          </Text>
+        </Stack>
+      </ContainerCard>
+    );
+  }
+
   if (!isMetricsDataLoaded) {
     return <LoadingSpinner />;
   }
@@ -759,6 +777,10 @@ function Metrics(props) {
         )}
       </Stack>
       <Divider sx={{ marginTop: "12px" }} />
+
+      <NonOmnistrateMetricsContainer
+        productTierFeatures={productTierFeatures}
+      />
 
       <Grid container spacing={3} mt={0}>
         <Grid item xs={2}>

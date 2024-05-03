@@ -310,6 +310,7 @@ export default function useResourceInstance(
           active: data?.active,
           customMetrics: customMetrics,
           mainResourceHasCompute: topologyDetails.hasCompute,
+          productTierFeatures,
         };
 
         return final;

@@ -1,4 +1,4 @@
-import { Box, styled } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   CellDescription,
   CellSubtext,
@@ -10,11 +10,16 @@ import {
   TableRow,
 } from "../../InfoTable/InfoTable";
 import formatDateUTC from "../../../utils/formatDateUTC";
-import React from "react";
-import Link from "next/link";
+import React, { useMemo } from "react";
 import capitalize from "lodash/capitalize";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import { PasswordWithOutBorderField } from "src/components/FormElementsv2/PasswordField/PasswordWithOutBorderField";
+import {
+  checkCustomerOmnistrateLogsExist,
+  checkCustomerOmnistrateMetricsExist,
+  getCustomerNonOmnistrateLogs,
+  getCustomerNonOmnistrateMetrics,
+} from "src/utils/constants/productTierFeatures";
 
 function ResourceInstanceDetails(props) {
   const {
@@ -24,10 +29,8 @@ function ResourceInstanceDetails(props) {
     resultParametersSchema = [],
     createdAt,
     modifiedAt,
-    // proxyEndpointDetails,
-    // serviceId,
-    // environmentId,
-    // searchInventoryView,
+
+    productTierFeatures,
   } = props;
   //   console.log("Result parameters", resultParameters);
   //   console.log("Result parameters schema", resultParametersSchema);
@@ -50,6 +53,36 @@ function ResourceInstanceDetails(props) {
         "private_network_id",
       ].includes(param.key);
     });
+
+  const nonOmnistrateCustomerLogs = useMemo(() => {
+    if (productTierFeatures) {
+      const result = [];
+      const omnistrateLogsExist =
+        checkCustomerOmnistrateLogsExist(productTierFeatures);
+
+      //only when omnistrate logs doesn't exist show other providers in this tab
+      if (!omnistrateLogsExist) {
+        result.push(...getCustomerNonOmnistrateLogs(productTierFeatures));
+      }
+
+      return result;
+    }
+  }, [productTierFeatures]);
+
+  const nonOmnistrateCustomerMetrics = useMemo(() => {
+    if (productTierFeatures) {
+      const result = [];
+      const omnistrateMetricsExist =
+        checkCustomerOmnistrateMetricsExist(productTierFeatures);
+
+      //only when omnistrate metrics doesn't exist show other providers in this tab
+      if (!omnistrateMetricsExist) {
+        result.push(...getCustomerNonOmnistrateMetrics(productTierFeatures));
+      }
+
+      return result;
+    }
+  }, [productTierFeatures]);
 
   if (isLoading) {
     return (
@@ -109,39 +142,51 @@ function ResourceInstanceDetails(props) {
             </TableCell>
           </TableRow>
 
-          {/* proxy endpoint */}
-          {/* {proxyEndpointDetails && proxyEndpointDetails.proxyEndpoint && (
+          {nonOmnistrateCustomerMetrics.length > 0 && (
             <TableRow>
               <TableCell sx={{ verticalAlign: "baseline" }}>
-                <CellTitle>Proxy Endpoint</CellTitle>
-                <CellSubtext></CellSubtext>
+                <CellTitle>Metrics</CellTitle>
               </TableCell>
-              <TableCell align="right" sx={{ paddingRight: 0 }}>
-                <ResourceProxyEndpoint
-                  primary
-                  endpoint={proxyEndpointDetails.proxyEndpoint}
-                  serviceId={serviceId}
-                  environmentId={environmentId}
-                  searchInventoryView={searchInventoryView}
-                />
+              <TableCell
+                align="right"
+                sx={{ width: "50%", verticalAlign: "baseline" }}
+              >
+                <Stack direction={"row"} justifyContent={"flex-end"}>
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-end"
+                    alignItems={"center"}
+                    gap={"8px"}
+                  >
+                    <CellDescription>{"www.endpoint.com"}</CellDescription>
+                  </Stack>
+                </Stack>
               </TableCell>
             </TableRow>
-          )} */}
+          )}
 
-          {/* proxy ports */}
-
-          {/* {proxyEndpointDetails && proxyEndpointDetails.openPorts && (
+          {nonOmnistrateCustomerLogs.length > 0 && (
             <TableRow>
-              <TableCell>
-                <CellTitle>Proxy Port(s)</CellTitle>
+              <TableCell sx={{ verticalAlign: "baseline" }}>
+                <CellTitle>Logs</CellTitle>
               </TableCell>
-              <TableCell align="right">
-                <CellDescription>
-                  {proxyEndpointDetails.openPorts}
-                </CellDescription>
+              <TableCell
+                align="right"
+                sx={{ width: "50%", verticalAlign: "baseline" }}
+              >
+                <Stack direction={"row"} justifyContent={"flex-end"}>
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-end"
+                    alignItems={"center"}
+                    gap={"8px"}
+                  >
+                    <CellDescription>{"www.endpoint.com"}</CellDescription>
+                  </Stack>
+                </Stack>
               </TableCell>
             </TableRow>
-          )} */}
+          )}
 
           {resultParametersWithDescription.map((parameter, index) => {
             if (parameter.type === "Password") {
@@ -196,86 +241,3 @@ function ResourceInstanceDetails(props) {
 }
 
 export default ResourceInstanceDetails;
-
-// const ResourceProxyEndpoint = (props) => {
-//   const {
-//     endpoint,
-//     primary,
-//     sx = {},
-//     serviceId,
-//     environmentId,
-//     searchInventoryView,
-//   } = props;
-
-//   //regex for instance id extraction from proxy endpoint
-//   const regex = /instance-([^\.]+)/;
-//   const match = endpoint.match(regex);
-//   let instanceId;
-
-//   if (match) {
-//     instanceId = match[0];
-//     console.log("instanceId", instanceId, match);
-//   }
-
-//   let resourceInstanceUrlLink;
-
-//   if (instanceId) {
-//     resourceInstanceUrlLink = getInventoryManagementInventoryRoute(
-//       serviceId,
-//       environmentId,
-//       instanceId,
-//       searchInventoryView
-//     );
-//   }
-
-//   return (
-//     <Stack
-//       direction="row"
-//       sx={{
-//         border: primary ? "2px solid #7F56D9" : "1px solid #EAECF0",
-//         background: primary ? "#F9F5FF" : "white",
-//         padding: "16px",
-//         borderRadius: "12px",
-//         ...sx,
-//       }}
-//     >
-//       <Image src={resourceEndpointIcon} alt="resource-endpoint" />
-//       <Box
-//         sx={{
-//           flexGrow: 1,
-//           marginLeft: "16px",
-//           textAlign: "left",
-//           alignSelf: "center",
-//         }}
-//       >
-//         <LinkResourceInstance
-//           href={resourceInstanceUrlLink ?? ""}
-//           target="_blank"
-//         >
-//           <Text
-//             size="small"
-//             weight="regular"
-//             color={primary ? "#6941C6" : ""}
-//             sx={{ wordBreak: "break-all" }}
-//           >
-//             {endpoint}
-//           </Text>
-//           <ArrowOutwardIcon />
-//         </LinkResourceInstance>
-//       </Box>
-//       {endpoint && (
-//         <Box alignSelf="start">
-//           <CopyToClipbpoardButton text={endpoint} />
-//         </Box>
-//       )}
-//     </Stack>
-//   );
-// };
-
-const LinkResourceInstance = styled(Link)(({ theme }) => ({
-  display: "flex",
-  color: "#6941C6",
-  fontWeight: 500,
-  gap: 2,
-  alignItems: "center",
-}));

@@ -11,6 +11,7 @@ import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import styled from "@emotion/styled";
 import useSnackbar from "../../../hooks/useSnackbar";
 import InfiniteScroll from "react-infinite-scroller";
+import NonOmnistrateLogsContainer from "./NonOmnistrateLogsContainer";
 
 const logsPerPage = 50;
 
@@ -22,6 +23,7 @@ function Logs(props) {
     //resourceKey,
     resourceInstanceId,
     //mainResourceHasCompute,
+    productTierFeatures,
   } = props;
   const [logs, setLogs] = useState([]);
   let selectedId = "";
@@ -34,7 +36,7 @@ function Logs(props) {
   let logsSocketEndpoint = null;
   if (socketBaseURL && selectedNodeId) {
     logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
-  } 
+  }
   // else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
   //   logsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
   // }
@@ -132,6 +134,19 @@ function Logs(props) {
           minHeight: "500px",
         }}
       >
+        <Stack
+          sx={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <DisplayText size="xsmall" sx={{ marginTop: "12px" }}>
+            Logs
+          </DisplayText>
+        </Stack>
+        <Divider sx={{ marginTop: "12px" }} />
+
+        <NonOmnistrateLogsContainer productTierFeatures={productTierFeatures} />
         <Stack direction="row" justifyContent="center" marginTop="200px">
           <Text size="xlarge">
             Logs are not available{" "}
@@ -181,6 +196,9 @@ function Logs(props) {
         )}
       </Stack>
       <Divider sx={{ marginTop: "12px" }} />
+
+      <NonOmnistrateLogsContainer productTierFeatures={productTierFeatures} />
+
       <LogsContainer>
         <InfiniteScroll
           pageStart={0}

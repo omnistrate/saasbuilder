@@ -28,6 +28,10 @@ import {
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import { checkIfResouceIsBYOA } from "src/utils/access/byoaResource";
+import {
+  checkCustomerOmnistrateLogsExist,
+  checkCustomerOmnistrateMetricsExist,
+} from "src/utils/constants/productTierFeatures";
 
 function ResourceInstance() {
   const router = useRouter();
@@ -117,9 +121,8 @@ function ResourceInstance() {
   );
 
   const tabs = getTabs(
-    resourceInstanceData?.isMetricsEnabled,
-    resourceInstanceData?.isLogsEnabled,
-    resourceInstanceData?.active
+    resourceInstanceData?.active,
+    resourceInstanceData?.productTierFeatures
   );
 
   let pageTitle = "Resource";
@@ -307,6 +310,7 @@ function ResourceInstance() {
           resultParametersSchema={
             resourceSchemaQuery?.data?.DESCRIBE?.outputParameters
           }
+          productTierFeatures={resourceInstanceData?.productTierFeatures}
         />
       )}
       {currentTab === tabs.connectivity && (
@@ -352,6 +356,7 @@ function ResourceInstance() {
           resourceKey={resourceInstanceData?.resourceKey}
           customMetrics={resourceInstanceData?.customMetrics}
           mainResourceHasCompute={resourceInstanceData?.mainResourceHasCompute}
+          productTierFeatures={resourceInstanceData?.productTierFeatures}
         />
       )}
       {currentTab === tabs.logs && (
@@ -362,6 +367,7 @@ function ResourceInstance() {
           instanceStatus={resourceInstanceData?.status}
           resourceKey={resourceInstanceData?.resourceKey}
           mainResourceHasCompute={resourceInstanceData?.mainResourceHasCompute}
+          productTierFeatures={resourceInstanceData?.productTierFeatures}
         />
       )}
       <SideDrawerRight
@@ -381,14 +387,20 @@ function ResourceInstance() {
 
 export default ResourceInstance;
 
-function getTabs(isMetricsEnabled, isLogsEnabled, isActive) {
+function getTabs(isActive, productTierFeatures) {
   const tabs = {
     resourceInstanceDetails: "Resource Instance Details",
     connectivity: "Connectivity",
     nodes: "Nodes",
   };
-  if (isMetricsEnabled) tabs["metrics"] = "Metrics";
-  if (isLogsEnabled) tabs["logs"] = "Logs";
+
+  const omnistrateMetricsExist =
+    checkCustomerOmnistrateMetricsExist(productTierFeatures);
+  if (omnistrateMetricsExist) tabs["metrics"] = "Metrics";
+
+  const omnistrateLogsExist =
+    checkCustomerOmnistrateLogsExist(productTierFeatures);
+  if (omnistrateLogsExist) tabs["logs"] = "Logs";
 
   if (!isActive) {
     delete tabs.connectivity;
