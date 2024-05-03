@@ -97,6 +97,7 @@ import Tooltip from "src/components/Tooltip/Tooltip";
 import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
 import DeleteAccountConfigConfirmationDialog from "src/components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
 import { cloneDeep } from "lodash";
+import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
 
 const instanceStatuses = {
   FAILED: "FAILED",
@@ -392,26 +393,11 @@ function MarketplaceService() {
         headerAlign: "center",
         renderCell: (params) => {
           const status = params?.row?.status;
-          const detailedNetworkTopologyEntries = Object.entries(
-            params.row.detailedNetworkTopology ?? {}
-          );
 
-          const mainResource = detailedNetworkTopologyEntries?.find(
-            ([resourceId, details]) => {
-              return details.main === true;
-            }
+          const healthStatusPercent = calculateInstanceHealthPercentage(
+            params.row.detailedNetworkTopology,
+            status
           );
-
-          const nodes = mainResource?.[1]?.nodes;
-          let healthStatusPercent = 0;
-          if (nodes?.length > 0) {
-            const healthyNodes = nodes?.filter(
-              (node) => node?.healthStatus === "HEALTHY"
-            );
-            healthStatusPercent = (healthyNodes?.length / nodes?.length) * 100;
-          } else if (status === "RUNNING" || status === "READY") {
-            healthStatusPercent = 100;
-          }
 
           return (
             <GradientProgressBar

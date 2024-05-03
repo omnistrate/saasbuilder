@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getResourceInstanceDetails } from "../api/resourceInstance";
 import processClusterPorts from "../utils/processClusterPorts";
+import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
 
 export default function useResourceInstance(
   serviceProviderId,
@@ -269,16 +270,10 @@ export default function useResourceInstance(
           );
         }
 
-        let healthStatusPercent = 0;
-
-        if (nodes?.length > 0) {
-          let healthyNodes = nodes?.filter(
-            (node) => node?.healthStatus === "HEALTHY"
-          );
-          healthStatusPercent = (healthyNodes?.length / nodes?.length) * 100;
-        } else if (data?.status === "RUNNING" || data?.status === "READY") {
-          healthStatusPercent = 100;
-        }
+        const healthStatusPercent = calculateInstanceHealthPercentage(
+          data?.detailedNetworkTopology,
+          data?.status
+        );
 
         const final = {
           resourceInstanceId: resourceInstanceId,
