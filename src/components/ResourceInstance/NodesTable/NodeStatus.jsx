@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import NodeStatusTooltip from "./NodeStatusTooltip";
 import StatusChipPulsateDot from "src/components/StatusChipPulsateDot/StatusChipPulsateDot";
 import { useEffect, useState } from "react";
@@ -34,7 +33,7 @@ export const NodeStatus = (props) => {
           <StatusChipPulsateDot
             key={index}
             status={status}
-            color={index > activeDot && "gray"}
+            color={index < activeDot && "gray"}
             pulsateDot={true}
           />
         ))}

@@ -27,6 +27,7 @@ import {
 import { useSelector } from "react-redux";
 import { selectUserrootData } from "../../../slices/userDataSlice";
 import Card from "src/components/Card/Card";
+import { NodeStatus } from "./NodeStatus";
 
 export default function NodesTable(props) {
   const {

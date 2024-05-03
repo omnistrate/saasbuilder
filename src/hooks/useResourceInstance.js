@@ -207,6 +207,7 @@ export default function useResourceInstance(
                     const status = node.status;
                     const resourceName = topologyDetails.resourceName;
                     const resourceKey = topologyDetails.resourceKey;
+                    const detailedHealth = node.detailedHealth;
                     nodes.push({
                       id: nodeId,
                       nodeId: nodeId,
@@ -219,6 +220,7 @@ export default function useResourceInstance(
                       healthStatus: node.healthStatus,
                       resourceKey,
                       displayName: nodeId,
+                      detailedHealth: detailedHealth,
                     });
                   });
                 } else {
