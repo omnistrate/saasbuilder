@@ -139,7 +139,7 @@ function Connectivity(props) {
                       </Stack>
                     )}
                     {(isEndpointsExpanded ||
-                      (!primaryResourceName && !primaryResourceEndpoint)) &&
+                      !(primaryResourceName && primaryResourceEndpoint)) &&
                       otherEndpoints.map((obj) => {
                         const { resourceName, endpoint } = obj;
                         return (
@@ -195,8 +195,10 @@ function Connectivity(props) {
                         </Stack>
                       )}
                     {(isPortsExpanded ||
-                      (!primaryResourcePorts?.resourceName &&
-                        !primaryResourcePorts?.ports)) &&
+                      !(
+                        primaryResourcePorts?.resourceName &&
+                        primaryResourcePorts?.ports
+                      )) &&
                       otherResourcePorts.map((obj) => {
                         const { resourceName, ports } = obj;
                         return (
