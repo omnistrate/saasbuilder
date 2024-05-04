@@ -131,7 +131,6 @@ jobs:
 
       - name: Build and push multi-arch
         if: ${{ github.event_name != 'pull_request' }}
-        timeout-minutes: 20
         uses: docker/build-push-action@v5
         with:
           context: .
