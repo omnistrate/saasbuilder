@@ -73,7 +73,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
+                  
   package-multi-arch:
     if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
@@ -150,3 +150,22 @@ jobs:
         run: cosign sign --yes ${TAGS}
         env:
           TAGS: ${{ steps.meta.outputs.tags }}
+
+  tag:
+    if: github.event_name == 'push'
+    needs: 
+      - package-multi-arch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: Tag-'${{ github.workflow }}'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} 
