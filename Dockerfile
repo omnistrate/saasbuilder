@@ -25,7 +25,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
 # Install node modules
 COPY --link package.json yarn.lock ./
 RUN --mount=type=cache,target=/root/.cache/yarn \
-    yarn install --frozen-lockfile --production=false
+    yarn install --frozen-lockfile --production=false --network-timeout 1000000
 
 # Copy application code
 COPY --link . .
@@ -36,7 +36,7 @@ RUN --mount=type=cache,target=/root/.cache/yarn \
 
 # Remove development dependencies
 RUN --mount=type=cache,target=/root/.cache/yarn \
-    yarn install --production=true
+    yarn install --production=true --network-timeout 1000000
 
 # Final stage for app image
 FROM base
