@@ -1,0 +1,57 @@
+name: "Create and merge deploy PR"
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_target:
+        description: 'Deploy target'
+        required: true
+        type: string
+        default: 'master'
+
+jobs:
+  create-and-merge-deploy-pr:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: "trigger deploy trial when diff exists and status check passed"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPLOY_TARGET: ${{ inputs.deploy_target }}
+        run: |
+          # Check out branches so that you don't have to speculate the remote name.
+          git checkout dev
+          git checkout ${DEPLOY_TARGET}
+          does_diff_exist=$( \
+            git diff --quiet --exit-code \
+                ${DEPLOY_TARGET} dev ; \
+            echo $? )
+          if [[ "${does_diff_exist}" == "0" ]]; then
+            echo "'dev' and '${DEPLOY_TARGET}' are identical. Quit the job."
+            exit 0
+          elif [[ "${does_diff_exist}" != "1" ]]; then
+            echo 'git diff failed unexpectedly.'
+            exit 1
+          fi
+          
+          # Add some logic to check if the latest CI status is success.
+          
+          # Create a PR
+          pr_url=$( \
+            gh pr create \
+              --base ${DEPLOY_TARGET} \
+              --head dev --label "auto deploy" \
+              --title "Deploy to ${DEPLOY_TARGET}" \
+              --body "Auto deploy" \
+              --no-maintainer-edit )
+          echo "Created a PR: ${pr_url}"
+          if [[ -z "${pr_url}" ]]; then
+            echo "Failed to create PR unexpectedly."
+            exit 1
+          fi
+          # And finally, merge it!
+          # NOTE: use `--admin` to bypass the review requirement.
+          gh pr merge ${pr_url} --admin --merge

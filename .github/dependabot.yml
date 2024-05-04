@@ -5,7 +5,30 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
+  - package-ecosystem: "github-actions"
+    # Workflow files stored in the default location of `.github/workflows`. (You don't need to specify `/.github/workflows` for `directory`. You can use `directory: "/"`.)
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups: 
+      github-actions:
+        dependency-type: "production"
+        update-types:
+        - "minor"
+        - "patch"
+
+  - package-ecosystem: "npm" 
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    groups: 
+      npm-updates:
+        dependency-type: "production"
+        update-types:
+        - "minor"
+        - "patch"
+
+  - package-ecosystem: "docker" 
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
