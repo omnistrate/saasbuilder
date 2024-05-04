@@ -2,13 +2,9 @@ name: Package
 
 on:
   push:
-    paths:
-      - Dockerfile
     branches: 
     - master
   pull_request:
-    paths:
-      - Dockerfile
     branches: 
     - master
   release:
