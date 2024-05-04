@@ -52,4 +52,5 @@ EXPOSE 3000
 
 USER nextjs
 
+
 CMD [ "node", "server.js" ]
