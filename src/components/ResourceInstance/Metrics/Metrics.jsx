@@ -69,7 +69,7 @@ function Metrics(props) {
   let metricsSocketEndpoint = null;
   if (socketBaseURL && selectedNode) {
     metricsSocketEndpoint = `${socketBaseURL}&podName=${selectedNode.id}&instanceId=${resourceInstanceId}`;
-  } 
+  }
   // else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
   //   metricsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
   // }
@@ -741,7 +741,7 @@ function Metrics(props) {
         {nodes?.length > 0 && (
           <Box sx={{ minWidth: "320px" }}>
             <Text size="small" weight="medium" color="#344054">
-              Node ID
+              Container ID
             </Text>
             <Select
               value={selectedNode}
