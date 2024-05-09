@@ -86,14 +86,14 @@ const MarketplaceStaticNavList = (props) => {
   };
 
   const NavLinks = [
-    {
-      text: "API Documentation",
-      isDisabled: false,
-      isActive: isActive,
-      href: apiDocs ?? apiDocsUrl,
-      icon: APIDocsIcon,
-      newTab: apiDocs ? false : true,
-    },
+    // {
+    //   text: "API Documentation",
+    //   isDisabled: false,
+    //   isActive: isActive,
+    //   href: apiDocs ?? apiDocsUrl,
+    //   icon: APIDocsIcon,
+    //   newTab: apiDocs ? false : true,
+    // },
     {
       text: "Download CLI",
       isDisabled: isDownloading,
