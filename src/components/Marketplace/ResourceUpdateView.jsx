@@ -180,19 +180,11 @@ function ResourceUpdateView(props) {
                     <MenuItem disabled value="">
                       <em>None</em>
                     </MenuItem>
-                    {[...regions]
-                      .sort(function (a, b) {
-                        if (a.code < b.code) return -1;
-                        else if (a.code > b.code) {
-                          return 1;
-                        }
-                        return -1;
-                      })
-                      .map((region) => (
-                        <MenuItem key={region.code} value={region.code}>
-                          {region.cloudProviderName} - {region.code}
-                        </MenuItem>
-                      ))}
+                    {regions[formData.values.cloud_provider]?.map((region) => (
+                      <MenuItem key={region} value={region}>
+                        {formData.values.cloud_provider} - {region}
+                      </MenuItem>
+                    ))}
                   </Select>
                   <ErrorLabel></ErrorLabel>
                 </FieldContainer>
