@@ -144,7 +144,6 @@ function MarketplaceService() {
     setIsOrgIdModalOpen(false);
   }
 
-
   const resourceInstancesHashmap = useMemo(() => {
     const hashmap = {};
     resourceInstanceList.forEach((instance) => {
@@ -196,7 +195,7 @@ function MarketplaceService() {
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [viewInfoDrawerOpen, setViewInfoDrawerOpen] = useState(false);
   const [updateDrawerOpen, setUpdateDrawerOpen] = useState(false);
-  
+
   const timeoutID = useRef(null);
   const currentResourceInfo = useRef({ resourceKey: null, resourceId: null });
   useEffect(() => {
@@ -1799,8 +1798,8 @@ function MarketplaceService() {
                     isCurrentResourceBYOA={isCurrentResourceBYOA}
                     formData={updateformik}
                     regions={{
-                      aws: service?.awsRegions,
-                      gcp: service?.gcpRegions,
+                      aws: service?.awsRegions || [],
+                      gcp: service?.gcpRegions || [],
                     }}
                     formCancelClick={closeUpdateDrawer}
                     isLoading={updateResourceInstanceMutation.isLoading}
@@ -1858,8 +1857,8 @@ function MarketplaceService() {
               handleOrgIdModalOpen={handleOrgIdModalOpen}
               cloudProviders={service?.cloudProviders}
               regions={{
-                aws: service?.awsRegions,
-                gcp: service?.gcpRegions,
+                aws: service?.awsRegions || [],
+                gcp: service?.gcpRegions || [],
               }}
             />
           }
