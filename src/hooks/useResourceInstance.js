@@ -116,7 +116,7 @@ export default function useResourceInstance(
             });
           }
         }
-        if (topologyDetails.hasCompute) {
+        if (topologyDetails?.hasCompute) {
           if (topologyDetails?.nodes) {
             topologyDetails.nodes.forEach((node) => {
               const nodeId = node.id;
@@ -198,7 +198,7 @@ export default function useResourceInstance(
                   : "",
               });
             } else {
-              if (topologyDetails.hasCompute) {
+              if (topologyDetails?.hasCompute) {
                 if (topologyDetails.nodes) {
                   topologyDetails.nodes.forEach((node) => {
                     const nodeId = node.id;
@@ -308,7 +308,7 @@ export default function useResourceInstance(
           healthStatusPercent: healthStatusPercent,
           active: data?.active,
           customMetrics: customMetrics,
-          mainResourceHasCompute: topologyDetails.hasCompute,
+          mainResourceHasCompute: Boolean(topologyDetails?.hasCompute),
         };
 
         return final;
