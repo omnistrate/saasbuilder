@@ -351,11 +351,8 @@ function CreateResourceInstanceForm(props) {
                   input={<OutlinedInput />}
                 >
                   {cloudProviders.map((option) => (
-                    <MenuItem
-                      key={option.name.toLowerCase()}
-                      value={option.name.toLowerCase()}
-                    >
-                      {option.description}
+                    <MenuItem key={option} value={option}>
+                      {cloudProviderLabels[option]}
                     </MenuItem>
                   ))}
                 </Select>
