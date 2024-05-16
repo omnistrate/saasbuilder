@@ -113,19 +113,30 @@ function ResourceInstance() {
     environmentId,
     productTierId,
     resourceId,
+    currentSource,
     subscriptionData?.id
   );
 
   const tabs = getTabs(
     resourceInstanceData?.isMetricsEnabled,
     resourceInstanceData?.isLogsEnabled,
-    resourceInstanceData?.active
+    resourceInstanceData?.active,
+    isResourceBYOA
   );
 
   let pageTitle = "Resource";
 
   if (tabs[view]) {
     pageTitle = tabs[view];
+  }
+
+  let cloudProvider = resourceInstanceData?.cloudProvider;
+  //The api doesn't return cloud provider field in the root object for a Cloud Provider Account instance
+  //Get the cloud provider data from result parameters in this case
+  if (!cloudProvider) {
+    if (resourceInstanceData?.resultParameters?.cloud_provider) {
+      cloudProvider = resourceInstanceData?.resultParameters?.cloud_provider;
+    }
   }
 
   useEffect(() => {
@@ -211,6 +222,7 @@ function ResourceInstance() {
     serviceId,
     environmentId,
     productTierId,
+    currentSource,
     subscriptionData?.id
   );
 
@@ -262,7 +274,7 @@ function ResourceInstance() {
       <ResourceInstanceOverview
         resourceInstanceId={resourceInstanceId}
         region={resourceInstanceData?.region}
-        cloudProvider={resourceInstanceData?.cloudProvider}
+        cloudProvider={cloudProvider}
         status={resourceInstanceData?.status}
         createdAt={resourceInstanceData?.createdAt}
         modifiedAt={resourceInstanceData?.modifiedAt}
@@ -286,6 +298,7 @@ function ResourceInstance() {
                     resourceId,
                     resourceInstanceId,
                     key,
+                    currentSource,
                     subscriptionData?.id
                   )
                 );
@@ -307,6 +320,8 @@ function ResourceInstance() {
           resultParametersSchema={
             resourceSchemaQuery?.data?.DESCRIBE?.outputParameters
           }
+          serviceOffering={serviceOffering}
+          subscriptionId={subscriptionId}
         />
       )}
       {currentTab === tabs.connectivity && (
@@ -350,7 +365,7 @@ function ResourceInstance() {
           socketBaseURL={resourceInstanceData.metricsSocketURL}
           instanceStatus={resourceInstanceData?.status}
           resourceKey={resourceInstanceData?.resourceKey}
-          customMetrics={resourceInstanceData?.customMetrics}
+          customMetrics={resourceInstanceData?.customMetrics || []}
           mainResourceHasCompute={resourceInstanceData?.mainResourceHasCompute}
         />
       )}
@@ -381,14 +396,14 @@ function ResourceInstance() {
 
 export default ResourceInstance;
 
-function getTabs(isMetricsEnabled, isLogsEnabled, isActive) {
+function getTabs(isMetricsEnabled, isLogsEnabled, isActive, isResourceBYOA) {
   const tabs = {
     resourceInstanceDetails: "Resource Instance Details",
     connectivity: "Connectivity",
-    nodes: "Nodes",
+    nodes: "Containers",
   };
-  if (isMetricsEnabled) tabs["metrics"] = "Metrics";
-  if (isLogsEnabled) tabs["logs"] = "Logs";
+  if (isMetricsEnabled && !isResourceBYOA) tabs["metrics"] = "Metrics";
+  if (isLogsEnabled && !isResourceBYOA) tabs["logs"] = "Logs";
 
   if (!isActive) {
     delete tabs.connectivity;
@@ -401,7 +416,7 @@ function getTabs(isMetricsEnabled, isLogsEnabled, isActive) {
 const TAB_LABEL_MAP = {
   "Resource Instance Details": "Resource Instance Details",
   Connectivity: "Connectivity",
-  Nodes: "Nodes",
+  Containers: "Containers",
   Metrics: "Metrics",
   Logs: "Logs",
 };

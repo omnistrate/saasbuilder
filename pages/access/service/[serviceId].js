@@ -458,7 +458,7 @@ function MarketplaceService() {
     }
 
     return columnDefinition;
-  }, [serviceId, selectedResource]);
+  }, [serviceId, selectedResource, resourceInstanceList]);
 
   const snackbar = useSnackbar();
   const dispatch = useDispatch();
