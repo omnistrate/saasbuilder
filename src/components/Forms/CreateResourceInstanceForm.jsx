@@ -27,6 +27,7 @@ import useResourcesInstanceIds from "../../hooks/useResourcesInstanceIds";
 import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import { PasswordField } from "../FormElementsv2/PasswordField/PasswordField";
+import { cloudProviderLabels } from "src/utils/constants/cloudProviders";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -52,11 +53,11 @@ function CreateResourceInstanceForm(props) {
     cloudProviderAccounts,
     service,
     subscriptionId,
+    cloudProviders,
   } = props;
 
   const [isSchemaLoading, setIsSchemaLoading] = useState(true);
   const [createSchema, setCreateSchema] = useState([]);
-  const cloudProviders = useSelector(selectCloudProviders);
   const { isFetching, data: resourceIdInstancesHashMap = {} } =
     useResourcesInstanceIds(
       service?.serviceProviderId,
@@ -68,10 +69,6 @@ function CreateResourceInstanceForm(props) {
       service?.resourceParameters,
       subscriptionId
     );
-
-  const regionsFilteredBySelectedProvider = regions.filter(
-    (region) => region.cloudProviderName === formData.values.cloud_provider
-  );
 
   useEffect(() => {
     async function getSchema() {
@@ -230,11 +227,8 @@ function CreateResourceInstanceForm(props) {
               sx={{ marginTop: "16px" }}
             >
               {cloudProviders.map((option) => (
-                <MenuItem
-                  key={option.name.toLowerCase()}
-                  value={option.name.toLowerCase()}
-                >
-                  {option.description}
+                <MenuItem key={option} value={option}>
+                  {cloudProviderLabels[option]}
                 </MenuItem>
               ))}
             </TextField>
@@ -292,19 +286,11 @@ function CreateResourceInstanceForm(props) {
               <MenuItem disabled value="">
                 <em>None</em>
               </MenuItem>
-              {[...regionsFilteredBySelectedProvider]
-                .sort(function (a, b) {
-                  if (a.code < b.code) return -1;
-                  else if (a.code > b.code) {
-                    return 1;
-                  }
-                  return -1;
-                })
-                .map((region) => (
-                  <MenuItem key={region.code} value={region.code}>
-                    {region.cloudProviderName} - {region.code}
-                  </MenuItem>
-                ))}
+              {regions[formData.values.cloud_provider]?.map((region) => (
+                <MenuItem key={region} value={region}>
+                  {formData.values.cloud_provider} - {region}
+                </MenuItem>
+              ))}
             </TextField>
           </FieldContainer>
         )}
@@ -365,11 +351,8 @@ function CreateResourceInstanceForm(props) {
                   input={<OutlinedInput />}
                 >
                   {cloudProviders.map((option) => (
-                    <MenuItem
-                      key={option.name.toLowerCase()}
-                      value={option.name.toLowerCase()}
-                    >
-                      {option.description}
+                    <MenuItem key={option} value={option}>
+                      {cloudProviderLabels[option]}
                     </MenuItem>
                   ))}
                 </Select>
