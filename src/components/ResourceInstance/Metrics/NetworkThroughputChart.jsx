@@ -39,7 +39,7 @@ function NetworkThroughputChart(props) {
               tickLine={false}
             />
             <YAxis
-              tickFormatter={(value) => `${value} MB/s`}
+              tickFormatter={(value) => `${value} MiB/s`}
               domain={([datamin, datamax]) => [
                 0,
                 datamax > 0 ? Math.round(datamax + 1) : 1,
@@ -48,7 +48,7 @@ function NetworkThroughputChart(props) {
             />
             <Tooltip
               isAnimationActive={false}
-              formatter={(value) => `${value} MB/s`}
+              formatter={(value) => `${value} MiB/s`}
             />
             <Legend />
             {labels.map((labelName, index) => {

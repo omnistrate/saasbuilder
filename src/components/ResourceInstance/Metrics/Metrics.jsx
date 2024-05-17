@@ -58,6 +58,7 @@ function Metrics(props) {
     resourceInstanceId,
     customMetrics = [],
     mainResourceHasCompute,
+    productTierType,
   } = props;
   let firstNode = null;
   if (nodes.length > 0) {
@@ -95,8 +96,8 @@ function Metrics(props) {
     data: [],
   });
 
-  const [totalMemoryGB, setTotalMemoryGB] = useState(null);
-  const [memoryUsageGB, setMemoryUsageGB] = useState(null);
+  const [totalMemoryGiB, setTotalMemoryGiB] = useState(null);
+  const [memoryUsageGiB, setMemoryUsageGiB] = useState(null);
   const [memoryUsagePercent, setMemoryUsagePercent] = useState(null);
   const [systemUptimeHours, setSystemUptimeHours] = useState(null);
   const [diskIOPSReadLabels, setDiskIOPSReadLabels] = useState([]);
@@ -215,8 +216,8 @@ function Metrics(props) {
     setCpuUsageData(initialCpuUsage);
     setLoadAverage(initialLoadAverage);
     setMemUsagePercentData(initialMemUsagePercentData);
-    setTotalMemoryGB(null);
-    setMemoryUsageGB(null);
+    setTotalMemoryGiB(null);
+    setMemoryUsageGiB(null);
     setMemoryUsagePercent(null);
     setSystemUptimeHours(null);
     setDiskIOPSReadLabels([]);
@@ -373,7 +374,7 @@ function Metrics(props) {
             metric.Name === "disk_throughput_bytes_per_sec" &&
             metric.Labels.type === "read"
           ) {
-            const value = Number(metric.Value / 1000000).toFixed(2);
+            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
             const label = metric.Labels.disk;
 
             setDiskThroughputReadLabels((prev) => {
@@ -395,7 +396,7 @@ function Metrics(props) {
             metric.Name === "disk_throughput_bytes_per_sec" &&
             metric.Labels.type === "write"
           ) {
-            const value = Number(metric.Value / 1000000).toFixed(2);
+            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
             const label = metric.Labels.disk;
 
             setDiskThroughputWriteLabels((prev) => {
@@ -417,7 +418,7 @@ function Metrics(props) {
             metric.Name === "net_throughput_bytes_per_sec" &&
             metric.Labels.direction === "recv"
           ) {
-            const value = Number(metric.Value / 1000000).toFixed(2);
+            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
             const label = metric.Labels.interface;
 
             setNetThroughputReceiveLabels((prev) => {
@@ -439,7 +440,7 @@ function Metrics(props) {
             metric.Name === "net_throughput_bytes_per_sec" &&
             metric.Labels.direction === "sent"
           ) {
-            const value = Number(metric.Value / 1000000).toFixed(2);
+            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
             const label = metric.Labels.interface;
 
             setNetThroughputSendLabels((prev) => {
@@ -554,7 +555,7 @@ function Metrics(props) {
         setCpuUsageData((prev) => {
           if (prev.data.length === maxDataPoints) {
             return {
-              current: value ? value : prev.current,
+              current: value !== undefined ? value : prev.current,
               data: [
                 ...prev.data.slice(1, maxDataPoints),
                 {
@@ -565,7 +566,7 @@ function Metrics(props) {
             };
           } else {
             return {
-              current: value ? value : prev.current,
+              current: value !== undefined ? value : prev.current,
               data: [
                 ...prev.data,
                 {
@@ -585,7 +586,10 @@ function Metrics(props) {
         setLoadAverage((prev) => {
           if (prev.data.length === maxDataPoints) {
             return {
-              current: loadAverageValue ? loadAverageValue : prev.current,
+              current:
+                loadAverageValue !== undefined
+                  ? loadAverageValue
+                  : prev.current,
               data: [
                 ...prev.data.slice(1, maxDataPoints),
                 {
@@ -596,7 +600,10 @@ function Metrics(props) {
             };
           } else {
             return {
-              current: loadAverageValue ? loadAverageValue : prev.current,
+              current:
+                loadAverageValue !== undefined
+                  ? loadAverageValue
+                  : prev.current,
               data: [
                 ...prev.data,
                 {
@@ -611,12 +618,12 @@ function Metrics(props) {
         //Set memory bytes
         if (memoryUsageBytes) {
           const value = memoryUsageBytes.Value;
-          setMemoryUsageGB(Number(value / 1000000000).toFixed(2));
+          setMemoryUsageGiB(Number(value / Math.pow(1024, 3)).toFixed(2));
         }
 
         if (totalMemoryBytes) {
           const value = totalMemoryBytes.Value;
-          setTotalMemoryGB(Number(value / 1000000000).toFixed(2));
+          setTotalMemoryGiB(Number(value / Math.pow(1024, 3)).toFixed(2));
         }
 
         if (memoryUsagePercent) {
@@ -760,34 +767,20 @@ function Metrics(props) {
       </Stack>
       <Divider sx={{ marginTop: "12px" }} />
 
-      <Grid container spacing={3} mt={0}>
-        <Grid item xs={2}>
-          <MetricCard title="CPU Usage" value={cpuUsageData.current} unit="%" />
-        </Grid>
-        <Grid item xs={2}>
+      <Box display="flex" alignItems="stretch" gap={3} mt={3}>
+        <MetricCard title="CPU Usage" value={cpuUsageData.current} unit="%" />
+        {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
           <MetricCard title="Load average" value={loadAverage.current} />
-        </Grid>
-        <Grid item xs={2}>
-          <MetricCard title="Total RAM" value={totalMemoryGB} unit="GB" />
-        </Grid>
-        <Grid item xs={2}>
-          <MetricCard title="Used RAM" value={memoryUsageGB} unit="GB" />
-        </Grid>
-        <Grid item xs={2}>
-          <MetricCard
-            title="RAM Usage (%)"
-            value={memoryUsagePercent}
-            unit="%"
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <MetricCard
-            title="System Uptime"
-            value={systemUptimeHours}
-            unit="hrs"
-          />
-        </Grid>
-      </Grid>
+        )}
+        <MetricCard title="Total RAM" value={totalMemoryGiB} unit="GiB" />
+        <MetricCard title="Used RAM" value={memoryUsageGiB} unit="GiB" />
+        <MetricCard title="RAM Usage (%)" value={memoryUsagePercent} unit="%" />
+        <MetricCard
+          title="System Uptime"
+          value={systemUptimeHours}
+          unit="hrs"
+        />
+      </Box>
 
       <CpuUsageChart data={cpuUsageData.data} />
 
@@ -795,9 +788,11 @@ function Metrics(props) {
         <MemUsagePercentChart data={memUsagePercentData.data} />
       </Box>
 
-      <Box mt={8}>
-        <LoadAverageChart data={loadAverage.data} />
-      </Box>
+      {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
+        <Box mt={8}>
+          <LoadAverageChart data={loadAverage.data} />
+        </Box>
+      )}
 
       <Box mt={8}>
         <DiskUsageChart data={diskUsage} labels={diskPathLabels} />
@@ -826,20 +821,24 @@ function Metrics(props) {
           labels={diskThroughputWriteLabels}
         />
       </Box>
-      <Box mt={8}>
-        <NetworkThroughputChart
-          chartName="Network Throughput (Receive)"
-          data={netThroughputReceive}
-          labels={netThroughputReceiveLabels}
-        />
-      </Box>
-      <Box mt={8}>
-        <NetworkThroughputChart
-          chartName="Network Throughput (Send)"
-          data={netThroughputSend}
-          labels={netThroughputSendLabels}
-        />
-      </Box>
+      {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
+        <>
+          <Box mt={8}>
+            <NetworkThroughputChart
+              chartName="Network Throughput (Receive)"
+              data={netThroughputReceive}
+              labels={netThroughputReceiveLabels}
+            />
+          </Box>
+          <Box mt={8}>
+            <NetworkThroughputChart
+              chartName="Network Throughput (Send)"
+              data={netThroughputSend}
+              labels={netThroughputSendLabels}
+            />
+          </Box>
+        </>
+      )}
       {customMetrics //show metrics for selected node resource type
         .filter((metric) => {
           if (selectedNode)
