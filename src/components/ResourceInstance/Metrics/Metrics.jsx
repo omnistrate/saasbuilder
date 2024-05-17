@@ -96,8 +96,8 @@ function Metrics(props) {
     data: [],
   });
 
-  const [totalMemoryGB, setTotalMemoryGB] = useState(null);
-  const [memoryUsageGB, setMemoryUsageGB] = useState(null);
+  const [totalMemoryGiB, setTotalMemoryGiB] = useState(null);
+  const [memoryUsageGiB, setMemoryUsageGiB] = useState(null);
   const [memoryUsagePercent, setMemoryUsagePercent] = useState(null);
   const [systemUptimeHours, setSystemUptimeHours] = useState(null);
   const [diskIOPSReadLabels, setDiskIOPSReadLabels] = useState([]);
@@ -216,8 +216,8 @@ function Metrics(props) {
     setCpuUsageData(initialCpuUsage);
     setLoadAverage(initialLoadAverage);
     setMemUsagePercentData(initialMemUsagePercentData);
-    setTotalMemoryGB(null);
-    setMemoryUsageGB(null);
+    setTotalMemoryGiB(null);
+    setMemoryUsageGiB(null);
     setMemoryUsagePercent(null);
     setSystemUptimeHours(null);
     setDiskIOPSReadLabels([]);
@@ -374,7 +374,7 @@ function Metrics(props) {
             metric.Name === "disk_throughput_bytes_per_sec" &&
             metric.Labels.type === "read"
           ) {
-            const value = Number(metric.Value / 1000000).toFixed(2);
+            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
             const label = metric.Labels.disk;
 
             setDiskThroughputReadLabels((prev) => {
@@ -396,7 +396,7 @@ function Metrics(props) {
             metric.Name === "disk_throughput_bytes_per_sec" &&
             metric.Labels.type === "write"
           ) {
-            const value = Number(metric.Value / 1000000).toFixed(2);
+            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
             const label = metric.Labels.disk;
 
             setDiskThroughputWriteLabels((prev) => {
@@ -418,7 +418,7 @@ function Metrics(props) {
             metric.Name === "net_throughput_bytes_per_sec" &&
             metric.Labels.direction === "recv"
           ) {
-            const value = Number(metric.Value / 1000000).toFixed(2);
+            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
             const label = metric.Labels.interface;
 
             setNetThroughputReceiveLabels((prev) => {
@@ -440,7 +440,7 @@ function Metrics(props) {
             metric.Name === "net_throughput_bytes_per_sec" &&
             metric.Labels.direction === "sent"
           ) {
-            const value = Number(metric.Value / 1000000).toFixed(2);
+            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
             const label = metric.Labels.interface;
 
             setNetThroughputSendLabels((prev) => {
@@ -618,12 +618,12 @@ function Metrics(props) {
         //Set memory bytes
         if (memoryUsageBytes) {
           const value = memoryUsageBytes.Value;
-          setMemoryUsageGB(Number(value / 1000000000).toFixed(2));
+          setMemoryUsageGiB(Number(value / Math.pow(1024, 3)).toFixed(2));
         }
 
         if (totalMemoryBytes) {
           const value = totalMemoryBytes.Value;
-          setTotalMemoryGB(Number(value / 1000000000).toFixed(2));
+          setTotalMemoryGiB(Number(value / Math.pow(1024, 3)).toFixed(2));
         }
 
         if (memoryUsagePercent) {
@@ -772,8 +772,8 @@ function Metrics(props) {
         {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
           <MetricCard title="Load average" value={loadAverage.current} />
         )}
-        <MetricCard title="Total RAM" value={totalMemoryGB} unit="GB" />
-        <MetricCard title="Used RAM" value={memoryUsageGB} unit="GB" />
+        <MetricCard title="Total RAM" value={totalMemoryGiB} unit="GiB" />
+        <MetricCard title="Used RAM" value={memoryUsageGiB} unit="GiB" />
         <MetricCard title="RAM Usage (%)" value={memoryUsagePercent} unit="%" />
         <MetricCard
           title="System Uptime"
