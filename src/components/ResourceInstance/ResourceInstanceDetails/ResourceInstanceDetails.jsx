@@ -1,4 +1,4 @@
-import { Box, styled } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   CellDescription,
   CellSubtext,
@@ -10,10 +10,11 @@ import {
   TableRow,
 } from "../../InfoTable/InfoTable";
 import formatDateUTC from "../../../utils/formatDateUTC";
-import React from "react";
-import Link from "next/link";
+import React, { useMemo } from "react";
 import capitalize from "lodash/capitalize";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import { getTerraformKitURL } from "src/api/resourceInstance";
+import { baseURL } from "src/axios";
 import { PasswordWithOutBorderField } from "src/components/FormElementsv2/PasswordField/PasswordWithOutBorderField";
 
 function ResourceInstanceDetails(props) {
@@ -24,32 +25,83 @@ function ResourceInstanceDetails(props) {
     resultParametersSchema = [],
     createdAt,
     modifiedAt,
-    // proxyEndpointDetails,
-    // serviceId,
-    // environmentId,
-    // searchInventoryView,
-  } = props;
-  //   console.log("Result parameters", resultParameters);
-  //   console.log("Result parameters schema", resultParametersSchema);
+    subscriptionId,
+    serviceOffering,
 
-  const resultParametersWithDescription = Object.keys(resultParameters)
-    .map((key) => {
-      const match = resultParametersSchema.find((param) => param.key === key);
-      return {
-        ...match,
-        value: resultParameters[key],
-        key,
-      };
-    })
-    .filter((param) => {
-      return ![
-        "availability_zones",
-        "cluster_endpoint",
-        "node_endpoints",
-        "private_network_cidr",
-        "private_network_id",
-      ].includes(param.key);
-    });
+  } = props;
+
+  const isResourceBYOA =
+    resultParameters.gcp_project_id || resultParameters.aws_account_id;
+
+  const resultParametersWithDescription = useMemo(() => {
+    const result = Object.keys(resultParameters)
+      .map((key) => {
+        const match = resultParametersSchema.find((param) => param.key === key);
+        return {
+          ...match,
+          value: resultParameters[key],
+          key,
+        };
+      })
+      .filter((param) => {
+        const filterArr = [
+          "availability_zones",
+          "cluster_endpoint",
+          "node_endpoints",
+          "private_network_cidr",
+          "private_network_id",
+        ];
+
+        if (isResourceBYOA) {
+          if (resultParameters.cloud_provider === "aws") {
+            filterArr.push(
+              ...[
+                "gcp_project_id",
+                "gcp_project_number",
+                "gcp_service_account_email",
+              ]
+            );
+          } else if (resultParameters.cloud_provider === "gcp") {
+            filterArr.push(...["aws_account_id", "aws_bootstrap_role_arn"]);
+          }
+
+          if (resultParameters.account_configuration_method === "Terraform") {
+            filterArr.push("cloudformation_url");
+          }
+        }
+
+        return !filterArr.includes(param.key);
+      });
+
+    if (resultParameters.account_configuration_method === "Terraform") {
+      result.push({
+        key: "terraform_url",
+        displayName: "Terraform URL",
+        description:
+          "Terraform Kit URL to configure access to an AWS/GCP account.",
+        type: "String",
+        isList: false,
+        custom: true,
+        value: `${baseURL}${getTerraformKitURL(
+          serviceOffering?.serviceProviderId,
+          serviceOffering?.serviceURLKey,
+          serviceOffering?.serviceAPIVersion,
+          serviceOffering?.serviceEnvironmentURLKey,
+          serviceOffering?.serviceModelURLKey,
+          subscriptionId,
+          resultParameters?.cloud_provider
+        )}`,
+      });
+    }
+
+    return result;
+  }, [
+    isResourceBYOA,
+    resultParameters,
+    resultParametersSchema,
+    serviceOffering,
+    subscriptionId,
+  ]);
 
   if (isLoading) {
     return (
@@ -69,11 +121,11 @@ function ResourceInstanceDetails(props) {
   return (
     <TableContainer
       sx={{
-        mt: "54px",
+        mt: "24px",
       }}
     >
-      <Table>
-        <TableBody>
+      <Table sx={{ width: "100%" }}>
+        <TableBody sx={{ width: "100%" }}>
           <TableRow>
             <TableCell sx={{ verticalAlign: "baseline" }}>
               <CellTitle>Instance ID </CellTitle>
@@ -88,7 +140,7 @@ function ResourceInstanceDetails(props) {
 
           <TableRow>
             <TableCell sx={{ verticalAlign: "baseline" }}>
-              <CellTitle>Created At</CellTitle>
+              <CellTitle>Created at</CellTitle>
             </TableCell>
             <TableCell
               align="right"
@@ -99,7 +151,7 @@ function ResourceInstanceDetails(props) {
           </TableRow>
           <TableRow>
             <TableCell sx={{ verticalAlign: "baseline" }}>
-              <CellTitle>Modified At</CellTitle>
+              <CellTitle>Modified at</CellTitle>
             </TableCell>
             <TableCell
               align="right"
@@ -109,47 +161,14 @@ function ResourceInstanceDetails(props) {
             </TableCell>
           </TableRow>
 
-          {/* proxy endpoint */}
-          {/* {proxyEndpointDetails && proxyEndpointDetails.proxyEndpoint && (
-            <TableRow>
-              <TableCell sx={{ verticalAlign: "baseline" }}>
-                <CellTitle>Proxy Endpoint</CellTitle>
-                <CellSubtext></CellSubtext>
-              </TableCell>
-              <TableCell align="right" sx={{ paddingRight: 0 }}>
-                <ResourceProxyEndpoint
-                  primary
-                  endpoint={proxyEndpointDetails.proxyEndpoint}
-                  serviceId={serviceId}
-                  environmentId={environmentId}
-                  searchInventoryView={searchInventoryView}
-                />
-              </TableCell>
-            </TableRow>
-          )} */}
-
-          {/* proxy ports */}
-
-          {/* {proxyEndpointDetails && proxyEndpointDetails.openPorts && (
-            <TableRow>
-              <TableCell>
-                <CellTitle>Proxy Port(s)</CellTitle>
-              </TableCell>
-              <TableCell align="right">
-                <CellDescription>
-                  {proxyEndpointDetails.openPorts}
-                </CellDescription>
-              </TableCell>
-            </TableRow>
-          )} */}
-
           {resultParametersWithDescription.map((parameter, index) => {
+            const displayName = parameter.displayName;
             if (parameter.type === "Password") {
               return (
                 <TableRow key={parameter.key} sx={{ width: "100%" }}>
                   <TableCell sx={{ verticalAlign: "baseline" }}>
                     <CellTitle>
-                      {capitalize(parameter.displayName) || parameter.key}
+                      {capitalize(displayName) || parameter.key}
                     </CellTitle>
                     <CellSubtext>{parameter.description}</CellSubtext>
                   </TableCell>
@@ -165,10 +184,10 @@ function ResourceInstanceDetails(props) {
               );
             } else {
               return (
-                <TableRow key={parameter.key}>
+                <TableRow key={parameter.key} sx={{ width: "100%" }}>
                   <TableCell sx={{ verticalAlign: "baseline" }}>
                     <CellTitle>
-                      {capitalize(parameter.displayName) || parameter.key}
+                      {capitalize(displayName) || parameter.key}
                     </CellTitle>
                     <CellSubtext>{parameter.description}</CellSubtext>
                   </TableCell>
@@ -177,10 +196,7 @@ function ResourceInstanceDetails(props) {
                     sx={{ width: "50%", verticalAlign: "baseline" }}
                   >
                     <CellDescription
-                      sx={{
-                        wordBreak: "break-word",
-                        paddingLeft: "30px",
-                      }}
+                      sx={{ wordBreak: "break-word", paddingLeft: "30px" }}
                     >
                       {parameter.value}
                     </CellDescription>
@@ -196,86 +212,3 @@ function ResourceInstanceDetails(props) {
 }
 
 export default ResourceInstanceDetails;
-
-// const ResourceProxyEndpoint = (props) => {
-//   const {
-//     endpoint,
-//     primary,
-//     sx = {},
-//     serviceId,
-//     environmentId,
-//     searchInventoryView,
-//   } = props;
-
-//   //regex for instance id extraction from proxy endpoint
-//   const regex = /instance-([^\.]+)/;
-//   const match = endpoint.match(regex);
-//   let instanceId;
-
-//   if (match) {
-//     instanceId = match[0];
-//     console.log("instanceId", instanceId, match);
-//   }
-
-//   let resourceInstanceUrlLink;
-
-//   if (instanceId) {
-//     resourceInstanceUrlLink = getInventoryManagementInventoryRoute(
-//       serviceId,
-//       environmentId,
-//       instanceId,
-//       searchInventoryView
-//     );
-//   }
-
-//   return (
-//     <Stack
-//       direction="row"
-//       sx={{
-//         border: primary ? "2px solid #7F56D9" : "1px solid #EAECF0",
-//         background: primary ? "#F9F5FF" : "white",
-//         padding: "16px",
-//         borderRadius: "12px",
-//         ...sx,
-//       }}
-//     >
-//       <Image src={resourceEndpointIcon} alt="resource-endpoint" />
-//       <Box
-//         sx={{
-//           flexGrow: 1,
-//           marginLeft: "16px",
-//           textAlign: "left",
-//           alignSelf: "center",
-//         }}
-//       >
-//         <LinkResourceInstance
-//           href={resourceInstanceUrlLink ?? ""}
-//           target="_blank"
-//         >
-//           <Text
-//             size="small"
-//             weight="regular"
-//             color={primary ? "#6941C6" : ""}
-//             sx={{ wordBreak: "break-all" }}
-//           >
-//             {endpoint}
-//           </Text>
-//           <ArrowOutwardIcon />
-//         </LinkResourceInstance>
-//       </Box>
-//       {endpoint && (
-//         <Box alignSelf="start">
-//           <CopyToClipbpoardButton text={endpoint} />
-//         </Box>
-//       )}
-//     </Stack>
-//   );
-// };
-
-const LinkResourceInstance = styled(Link)(({ theme }) => ({
-  display: "flex",
-  color: "#6941C6",
-  fontWeight: 500,
-  gap: 2,
-  alignItems: "center",
-}));
