@@ -352,6 +352,7 @@ function ResourceInstance() {
           resourceKey={resourceInstanceData?.resourceKey}
           customMetrics={resourceInstanceData?.customMetrics}
           mainResourceHasCompute={resourceInstanceData?.mainResourceHasCompute}
+          productTierType={serviceOffering?.productTierType}
         />
       )}
       {currentTab === tabs.logs && (

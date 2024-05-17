@@ -1,13 +1,12 @@
-import { Box, Stack } from "@mui/material";
-import React from "react";
-import Card from "../../Card/Card";
-import { DisplayText, Text } from "../../Typography/Typography";
+import { Stack } from "@mui/material";
+import Card from "components/Card/Card";
+import { DisplayText, Text } from "components/Typography/Typography";
 
 function MetricCard(props) {
   const { title = "", value = "", unit = "" } = props;
 
   return (
-    <Card height="100%">
+    <Card height="100%" flex="1">
       <Text
         size="small"
         color="#475467"
@@ -23,12 +22,10 @@ function MetricCard(props) {
         alignItems="baseline"
       >
         <DisplayText size="small">{value}</DisplayText>
-        {value ? (
+        {value !== undefined && unit && (
           <Text size="medium" sx={{ ml: "4px" }}>
             {unit}
           </Text>
-        ) : (
-          ""
         )}
       </Stack>
     </Card>

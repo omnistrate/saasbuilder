@@ -58,6 +58,7 @@ function Metrics(props) {
     resourceInstanceId,
     customMetrics = [],
     mainResourceHasCompute,
+    productTierType,
   } = props;
   let firstNode = null;
   if (nodes.length > 0) {
@@ -554,7 +555,7 @@ function Metrics(props) {
         setCpuUsageData((prev) => {
           if (prev.data.length === maxDataPoints) {
             return {
-              current: value ? value : prev.current,
+              current: value !== undefined ? value : prev.current,
               data: [
                 ...prev.data.slice(1, maxDataPoints),
                 {
@@ -565,7 +566,7 @@ function Metrics(props) {
             };
           } else {
             return {
-              current: value ? value : prev.current,
+              current: value !== undefined ? value : prev.current,
               data: [
                 ...prev.data,
                 {
@@ -585,7 +586,10 @@ function Metrics(props) {
         setLoadAverage((prev) => {
           if (prev.data.length === maxDataPoints) {
             return {
-              current: loadAverageValue ? loadAverageValue : prev.current,
+              current:
+                loadAverageValue !== undefined
+                  ? loadAverageValue
+                  : prev.current,
               data: [
                 ...prev.data.slice(1, maxDataPoints),
                 {
@@ -596,7 +600,10 @@ function Metrics(props) {
             };
           } else {
             return {
-              current: loadAverageValue ? loadAverageValue : prev.current,
+              current:
+                loadAverageValue !== undefined
+                  ? loadAverageValue
+                  : prev.current,
               data: [
                 ...prev.data,
                 {
@@ -760,34 +767,20 @@ function Metrics(props) {
       </Stack>
       <Divider sx={{ marginTop: "12px" }} />
 
-      <Grid container spacing={3} mt={0}>
-        <Grid item xs={2}>
-          <MetricCard title="CPU Usage" value={cpuUsageData.current} unit="%" />
-        </Grid>
-        <Grid item xs={2}>
+      <Box display="flex" alignItems="stretch" gap={3} mt={3}>
+        <MetricCard title="CPU Usage" value={cpuUsageData.current} unit="%" />
+        {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
           <MetricCard title="Load average" value={loadAverage.current} />
-        </Grid>
-        <Grid item xs={2}>
-          <MetricCard title="Total RAM" value={totalMemoryGB} unit="GB" />
-        </Grid>
-        <Grid item xs={2}>
-          <MetricCard title="Used RAM" value={memoryUsageGB} unit="GB" />
-        </Grid>
-        <Grid item xs={2}>
-          <MetricCard
-            title="RAM Usage (%)"
-            value={memoryUsagePercent}
-            unit="%"
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <MetricCard
-            title="System Uptime"
-            value={systemUptimeHours}
-            unit="hrs"
-          />
-        </Grid>
-      </Grid>
+        )}
+        <MetricCard title="Total RAM" value={totalMemoryGB} unit="GB" />
+        <MetricCard title="Used RAM" value={memoryUsageGB} unit="GB" />
+        <MetricCard title="RAM Usage (%)" value={memoryUsagePercent} unit="%" />
+        <MetricCard
+          title="System Uptime"
+          value={systemUptimeHours}
+          unit="hrs"
+        />
+      </Box>
 
       <CpuUsageChart data={cpuUsageData.data} />
 
@@ -795,9 +788,11 @@ function Metrics(props) {
         <MemUsagePercentChart data={memUsagePercentData.data} />
       </Box>
 
-      <Box mt={8}>
-        <LoadAverageChart data={loadAverage.data} />
-      </Box>
+      {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
+        <Box mt={8}>
+          <LoadAverageChart data={loadAverage.data} />
+        </Box>
+      )}
 
       <Box mt={8}>
         <DiskUsageChart data={diskUsage} labels={diskPathLabels} />
@@ -826,20 +821,24 @@ function Metrics(props) {
           labels={diskThroughputWriteLabels}
         />
       </Box>
-      <Box mt={8}>
-        <NetworkThroughputChart
-          chartName="Network Throughput (Receive)"
-          data={netThroughputReceive}
-          labels={netThroughputReceiveLabels}
-        />
-      </Box>
-      <Box mt={8}>
-        <NetworkThroughputChart
-          chartName="Network Throughput (Send)"
-          data={netThroughputSend}
-          labels={netThroughputSendLabels}
-        />
-      </Box>
+      {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
+        <>
+          <Box mt={8}>
+            <NetworkThroughputChart
+              chartName="Network Throughput (Receive)"
+              data={netThroughputReceive}
+              labels={netThroughputReceiveLabels}
+            />
+          </Box>
+          <Box mt={8}>
+            <NetworkThroughputChart
+              chartName="Network Throughput (Send)"
+              data={netThroughputSend}
+              labels={netThroughputSendLabels}
+            />
+          </Box>
+        </>
+      )}
       {customMetrics //show metrics for selected node resource type
         .filter((metric) => {
           if (selectedNode)
