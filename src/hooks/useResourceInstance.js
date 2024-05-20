@@ -117,6 +117,7 @@ export default function useResourceInstance(
           }
         }
         if (topologyDetails?.hasCompute) {
+        if (topologyDetails?.hasCompute) {
           if (topologyDetails?.nodes) {
             topologyDetails.nodes.forEach((node) => {
               const nodeId = node.id;

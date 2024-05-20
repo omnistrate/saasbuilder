@@ -1689,13 +1689,19 @@ function MarketplaceService() {
               startIcon={
                 <EditIcon
                   color={
-                    (!isModifyActionEnabled || !modifyAccessServiceAllowed) &&
+                    (isCurrentResourceBYOA ||
+                      !isModifyActionEnabled ||
+                      !modifyAccessServiceAllowed) &&
                     "#EAECF0"
                   }
                 />
               }
               sx={{ marginRight: 2 }}
-              disabled={!isModifyActionEnabled || !modifyAccessServiceAllowed}
+              disabled={
+                isCurrentResourceBYOA ||
+                !isModifyActionEnabled ||
+                !modifyAccessServiceAllowed
+              }
               onClick={openUpdateDrawer}
             >
               Modify

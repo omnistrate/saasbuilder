@@ -1,4 +1,6 @@
-import { Box } from "@mui/material";
+import Link from "next/link";
+import { useMemo } from "react";
+import { Box, styled } from "@mui/material";
 import {
   CellDescription,
   CellSubtext,
@@ -10,12 +12,11 @@ import {
   TableRow,
 } from "../../InfoTable/InfoTable";
 import formatDateUTC from "../../../utils/formatDateUTC";
-import React, { useMemo } from "react";
 import capitalize from "lodash/capitalize";
-import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
-import { getTerraformKitURL } from "src/api/resourceInstance";
-import { baseURL } from "src/axios";
-import { PasswordWithOutBorderField } from "src/components/FormElementsv2/PasswordField/PasswordWithOutBorderField";
+
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import { PasswordWithOutBorderField } from "components/FormElementsv2/PasswordField/PasswordWithOutBorderField";
+import TerraformDownloadURL from "./TerraformDownloadURL";
 
 function ResourceInstanceDetails(props) {
   const {
@@ -27,7 +28,6 @@ function ResourceInstanceDetails(props) {
     modifiedAt,
     subscriptionId,
     serviceOffering,
-
   } = props;
 
   const isResourceBYOA =
@@ -72,36 +72,8 @@ function ResourceInstanceDetails(props) {
 
         return !filterArr.includes(param.key);
       });
-
-    if (resultParameters.account_configuration_method === "Terraform") {
-      result.push({
-        key: "terraform_url",
-        displayName: "Terraform URL",
-        description:
-          "Terraform Kit URL to configure access to an AWS/GCP account.",
-        type: "String",
-        isList: false,
-        custom: true,
-        value: `${baseURL}${getTerraformKitURL(
-          serviceOffering?.serviceProviderId,
-          serviceOffering?.serviceURLKey,
-          serviceOffering?.serviceAPIVersion,
-          serviceOffering?.serviceEnvironmentURLKey,
-          serviceOffering?.serviceModelURLKey,
-          subscriptionId,
-          resultParameters?.cloud_provider
-        )}`,
-      });
-    }
-
     return result;
-  }, [
-    isResourceBYOA,
-    resultParameters,
-    resultParametersSchema,
-    serviceOffering,
-    subscriptionId,
-  ]);
+  }, [isResourceBYOA, resultParameters, resultParametersSchema]);
 
   if (isLoading) {
     return (
@@ -205,6 +177,14 @@ function ResourceInstanceDetails(props) {
               );
             }
           })}
+
+          {resultParameters.account_configuration_method === "Terraform" && (
+            <TerraformDownloadURL
+              serviceOffering={serviceOffering}
+              subscriptionId={subscriptionId}
+              cloud_provider={resultParameters.cloud_provider}
+            />
+          )}
         </TableBody>
       </Table>
     </TableContainer>
@@ -212,3 +192,86 @@ function ResourceInstanceDetails(props) {
 }
 
 export default ResourceInstanceDetails;
+
+// const ResourceProxyEndpoint = (props) => {
+//   const {
+//     endpoint,
+//     primary,
+//     sx = {},
+//     serviceId,
+//     environmentId,
+//     searchInventoryView,
+//   } = props;
+
+//   //regex for instance id extraction from proxy endpoint
+//   const regex = /instance-([^\.]+)/;
+//   const match = endpoint.match(regex);
+//   let instanceId;
+
+//   if (match) {
+//     instanceId = match[0];
+//     console.log("instanceId", instanceId, match);
+//   }
+
+//   let resourceInstanceUrlLink;
+
+//   if (instanceId) {
+//     resourceInstanceUrlLink = getInventoryManagementInventoryRoute(
+//       serviceId,
+//       environmentId,
+//       instanceId,
+//       searchInventoryView
+//     );
+//   }
+
+//   return (
+//     <Stack
+//       direction="row"
+//       sx={{
+//         border: primary ? "2px solid #7F56D9" : "1px solid #EAECF0",
+//         background: primary ? "#F9F5FF" : "white",
+//         padding: "16px",
+//         borderRadius: "12px",
+//         ...sx,
+//       }}
+//     >
+//       <Image src={resourceEndpointIcon} alt="resource-endpoint" />
+//       <Box
+//         sx={{
+//           flexGrow: 1,
+//           marginLeft: "16px",
+//           textAlign: "left",
+//           alignSelf: "center",
+//         }}
+//       >
+//         <LinkResourceInstance
+//           href={resourceInstanceUrlLink ?? ""}
+//           target="_blank"
+//         >
+//           <Text
+//             size="small"
+//             weight="regular"
+//             color={primary ? "#6941C6" : ""}
+//             sx={{ wordBreak: "break-all" }}
+//           >
+//             {endpoint}
+//           </Text>
+//           <ArrowOutwardIcon />
+//         </LinkResourceInstance>
+//       </Box>
+//       {endpoint && (
+//         <Box alignSelf="start">
+//           <CopyToClipbpoardButton text={endpoint} />
+//         </Box>
+//       )}
+//     </Stack>
+//   );
+// };
+
+const LinkResourceInstance = styled(Link)(({ theme }) => ({
+  display: "flex",
+  color: "#6941C6",
+  fontWeight: 500,
+  gap: 2,
+  alignItems: "center",
+}));

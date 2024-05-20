@@ -134,13 +134,31 @@ export const deleteResourceInstance = (payload) => {
   );
 };
 
+export const getTerraformKitURL = (
+  serviceProviderId,
+  serviceKey,
+  serviceAPIVersion,
+  serviceEnvironmentKey,
+  serviceModelKey,
+  subscriptionId,
+  cloudProvider
+) => {
+  const queryParams = {};
+
+  if (subscriptionId) {
+    queryParams.subscriptionId = subscriptionId;
+  }
+  return `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/setup-kit/${cloudProvider}?subscriptionId=${subscriptionId}`;
+};
+
 export const getTerraformKit = (
   serviceProviderId,
   serviceKey,
   serviceAPIVersion,
   serviceEnvironmentKey,
   serviceModelKey,
-  subscriptionId
+  subscriptionId,
+  cloudProvider
 ) => {
   const queryParams = {};
 
@@ -148,7 +166,7 @@ export const getTerraformKit = (
     queryParams.subscriptionId = subscriptionId;
   }
   return axios.get(
-    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/setup-kit`,
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/setup-kit/${cloudProvider}`,
     {
       params: queryParams,
       responseType: "blob",
