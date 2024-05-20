@@ -178,13 +178,15 @@ function ResourceInstanceDetails(props) {
             }
           })}
 
-          {resultParameters.account_configuration_method === "Terraform" && (
-            <TerraformDownloadURL
-              serviceOffering={serviceOffering}
-              subscriptionId={subscriptionId}
-              cloud_provider={resultParameters.cloud_provider}
-            />
-          )}
+          {serviceOffering &&
+            subscriptionId &&
+            resultParameters.account_configuration_method === "Terraform" && (
+              <TerraformDownloadURL
+                serviceOffering={serviceOffering}
+                subscriptionId={subscriptionId}
+                cloud_provider={resultParameters.cloud_provider}
+              />
+            )}
         </TableBody>
       </Table>
     </TableContainer>
