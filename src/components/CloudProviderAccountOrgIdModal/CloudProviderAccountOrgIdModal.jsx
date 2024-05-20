@@ -367,8 +367,6 @@ const NonCreatationTimeInstructions = (props) => {
     cloudFormationTemplateUrl,
   } = props;
 
-  console.log(accountConfigMethod, "accountConfigMethod");
-
   return (
     <>
       <Box width={"100%"} mb="30px">
