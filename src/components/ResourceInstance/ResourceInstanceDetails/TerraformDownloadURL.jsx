@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 
 import { getTerraformKit, getTerraformKitURL } from "src/api/resourceInstance";
@@ -68,14 +68,15 @@ const TerraformDownloadURL = ({
           alignItems="center"
           justifyContent="flex-end"
         >
-          <Box
-            flexShrink="0"
-            visibility={
-              downloadTerraformKitMutation.isLoading ? "visible" : "hidden"
-            }
-          >
-            <LoadingSpinnerSmall />
-          </Box>
+          <LoadingSpinnerSmall
+            sx={{
+              flexShrink: "0",
+              visibility: downloadTerraformKitMutation.isLoading
+                ? "visible"
+                : "hidden",
+              mr: "12px",
+            }}
+          />
           <Text
             size="large"
             color="#7F56D9"
