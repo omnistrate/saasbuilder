@@ -20,34 +20,6 @@ async function fetchServiceOffering(serviceId, productTierId) {
     offering.isReleased = false;
   }
 
-  if (
-    offering.serviceModelType === "BYOA" &&
-    offering.cloudProviders?.length <= 1
-  ) {
-    offering.cloudProviders = ["aws", "gcp"];
-    const allRegionIds = [];
-    const gcpRegions = [];
-    await Promise.all(
-      ["gcp"].map((cloudProvider) => {
-        return getRegionIdsByCloudProviderWithParams(cloudProvider).then(
-          (response) => {
-            const regionIds = response.data.ids;
-            allRegionIds.push(...regionIds);
-          }
-        );
-      })
-    );
-
-    await Promise.all(
-      allRegionIds.map((regionId) => {
-        return getRegionById(regionId).then((response) => {
-          gcpRegions.push(response.data.code);
-        });
-      })
-    );
-    offering.gcpRegions = [...gcpRegions];
-  }
-
   return {
     ...restData,
     ...offering,
