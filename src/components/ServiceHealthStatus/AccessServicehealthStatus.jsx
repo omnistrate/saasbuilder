@@ -15,18 +15,14 @@ function AccessServiceHealthStatus() {
 
   const healthDescriptionData = useMemo(() => {
     const defaultLabel = SERVICE_HEALTH_LABEL_MAP.UNKNOWN;
-    let res = {
-      description: defaultLabel,
-      styles: SERVICE_HEALTH_LABEL_STYLES[defaultLabel],
+    const label =
+      SERVICE_HEALTH_LABEL_MAP[serviceHealthQuery?.data?.status] ||
+      defaultLabel;
+
+    return {
+      description: label,
+      styles: SERVICE_HEALTH_LABEL_STYLES[label] || {},
     };
-    const label = SERVICE_HEALTH_LABEL_MAP[serviceHealthQuery?.data?.status];
-    if (label) {
-      res = {
-        description: label,
-        styles: SERVICE_HEALTH_LABEL_STYLES[label],
-      };
-    }
-    return res;
   }, [serviceHealthQuery?.data?.status]);
 
   const label = healthDescriptionData?.description;
