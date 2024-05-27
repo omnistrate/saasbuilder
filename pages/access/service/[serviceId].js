@@ -98,6 +98,7 @@ import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcu
 import DeleteAccountConfigConfirmationDialog from "src/components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
 import { cloneDeep } from "lodash";
 import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
+import AccessServiceHealthStatus from "src/components/ServiceHealthStatus/AccessServicehealthStatus";
 
 const instanceStatuses = {
   FAILED: "FAILED",
@@ -1529,11 +1530,18 @@ function MarketplaceService() {
         <Head>
           <title>Resources</title>
         </Head>
-        <LogoHeader
-          title={`${selectedResource?.name} Instances`}
-          desc="Some Description"
-          newicon={resourceInstnaceIcon}
-        />
+        <Stack
+          direction="row"
+          justifyContent={"space-between"}
+          alignItems={"center"}
+        >
+          <LogoHeader
+            title={`${selectedResource?.name} Instances`}
+            desc="Some Description"
+            newicon={resourceInstnaceIcon}
+          />
+          <AccessServiceHealthStatus />
+        </Stack>
 
         <AccessHeaderCard
           serviceName={service?.serviceName}
