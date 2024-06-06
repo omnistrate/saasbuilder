@@ -1,7 +1,6 @@
 import { Box, Stack, styled } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiToolbar from "@mui/material/Toolbar";
-import Link from "next/link";
 import { useSelector } from "react-redux";
 import useLogout from "../../hooks/useLogout";
 import useUserData from "../../hooks/usersData";
@@ -9,10 +8,8 @@ import { closedWidth, drawerWidth } from "./SideDrawer";
 import ProfileDropdown from "./ProfileDropdown";
 import { selectUserData } from "src/slices/userDataSlice";
 import { Text } from "../Typography/Typography";
-import  { styleConfig } from "src/providerConfig";
-import Image from "next/image";
+import { styleConfig } from "src/providerConfig";
 import ServicesDropdown from "./ServicesDropdown";
-import placeholderService from "public/assets/images/dashboard/service/servicePlaceholder.png";
 import useBillingDetails from "src/hooks/query/useBillingDetails";
 
 const AppBar = styled(MuiAppBar, {
@@ -105,8 +102,11 @@ function DashboardHeader(props) {
         </Box>
 
         <Stack direction="row" alignItems="center" gap="10px" pr="16px">
-          <Image
-            src={serviceLogoURL || placeholderService}
+          <img
+            src={
+              serviceLogoURL ||
+              "/assets/images/dashboard/service/servicePlaceholder.png"
+            }
             height={28}
             width={40}
             style={{ maxHeight: "28px", width: "auto", maxWidth: "180px" }}

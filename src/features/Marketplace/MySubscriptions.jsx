@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import { Box, CircularProgress, IconButton, Stack } from "@mui/material";
@@ -17,7 +16,6 @@ import MarketplaceHeader from "components/Headers/MarketplaceHeader";
 import formatDateUTC from "src/utils/formatDateUTC";
 import DataGridHeader from "./components/DataGridHeader";
 
-import placeholderService from "public/assets/images/dashboard/service/servicePlaceholder.png";
 import BellRingingIcon from "src/components/Icons/BellRinging/BellRingingIcon";
 import SpeedometerIcon from "src/components/Icons/Speedometer/SpeedometerIcon";
 
@@ -119,11 +117,14 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
                 height="52px"
                 flexShrink={0}
               >
-                <Image
+                <img
                   width="50"
                   height="50"
                   style={{ objectFit: "cover" }}
-                  src={serviceLogoURL || placeholderService}
+                  src={
+                    serviceLogoURL ||
+                    "/assets/images/dashboard/service/servicePlaceholder.png"
+                  }
                   alt={serviceName}
                 />
               </Box>
