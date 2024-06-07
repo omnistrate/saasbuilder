@@ -65,7 +65,7 @@ const StyledAutoComplete = styled(MuiAutocomplete, {
   },
 }));
 
-const StyledTextField = styled(TextField)(({ theme }) => ({
+export const StyledTextField = styled(TextField)(({ theme }) => ({
   ".MuiAutocomplete-input": {
     color: theme.palette.gray["900"],
     fontSize: "16px",
@@ -104,6 +104,12 @@ const StyledListOption = styled("li")(() => ({
   marginBottom: "2px",
   justifyContent: "space-between !important",
   width: "100%",
+  '&.MuiAutocomplete-option[aria-selected="true"]': {
+    backgroundColor: "rgba(158, 119, 237, 0.08)",
+  },
+  '&.MuiAutocomplete-option[aria-selected="true"].Mui-focused': {
+    backgroundColor: "rgba(158, 119, 237, 0.12)",
+  },
 }));
 
 const StyledListOptionText = styled("p")(({ theme }) => ({
@@ -132,7 +138,6 @@ function Autocomplete(props) {
       marginTop={marginTop}
       getOptionLabel={getOptionLabel}
       disabled={disabled}
-      {...restProps}
       renderInput={(params) => (
         <StyledTextField {...params} placeholder={placeholder} error={error} />
       )}
@@ -158,6 +163,7 @@ function Autocomplete(props) {
           </StyledListOption>
         );
       }}
+      {...restProps}
     />
   );
 }
