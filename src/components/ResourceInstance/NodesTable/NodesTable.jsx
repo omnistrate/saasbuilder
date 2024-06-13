@@ -28,6 +28,7 @@ import { useSelector } from "react-redux";
 import { selectUserrootData } from "../../../slices/userDataSlice";
 import Card from "src/components/Card/Card";
 import { NodeStatus } from "./NodeStatus";
+import DataGridText from "src/components/DataGrid/DataGridText";
 
 export default function NodesTable(props) {
   const {
@@ -82,7 +83,6 @@ export default function NodesTable(props) {
             <GridCellExpand
               startIcon={<Image src={nodeIcon} alt="node" />}
               value={nodeId}
-              width={params.colDef.computedWidth}
               textStyles={{
                 color: "#101828",
                 marginLeft: "4px",
@@ -100,6 +100,7 @@ export default function NodesTable(props) {
         field: "resourceName",
         headerName: `${sectionLabel} Name`,
         flex: 0.9,
+        minWidth: 100,
         headerAlign: "center",
         align: "center",
       },
@@ -107,14 +108,24 @@ export default function NodesTable(props) {
         field: "endpoint",
         headerName: "Endpoint",
         flex: 1,
+        minWidth: 190,
         headerAlign: "center",
         align: "center",
-        renderCell: renderCellExpand,
+        renderCell: (params) => {
+          const endpoint = params.row.endpoint;
+          if (!endpoint) {
+            return "-";
+          }
+          return (
+            <DataGridText showCopyButton>{params.row.endpoint}</DataGridText>
+          );
+        },
       },
       {
         field: "ports",
         headerName: "Ports",
         flex: 0.7,
+        minWidth: 100,
         headerAlign: "center",
         align: "center",
         cellClassName: "node-ports",
@@ -123,26 +134,15 @@ export default function NodesTable(props) {
         field: "availabilityZone",
         headerName: "Availability Zone",
         flex: 1,
+        minWidth: 150,
         headerAlign: "center",
         align: "center",
         renderCell: (params) => {
           const availabilityZone = params.row.availabilityZone;
           return (
-            // <Stack direction="row" alignItems="center">
-            //   <Image src={zoneIcon} alt="node" />
-            //   <Text
-            //     size="small"
-            //     weight="medium"
-            //     sx={{ color: "#101828", marginLeft: "12px" }}
-            //   >
-            //     {availabilityZone}
-            //   </Text>
-            // </Stack>
-
             <GridCellExpand
               startIcon={<Image src={zoneIcon} alt="zone" />}
               value={availabilityZone}
-              width={params.colDef.computedWidth}
               textStyles={{
                 color: "#101828",
                 marginLeft: "4px",
@@ -368,14 +368,3 @@ const getRowBorderStyles = () => {
 
   return styles;
 };
-
-function renderCellExpand(params) {
-  const value = params.row.endpoint || "";
-  return (
-    <GridCellExpand
-      value={value}
-      width={params.colDef.computedWidth}
-      copyButton
-    />
-  );
-}
