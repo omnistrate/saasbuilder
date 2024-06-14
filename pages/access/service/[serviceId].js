@@ -101,6 +101,7 @@ import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPerce
 import AccessServiceHealthStatus from "src/components/ServiceHealthStatus/AccessServicehealthStatus";
 import RestoreInstanceIcon from "src/components/Icons/RestoreInstance/RestoreInstanceIcon";
 import AccessSideRestoreInstance from "src/components/RestoreInstance/AccessSideRestoreInstance";
+import DataGridText from "src/components/DataGrid/DataGridText";
 
 const instanceStatuses = {
   FAILED: "FAILED",
@@ -259,7 +260,6 @@ function MarketplaceService() {
         headerAlign: "center",
         renderCell: (params) => {
           const instanceId = params.row.id;
-          const isActive = params.row.active;
 
           const instanceIdDisplay = isCurrentResourceBYOA
             ? "account-" + instanceId
@@ -274,14 +274,15 @@ function MarketplaceService() {
           );
 
           return (
-            <Box display="flex" gap="8px" alignItems="center">
-              <GridCellExpand
-                href={resourceInstanceUrlLink}
-                value={instanceIdDisplay ?? ""}
-                width={params.colDef.computedWidth}
-              />
-              <CopyButton text={instanceIdDisplay} />
-            </Box>
+            <DataGridText
+              color="primary"
+              showCopyButton
+              linkProps={{
+                href: resourceInstanceUrlLink,
+              }}
+            >
+              {instanceIdDisplay}
+            </DataGridText>
           );
         },
       },
@@ -377,17 +378,10 @@ function MarketplaceService() {
         minWidth: 155,
         renderCell: (params) => {
           const region = params.row.region;
-          return !isCurrentResourceBYOA && region ? (
+          return (
             <GridCellExpand
-              value={region}
+              value={region || "Global"}
               startIcon={<RegionIcon />}
-              width={params.colDef.computedWidth}
-            />
-          ) : (
-            <GridCellExpand
-              value={"Global"}
-              startIcon={<RegionIcon />}
-              width={params.colDef.computedWidth}
             />
           );
         },
