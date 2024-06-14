@@ -23,13 +23,14 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import { deleteSubscription } from "src/api/subscriptions";
 import useSnackbar from "src/hooks/useSnackbar";
-import SubscriptionTypeCell from "./components/SubscriptionTypeCell";
 // import CloudProviderCell from "./components/CloudProviderCell"; - Removed for Now
 import useUserSubscriptions from "src/hooks/query/useUserSubscriptions";
 import { getResourceRouteWithoutEnv } from "src/utils/route/access/accessRoute";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import Head from "next/head";
 import NoLogoImage from "public/assets/images/logos/no-logo.png";
+import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
+import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
 
 const ITEM_HEIGHT = 45;
 
@@ -93,7 +94,6 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
         return (
           <GridCellExpand
             value={serviceName || ""}
-            width={params.colDef.computedWidth}
             justifyContent="flex-start"
             textStyles={{
               color: "#6941C6",
@@ -181,10 +181,18 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
       minWidth: 150,
       headerAlign: "center",
       renderCell: (params) => {
-        if (params.row.roleType === "root") {
-          return <SubscriptionTypeCell subscriptionType="Direct" />;
-        }
-        return <SubscriptionTypeCell subscriptionType="Invited" />;
+        return (
+          <GridCellExpand
+            value={params.row.roleType === "root" ? "Direct" : "Invited"}
+            startIcon={
+              params.row.roleType === "root" ? (
+                <SubscriptionTypeDirectIcon />
+              ) : (
+                <SubscriptionTypeInvitedIcon />
+              )
+            }
+          />
+        );
       },
     },
     {
