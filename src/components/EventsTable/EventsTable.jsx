@@ -5,7 +5,7 @@ import GridCellExpand from "../GridCellExpand/GridCellExpand";
 
 const columns = [
   { field: "resourceName", headerName: "Resource Name", flex: 1 },
-  { field: "resourceInstanceId", headerName: "Resource Instance Id", flex: 1 },
+  { field: "resourceInstanceId", headerName: "Resource Instance ID", flex: 1 },
   {
     field: "time",
     headerName: "Time",
