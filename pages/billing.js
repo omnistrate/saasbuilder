@@ -5,12 +5,18 @@ import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
 import NoLogoImage from "public/assets/images/logos/no-logo.png";
 
 export const getServerSideProps = async () => {
-  const response = await getProviderOrgDetails();
+  let orgName = "";
+  let orgLogoURL = "";
+  try {
+    const response = await getProviderOrgDetails();
+    orgName = response.data.orgName;
+    orgLogoURL = response.data.orgLogoURL;
+  } catch (err) {}
 
   return {
     props: {
-      orgName: response.data.orgName,
-      orgLogoURL: response.data.orgLogoURL,
+      orgName: orgName,
+      orgLogoURL: orgLogoURL,
     },
   };
 };

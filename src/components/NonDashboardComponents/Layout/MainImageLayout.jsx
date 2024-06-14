@@ -6,7 +6,7 @@ import MainImg from "public/assets/images/non-dashboard/signin-main.svg";
 import Footer from "../Footer";
 import Logo from "../Logo";
 import CurvedArrow from "../Icons/CurvedArrow";
-import NoLogoImage from "public/assets/images/logos/no-logo.png";
+//import NoLogoImage from "public/assets/images/logos/no-logo.png";
 
 const manrope = Manrope({ subsets: ["latin"] });
 
@@ -67,11 +67,7 @@ const MainImageLayout = ({
                   style={{ position: "absolute", top: 0, left: "-60px" }}
                 />
               )}
-              {orgLogoURL ? (
-                <Logo src={orgLogoURL} alt={orgName} />
-              ) : (
-                <Image src={NoLogoImage} />
-              )}
+              {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}
             </Box>
             {children}
           </Stack>
