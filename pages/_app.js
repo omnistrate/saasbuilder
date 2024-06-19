@@ -18,6 +18,7 @@ import "../styles/nprogress.css";
 import { theme as dashboardTheme } from "../styles/theme";
 import _ from "lodash";
 import ProviderFavicon from "src/components/ProviderFavicon/ProviderFavicon";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 NProgress.configure({
   trickleSpeed: 50,
@@ -118,7 +119,7 @@ export default function App(props) {
     async function (error) {
       if (error.response && error.response.status === 401) {
         if (`${baseURL}/signin` !== error.request.responseURL) {
-          handleLogout();
+        //  handleLogout();
         }
       } else if (error.response && error.response.data) {
         const status = String(error.response.status);
@@ -128,7 +129,7 @@ export default function App(props) {
             "You have not been subscribed to a service yet.",
             "Your provider has not enabled billing for the user.",
             "You have not been enrolled in a service plan with a billing plan yet.",
-            "Your provider has not enabled billing for the services."
+            "Your provider has not enabled billing for the services.",
           ];
           if (!ignoredMessages.includes(message)) {
             if (message) {
@@ -157,7 +158,9 @@ export default function App(props) {
                 <ThemeProvider
                   theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}
                 >
-                  <Component {...pageProps} />
+                
+                    <Component {...pageProps} />\
+                 
                 </ThemeProvider>
               </NotificationBarProvider>
             </SnackbarProvider>
