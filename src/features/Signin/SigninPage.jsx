@@ -21,6 +21,7 @@ import useSnackbar from "src/hooks/useSnackbar";
 import GoogleLogin from "./components/GoogleLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "./constants";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import GithubLogin from "./components/GitHubLogin";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -113,8 +114,19 @@ const SigninPage = (props) => {
     }
   }
 
+  let githubIDPClientID = null;
+  let showGithubLoginButton = false;
+  let isGithubLoginDisabled = false;
+
   if (githubIdentityProvider) {
     console.log("Github identity provider", githubIdentityProvider);
+    showGithubLoginButton = true;
+    githubIDPClientID = githubIdentityProvider.clientId;
+    const { status } = githubIdentityProvider;
+
+    if (status === IDENTITY_PROVIDER_STATUS_TYPES.FAILED) {
+      isGithubLoginDisabled = true;
+    }
   }
 
   return (
@@ -198,7 +210,7 @@ const SigninPage = (props) => {
               Or login with
             </Box>
           </Box>
-          <Stack direction="row" justifyContent="center" mt="-6px">
+          <Stack direction="row" justifyContent="center" mt="-6px" gap="16px">
             {showGoogleLoginButton && (
               <GoogleOAuthProvider
                 clientId={googleIDPClientID}
@@ -215,6 +227,10 @@ const SigninPage = (props) => {
                 />
               </GoogleOAuthProvider>
             )}
+            <GithubLogin
+              githubClientID={githubIDPClientID}
+              disabled={isGithubLoginDisabled}
+            />
           </Stack>
         </>
       )}

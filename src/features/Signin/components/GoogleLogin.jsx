@@ -19,7 +19,10 @@ function GoogleLogin(props) {
     onNonOAuthError: (error) => {
       console.log("Non Oauth Error", error);
     },
+    //redirect_uri: "http://localhost:3000/api/idp-auth",
+    //ux_mode: "redirect",
     flow: "auth-code",
+    //state: "google-auth",
   });
   return (
     <Tooltip

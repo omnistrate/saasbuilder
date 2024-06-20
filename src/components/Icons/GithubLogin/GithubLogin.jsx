@@ -1,4 +1,4 @@
-function GithubLogin() {
+function GithubLoginIcon() {
   return (
     <svg
       width="32"
@@ -29,4 +29,4 @@ function GithubLogin() {
   );
 }
 
-export default GithubLogin;
+export default GithubLoginIcon;

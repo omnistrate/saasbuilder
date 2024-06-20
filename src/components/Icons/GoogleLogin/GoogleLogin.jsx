@@ -1,4 +1,4 @@
-function GoogleLogin(props) {
+function GoogleLoginIcon(props) {
   const { disabled } = props;
 
   return (
@@ -29,4 +29,4 @@ function GoogleLogin(props) {
   );
 }
 
-export default GoogleLogin;
+export default GoogleLoginIcon;
