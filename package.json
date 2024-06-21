@@ -57,7 +57,7 @@
     "sass": "^1.56.1",
     "sharp": "0.32.6",
     "swagger-ui-react": "^5.4.2",
-    "yup": "^0.32.11"
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.2",
