@@ -13,9 +13,7 @@ import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLa
 import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
 import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
 import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
-import {
-  customerUserSignin,
-} from "src/api/customer-user";
+import { customerUserSignin } from "src/api/customer-user";
 import useSnackbar from "src/hooks/useSnackbar";
 import GoogleLogin from "./components/GoogleLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "./constants";
@@ -46,7 +44,7 @@ const SigninPage = (props) => {
   useEffect(() => {
     if (redirect_reason === "idp_auth_error") {
       snackbar.showError("Something went wrong. Please retry");
-      router.replace("/signin")
+      router.replace("/signin");
     }
   }, [redirect_reason]);
 
@@ -224,11 +222,13 @@ const SigninPage = (props) => {
                 />
               </GoogleOAuthProvider>
             )}
-            <GithubLogin
-              githubClientID={githubIDPClientID}
-              disabled={isGithubLoginDisabled}
-              saasBuilderBaseURL={saasBuilderBaseURL}
-            />
+            {showGithubLoginButton && (
+              <GithubLogin
+                githubClientID={githubIDPClientID}
+                disabled={isGithubLoginDisabled}
+                saasBuilderBaseURL={saasBuilderBaseURL}
+              />
+            )}
           </Stack>
         </>
       )}
