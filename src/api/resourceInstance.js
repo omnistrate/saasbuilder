@@ -134,6 +134,23 @@ export const deleteResourceInstance = (payload) => {
   );
 };
 
+export const getTerraformKitURL = (
+  serviceProviderId,
+  serviceKey,
+  serviceAPIVersion,
+  serviceEnvironmentKey,
+  serviceModelKey,
+  subscriptionId,
+  cloudProvider
+) => {
+  const queryParams = {};
+
+  if (subscriptionId) {
+    queryParams.subscriptionId = subscriptionId;
+  }
+  return `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/setup-kit/${cloudProvider}?subscriptionId=${subscriptionId}`;
+};
+
 export const getTerraformKit = (
   serviceProviderId,
   serviceKey,

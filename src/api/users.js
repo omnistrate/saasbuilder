@@ -31,6 +31,3 @@ export const getBillingDetails = (userId) => {
   return axios.get(`/resource-instance/user/${userId}/billing-details`);
 };
 
-export const signInWithIdentityProvider = (payload) => {
-  return axios.post(`/customer-login-with-identity-provider`, payload);
-};
