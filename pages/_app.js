@@ -118,7 +118,7 @@ export default function App(props) {
     async function (error) {
       if (error.response && error.response.status === 401) {
         if (`${baseURL}/signin` !== error.request.responseURL) {
-        //  handleLogout();
+          handleLogout();
         }
       } else if (error.response && error.response.data) {
         const status = String(error.response.status);
@@ -157,9 +157,7 @@ export default function App(props) {
                 <ThemeProvider
                   theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}
                 >
-                
-                    <Component {...pageProps} />\
-                 
+                  <Component {...pageProps} />\
                 </ThemeProvider>
               </NotificationBarProvider>
             </SnackbarProvider>
