@@ -14,10 +14,12 @@ const Tooltip = styled(
     color: theme.palette.common.black,
   },
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#101828",
     fontSize: "12px",
     lineHeight: "18px",
     fontWeight: 600,
+    padding: "12px",
+    borderRadius: "8px",
   },
 }));
 

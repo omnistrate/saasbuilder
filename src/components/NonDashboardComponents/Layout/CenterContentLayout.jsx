@@ -1,13 +1,10 @@
 import Head from "next/head";
-import { Manrope } from "next/font/google";
 import { Box, Stack } from "@mui/material";
 import Footer from "../Footer";
 import Logo from "../Logo";
 import BackgroundImg from "public/assets/images/non-dashboard/wave-background.svg";
 import NoLogoImage from "public/assets/images/logos/no-logo.png";
 import Image from "next/image";
-
-const manrope = Manrope({ subsets: ["latin"] });
 
 const CenterContentLayout = ({
   orgName,
@@ -25,7 +22,6 @@ const CenterContentLayout = ({
       )}
       <Box
         height="100%"
-        className={manrope.className}
         sx={{
           position: "relative", // For the Footer
           display: "grid",

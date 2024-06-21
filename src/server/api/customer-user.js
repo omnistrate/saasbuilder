@@ -28,6 +28,19 @@ function customerUserSignIn(payload) {
   });
 }
 
+function customerSignInWithIdentityProvider(payload) {
+  return axios
+    .post("/customer-login-with-identity-provider", payload)
+    .catch((error) => {
+      console.log("IDP Sign in error", error);
+      if (error.response && error.response.status === 401) {
+        throw new ProviderAuthError();
+      } else {
+        throw error;
+      }
+    });
+}
+
 function customerUserResetPassword(payload) {
   return axios.post("/customer-reset-password", payload).catch((error) => {
     console.log("Reset password error", error);
@@ -58,5 +71,8 @@ module.exports = {
   ),
   getProviderOrgDetails: withProviderTokenExpirationHanding(
     getProviderOrgDetails
+  ),
+  customerSignInWithIdentityProvider: withProviderTokenExpirationHanding(
+    customerSignInWithIdentityProvider
   ),
 };

@@ -35,7 +35,7 @@ const nextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self'; script-src 'self' https://www.googletagmanager.com 'unsafe-eval' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src *; img-src * data:; media-src *;frame-src *",
+              "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://accounts.google.com/gsi/client 'unsafe-eval' 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src *; img-src * data:; media-src *; frame-src *; object-src 'none'",
           },
           {
             key: "Strict-Transport-Security",

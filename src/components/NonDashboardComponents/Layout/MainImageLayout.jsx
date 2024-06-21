@@ -1,14 +1,10 @@
 import Head from "next/head";
 import Image from "next/image";
-import { Manrope } from "next/font/google";
 import { Box, Stack } from "@mui/material";
 import MainImg from "public/assets/images/non-dashboard/signin-main.svg";
 import Footer from "../Footer";
 import Logo from "../Logo";
 import CurvedArrow from "../Icons/CurvedArrow";
-//import NoLogoImage from "public/assets/images/logos/no-logo.png";
-
-const manrope = Manrope({ subsets: ["latin"] });
 
 const MainImageLayout = ({
   orgName,
@@ -28,7 +24,6 @@ const MainImageLayout = ({
         display="grid"
         gridTemplateColumns="1fr 1fr"
         height="100%"
-        className={manrope.className}
       >
         {/* Image Box */}
         <Box
