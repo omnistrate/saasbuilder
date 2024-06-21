@@ -17,10 +17,6 @@ import SignupNotification from "components/NonDashboardComponents/SignupNotifica
 import useSnackbar from "src/hooks/useSnackbar";
 import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
-import { useGoogleLogin } from "@react-oauth/google";
-import { signInWithIdentityProvider } from "src/api/users";
-import axios from "src/axios";
-import Cookies from "js-cookie";
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -42,34 +38,6 @@ const SignupPage = (props) => {
   const { org, orgUrl, email, userSource } = router.query;
   const [showSuccess, setShowSuccess] = useState(false);
   const snackbar = useSnackbar();
-  const [isGoogleSSOInProgress, setIsGoogleSSOInProgress] = useState(false);
-
-  async function handleSSOLogin(authorizationCode, identityProviderName) {
-    const payload = { authorizationCode, identityProviderName };
-    try {
-      const response = await signInWithIdentityProvider(payload);
-      const jwtToken = response.data.jwtToken;
-      if (jwtToken) {
-        Cookies.set("token", jwtToken, { sameSite: "Strict", secure: true });
-        axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
-        if (identityProviderName === "Google") setIsGoogleSSOInProgress(false);
-        router.push("/service-plans");
-      }
-    } catch (error) {}
-  }
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (response) => {
-      const code = response.code;
-      handleSSOLogin(code, "Google");
-    },
-    onError: (error) => {
-      console.log("Error", error);
-      setIsGoogleSSOInProgress(false);
-    },
-
-    flow: "auth-code",
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -303,15 +271,6 @@ const SignupPage = (props) => {
             </SubmitButton>
           </Stack>
         </Stack>
-        <button
-          onClick={() => {
-            setIsGoogleSSOInProgress(true);
-            googleLogin();
-          }}
-        >
-          sso
-        </button>
-
         {/* Signup Link */}
         <Typography
           fontWeight="500"

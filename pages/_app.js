@@ -18,7 +18,6 @@ import "../styles/nprogress.css";
 import { theme as dashboardTheme } from "../styles/theme";
 import _ from "lodash";
 import ProviderFavicon from "src/components/ProviderFavicon/ProviderFavicon";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 NProgress.configure({
   trickleSpeed: 50,

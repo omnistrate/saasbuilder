@@ -32,7 +32,7 @@ function customerSignInWithIdentityProvider(payload) {
   return axios
     .post("/customer-login-with-identity-provider", payload)
     .catch((error) => {
-      console.log("Sign in error", error);
+      console.log("IDP Sign in error", error);
       if (error.response && error.response.status === 401) {
         throw new ProviderAuthError();
       } else {
