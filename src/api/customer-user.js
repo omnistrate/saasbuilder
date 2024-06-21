@@ -8,10 +8,6 @@ export function customerUserSignin(payload) {
   return axios.post(`/api/signin`, payload);
 }
 
-export function customerUserSigninWithIdentityProvider(payload) {
-  return axios.post(`/api/signin-sso`, payload);
-}
-
 export function customerUserResetPassword(payload) {
   return axios.post(`/api/reset-password`, payload);
 }

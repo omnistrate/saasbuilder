@@ -5,12 +5,12 @@ import GithubLoginIcon from "src/components/Icons/GithubLogin/GithubLogin";
 import { useRouter } from "next/router";
 
 function GithubLogin(props) {
-  const { handleSSOLogin, disabled, githubClientID } = props;
+  const { disabled, githubClientID } = props;
   const router = useRouter();
 
   function handleGitHubLogin() {
     router.push(
-      `https://github.com/login/oauth/authorize?client_id=${githubClientID}&scope=user:email&redirect_uri=http://localhost:3000/api/idp-auth&state=github-auth`
+      `https://github.com/login/oauth/authorize?client_id=${githubClientID}&scope=user:email&redirect_uri=${window.location.origin}/api/idp-auth&state=github-auth`
     );
   }
 

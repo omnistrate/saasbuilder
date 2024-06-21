@@ -5,24 +5,16 @@ import Tooltip from "src/components/Tooltip/Tooltip";
 import { Box } from "@mui/material";
 
 function GoogleLogin(props) {
-  const { handleSSOLogin, disabled } = props;
+  const { disabled, saasBuilderBaseURL } = props;
 
   const handleGoogleLogin = useGoogleLogin({
-    onSuccess: async (response) => {
-      console.log("success", response);
-      const code = response.code;
-      handleSSOLogin(code, "Google");
-    },
-    onError: (error) => {
-      console.log("Error", error);
-    },
-    onNonOAuthError: (error) => {
-      console.log("Non Oauth Error", error);
-    },
-    //redirect_uri: "http://localhost:3000/api/idp-auth",
-    //ux_mode: "redirect",
+    onSuccess: async (response) => {},
+    onError: (error) => {},
+    onNonOAuthError: (error) => {},
+    redirect_uri: `${saasBuilderBaseURL}/api/idp-auth`,
+    ux_mode: "redirect",
     flow: "auth-code",
-    //state: "google-auth",
+    state: "google-auth",
   });
   return (
     <Tooltip

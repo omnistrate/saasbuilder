@@ -15,13 +15,13 @@ import TextField from "components/NonDashboardComponents/FormElementsV2/TextFiel
 import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
 import {
   customerUserSignin,
-  customerUserSigninWithIdentityProvider,
 } from "src/api/customer-user";
 import useSnackbar from "src/hooks/useSnackbar";
 import GoogleLogin from "./components/GoogleLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "./constants";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import GithubLogin from "./components/GitHubLogin";
+import { useEffect } from "react";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -36,20 +36,19 @@ const SigninPage = (props) => {
     orgLogoURL,
     googleIdentityProvider,
     githubIdentityProvider,
+    saasBuilderBaseURL,
   } = props;
   const router = useRouter();
+
+  const { redirect_reason } = router.query;
   const snackbar = useSnackbar();
 
-  async function handleSSOLogin(authorizationCode, identityProviderName) {
-    const payload = { authorizationCode, identityProviderName };
-    try {
-      const response = await customerUserSigninWithIdentityProvider(payload);
-      const jwtToken = response.data.jwtToken;
-      handleSignInSuccess(jwtToken);
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    if (redirect_reason === "idp_auth_error") {
+      snackbar.showError("Something went wrong. Please retry");
+      router.replace("/signin")
     }
-  }
+  }, [redirect_reason]);
 
   function handleSignInSuccess(jwtToken) {
     if (jwtToken) {
@@ -103,7 +102,6 @@ const SigninPage = (props) => {
   let isGoogleLoginDisabled = false;
 
   if (googleIdentityProvider) {
-    console.log("Google identity provider", googleIdentityProvider);
     showGoogleLoginButton = true;
     googleIDPClientID = googleIdentityProvider.clientId;
 
@@ -119,7 +117,6 @@ const SigninPage = (props) => {
   let isGithubLoginDisabled = false;
 
   if (githubIdentityProvider) {
-    console.log("Github identity provider", githubIdentityProvider);
     showGithubLoginButton = true;
     githubIDPClientID = githubIdentityProvider.clientId;
     const { status } = githubIdentityProvider;
@@ -222,14 +219,15 @@ const SigninPage = (props) => {
                 }}
               >
                 <GoogleLogin
-                  handleSSOLogin={handleSSOLogin}
                   disabled={isGoogleLoginDisabled}
+                  saasBuilderBaseURL={saasBuilderBaseURL}
                 />
               </GoogleOAuthProvider>
             )}
             <GithubLogin
               githubClientID={githubIDPClientID}
               disabled={isGithubLoginDisabled}
+              saasBuilderBaseURL={saasBuilderBaseURL}
             />
           </Stack>
         </>

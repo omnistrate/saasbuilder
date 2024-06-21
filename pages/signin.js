@@ -48,6 +48,7 @@ export const getServerSideProps = async () => {
       orgLogoURL: orgLogoURL,
       googleIdentityProvider: googleIdentityProvider,
       githubIdentityProvider: githubIdentityProvider,
+      saasBuilderBaseURL : process.env.YOUR_SAAS_DOMAIN_URL
     },
   };
 };
