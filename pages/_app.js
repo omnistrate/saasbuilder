@@ -157,7 +157,7 @@ export default function App(props) {
                 <ThemeProvider
                   theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}
                 >
-                  <Component {...pageProps} />\
+                  <Component {...pageProps} />
                 </ThemeProvider>
               </NotificationBarProvider>
             </SnackbarProvider>
