@@ -97,6 +97,7 @@ import AccessServiceHealthStatus from "src/components/ServiceHealthStatus/Access
 import RestoreInstanceIcon from "src/components/Icons/RestoreInstance/RestoreInstanceIcon";
 import AccessSideRestoreInstance from "src/components/RestoreInstance/AccessSideRestoreInstance";
 import DataGridText from "src/components/DataGrid/DataGridText";
+import Head from "next/head";
 
 const instanceStatuses = {
   FAILED: "FAILED",
@@ -1306,6 +1307,9 @@ function MarketplaceService() {
         customLogo
         currentSubscription={subscriptionData}
       >
+        <Head>
+          <title>Resources</title>
+        </Head>
         <Box
           display="flex"
           justifyContent="center"
@@ -1349,6 +1353,9 @@ function MarketplaceService() {
         accessPage
         currentSubscription={subscriptionData}
       >
+        <Head>
+          <title>Resources</title>
+        </Head>
         <OfferingUnavailableUI />
       </DashboardLayout>
     );
@@ -1390,6 +1397,9 @@ function MarketplaceService() {
           />
         }
       >
+        <Head>
+          <title>Resources</title>
+        </Head>
         <Card mt={3} style={{ height: "700px", width: "100%" }}>
           <Box>
             <Image
@@ -1498,6 +1508,9 @@ function MarketplaceService() {
         currentSubscription={subscriptionData}
       >
         <>
+          <Head>
+            <title>Resources</title>
+          </Head>
           <SubscriptionNotFoundUI />
         </>
       </DashboardLayout>
@@ -1539,6 +1552,9 @@ function MarketplaceService() {
           />
         }
       >
+        <Head>
+          <title>Resources</title>
+        </Head>
         <Stack
           direction="row"
           justifyContent={"space-between"}
