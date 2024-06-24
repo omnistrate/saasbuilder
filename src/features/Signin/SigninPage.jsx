@@ -190,7 +190,7 @@ const SigninPage = (props) => {
       </Stack>
       {Boolean(googleIdentityProvider || githubIdentityProvider) && (
         <>
-          <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="8px">
+          <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="4px">
             <Box
               display="inline-block"
               paddingLeft="16px"
@@ -205,15 +205,13 @@ const SigninPage = (props) => {
               Or login with
             </Box>
           </Box>
-          <Stack direction="row" justifyContent="center" mt="-6px" gap="16px">
+          <Stack direction="row" justifyContent="center" mt="-18px" gap="16px">
             {showGoogleLoginButton && (
               <GoogleOAuthProvider
                 clientId={googleIDPClientID}
                 onScriptLoadError={() => {
-                  console.log("Script load error");
                 }}
                 onScriptLoadSuccess={() => {
-                  console.log("Script load success");
                 }}
               >
                 <GoogleLogin
