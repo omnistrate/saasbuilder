@@ -116,6 +116,7 @@ export default function useResourceInstance(
             });
           }
         }
+
         if (topologyDetails?.hasCompute) {
           if (topologyDetails?.nodes) {
             topologyDetails.nodes.forEach((node) => {

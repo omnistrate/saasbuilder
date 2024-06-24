@@ -157,7 +157,8 @@ export const getTerraformKit = (
   serviceAPIVersion,
   serviceEnvironmentKey,
   serviceModelKey,
-  subscriptionId
+  subscriptionId,
+  cloudProvider
 ) => {
   const queryParams = {};
 
@@ -165,7 +166,7 @@ export const getTerraformKit = (
     queryParams.subscriptionId = subscriptionId;
   }
   return axios.get(
-    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/setup-kit`,
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/setup-kit/${cloudProvider}`,
     {
       params: queryParams,
       responseType: "blob",

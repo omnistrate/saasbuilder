@@ -1,4 +1,4 @@
-import { Stack, styled } from "@mui/material";
+import { Stack, Tooltip, styled } from "@mui/material";
 import MuiTableContainer from "@mui/material/TableContainer";
 import MuiTable from "@mui/material/Table";
 import MuiTableBody from "@mui/material/TableBody";
@@ -7,7 +7,6 @@ import MuiTableCell from "@mui/material/TableCell";
 import { Text } from "../Typography/Typography";
 import CopyToClipbpoardButton from "../CopyClipboardButton/CopyClipboardButton";
 
-//mt : 54
 export const TableContainer = styled(MuiTableContainer)(({ theme }) => ({
   background: "#FFFFFF",
   border: "1px solid #EAECF0",
@@ -47,8 +46,22 @@ export const CellDescription = (props) => {
   const { children } = props;
 
   return (
-    <Stack direction="row" alignItems="center" justifyContent="flex-end">
-      <Text size="large" color="#475467" {...props} />
+    <Stack
+      direction="row"
+      alignItems="center"
+      justifyContent="flex-end"
+      sx={{ width: "100%" }}
+    >
+      <Tooltip title={children} placement="top" arrow>
+        {/* Div is necessary for showing the Tooltip */}
+        <div>
+          <Text size="large" color="#475467">
+            {typeof children === "string"
+              ? `${children?.slice(0, 100)}${children?.length > 100 ? "..." : ""}`
+              : children}
+          </Text>
+        </div>
+      </Tooltip>
       {children && typeof children === "string" && (
         <CopyToClipbpoardButton text={children} />
       )}
