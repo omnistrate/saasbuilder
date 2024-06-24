@@ -55,11 +55,8 @@ import RegionIcon from "../../../src/components/Region/RegionIcon";
 import SideDrawerRight from "../../../src/components/SideDrawerRight/SideDrawerRight";
 import StatusChip from "../../../src/components/StatusChip/StatusChip";
 import { Text } from "../../../src/components/Typography/Typography";
-import useCloudProviderRegions from "../../../src/hooks/useCloudProviderRegions";
-import useCloudProviders from "../../../src/hooks/useCloudProviders";
 import useServiceOffering from "../../../src/hooks/useServiceOffering";
 import useSnackbar from "../../../src/hooks/useSnackbar";
-import { selectAllRegions } from "../../../src/slices/regionSlice";
 import {
   selectResourceInstanceList,
   selectResourceInstanceListLoadingStatus,
@@ -87,7 +84,7 @@ import {
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import CloudProviderAccountOrgIdModal from "src/components/CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
-import { getAwsBootstrapArn } from "src/utils/accountConfig/accountConfig";
+import { getAwsBootstrapArn, getGcpServiceEmail } from "src/utils/accountConfig/accountConfig";
 import GradientProgressBar from "src/components/GradientProgessBar/GradientProgressBar";
 import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
 import Head from "next/head";
@@ -132,7 +129,7 @@ function MarketplaceService() {
   //this is required to show some extra text on CloudProviderAccountModal on creation
   const [isAccountCreation, setIsAccountCreation] = useState(false);
 
-  const [isCloudFormation, setIsCloudFormation] = useState(false); //false implies cloud provider account created using terraform
+  const [accountConfigMethod, setAccountConfigMethod] = useState(); // CloudFormation or Terraform
   const [cloudProvider, setCloudProvider] = useState("");
   const [cloudFormationTemplateUrl, setCloudFormationTemplateUrl] =
     useState("");
@@ -186,6 +183,7 @@ function MarketplaceService() {
     selectedResource.id.includes("r-injectedaccountconfig")
   )
     isCurrentResourceBYOA = true;
+  const selectedUser = useSelector(selectUserrootData);
 
   const isUnmounted = useRef(false);
   const router = useRouter();
@@ -329,10 +327,13 @@ function MarketplaceService() {
                       alignItems: "center",
                     }}
                     onClick={() => {
-                      const row = params?.row;
-                      setCloudProvider("aws");
+                      const result_params = params.row.result_params;
+                      setCloudProvider(result_params?.cloud_provider);
                       setCloudFormationTemplateUrl(
-                        row?.result_params?.cloudformation_url
+                        result_params?.cloudformation_url
+                      );
+                      setAccountConfigMethod(
+                        result_params?.account_configuration_method
                       );
                       handleOrgIdModalOpen();
                     }}
@@ -445,21 +446,18 @@ function MarketplaceService() {
         headerAlign: "center",
         minWidth: 130,
         renderCell: (params) => {
-          return !isCurrentResourceBYOA ? (
-            params.row.cloud_provider === "aws" ? (
-              <AwsLogo />
-            ) : params.row.cloud_provider === "azure" ? (
-              <AzureLogo />
-            ) : params.row.cloud_provider === "gcp" ? (
-              <GcpLogo />
-            ) : (
-              <GridCellExpand
-                value={"Everywhere"}
-                width={params.colDef.computedWidth}
-              />
-            )
-          ) : (
+          const cloudProvider = isCurrentResourceBYOA
+            ? params.row.result_params.cloud_provider
+            : params.row.cloud_provider;
+
+          return cloudProvider === "aws" ? (
             <AwsLogo />
+          ) : cloudProvider === "gcp" ? (
+            <GcpLogo />
+          ) : cloudProvider === "azure" ? (
+            <AzureLogo />
+          ) : (
+            "-"
           );
         },
       });
@@ -611,7 +609,7 @@ function MarketplaceService() {
       resourceKey: selectedResource.key,
       subscriptionId: subscriptionData?.id,
       ...(isCurrentResourceBYOA
-        ? { configMethod: ACCOUNT_CREATION_METHODS.CLOUDFORMATION }
+        ? { configMethod: ACCOUNT_CREATION_METHODS.TERRAFORM }
         : {}),
     },
     enableReinitialize: true,
@@ -662,7 +660,7 @@ function MarketplaceService() {
                 break;
               case "Float64":
                 {
-                  var output = Number(data.requestParams[key]);
+                  const output = Number(data.requestParams[key]);
                   {
                     if (!Number.isNaN(output)) {
                       data.requestParams[key] = Number(data.requestParams[key]);
@@ -724,6 +722,33 @@ function MarketplaceService() {
               requiredFieldName = param.displayName;
               break;
             }
+
+            if (isCurrentResourceBYOA) {
+              // For BYOA Cloud Provider Resource, we need to set a few additional parameters
+              if (values.cloud_provider === "gcp") {
+                if (!data.requestParams.gcp_project_number) {
+                  isError = true;
+                  requiredFieldName = "Project Number";
+                } else if (!data.requestParams.gcp_project_id) {
+                  isError = true;
+                  requiredFieldName = "Project ID";
+                } else {
+                  data.requestParams.gcp_service_account_email =
+                    getGcpServiceEmail(
+                      data.requestParams.gcp_project_id,
+                      selectedUser.orgId.toLowerCase()
+                    );
+                }
+              } else if (values.cloud_provider === "aws") {
+                if (!data.requestParams.aws_account_id) {
+                  isError = true;
+                  requiredFieldName = "Account ID";
+                }
+              }
+
+              data.requestParams.account_configuration_method =
+                values.configMethod;
+            }
           }
           if (isError) {
             snackbar.showError(`${requiredFieldName} is required`);
@@ -731,7 +756,7 @@ function MarketplaceService() {
             createResourceInstanceMutation.mutate(data);
           }
         } catch (err) {
-          console.error("error", err?.response?.data);
+          //console.log("error", err);
         } finally {
           setIsCreateInstanceSchemaFetching(false);
         }
@@ -806,7 +831,7 @@ function MarketplaceService() {
   useEffect(() => {
     if (!isOrgIdModalOpen) {
       setIsAccountCreation(false);
-      setIsCloudFormation(false);
+      setAccountConfigMethod(undefined);
       setCloudProvider("");
       setCloudFormationTemplateUrl("");
       setAccountConfigStatus("");
@@ -1000,7 +1025,7 @@ function MarketplaceService() {
           cloudProviderResInstances.push(cloudProviderAccount);
         }
         //gcp
-        if (cloudProviderResourceInstance?.result_params?.gcp_account_id) {
+        if (cloudProviderResourceInstance?.result_params?.gcp_project_id) {
           const cloudProviderAccount = {
             id: instanceId,
             type: "gcp",
@@ -1193,7 +1218,9 @@ function MarketplaceService() {
     initialValues: {
       serviceId: serviceId,
       id: selectedResourceInstance?.id,
-      cloud_provider: selectedResourceInstance?.cloud_provider,
+      cloud_provider:
+        selectedResourceInstance?.result_params?.cloud_provider ||
+        selectedResourceInstance?.cloud_provider, // The first item would be defined in case of BYOA Provider Account Instances
       network_type: selectedResourceInstance?.network_type,
       region: selectedResourceInstance?.region,
       serviceProviderId: service?.serviceProviderId,
@@ -1246,7 +1273,7 @@ function MarketplaceService() {
                 break;
               case "Float64":
                 {
-                  var output = Number(data.requestParams[key]);
+                  const output = Number(data.requestParams[key]);
                   {
                     if (!Number.isNaN(output)) {
                       data.requestParams[key] = Number(data.requestParams[key]);
@@ -1713,13 +1740,19 @@ function MarketplaceService() {
               startIcon={
                 <EditIcon
                   color={
-                    (!isModifyActionEnabled || !modifyAccessServiceAllowed) &&
+                    (isCurrentResourceBYOA ||
+                      !isModifyActionEnabled ||
+                      !modifyAccessServiceAllowed) &&
                     "#EAECF0"
                   }
                 />
               }
               sx={{ marginRight: 2 }}
-              disabled={!isModifyActionEnabled || !modifyAccessServiceAllowed}
+              disabled={
+                isCurrentResourceBYOA ||
+                !isModifyActionEnabled ||
+                !modifyAccessServiceAllowed
+              }
               onClick={openUpdateDrawer}
             >
               Modify
@@ -1925,7 +1958,7 @@ function MarketplaceService() {
           handleClose={handleOrgIdModalClose}
           open={isOrgIdModalOpen}
           isAccountCreation={isAccountCreation}
-          isCloudFormation={isCloudFormation}
+          accountConfigMethod={accountConfigMethod}
           cloudFormationTemplateUrl={cloudFormationTemplateUrl}
           cloudProvider={cloudProvider}
           isAccessPage={true}
