@@ -377,7 +377,10 @@ function CreateResourceInstanceForm(props) {
                 >
                   {accountCreationMethods.map((confgiMethod) => (
                     <MenuItem key={confgiMethod} value={confgiMethod}>
-                      {confgiMethod}
+                      {confgiMethod}{" "}
+                      {confgiMethod ===
+                        ACCOUNT_CREATION_METHODS.CLOUDFORMATION &&
+                        "(Recommended)"}
                     </MenuItem>
                   ))}
                 </Select>
