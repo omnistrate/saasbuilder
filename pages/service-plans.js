@@ -3,12 +3,18 @@ import MarketplaceProductTier from "src/features/Marketplace/MarketplaceProductT
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 
 export const getServerSideProps = async () => {
-  const response = await getProviderOrgDetails();
+  let orgName = "";
+  let orgLogoURL = "";
+  try {
+    const response = await getProviderOrgDetails();
+    orgName = response.data.orgName;
+    orgLogoURL = response.data.orgLogoURL;
+  } catch (err) {}
 
   return {
     props: {
-      orgName: response.data.orgName,
-      orgLogoURL: response.data.orgLogoURL,
+      orgName: orgName,
+      orgLogoURL: orgLogoURL,
     },
   };
 };

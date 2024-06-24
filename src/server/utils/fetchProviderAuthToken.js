@@ -16,8 +16,8 @@ function fetchProviderAuthToken() {
     signInPayload["hashedPassword"] = process.env.PROVIDER_HASHED_PASS;
   }
 
-  return axios.post("/signin", signInPayload).catch(() => {
-    console.error("Provider sign in failure");
+  return axios.post("/signin", signInPayload).catch((error) => {
+    console.error("Provider sign in failure", error);
     throw new ProviderAuthError();
   });
 }

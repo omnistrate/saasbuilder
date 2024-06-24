@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import { Box, CircularProgress, IconButton, Stack } from "@mui/material";
@@ -17,7 +16,6 @@ import MarketplaceHeader from "components/Headers/MarketplaceHeader";
 import formatDateUTC from "src/utils/formatDateUTC";
 import DataGridHeader from "./components/DataGridHeader";
 
-import placeholderService from "public/assets/images/dashboard/service/servicePlaceholder.png";
 import BellRingingIcon from "src/components/Icons/BellRinging/BellRingingIcon";
 import SpeedometerIcon from "src/components/Icons/Speedometer/SpeedometerIcon";
 
@@ -25,13 +23,14 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import { deleteSubscription } from "src/api/subscriptions";
 import useSnackbar from "src/hooks/useSnackbar";
-import SubscriptionTypeCell from "./components/SubscriptionTypeCell";
 // import CloudProviderCell from "./components/CloudProviderCell"; - Removed for Now
 import useUserSubscriptions from "src/hooks/query/useUserSubscriptions";
 import { getResourceRouteWithoutEnv } from "src/utils/route/access/accessRoute";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import Head from "next/head";
 import NoLogoImage from "public/assets/images/logos/no-logo.png";
+import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
+import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
 
 const ITEM_HEIGHT = 45;
 
@@ -95,7 +94,6 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
         return (
           <GridCellExpand
             value={serviceName || ""}
-            width={params.colDef.computedWidth}
             justifyContent="flex-start"
             textStyles={{
               color: "#6941C6",
@@ -119,11 +117,14 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
                 height="52px"
                 flexShrink={0}
               >
-                <Image
+                <img
                   width="50"
                   height="50"
                   style={{ objectFit: "cover" }}
-                  src={serviceLogoURL || placeholderService}
+                  src={
+                    serviceLogoURL ||
+                    "/assets/images/dashboard/service/servicePlaceholder.png"
+                  }
                   alt={serviceName}
                 />
               </Box>
@@ -180,10 +181,18 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
       minWidth: 150,
       headerAlign: "center",
       renderCell: (params) => {
-        if (params.row.roleType === "root") {
-          return <SubscriptionTypeCell subscriptionType="Direct" />;
-        }
-        return <SubscriptionTypeCell subscriptionType="Invited" />;
+        return (
+          <GridCellExpand
+            value={params.row.roleType === "root" ? "Direct" : "Invited"}
+            startIcon={
+              params.row.roleType === "root" ? (
+                <SubscriptionTypeDirectIcon />
+              ) : (
+                <SubscriptionTypeInvitedIcon />
+              )
+            }
+          />
+        );
       },
     },
     {

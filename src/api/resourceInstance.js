@@ -203,3 +203,18 @@ export const failoverResourceInstanceNode = (data) => {
     { params: queryParams }
   );
 };
+
+export const restoreResourceInstance = (payload) => {
+  const queryParams = {};
+  if (payload.subscriptionId) {
+    queryParams.subscriptionId = payload.subscriptionId;
+  }
+  return axios.post(
+    `/resource-instance/${payload.serviceProviderId}/${payload.serviceKey}/${payload.serviceAPIVersion}/${payload.serviceEnvironmentKey}/${payload.serviceModelKey}/${payload.productTierKey}/${payload.resourceKey}/${payload.id}/restore`,
+    {
+      targetRestoreTime: payload.targetRestoreTime,
+      network_type: payload.network_type,
+    },
+    { params: queryParams }
+  );
+};
