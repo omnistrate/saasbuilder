@@ -96,7 +96,7 @@ export const selectAccountByProvider = (state, provider) => {
   if (!state.accountConfig.accounts[provider]) {
     return [];
   }
-  let account = [];
+  const account = [];
   if (provider === "aws") {
     const aws = Object.values(state.accountConfig.accounts)[0];
     account.push(...Object.values(aws));
