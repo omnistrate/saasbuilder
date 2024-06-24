@@ -1,9 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { getServiceOffering } from "../api/serviceOffering";
-import {
-  getRegionById,
-  getRegionIdsByCloudProviderWithParams,
-} from "src/api/region";
 
 async function fetchServiceOffering(serviceId, productTierId) {
   const response = await getServiceOffering(serviceId);

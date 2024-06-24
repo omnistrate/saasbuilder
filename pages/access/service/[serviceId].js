@@ -55,11 +55,8 @@ import RegionIcon from "../../../src/components/Region/RegionIcon";
 import SideDrawerRight from "../../../src/components/SideDrawerRight/SideDrawerRight";
 import StatusChip from "../../../src/components/StatusChip/StatusChip";
 import { Text } from "../../../src/components/Typography/Typography";
-import useCloudProviderRegions from "../../../src/hooks/useCloudProviderRegions";
-import useCloudProviders from "../../../src/hooks/useCloudProviders";
 import useServiceOffering from "../../../src/hooks/useServiceOffering";
 import useSnackbar from "../../../src/hooks/useSnackbar";
-import { selectAllRegions } from "../../../src/slices/regionSlice";
 import {
   selectResourceInstanceList,
   selectResourceInstanceListLoadingStatus,
@@ -87,7 +84,7 @@ import {
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import CloudProviderAccountOrgIdModal from "src/components/CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
-import { getAwsBootstrapArn } from "src/utils/accountConfig/accountConfig";
+import { getAwsBootstrapArn, getGcpServiceEmail } from "src/utils/accountConfig/accountConfig";
 import GradientProgressBar from "src/components/GradientProgessBar/GradientProgressBar";
 import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
 import Head from "next/head";
@@ -171,6 +168,7 @@ function MarketplaceService() {
     selectedResource.id.includes("r-injectedaccountconfig")
   )
     isCurrentResourceBYOA = true;
+  const selectedUser = useSelector(selectUserrootData);
 
   const isUnmounted = useRef(false);
   const router = useRouter();
@@ -727,7 +725,11 @@ function MarketplaceService() {
                   isError = true;
                   requiredFieldName = "Project ID";
                 } else {
-                  data.requestParams.gcp_service_account_email = `bootstrap-${selectedUser.orgId.toLowerCase()}@${data.requestParams.gcp_project_number}.iam.gserviceaccount.com`;
+                  data.requestParams.gcp_service_account_email =
+                    getGcpServiceEmail(
+                      data.requestParams.gcp_project_id,
+                      selectedUser.orgId.toLowerCase()
+                    );
                 }
               } else if (values.cloud_provider === "aws") {
                 if (!data.requestParams.aws_account_id) {
@@ -746,7 +748,7 @@ function MarketplaceService() {
             createResourceInstanceMutation.mutate(data);
           }
         } catch (err) {
-          console.error("error", err?.response?.data);
+          //console.log("error", err);
         } finally {
           setIsCreateInstanceSchemaFetching(false);
         }
