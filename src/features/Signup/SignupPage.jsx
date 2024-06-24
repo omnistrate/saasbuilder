@@ -21,6 +21,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLogin from "../Signin/components/GoogleLogin";
 import GithubLogin from "../Signin/components/GitHubLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "../Signin/constants";
+import Divider from "src/components/Divider/Divider";
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -272,32 +273,6 @@ const SignupPage = (props) => {
             </FieldContainer>
           </Stack>
 
-          <Typography
-            fontWeight="500"
-            fontSize="14px"
-            lineHeight="22px"
-            color="#A0AEC0"
-            textAlign="start"
-          >
-            By creating an account, you agree to the{" "}
-            <Link
-              target="_blank"
-              href="/terms-of-use"
-              style={{ color: "#27A376" }}
-            >
-              Terms & Conditions
-            </Link>{" "}
-            and{" "}
-            <Link
-              target="_blank"
-              href="/privacy-policy"
-              style={{ color: "#27A376" }}
-            >
-              Privacy Policy
-            </Link>
-            .
-          </Typography>
-
           {/* Login and Google Button */}
           <Stack gap="16px">
             <SubmitButton
@@ -324,17 +299,20 @@ const SignupPage = (props) => {
                 lineHeight="22px"
                 sx={{ transform: "translateY(-50%)" }}
               >
-                Or register with
+                Or sign up with
               </Box>
             </Box>
-            <Stack direction="row" justifyContent="center" mt="-18px" gap="16px">
+            <Stack
+              direction="row"
+              justifyContent="center"
+              mt="-18px"
+              gap="16px"
+            >
               {showGoogleLoginButton && (
                 <GoogleOAuthProvider
                   clientId={googleIDPClientID}
-                  onScriptLoadError={() => {
-                  }}
-                  onScriptLoadSuccess={() => {
-                  }}
+                  onScriptLoadError={() => {}}
+                  onScriptLoadSuccess={() => {}}
                 >
                   <GoogleLogin
                     disabled={isGoogleLoginDisabled}
@@ -352,6 +330,35 @@ const SignupPage = (props) => {
             </Stack>
           </>
         )}
+
+        <Divider sx={{ borderColor: "#F1F2F4" }} />
+
+        <Typography
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="22px"
+          color="#A0AEC0"
+          textAlign="center"
+        >
+          By creating your account manually or using your Google or GitHub
+          account to sign up, you agree to our{" "}
+          <Link
+            target="_blank"
+            href="/terms-of-use"
+            style={{ color: "#27A376" }}
+          >
+            Terms & Conditions
+          </Link>{" "}
+          and{" "}
+          <Link
+            target="_blank"
+            href="/privacy-policy"
+            style={{ color: "#27A376" }}
+          >
+            Privacy Policy
+          </Link>
+          .
+        </Typography>
         {/* Signup Link */}
         <Typography
           fontWeight="500"
