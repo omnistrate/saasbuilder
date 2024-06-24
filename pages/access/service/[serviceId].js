@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Box, CircularProgress, Divider, Stack, styled } from "@mui/material";
+import { Box, CircularProgress, Divider, Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import Image from "next/image";
@@ -15,15 +15,13 @@ import {
   getResourceInstanceDetails,
   getResourceInstanceIds,
   getTerraformKit,
-} from "../../../src/api/resourceInstance";
-import { describeServiceOfferingResource } from "../../../src/api/serviceOffering";
-import {
   createResourceInstance,
   restartResourceInstance,
   startResourceInstance,
   stopResourceInstance,
   updateResourceInstance,
 } from "../../../src/api/resourceInstance";
+import { describeServiceOfferingResource } from "../../../src/api/serviceOffering";
 import Button from "../../../src/components/Button/Button";
 import Card from "../../../src/components/Card/Card";
 import LoadingSpinnerSmall from "../../../src/components/CircularProgress/CircularProgress";
@@ -64,7 +62,6 @@ import {
   setResourceInstanceListLoadingStatus,
   setResourceInstanceListToEmpty,
 } from "../../../src/slices/resourceInstanceListSlice";
-import { selectUserrootData } from "../../../src/slices/userDataSlice";
 import loadingStatuses from "../../../src/utils/constants/loadingStatuses";
 import formatDateUTC from "../../../src/utils/formatDateUTC";
 import {
@@ -84,21 +81,23 @@ import {
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import CloudProviderAccountOrgIdModal from "src/components/CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
-import { getAwsBootstrapArn, getGcpServiceEmail } from "src/utils/accountConfig/accountConfig";
+import {
+  getAwsBootstrapArn,
+  getGcpServiceEmail,
+} from "src/utils/accountConfig/accountConfig";
 import GradientProgressBar from "src/components/GradientProgessBar/GradientProgressBar";
-import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
-import Head from "next/head";
-import CopyButton from "src/components/Button/CopyButton";
 import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
 import DeleteAccountConfigConfirmationDialog from "src/components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
+import { selectUserrootData } from "src/slices/userDataSlice";
 import { cloneDeep } from "lodash";
 import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
 import AccessServiceHealthStatus from "src/components/ServiceHealthStatus/AccessServicehealthStatus";
 import RestoreInstanceIcon from "src/components/Icons/RestoreInstance/RestoreInstanceIcon";
 import AccessSideRestoreInstance from "src/components/RestoreInstance/AccessSideRestoreInstance";
 import DataGridText from "src/components/DataGrid/DataGridText";
+import Head from "next/head";
 
 const instanceStatuses = {
   FAILED: "FAILED",
@@ -126,9 +125,9 @@ function MarketplaceService() {
     useState(false);
 
   const [isOrgIdModalOpen, setIsOrgIdModalOpen] = useState(false);
+
   //this is required to show some extra text on CloudProviderAccountModal on creation
   const [isAccountCreation, setIsAccountCreation] = useState(false);
-
   const [accountConfigMethod, setAccountConfigMethod] = useState(); // CloudFormation or Terraform
   const [cloudProvider, setCloudProvider] = useState("");
   const [cloudFormationTemplateUrl, setCloudFormationTemplateUrl] =
@@ -184,17 +183,10 @@ function MarketplaceService() {
   )
     isCurrentResourceBYOA = true;
   const selectedUser = useSelector(selectUserrootData);
-
   const isUnmounted = useRef(false);
   const router = useRouter();
-  const {
-    serviceId,
-    source,
-    productTierId,
-    resourceId,
-    support,
-    subscriptionId,
-  } = router.query;
+  const { serviceId, source, productTierId, resourceId, subscriptionId } =
+    router.query;
   const {
     data: service,
     status: servicesLoadingStatus,
@@ -208,7 +200,6 @@ function MarketplaceService() {
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [viewInfoDrawerOpen, setViewInfoDrawerOpen] = useState(false);
   const [updateDrawerOpen, setUpdateDrawerOpen] = useState(false);
-
   const timeoutID = useRef(null);
   const currentResourceInfo = useRef({ resourceKey: null, resourceId: null });
   useEffect(() => {
@@ -258,7 +249,6 @@ function MarketplaceService() {
         headerAlign: "center",
         renderCell: (params) => {
           const instanceId = params.row.id;
-
           const instanceIdDisplay = isCurrentResourceBYOA
             ? "account-" + instanceId
             : instanceId;
@@ -268,6 +258,7 @@ function MarketplaceService() {
             productTierId,
             selectedResource?.id,
             instanceId,
+            currentSource,
             subscriptionData?.id
           );
 
@@ -290,7 +281,7 @@ function MarketplaceService() {
         flex: 0.9,
         align: "center",
         headerAlign: "center",
-        minWidth: 155,
+        minWidth: 160,
         renderCell: (params) => {
           const status = params.row.status;
           const showInstructions =
@@ -397,14 +388,14 @@ function MarketplaceService() {
         renderCell: (params) => {
           const status = params?.row?.status;
 
-          const healthStatusPercent = calculateInstanceHealthPercentage(
+          const healthPercentage = calculateInstanceHealthPercentage(
             params.row.detailedNetworkTopology,
             status
           );
 
           return (
             <GradientProgressBar
-              percentage={healthStatusPercent}
+              percentage={healthPercentage}
               marginTop="10px"
             />
           );
@@ -420,7 +411,7 @@ function MarketplaceService() {
     ) {
       columnDefinition.splice(1, 0, {
         field: "cloud_provider",
-        headerName: "Account Config ID",
+        headerName: "Account ID",
         flex: 0.8,
         align: "center",
         headerAlign: "center",
@@ -512,10 +503,14 @@ function MarketplaceService() {
       return Promise.allSettled(instanceDeletePromises);
     },
     {
-      onSuccess: async (response) => {
+      onSuccess: async () => {
+        if (selectedResource?.id.includes("r-injectedaccountconfig")) {
+          snackbar.showSuccess("Deleting Cloud Provider Account");
+        } else {
+          snackbar.showSuccess("Deleting Resource Instance");
+        }
         setSelectionModel([]);
         fetchResourceInstances(selectedResource);
-        //handleClose();
         deleteformik.resetForm();
         setCreationDrawerOpen(false);
         setViewInfoDrawerOpen(false);
@@ -536,7 +531,8 @@ function MarketplaceService() {
           service.serviceAPIVersion,
           service.serviceEnvironmentURLKey,
           service.serviceModelURLKey,
-          subscriptionData?.id
+          subscriptionData?.id,
+          cloudProvider
         );
       }
     },
@@ -567,7 +563,6 @@ function MarketplaceService() {
       setIsConfirmationDialog(false);
       snackbar.showError("Select a resource to modify");
     } else {
-      //setIsConfirmationDialog(true);
       setUpdateDrawerOpen(true);
     }
   };
@@ -596,7 +591,7 @@ function MarketplaceService() {
   const createformik = useFormik({
     initialValues: {
       serviceId: serviceId,
-      cloud_provider: "",
+      cloud_provider: "aws",
       network_type: "",
       region: "",
       requestParams: { ...requestParams },
@@ -714,6 +709,7 @@ function MarketplaceService() {
                 }
               }
             }
+
             if (
               param.key === "custom_availability_zone" &&
               data.requestParams[param.key] === ""
@@ -756,7 +752,7 @@ function MarketplaceService() {
             createResourceInstanceMutation.mutate(data);
           }
         } catch (err) {
-          //console.log("error", err);
+          console.error("error", err);
         } finally {
           setIsCreateInstanceSchemaFetching(false);
         }
@@ -859,7 +855,6 @@ function MarketplaceService() {
       fetchResourceInstances(selectedResource);
       snackbar.showSuccess("Starting Resource Instance");
     },
-    onError: (error) => {},
   });
 
   const stopResourceInstanceMutation = useMutation(stopResourceInstance, {
@@ -869,7 +864,6 @@ function MarketplaceService() {
       fetchResourceInstances(selectedResource);
       snackbar.showSuccess("Stopping Resource Instance");
     },
-    onError: (error) => {},
   });
 
   const restartResourceInstanceMutation = useMutation(restartResourceInstance, {
@@ -878,7 +872,6 @@ function MarketplaceService() {
       fetchResourceInstances(selectedResource);
       snackbar.showSuccess("Rebooting Resource Instance");
     },
-    onError: (error) => {},
   });
 
   const handleRefresh = () => {
@@ -1105,7 +1098,7 @@ function MarketplaceService() {
       }
     } catch (err) {
       dispatch(setResourceInstanceListLoadingStatus(loadingStatuses.error));
-      console.error("error", err?.response?.data);
+      console.error("error", err);
       if (
         resourceInfo.id === currentResourceInfo.current.resourceId &&
         resourceInfo.key === currentResourceInfo.current.resourceKey &&
@@ -1273,7 +1266,7 @@ function MarketplaceService() {
                 break;
               case "Float64":
                 {
-                  const output = Number(data.requestParams[key]);
+                  var output = Number(data.requestParams[key]);
                   {
                     if (!Number.isNaN(output)) {
                       data.requestParams[key] = Number(data.requestParams[key]);
@@ -1294,9 +1287,7 @@ function MarketplaceService() {
           });
 
           updateResourceInstanceMutation.mutate(data);
-        } catch (err) {
-          //console.error("error", err);
-        }
+        } catch (err) {}
       }
       getSchema();
     },
@@ -1333,16 +1324,6 @@ function MarketplaceService() {
     );
   }
 
-  const modelType = service?.serviceModelType;
-  let deploymentHeader = "";
-  if (modelType === "CUSTOMER_HOSTED") {
-    deploymentHeader = "Provider Account";
-  } else if (modelType === "OMNISTRATE_HOSTED") {
-    deploymentHeader = "Omnistrate Account";
-  } else if (modelType === "BYOA") {
-    deploymentHeader = "Bring Your Own Account (BYOA)";
-  }
-
   const servicePlanUrlLink = getMarketplaceRoute(
     serviceId,
     environmentId,
@@ -1353,6 +1334,7 @@ function MarketplaceService() {
     serviceId,
     environmentId,
     productTierId,
+    currentSource,
     subscriptionData?.id
   );
 
@@ -1374,7 +1356,7 @@ function MarketplaceService() {
         <Head>
           <title>Resources</title>
         </Head>
-        <ServiceOfferingUnavailableUI />
+        <OfferingUnavailableUI />
       </DashboardLayout>
     );
   }
@@ -1682,10 +1664,8 @@ function MarketplaceService() {
                 variant="outlined"
                 startIcon={
                   <RebootIcon
-                    color={
-                      (!isRebootActiondEnabled ||
-                        !modifyAccessServiceAllowed) &&
-                      "#EAECF0"
+                    disabled={
+                      !isRebootActiondEnabled || !modifyAccessServiceAllowed
                     }
                   />
                 }
@@ -1703,9 +1683,8 @@ function MarketplaceService() {
                 variant="outlined"
                 startIcon={
                   <PlayIcon
-                    color={
-                      (!isStartActionEnabled || !modifyAccessServiceAllowed) &&
-                      "#EAECF0"
+                    disabled={
+                      !isStartActionEnabled || !modifyAccessServiceAllowed
                     }
                   />
                 }
@@ -1721,9 +1700,8 @@ function MarketplaceService() {
                 variant="outlined"
                 startIcon={
                   <StopIcon
-                    color={
-                      (!isStopActionEnabled || !modifyAccessServiceAllowed) &&
-                      "#EAECF0"
+                    disabled={
+                      !isStopActionEnabled || !modifyAccessServiceAllowed
                     }
                   />
                 }
@@ -1739,11 +1717,10 @@ function MarketplaceService() {
               variant="outlined"
               startIcon={
                 <EditIcon
-                  color={
-                    (isCurrentResourceBYOA ||
-                      !isModifyActionEnabled ||
-                      !modifyAccessServiceAllowed) &&
-                    "#EAECF0"
+                  disabled={
+                    isCurrentResourceBYOA ||
+                    !isModifyActionEnabled ||
+                    !modifyAccessServiceAllowed
                   }
                 />
               }
@@ -1784,9 +1761,8 @@ function MarketplaceService() {
               variant="outlined"
               startIcon={
                 <DeleteIcon
-                  color={
-                    (!isDeleteActionEnabled || !deleteAccessServiceAllowed) &&
-                    "#EAECF0"
+                  disabled={
+                    !isDeleteActionEnabled || !deleteAccessServiceAllowed
                   }
                 />
               }
@@ -1888,6 +1864,7 @@ function MarketplaceService() {
                   />
                 }
               />
+
               {isCurrentResourceBYOA ? (
                 <DeleteAccountConfigConfirmationDialog
                   open={isConfirmationDialog}
@@ -1991,3 +1968,59 @@ function MarketplaceService() {
 }
 
 export default MarketplaceService;
+
+export const OfferingUnavailableUI = () => {
+  return (
+    <Card mt={3} style={{ height: "700px", width: "100%" }}>
+      <Box>
+        <Image
+          style={{ height: "500px", width: "100%", marginTop: "50px" }}
+          src={marketplaceIcon}
+          alt="image-icon"
+        />
+        <Box mt="-300px">
+          <div
+            justifyContent="center"
+            align="center"
+            style={{
+              marginTop: "50px",
+              fontWeight: "bold",
+              fontSize: "30px",
+            }}
+          >
+            Service Offering
+          </div>
+          <div
+            justifyContent="center"
+            align="center"
+            style={{
+              marginTop: "5px",
+              fontWeight: "bold",
+              fontSize: "30px",
+            }}
+          >
+            not available
+          </div>
+          <div
+            justifyContent="center"
+            align="center"
+            style={{
+              marginTop: "5px",
+              fontWeight: "bold",
+              fontSize: "30px",
+            }}
+          />
+          <div
+            justifyContent="center"
+            align="center"
+            style={{
+              marginTop: "100px",
+              fontWeight: "bold",
+              fontSize: "15px",
+            }}
+          />
+        </Box>
+      </Box>
+    </Card>
+  );
+};

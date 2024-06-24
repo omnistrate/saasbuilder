@@ -129,7 +129,7 @@ function CloudProviderAccountOrgIdModal(props) {
         <Content>
           {isAccountCreation ? (
             <CreationTimeInstructions
-              isCloudFormation={accountConfigMethod === "CloudFormation"}
+              accountConfigMethod={accountConfigMethod}
               cloudformationlink={cloudformationlink}
               terraformlink={terraformlink}
               cloudFormationGuide={cloudFormationGuide}
