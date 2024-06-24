@@ -10,13 +10,18 @@ import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
 
 export const getServerSideProps = async () => {
-  const response = await getProviderOrgDetails();
+  let orgName = "";
+  let orgLogoURL = "";
+  try {
+    const response = await getProviderOrgDetails();
+    orgName = response.data.orgName;
+    orgLogoURL = response.data.orgLogoURL;
+  } catch (err) {}
 
   return {
     props: {
-      orgSupportEmail: response.data.orgSupportEmail || response.data.email,
-      orgName: response.data.orgName,
-      orgPrivacyPolicy: response.data.orgPrivacyPolicy,
+      orgName: orgName,
+      orgLogoURL: orgLogoURL,
     },
   };
 };

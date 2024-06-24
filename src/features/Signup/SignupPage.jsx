@@ -232,7 +232,7 @@ const SignupPage = (props) => {
               </FieldError>
             </FieldContainer>
           </Stack>
-          
+
           <Typography
             fontWeight="500"
             fontSize="14px"
@@ -271,7 +271,6 @@ const SignupPage = (props) => {
             </SubmitButton>
           </Stack>
         </Stack>
-
         {/* Signup Link */}
         <Typography
           fontWeight="500"

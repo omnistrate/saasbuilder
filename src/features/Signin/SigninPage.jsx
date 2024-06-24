@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMutation } from "@tanstack/react-query";
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import axios from "src/axios";
 import Cookies from "js-cookie";
@@ -15,6 +15,11 @@ import TextField from "components/NonDashboardComponents/FormElementsV2/TextFiel
 import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
 import { customerUserSignin } from "src/api/customer-user";
 import useSnackbar from "src/hooks/useSnackbar";
+import GoogleLogin from "./components/GoogleLogin";
+import { IDENTITY_PROVIDER_STATUS_TYPES } from "./constants";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GithubLogin from "./components/GitHubLogin";
+import { useEffect } from "react";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -24,9 +29,33 @@ const createSigninValidationSchema = Yup.object({
 });
 
 const SigninPage = (props) => {
-  const { orgName, orgLogoURL } = props;
+  const {
+    orgName,
+    orgLogoURL,
+    googleIdentityProvider,
+    githubIdentityProvider,
+    saasBuilderBaseURL,
+  } = props;
   const router = useRouter();
+
+  const { redirect_reason } = router.query;
   const snackbar = useSnackbar();
+
+  useEffect(() => {
+    if (redirect_reason === "idp_auth_error") {
+      snackbar.showError("Something went wrong. Please retry");
+      router.replace("/signin");
+    }
+  }, [redirect_reason]);
+
+  function handleSignInSuccess(jwtToken) {
+    if (jwtToken) {
+      Cookies.set("token", jwtToken, { sameSite: "Strict", secure: true });
+      axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
+      router.push("/service-plans");
+    }
+  }
+
   const signInMutation = useMutation(
     (payload) => {
       delete axios.defaults.headers["Authorization"];
@@ -36,11 +65,7 @@ const SigninPage = (props) => {
       onSuccess: (data) => {
         formik.resetForm();
         const jwtToken = data.data.jwtToken;
-        if (jwtToken) {
-          Cookies.set("token", jwtToken, { sameSite: "Strict", secure: true });
-          axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
-          router.push("/service-plans");
-        }
+        handleSignInSuccess(jwtToken);
       },
       onError: (error) => {
         if (error.response.data && error.response.data.message) {
@@ -69,6 +94,35 @@ const SigninPage = (props) => {
   });
 
   const { values, touched, errors, handleChange, handleBlur } = formik;
+
+  let googleIDPClientID = null;
+  let showGoogleLoginButton = false;
+  let isGoogleLoginDisabled = false;
+
+  if (googleIdentityProvider) {
+    showGoogleLoginButton = true;
+    googleIDPClientID = googleIdentityProvider.clientId;
+
+    const { status } = googleIdentityProvider;
+
+    if (status === IDENTITY_PROVIDER_STATUS_TYPES.FAILED) {
+      isGoogleLoginDisabled = true;
+    }
+  }
+
+  let githubIDPClientID = null;
+  let showGithubLoginButton = false;
+  let isGithubLoginDisabled = false;
+
+  if (githubIdentityProvider) {
+    showGithubLoginButton = true;
+    githubIDPClientID = githubIdentityProvider.clientId;
+    const { status } = githubIdentityProvider;
+
+    if (status === IDENTITY_PROVIDER_STATUS_TYPES.FAILED) {
+      isGithubLoginDisabled = true;
+    }
+  }
 
   return (
     <MainImageLayout
@@ -134,6 +188,50 @@ const SigninPage = (props) => {
           </SubmitButton>
         </Stack>
       </Stack>
+      {Boolean(googleIdentityProvider || githubIdentityProvider) && (
+        <>
+          <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="8px">
+            <Box
+              display="inline-block"
+              paddingLeft="16px"
+              paddingRight="16px"
+              color="#687588"
+              bgcolor="white"
+              fontSize="14px"
+              fontWeight="500"
+              lineHeight="22px"
+              sx={{ transform: "translateY(-50%)" }}
+            >
+              Or login with
+            </Box>
+          </Box>
+          <Stack direction="row" justifyContent="center" mt="-6px" gap="16px">
+            {showGoogleLoginButton && (
+              <GoogleOAuthProvider
+                clientId={googleIDPClientID}
+                onScriptLoadError={() => {
+                  console.log("Script load error");
+                }}
+                onScriptLoadSuccess={() => {
+                  console.log("Script load success");
+                }}
+              >
+                <GoogleLogin
+                  disabled={isGoogleLoginDisabled}
+                  saasBuilderBaseURL={saasBuilderBaseURL}
+                />
+              </GoogleOAuthProvider>
+            )}
+            {showGithubLoginButton && (
+              <GithubLogin
+                githubClientID={githubIDPClientID}
+                disabled={isGithubLoginDisabled}
+                saasBuilderBaseURL={saasBuilderBaseURL}
+              />
+            )}
+          </Stack>
+        </>
+      )}
 
       {/* Signup Link */}
       <Typography
