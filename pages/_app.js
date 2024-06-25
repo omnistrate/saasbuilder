@@ -128,7 +128,7 @@ export default function App(props) {
             "You have not been subscribed to a service yet.",
             "Your provider has not enabled billing for the user.",
             "You have not been enrolled in a service plan with a billing plan yet.",
-            "Your provider has not enabled billing for the services."
+            "Your provider has not enabled billing for the services.",
           ];
           if (!ignoredMessages.includes(message)) {
             if (message) {

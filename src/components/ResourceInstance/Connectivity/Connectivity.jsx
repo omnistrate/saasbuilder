@@ -60,6 +60,10 @@ function Connectivity(props) {
         (port) => port.resourceName === resourceName && port.ports
       );
       if (matchingResourcePort) {
+        //filter out omnistrate observability
+        if (resourceName === "Omnistrate Observability") {
+          return;
+        }
         otherResourceFilteredPorts.push(matchingResourcePort);
         otherResourceFilteredEndpoints.push({ resourceName, endpoint });
       }

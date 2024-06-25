@@ -7,7 +7,7 @@ const FieldLabel = ({ required, children, ...restProps }) => {
       sx={{
         fontWeight: 500,
         fontSize: "14px",
-        lineHeight: "22px",
+        lineHeight: "20px",
         color: "#111827",
       }}
     >

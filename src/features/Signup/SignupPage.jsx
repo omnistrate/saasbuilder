@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, styled } from "@mui/material";
 import * as Yup from "yup";
 import { customerUserSignup } from "src/api/customer-user";
 import MainImageLayout from "components/NonDashboardComponents/Layout/MainImageLayout";
@@ -17,6 +17,11 @@ import SignupNotification from "components/NonDashboardComponents/SignupNotifica
 import useSnackbar from "src/hooks/useSnackbar";
 import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleLogin from "../Signin/components/GoogleLogin";
+import GithubLogin from "../Signin/components/GitHubLogin";
+import { IDENTITY_PROVIDER_STATUS_TYPES } from "../Signin/constants";
+import Divider from "src/components/Divider/Divider";
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -33,7 +38,13 @@ const signupValidationSchema = Yup.object({
 });
 
 const SignupPage = (props) => {
-  const { orgName, orgLogoURL } = props;
+  const {
+    orgName,
+    orgLogoURL,
+    googleIdentityProvider,
+    githubIdentityProvider,
+    saasBuilderBaseURL,
+  } = props;
   const router = useRouter();
   const { org, orgUrl, email, userSource } = router.query;
   const [showSuccess, setShowSuccess] = useState(false);
@@ -119,6 +130,35 @@ const SignupPage = (props) => {
 
   const { values, touched, errors, handleChange, handleBlur } = formik;
 
+  let googleIDPClientID = null;
+  let showGoogleLoginButton = false;
+  let isGoogleLoginDisabled = false;
+
+  if (googleIdentityProvider) {
+    showGoogleLoginButton = true;
+    googleIDPClientID = googleIdentityProvider.clientId;
+
+    const { status } = googleIdentityProvider;
+
+    if (status === IDENTITY_PROVIDER_STATUS_TYPES.FAILED) {
+      isGoogleLoginDisabled = true;
+    }
+  }
+
+  let githubIDPClientID = null;
+  let showGithubLoginButton = false;
+  let isGithubLoginDisabled = false;
+
+  if (githubIdentityProvider) {
+    showGithubLoginButton = true;
+    githubIDPClientID = githubIdentityProvider.clientId;
+    const { status } = githubIdentityProvider;
+
+    if (status === IDENTITY_PROVIDER_STATUS_TYPES.FAILED) {
+      isGithubLoginDisabled = true;
+    }
+  }
+
   return (
     <>
       <SignupNotification isVisible={showSuccess} />
@@ -126,12 +166,13 @@ const SignupPage = (props) => {
         orgName={orgName}
         orgLogoURL={orgLogoURL}
         pageTitle="Sign up"
+        contentMaxWidth={650}
       >
-        <DisplayHeading>Get Started Today</DisplayHeading>
+        <DisplayHeading mt="24px">Get Started Today</DisplayHeading>
 
-        <Stack component="form" gap="32px" autoComplete="off">
+        <Box component="form" mt="44px" autoComplete="off">
           {/* Signup Form */}
-          <Stack gap="10px">
+          <FormGrid>
             <FieldContainer>
               <FieldLabel required>Name</FieldLabel>
               <TextField
@@ -231,36 +272,10 @@ const SignupPage = (props) => {
                 {touched.confirmPassword && errors.confirmPassword}
               </FieldError>
             </FieldContainer>
-          </Stack>
-          
-          <Typography
-            fontWeight="500"
-            fontSize="14px"
-            lineHeight="22px"
-            color="#A0AEC0"
-            textAlign="start"
-          >
-            By creating an account, you agree to the{" "}
-            <Link
-              target="_blank"
-              href="/terms-of-use"
-              style={{ color: "#27A376" }}
-            >
-              Terms & Conditions
-            </Link>{" "}
-            and{" "}
-            <Link
-              target="_blank"
-              href="/privacy-policy"
-              style={{ color: "#27A376" }}
-            >
-              Privacy Policy
-            </Link>
-            .
-          </Typography>
+          </FormGrid>
 
           {/* Login and Google Button */}
-          <Stack gap="16px">
+          <Stack mt="32px" width="480px" mx="auto">
             <SubmitButton
               type="submit"
               onClick={formik.handleSubmit}
@@ -270,10 +285,78 @@ const SignupPage = (props) => {
               Create Account
             </SubmitButton>
           </Stack>
-        </Stack>
+        </Box>
+        {Boolean(googleIdentityProvider || githubIdentityProvider) && (
+          <>
+            <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="40px">
+              <Box
+                display="inline-block"
+                paddingLeft="16px"
+                paddingRight="16px"
+                color="#687588"
+                bgcolor="white"
+                fontSize="14px"
+                fontWeight="500"
+                lineHeight="22px"
+                sx={{ transform: "translateY(-50%)" }}
+              >
+                Or use one of these options
+              </Box>
+            </Box>
+            <Stack direction="row" justifyContent="center" mt="20px" gap="16px">
+              {showGoogleLoginButton && (
+                <GoogleOAuthProvider
+                  clientId={googleIDPClientID}
+                  onScriptLoadError={() => {}}
+                  onScriptLoadSuccess={() => {}}
+                >
+                  <GoogleLogin
+                    disabled={isGoogleLoginDisabled}
+                    saasBuilderBaseURL={saasBuilderBaseURL}
+                  />
+                </GoogleOAuthProvider>
+              )}
+              {showGithubLoginButton && (
+                <GithubLogin
+                  githubClientID={githubIDPClientID}
+                  disabled={isGithubLoginDisabled}
+                  saasBuilderBaseURL={saasBuilderBaseURL}
+                />
+              )}
+            </Stack>
+          </>
+        )}
 
+        <Typography
+          mt="22px"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="22px"
+          color="#A0AEC0"
+          textAlign="center"
+        >
+          By creating your account manually or using your Google or GitHub
+          account to sign up, you agree to our{" "}
+          <Link
+            target="_blank"
+            href="/terms-of-use"
+            style={{ color: "#27A376" }}
+          >
+            Terms & Conditions
+          </Link>{" "}
+          and{" "}
+          <Link
+            target="_blank"
+            href="/privacy-policy"
+            style={{ color: "#27A376" }}
+          >
+            Privacy Policy
+          </Link>
+          .
+        </Typography>
         {/* Signup Link */}
         <Typography
+          mt="20px"
           fontWeight="500"
           fontSize="14px"
           lineHeight="22px"
@@ -291,3 +374,14 @@ const SignupPage = (props) => {
 };
 
 export default SignupPage;
+
+const FormGrid = styled(Box)(({ theme }) => ({
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr",
+  columnGap: "22px",
+  rowGap: "27px",
+  "@media (max-width: 1280px)": {
+    gridTemplateColumns: "1fr",
+    rowGap: "22px",
+  },
+}));
