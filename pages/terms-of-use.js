@@ -60,7 +60,7 @@ const DefaultTermsOfUse = ({ orgName }) => {
         will be effective unless in writing and signed by an authorized
         signatory of you and an officer of {orgName}.
       </SectionDescription>
-      <SectionHeading>Disclaimer of warranties</SectionHeading>
+      <SectionHeading>Disclaimer of Warranties</SectionHeading>
       <SectionDescription>
         {orgName} IS PROVIDING THE SERVICES ON AN "AS IS" BASIS FOR USE AT YOUR
         OWN RISK. {orgName} DOES NOT WARRANT THAT THE OPERATION OF THE SERVICES
@@ -69,7 +69,7 @@ const DefaultTermsOfUse = ({ orgName }) => {
         IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT OF THIRD PARTY RIGHTS,
         MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
       </SectionDescription>
-      <SectionHeading>Limitiation of liability</SectionHeading>
+      <SectionHeading>Limitation of Liability</SectionHeading>
       <SectionDescription>
         YOU AGREE THAT {orgName} SHALL NOT BE RESPONSIBLE FOR ANY LOSS OR DAMAGE
         TO YOU, YOUR CUSTOMERS, OR THIRD PARTIES CAUSED BY THE USE OF OR
