@@ -248,10 +248,13 @@ const DefaultTermsOfUse = ({ orgName }) => {
         that you wish to deactivate your account with us. Continued use of our
         website or Service, following notice of such changes shall indicate your
         acknowledgement of such changes and agreement to be bound by the terms
-        and conditions of such changes. Feedback You acknowledge and agree that
-        any comments, ideas and/or reports provided to {orgName} ("Feedback")
-        shall be the property of
-        {orgName} and you hereby irrevocably transfer and assign to
+        and conditions of such changes.
+      </SectionDescription>
+      <SectionHeading>Feedback</SectionHeading>
+      <SectionDescription>
+        You acknowledge and agree that any comments, ideas and/or reports
+        provided to {orgName} ("Feedback") shall be the property of {orgName}{" "}
+        and you hereby irrevocably transfer and assign to
         {orgName} such Feedback, and all associated intellectual property
         rights, provided however that you shall be free to use such Feedback in
         the ordinary conduct of your business.
