@@ -49,7 +49,7 @@ const DefaultPrivacyPolicy = ({ orgName, orgSupportEmail }) => {
       </SectionDescription>
       <SectionHeading>{orgName} Privacy Policy</SectionHeading>
       <SectionDescription>
-        Last updated: July 28, 2023 This Privacy Policy explains how our
+        Last updated: July 28, 2023 This Privacy Policy explains our
         practices regarding the information we collect through our website and
         related services (collectively, the "Service"). By submitting
         information through our website or services, you agree to the terms of
