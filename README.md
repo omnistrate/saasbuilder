@@ -130,7 +130,7 @@ For a video guide covering all the below steps, you can follow it [here](https:/
 - Choose your service model i.e. Provider Hosted, to create your service.
 - Follow the prompt to launch an instance of the SaaSBuilder Service.
 - Specify instance details: type, Omnistrate account and password, SMTP email and password, and hosting domain.
-- Post-creation, navigate to the "Network" tab, copy the cluster endpoint.
+- Post-creation, navigate to the "Connectivity" tab, copy the cluster endpoint.
 - Access the SaaSBuilder App through the copied endpoint to reach the login page.
 - Once you have confirmed that you can access the SaaSBuilder app. You are ready to configure your domain.
 
