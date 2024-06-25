@@ -12,6 +12,7 @@ const MainImageLayout = ({
   pageTitle,
   showArrow,
   children,
+  contentMaxWidth = 480,
 }) => {
   return (
     <>
@@ -20,11 +21,7 @@ const MainImageLayout = ({
           <title>{pageTitle}</title>
         </Head>
       )}
-      <Box
-        display="grid"
-        gridTemplateColumns="1fr 1fr"
-        height="100%"
-      >
+      <Box display="grid" gridTemplateColumns="1fr 1fr" height="100%">
         {/* Image Box */}
         <Box
           p="50px 36px"
@@ -48,10 +45,10 @@ const MainImageLayout = ({
             position: "relative", // For the Footer
             display: "grid",
             placeItems: "center",
-            padding: "60px 120px 90px",
+            padding: "24px 55px 60px",
           }}
         >
-          <Stack gap="32px" width="480px" mx="auto">
+          <Box maxWidth={contentMaxWidth} width="100%" mx="auto">
             {/* Logo */}
             <Box
               position="relative" // For the Curved Arrow
@@ -65,7 +62,7 @@ const MainImageLayout = ({
               {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}
             </Box>
             {children}
-          </Stack>
+          </Box>
           <Footer orgName={orgName} />
         </Box>
       </Box>

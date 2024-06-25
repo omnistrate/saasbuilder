@@ -106,7 +106,7 @@ const DefaultPrivacyPolicy = ({ orgName, orgSupportEmail }) => {
         you. We reserve the right to share Anonymous Data in our discretion. If
         another company acquires us or our assets, that company will possess the
         Personal Data collected by it and us and will assume the rights and
-        obligations described in this Privacy Policy. Your expressly consent to
+        obligations described in this Privacy Policy. You expressly consent to
         our transfer of Personal Data to such acquirer in connection with such
         acquisition. Regardless of any choices you make regarding your Personal
         Data (as described below), we may disclose Personal Data if it believes

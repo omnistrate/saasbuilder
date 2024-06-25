@@ -8,19 +8,23 @@ const TextField = ({ type, endAdornment, ...restProps }) => {
       type={type || "text"}
       sx={{
         ".MuiOutlinedInput-root": {
-          borderRadius: "10px",
+          borderRadius: "6px",
           fontSize: "14px",
           color: "#111827",
           fontWeight: "500",
+          boxShadow: "0px 1px 2px 0px #1018280D",
           "& .MuiOutlinedInput-input": {
-            padding: "16px 20px",
+            padding: "10px 12px",
             backgroundColor: "#FFF",
             "&::placeholder": {
               fontSize: "14px",
               // color: "#A0AEC0",
-              color: "#767F8C",
+              color: "#9CA3AF",
             },
           },
+        },
+        "& .MuiOutlinedInput-notchedOutline": {
+          borderColor: "#D1D5DB",
         },
       }}
       InputProps={{
