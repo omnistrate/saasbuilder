@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, styled } from "@mui/material";
 import * as Yup from "yup";
 import { customerUserSignup } from "src/api/customer-user";
 import MainImageLayout from "components/NonDashboardComponents/Layout/MainImageLayout";
@@ -166,12 +166,13 @@ const SignupPage = (props) => {
         orgName={orgName}
         orgLogoURL={orgLogoURL}
         pageTitle="Sign up"
+        contentMaxWidth={650}
       >
-        <DisplayHeading>Get Started Today</DisplayHeading>
+        <DisplayHeading mt="24px">Get Started Today</DisplayHeading>
 
-        <Stack component="form" gap="32px" autoComplete="off">
+        <Box component="form" mt="44px" autoComplete="off">
           {/* Signup Form */}
-          <Stack gap="10px">
+          <FormGrid>
             <FieldContainer>
               <FieldLabel required>Name</FieldLabel>
               <TextField
@@ -271,10 +272,10 @@ const SignupPage = (props) => {
                 {touched.confirmPassword && errors.confirmPassword}
               </FieldError>
             </FieldContainer>
-          </Stack>
+          </FormGrid>
 
           {/* Login and Google Button */}
-          <Stack gap="16px">
+          <Stack mt="32px" width="480px" mx="auto">
             <SubmitButton
               type="submit"
               onClick={formik.handleSubmit}
@@ -284,10 +285,10 @@ const SignupPage = (props) => {
               Create Account
             </SubmitButton>
           </Stack>
-        </Stack>
+        </Box>
         {Boolean(googleIdentityProvider || githubIdentityProvider) && (
           <>
-            <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="4px">
+            <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="40px">
               <Box
                 display="inline-block"
                 paddingLeft="16px"
@@ -299,15 +300,10 @@ const SignupPage = (props) => {
                 lineHeight="22px"
                 sx={{ transform: "translateY(-50%)" }}
               >
-                Or sign up with
+                Or use one of these options
               </Box>
             </Box>
-            <Stack
-              direction="row"
-              justifyContent="center"
-              mt="-18px"
-              gap="16px"
-            >
+            <Stack direction="row" justifyContent="center" mt="20px" gap="16px">
               {showGoogleLoginButton && (
                 <GoogleOAuthProvider
                   clientId={googleIDPClientID}
@@ -331,9 +327,8 @@ const SignupPage = (props) => {
           </>
         )}
 
-        <Divider sx={{ borderColor: "#F1F2F4" }} />
-
         <Typography
+          mt="22px"
           fontWeight="500"
           fontSize="14px"
           lineHeight="22px"
@@ -361,6 +356,7 @@ const SignupPage = (props) => {
         </Typography>
         {/* Signup Link */}
         <Typography
+          mt="20px"
           fontWeight="500"
           fontSize="14px"
           lineHeight="22px"
@@ -378,3 +374,14 @@ const SignupPage = (props) => {
 };
 
 export default SignupPage;
+
+const FormGrid = styled(Box)(({ theme }) => ({
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr",
+  columnGap: "22px",
+  rowGap: "27px",
+  "@media (max-width: 1280px)": {
+    gridTemplateColumns: "1fr",
+    rowGap: "22px",
+  },
+}));

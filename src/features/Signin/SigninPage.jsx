@@ -130,9 +130,9 @@ const SigninPage = (props) => {
       orgName={orgName}
       orgLogoURL={orgLogoURL}
     >
-      <PageHeading>Login to your account</PageHeading>
+      <PageHeading mt="24px">Login to your account</PageHeading>
 
-      <Stack component="form" gap="32px">
+      <Stack component="form" gap="32px" mt="44px">
         {/* Signin Form */}
         <Stack gap="30px">
           <FieldContainer>
@@ -190,7 +190,7 @@ const SigninPage = (props) => {
       </Stack>
       {Boolean(googleIdentityProvider || githubIdentityProvider) && (
         <>
-          <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="4px">
+          <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="40px">
             <Box
               display="inline-block"
               paddingLeft="16px"
@@ -205,14 +205,12 @@ const SigninPage = (props) => {
               Or login with
             </Box>
           </Box>
-          <Stack direction="row" justifyContent="center" mt="-18px" gap="16px">
+          <Stack direction="row" justifyContent="center" mt="20px" gap="16px">
             {showGoogleLoginButton && (
               <GoogleOAuthProvider
                 clientId={googleIDPClientID}
-                onScriptLoadError={() => {
-                }}
-                onScriptLoadSuccess={() => {
-                }}
+                onScriptLoadError={() => {}}
+                onScriptLoadSuccess={() => {}}
               >
                 <GoogleLogin
                   disabled={isGoogleLoginDisabled}
@@ -233,6 +231,7 @@ const SigninPage = (props) => {
 
       {/* Signup Link */}
       <Typography
+        mt="22px"
         fontWeight="500"
         fontSize="14px"
         lineHeight="22px"
