@@ -21,7 +21,6 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLogin from "../Signin/components/GoogleLogin";
 import GithubLogin from "../Signin/components/GitHubLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "../Signin/constants";
-import Divider from "src/components/Divider/Divider";
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -156,6 +155,19 @@ const SignupPage = (props) => {
 
     if (status === IDENTITY_PROVIDER_STATUS_TYPES.FAILED) {
       isGithubLoginDisabled = true;
+    }
+  }
+
+  let invitationInfo = {};
+  if (email || org || orgUrl) {
+    if (email) {
+      invitationInfo.invitedEmail = decodeURIComponent(email);
+    }
+    if (org) {
+      invitationInfo.legalCompanyName = decodeURIComponent(org);
+    }
+    if (orgUrl) {
+      invitationInfo.companyUrl = decodeURIComponent(orgUrl);
     }
   }
 
@@ -313,6 +325,7 @@ const SignupPage = (props) => {
                   <GoogleLogin
                     disabled={isGoogleLoginDisabled}
                     saasBuilderBaseURL={saasBuilderBaseURL}
+                    invitationInfo={invitationInfo}
                   />
                 </GoogleOAuthProvider>
               )}
@@ -321,6 +334,7 @@ const SignupPage = (props) => {
                   githubClientID={githubIDPClientID}
                   disabled={isGithubLoginDisabled}
                   saasBuilderBaseURL={saasBuilderBaseURL}
+                  invitationInfo={invitationInfo}
                 />
               )}
             </Stack>
