@@ -159,6 +159,15 @@ const SignupPage = (props) => {
     }
   }
 
+  let policyAgreementText = `By creating your account, you agree to our`;
+  if (showGoogleLoginButton && showGithubLoginButton) {
+    policyAgreementText = `By creating your account manually or using your Google or GitHub account to sign up, you agree to our`;
+  } else if (showGoogleLoginButton) {
+    policyAgreementText = `By creating your account manually or using your Google account to sign up, you agree to our`;
+  } else if (showGithubLoginButton) {
+    policyAgreementText = `By creating your account manually or using your Github account to sign up, you agree to our`;
+  }
+
   return (
     <>
       <SignupNotification isVisible={showSuccess} />
@@ -335,8 +344,7 @@ const SignupPage = (props) => {
           color="#A0AEC0"
           textAlign="center"
         >
-          By creating your account manually or using your Google or GitHub
-          account to sign up, you agree to our{" "}
+          {policyAgreementText}{" "}
           <Link
             target="_blank"
             href="/terms-of-use"
@@ -352,7 +360,7 @@ const SignupPage = (props) => {
           >
             Privacy Policy
           </Link>
-          .
+          
         </Typography>
         {/* Signup Link */}
         <Typography
