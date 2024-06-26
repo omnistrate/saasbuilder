@@ -146,5 +146,5 @@ const Toolbar = styled(MuiToolbar, {
   justifyContent: "space-between",
   alignItems: "center",
   marginLeft: noSidebar ? 0 : isOpen ? "0px" : "40px",
-  minHeight: "74px !important",
+  minHeight: "60px !important",
 }));
