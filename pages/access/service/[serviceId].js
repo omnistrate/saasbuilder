@@ -1112,6 +1112,10 @@ function MarketplaceService() {
     }
   }
 
+  function fetchResourceInstancesOfSelectedResource() {
+    return fetchResourceInstances(selectedResource);
+  }
+
   async function getResourceSchema(resourceId) {
     const resourceInstanceSchema = await describeServiceOfferingResource(
       serviceId,
@@ -1946,6 +1950,9 @@ function MarketplaceService() {
           selectedResourceKey={selectedResource.key}
           subscriptionId={subscriptionData?.id}
           setCloudFormationTemplateUrl={setCloudFormationTemplateUrl}
+          fetchResourceInstancesOfSelectedResource={
+            fetchResourceInstancesOfSelectedResource
+          }
         />
 
         <AccessSideRestoreInstance
