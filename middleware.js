@@ -54,6 +54,6 @@ export async function middleware(request) {
 
 export const config = {
   matcher: [
-    "/((?!api/action|api/signup|api/signin|api/reset-password|api/provider-details|api/idp-auth|privacy-policy|terms-of-use|signup|reset-password|change-password|favicon.ico|_next/image|_next/static|static|validate-token).*)",
+    "/((?!api/action|api/signup|api/signin|api/reset-password|api/provider-details|idp-auth|api/sign-in-with-idp|privacy-policy|terms-of-use|signup|reset-password|change-password|favicon.ico|_next/image|_next/static|static|validate-token).*)",
   ],
 };
