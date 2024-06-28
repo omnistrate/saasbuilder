@@ -319,7 +319,12 @@ function MarketplaceService() {
                     }}
                     onClick={() => {
                       const result_params = params.row.result_params;
-                      setCloudProvider(result_params?.cloud_provider);
+                      setCloudProvider(
+                        result_params?.cloud_provider ||
+                          !!result_params?.aws_account_id
+                          ? "aws"
+                          : "gcp"
+                      );
                       setCloudFormationTemplateUrl(
                         result_params?.cloudformation_url
                       );
