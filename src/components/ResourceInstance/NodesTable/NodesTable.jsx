@@ -29,6 +29,11 @@ import { selectUserrootData } from "../../../slices/userDataSlice";
 import Card from "src/components/Card/Card";
 import { NodeStatus } from "./NodeStatus";
 import DataGridText from "src/components/DataGrid/DataGridText";
+import {
+  getResourceInstanceStatusStylesAndlabel,
+  resourceInstanceStatusMap,
+} from "src/constants/statusChipStyles/resourceInstanceStatus";
+import { chipCategoryColors } from "src/constants/statusChipStyles";
 
 export default function NodesTable(props) {
   const {
@@ -162,7 +167,9 @@ export default function NodesTable(props) {
         align: "center",
         renderCell: (params) => {
           const status = params.row.status;
-          return <StatusChip status={status} />;
+          const statusStylesAndMap =
+            getResourceInstanceStatusStylesAndlabel(status);
+          return <StatusChip status={status} {...statusStylesAndMap} />;
         },
         minWidth: 200,
       },
@@ -350,12 +357,13 @@ export default function NodesTable(props) {
 const getRowBorderStyles = () => {
   const styles = {};
 
-  for (let statusType in statusStyles) {
-    let color = statusStyles[statusType].color;
+  for (const status in resourceInstanceStatusMap) {
+    const category = resourceInstanceStatusMap[status]?.category;
+    let color = chipCategoryColors[category]?.color;
     if (!color) {
-      color = "#06AED4";
+      color = defaultChipStyles.color;
     }
-    styles[`& .${statusType}::before`] = {
+    styles[`& .${status}::before`] = {
       content: '""',
       height: "60px",
       width: "3px",
