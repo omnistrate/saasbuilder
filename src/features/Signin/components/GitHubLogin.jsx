@@ -15,7 +15,6 @@ function GithubLogin(props) {
   } = props;
   const router = useRouter();
 
-
   function handleGitHubLogin() {
     const uuid = uuidv4();
     const githubAuthState = {
@@ -28,7 +27,13 @@ function GithubLogin(props) {
     ).toString("base64");
 
     const localAuthState = { ...githubAuthState, invitationInfo };
-    localStorage.setItem("authState", JSON.stringify(localAuthState));
+    //encode to base64 before storing in session storage
+    const encodedLocalAuthState = Buffer.from(
+      JSON.stringify(localAuthState),
+      "utf8"
+    ).toString("base64");
+
+    sessionStorage.setItem("authState", encodedLocalAuthState);
 
     router.push(
       `https://github.com/login/oauth/authorize?client_id=${githubClientID}&scope=user:email&redirect_uri=${saasBuilderBaseURL}/idp-auth&state=${encodedGithubAuthState}`

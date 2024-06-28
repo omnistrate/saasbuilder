@@ -39,7 +39,13 @@ function GoogleLogin(props) {
     });
 
     const localAuthState = { ...googleAuthState, invitationInfo };
-    localStorage.setItem("authState", JSON.stringify(localAuthState));
+    
+    const encodedLocalAuthState = Buffer.from(
+      JSON.stringify(localAuthState),
+      "utf8"
+    ).toString("base64");
+
+    sessionStorage.setItem("authState", encodedLocalAuthState);
     googleLogin();
   }
 
