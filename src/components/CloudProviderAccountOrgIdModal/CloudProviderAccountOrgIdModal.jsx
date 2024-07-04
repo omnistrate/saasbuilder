@@ -33,6 +33,7 @@ function CloudProviderAccountOrgIdModal(props) {
     selectedResourceKey,
     subscriptionId,
     setCloudFormationTemplateUrl,
+    fetchResourceInstancesOfSelectedResource,
   } = props;
 
   const terraformlink = isAccessPage ? (
@@ -142,6 +143,9 @@ function CloudProviderAccountOrgIdModal(props) {
               service={service}
               selectedResourceKey={selectedResourceKey}
               subscriptionId={subscriptionId}
+              fetchResourceInstancesOfSelectedResource={
+                fetchResourceInstancesOfSelectedResource
+              }
             />
           ) : (
             <NonCreatationTimeInstructions
@@ -183,6 +187,7 @@ const CreationTimeInstructions = (props) => {
     service,
     selectedResourceKey,
     subscriptionId,
+    fetchResourceInstancesOfSelectedResource,
   } = props;
 
   const [isPolling, setIsPolling] = useState(true);
@@ -223,6 +228,7 @@ const CreationTimeInstructions = (props) => {
       const resourceInstance = res.data;
       const url = resourceInstance?.result_params?.cloudformation_url;
       if (url) {
+        fetchResourceInstancesOfSelectedResource?.();
         setCloudFormationTemplateUrl(url);
         setIsPolling(false);
         clearInterval(pollTimerRef.current);
