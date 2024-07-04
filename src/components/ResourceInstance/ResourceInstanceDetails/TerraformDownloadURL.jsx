@@ -67,6 +67,7 @@ const TerraformDownloadURL = ({
           direction="row"
           alignItems="center"
           justifyContent="flex-end"
+          gap="12px"
         >
           <LoadingSpinnerSmall
             sx={{
@@ -74,7 +75,6 @@ const TerraformDownloadURL = ({
               visibility: downloadTerraformKitMutation.isLoading
                 ? "visible"
                 : "hidden",
-              mr: "12px",
             }}
           />
           <Text

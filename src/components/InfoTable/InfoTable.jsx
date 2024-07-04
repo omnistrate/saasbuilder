@@ -51,6 +51,7 @@ export const CellDescription = (props) => {
       alignItems="center"
       justifyContent="flex-end"
       sx={{ width: "100%" }}
+      gap="10px"
     >
       <Tooltip title={children} placement="top" arrow>
         {/* Div is necessary for showing the Tooltip */}

@@ -5,7 +5,7 @@ import useServiceOffering from "src/hooks/useServiceOffering";
 import ResourceInstanceOverview from "src/components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import { Tabs, Tab } from "src/components/Tab/Tab";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import NodesTable from "src/components/ResourceInstance/NodesTable/NodesTable";
 import { Stack } from "@mui/material";
 import Button from "src/components/Button/Button";
@@ -28,6 +28,13 @@ import {
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import { checkIfResouceIsBYOA } from "src/utils/access/byoaResource";
+import { useMutation } from "@tanstack/react-query";
+import {
+  addCustomDNSToResourceInstance,
+  getResourceInstanceDetails,
+  removeCustomDNSFromResourceInstance,
+} from "src/api/resourceInstance";
+import Link from "next/link";
 
 function ResourceInstance() {
   const router = useRouter();
@@ -47,6 +54,8 @@ function ResourceInstance() {
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [currentSource, setCurrentSource] = useState("");
+  const timeoutID = useRef(null);
+  const pollCount = useRef(0);
 
   let resourceName = "";
   let resourceKey = "";
@@ -96,6 +105,96 @@ function ResourceInstance() {
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);
   };
+
+  const addCustomDNSMutation = useMutation({
+    mutationFn: (payload) => {
+      return addCustomDNSToResourceInstance(
+        serviceOffering?.serviceProviderId,
+        serviceOffering?.serviceURLKey,
+        serviceOffering?.serviceAPIVersion,
+        serviceOffering?.serviceEnvironmentURLKey,
+        serviceOffering?.serviceModelURLKey,
+        serviceOffering?.productTierURLKey,
+        resourceKey,
+        resourceInstanceId,
+        subscriptionData?.id,
+        payload
+      );
+    },
+    onSuccess: () => {
+      resourceInstanceQuery.refetch();
+    },
+  });
+
+  const removeCustomDNSMutation = useMutation({
+    mutationFn: (payload) => {
+      return removeCustomDNSFromResourceInstance(
+        serviceOffering?.serviceProviderId,
+        serviceOffering?.serviceURLKey,
+        serviceOffering?.serviceAPIVersion,
+        serviceOffering?.serviceEnvironmentURLKey,
+        serviceOffering?.serviceModelURLKey,
+        serviceOffering?.productTierURLKey,
+        resourceKey,
+        resourceInstanceId,
+        subscriptionData?.id
+      );
+    },
+    onSuccess: () => {
+      pollInstanceQueryToVerifyDNSRemoval();
+    },
+  });
+
+  function clearExistingTimeout() {
+    if (timeoutID.current) {
+      clearTimeout(timeoutID.current);
+    }
+  }
+
+  function pollInstanceQueryToVerifyDNSRemoval() {
+    clearExistingTimeout();
+    pollCount.current = 0;
+    verifyDNSRemoval();
+
+    function verifyDNSRemoval() {
+      if (pollCount.current < 5) {
+        pollCount.current++;
+        const id = setTimeout(() => {
+          getResourceInstanceDetails(
+            serviceOffering?.serviceProviderId,
+            serviceOffering?.serviceURLKey,
+            serviceOffering?.serviceAPIVersion,
+            serviceOffering?.serviceEnvironmentURLKey,
+            serviceOffering?.serviceModelURLKey,
+            serviceOffering?.productTierURLKey,
+            resourceKey,
+            resourceInstanceId,
+            subscriptionData?.id
+          )
+            .then((response) => {
+              const topologyDetails =
+                response.data?.detailedNetworkTopology?.[resourceId];
+              //check for dnsName field in the response, absence means dns removal complete
+              if (!Boolean(topologyDetails?.customDNSEndpoint.dnsName)) {
+                resourceInstanceQuery.refetch();
+              } else {
+                verifyDNSRemoval();
+              }
+            })
+            .catch((error) => {
+              verifyDNSRemoval();
+            });
+        }, 1500);
+        timeoutID.current = id;
+      }
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      clearExistingTimeout();
+    };
+  }, []);
 
   const isLoading =
     !router.isReady ||
@@ -260,15 +359,11 @@ function ResourceInstance() {
         <title>{pageTitle}</title>
       </Head>
       <Stack direction="row" alignItems="center" justifyContent="flex-end">
-        <Button
-          startIcon={<RiArrowGoBackFill />}
-          sx={{ color: "#6941C6" }}
-          onClick={() => {
-            router.push(resourceInstancesUrl);
-          }}
-        >
-          Back to list of Resource Instances
-        </Button>
+        <Link href={resourceInstancesUrl}>
+          <Button startIcon={<RiArrowGoBackFill />} sx={{ color: "#6941C6" }}>
+            Back to list of Resource Instances
+          </Button>
+        </Link>
       </Stack>
 
       <ResourceInstanceOverview
@@ -342,6 +437,8 @@ function ResourceInstance() {
           privateNetworkId={resourceInstanceData.connectivity.privateNetworkId}
           globalEndpoints={resourceInstanceData.connectivity.globalEndpoints}
           nodes={resourceInstanceData.nodes}
+          addCustomDNSMutation={addCustomDNSMutation}
+          removeCustomDNSMutation={removeCustomDNSMutation}
         />
       )}
       {currentTab === tabs.nodes && (

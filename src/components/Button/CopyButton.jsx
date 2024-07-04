@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton } from "@mui/material";
 import clipboard from "clipboardy";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import Tooltip from "../Tooltip/Tooltip";
 
 const CopyButton = (props) => {
   const {
