@@ -239,7 +239,10 @@ export const addCustomDNSToResourceInstance = (
 
   return axios.post(
     `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/custom-dns`,
-    payload
+    payload,
+    {
+      params: queryParams,
+    }
   );
 };
 
@@ -261,6 +264,9 @@ export const removeCustomDNSFromResourceInstance = (
   }
 
   return axios.delete(
-    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/custom-dns`
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/custom-dns`,
+    {
+      params: queryParams,
+    }
   );
 };
