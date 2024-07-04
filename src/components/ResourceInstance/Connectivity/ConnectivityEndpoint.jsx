@@ -1,4 +1,4 @@
-import { Box, SxProps, styled, Theme, Stack } from "@mui/material";
+import { Box, styled, Stack } from "@mui/material";
 import Image from "next/image";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,11 +8,10 @@ import { Text } from "src/components/Typography/Typography";
 import CopyToClipbpoardButton from "src/components/CopyClipboardButton/CopyClipboardButton";
 import resourcePortsIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/ports.svg";
 import resourceEndpointIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/resource-endpoint.svg";
-import { FC, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import AccordionEditIcon from "src/components/Icons/AccordionEdit/AccordionEdit";
 import Switch from "src/components/Switch/Switch";
 import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
-import FieldTitle from "src/components/FormElementsv2/FieldTitle/FieldTitle";
 import TextField from "src/components/FormElementsv2/TextField/TextField";
 import Button from "src/components/Button/Button";
 import { useFormik } from "formik";
@@ -49,6 +48,7 @@ const ResourceConnectivityEndpoint = (props) => {
   const [showConfigurationDialog, setShowConfigurationDialog] = useState(false);
   const [isTextfieldDisabled, setIsTextFieldDisabled] = useState(false);
   const [shouldShowConfigDialog, setShouldShowConfigDialog] = useState(false);
+  const [deleteMessage, setDeleteMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
   const { dnsName } = customDNSData;
@@ -120,6 +120,9 @@ const ResourceConnectivityEndpoint = (props) => {
       if (!isCustomDNSSetup) {
         setIsToggleChecked(false);
       } else {
+        setDeleteMessage(
+          "Disabling will delete endpoint alias. Are you sure you want to continue?"
+        );
         setShowDeleteConfirmationDialog(true);
       }
     } else {
@@ -247,6 +250,9 @@ const ResourceConnectivityEndpoint = (props) => {
                               <IconButtonSquare
                                 sx={{ borderColor: "#FDA29B !important" }}
                                 onClick={() => {
+                                  setDeleteMessage(
+                                    "Are you sure you want to delete this endpoint alias?"
+                                  );
                                   setShowDeleteConfirmationDialog(true);
                                 }}
                               >
@@ -309,7 +315,7 @@ const ResourceConnectivityEndpoint = (props) => {
           }}
           formData={removeCustomDNSFormik}
           title={`Delete Endpoint Alias`}
-          subtitle={`Are you sure you want to delete this endpoint alias?`}
+          subtitle={deleteMessage}
           message={
             "To confirm deletion, please enter <b>deleteme</b>, in the field below:"
           }
