@@ -81,6 +81,9 @@ export default function useResourceInstance(
               ? topologyDetails.clusterEndpoint
               : "",
             customDNSEndpoint: topologyDetails.customDNSEndpoint,
+            resourceId: resourceId,
+            resourceKey: topologyDetails.resourceKey,
+            resourceHasCompute: topologyDetails.hasCompute,
           };
           globalEndpoints.others = [];
         }
@@ -191,14 +194,6 @@ export default function useResourceInstance(
                 metricsSocketURL = `wss://${baseURL}/metrics?username=${username}&password=${password}`;
                 logsSocketURL = `wss://${baseURL}/logs?username=${username}&password=${password}`;
               }
-
-              globalEndpoints.others.push({
-                resourceName: topologyDetails.resourceName,
-                endpoint: topologyDetails.clusterEndpoint
-                  ? topologyDetails.clusterEndpoint
-                  : "",
-                customDNSEndpoint: topologyDetails.customDNSEndpoint,
-              });
             } else {
               if (topologyDetails?.hasCompute === true) {
                 if (topologyDetails.nodes) {
@@ -247,6 +242,10 @@ export default function useResourceInstance(
                 endpoint: topologyDetails.clusterEndpoint
                   ? topologyDetails.clusterEndpoint
                   : "",
+                customDNSEndpoint: topologyDetails.customDNSEndpoint,
+                resourceId: resourceId,
+                resourceKey: topologyDetails.resourceKey,
+                resourceHasCompute: topologyDetails.hasCompute,
               });
             }
           }

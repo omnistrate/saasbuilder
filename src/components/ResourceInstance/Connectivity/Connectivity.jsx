@@ -25,17 +25,13 @@ function Connectivity(props) {
     privateNetworkCIDR,
     privateNetworkId,
     globalEndpoints,
-    context,
     nodes,
-    addCustomDNSMutation,
-    removeCustomDNSMutation,
+    queryData,
+    refetchInstance,
   } = props;
   const [availabilityZones, setAvailabilityZones] = useState("");
   let sectionLabel = "Resource";
 
-  if (context === "inventory") {
-    sectionLabel = "Service Component";
-  }
   const primaryResourceName = globalEndpoints?.primary?.resourceName;
   const primaryResourceEndpoint = globalEndpoints?.primary?.endpoint;
   const primaryResourcePorts = ports?.[0];
@@ -46,18 +42,19 @@ function Connectivity(props) {
 
   const otherResourceFilteredPorts = [];
   const otherResourceFilteredEndpoints = [];
-  otherEndpoints?.forEach(({ resourceName, endpoint }) => {
+
+  otherEndpoints?.forEach((endpointData) => {
+    const { resourceName, endpoint } = endpointData;
     if (resourceName && endpoint) {
       const matchingResourcePort = otherResourcePorts.find(
         (port) => port.resourceName === resourceName && port.ports
       );
       if (matchingResourcePort) {
-        //on access side filter out omnistrate observability
         if (resourceName === "Omnistrate Observability") {
           return;
         }
         otherResourceFilteredPorts.push(matchingResourcePort);
-        otherResourceFilteredEndpoints.push({ resourceName, endpoint });
+        otherResourceFilteredEndpoints.push(endpointData);
       }
     }
   });
@@ -88,7 +85,7 @@ function Connectivity(props) {
 
   if (noConnectivityData) {
     return (
-      <Card  mt="54px" sx={{ minHeight: "500px" }}>
+      <Card mt="54px" sx={{ minHeight: "500px" }}>
         <Stack direction="row" justifyContent="center" marginTop="200px">
           <Text size="xlarge">No Connectivity data</Text>
         </Stack>
@@ -130,8 +127,13 @@ function Connectivity(props) {
                     viewType="endpoint"
                     endpointURL={primaryResourceEndpoint}
                     customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
-                    addCustomDNSMutation={addCustomDNSMutation}
-                    removeCustomDNSMutation={removeCustomDNSMutation}
+                    queryData={queryData}
+                    resourceKey={globalEndpoints?.primary?.resourceKey}
+                    resourceId={globalEndpoints?.primary?.resourceId}
+                    refetchInstance={refetchInstance}
+                    resourceHasCompute={
+                      globalEndpoints?.primary?.resourceHasCompute
+                    }
                   />
                 )}
                 {otherResourceFilteredEndpoints?.length > 0 && (
@@ -156,14 +158,28 @@ function Connectivity(props) {
                     {(isEndpointsExpanded ||
                       !(primaryResourceName && primaryResourceEndpoint)) &&
                       otherResourceFilteredEndpoints.map((obj) => {
-                        const { resourceName, endpoint } = obj;
+                        const {
+                          resourceName,
+                          endpoint,
+                          resourceId,
+                          customDNSEndpoint,
+                          resourceKey,
+                          resourceHasCompute,
+                        } = obj;
                         return (
                           <ResourceConnectivityEndpoint
+                            key={resourceId}
+                            isPrimaryResource={false}
                             resourceName={resourceName}
                             viewType="endpoint"
                             endpointURL={endpoint}
-                            key={obj.resourceName}
+                            customDNSData={customDNSEndpoint}
+                            queryData={queryData}
+                            resourceKey={resourceKey}
+                            resourceId={resourceId}
+                            refetchInstance={refetchInstance}
                             containerStyles={{ marginTop: "16px" }}
+                            resourceHasCompute={resourceHasCompute}
                           />
                         );
                       })}

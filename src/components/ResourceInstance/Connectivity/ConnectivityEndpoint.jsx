@@ -8,7 +8,7 @@ import { Text } from "src/components/Typography/Typography";
 import CopyToClipbpoardButton from "src/components/CopyClipboardButton/CopyClipboardButton";
 import resourcePortsIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/ports.svg";
 import resourceEndpointIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/resource-endpoint.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AccordionEditIcon from "src/components/Icons/AccordionEdit/AccordionEdit";
 import Switch from "src/components/Switch/Switch";
 import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
@@ -25,6 +25,13 @@ import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgres
 import CustomDNSDetailsModal from "./CustomDNSDetailsModal";
 import StatusChip from "src/components/StatusChip/StatusChip";
 import _ from "lodash";
+import {
+  addCustomDNSToResourceInstance,
+  getResourceInstanceDetails,
+  removeCustomDNSFromResourceInstance,
+} from "src/api/resourceInstance";
+import { useMutation } from "@tanstack/react-query";
+import ViewInstructionsIcon from "src/components/Icons/ViewInstructions/ViewInstructions";
 
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
@@ -39,8 +46,11 @@ const ResourceConnectivityEndpoint = (props) => {
     viewType,
     isPrimaryResource = false,
     customDNSData = { enabled: false },
-    addCustomDNSMutation,
-    removeCustomDNSMutation,
+    queryData,
+    resourceKey,
+    resourceId,
+    refetchInstance,
+    resourceHasCompute,
   } = props;
 
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
@@ -50,6 +60,8 @@ const ResourceConnectivityEndpoint = (props) => {
   const [shouldShowConfigDialog, setShouldShowConfigDialog] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const timeoutID = useRef(null);
+  const pollCount = useRef(0);
 
   const { dnsName } = customDNSData;
   let isCustomDNSSetup = false;
@@ -85,7 +97,9 @@ const ResourceConnectivityEndpoint = (props) => {
           await removeCustomDNSMutation?.mutateAsync();
           setShowDeleteConfirmationDialog(false);
           removeCustomDNSFormik.resetForm();
-        } catch (err) {}
+        } catch (err) {
+          console.log(error);
+        }
       }
     },
   });
@@ -134,6 +148,98 @@ const ResourceConnectivityEndpoint = (props) => {
     customDNSData?.status
   );
 
+  const addCustomDNSMutation = useMutation({
+    mutationFn: (payload) => {
+      return addCustomDNSToResourceInstance(
+        queryData?.serviceProviderId,
+        queryData?.serviceKey,
+        queryData?.serviceAPIVersion,
+        queryData?.serviceEnvironmentKey,
+        queryData?.serviceModelKey,
+        queryData?.productTierKey,
+        resourceKey,
+        queryData.resourceInstanceId,
+        queryData.subscriptionId,
+        payload
+      );
+    },
+    onSuccess: () => {
+      refetchInstance();
+    },
+  });
+
+  const removeCustomDNSMutation = useMutation({
+    mutationFn: (payload) => {
+      console.log("query data", queryData);
+      console.log("service provider id", queryData?.serviceProviderId);
+      return removeCustomDNSFromResourceInstance(
+        queryData?.serviceProviderId,
+        queryData?.serviceKey,
+        queryData?.serviceAPIVersion,
+        queryData?.serviceEnvironmentKey,
+        queryData?.serviceModelKey,
+        queryData?.productTierKey,
+        resourceKey,
+        queryData.resourceInstanceId,
+        queryData.subscriptionId
+      );
+    },
+    onSuccess: () => {
+      pollInstanceQueryToVerifyDNSRemoval();
+    },
+  });
+
+  function clearExistingTimeout() {
+    if (timeoutID.current) {
+      clearTimeout(timeoutID.current);
+    }
+  }
+
+  function pollInstanceQueryToVerifyDNSRemoval() {
+    clearExistingTimeout();
+    pollCount.current = 0;
+    verifyDNSRemoval();
+
+    function verifyDNSRemoval() {
+      if (pollCount.current < 5) {
+        pollCount.current++;
+        const id = setTimeout(() => {
+          getResourceInstanceDetails(
+            queryData?.serviceProviderId,
+            queryData?.serviceKey,
+            queryData?.serviceAPIVersion,
+            queryData?.serviceEnvironmentKey,
+            queryData?.serviceModelKey,
+            queryData?.productTierKey,
+            resourceKey,
+            queryData.resourceInstanceId,
+            queryData.subscriptionId
+          )
+            .then((response) => {
+              const topologyDetails =
+                response.data?.detailedNetworkTopology?.[resourceId];
+              //check for dnsName field in the response, absence means dns removal complete
+              if (!Boolean(topologyDetails?.customDNSEndpoint.dnsName)) {
+                refetchInstance();
+              } else {
+                verifyDNSRemoval();
+              }
+            })
+            .catch((error) => {
+              verifyDNSRemoval();
+            });
+        }, 1500);
+        timeoutID.current = id;
+      }
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      clearExistingTimeout();
+    };
+  }, []);
+
   return (
     <>
       <Box
@@ -179,7 +285,7 @@ const ResourceConnectivityEndpoint = (props) => {
                 )}
               </TableCell>
             </TableRow>
-            {customDNSData?.enabled && (
+            {resourceHasCompute && customDNSData?.enabled && (
               <>
                 <TableRow>
                   <TableCell align="center" sx={{ paddingRight: "8px" }}>
@@ -219,7 +325,7 @@ const ResourceConnectivityEndpoint = (props) => {
                       colSpan={2}
                       sx={{ paddingLeft: "4px", paddingTop: 0 }}
                     >
-                      <FieldContainer marginTop={0}>                   
+                      <FieldContainer marginTop={0}>
                         <Stack
                           direction="row"
                           alignItems="center"
@@ -240,12 +346,19 @@ const ResourceConnectivityEndpoint = (props) => {
                             <>
                               <IconButtonSquare
                                 onClick={() => {
+                                  setShowConfigurationDialog(true);
+                                }}
+                              >
+                                <ViewInstructionsIcon color="#7F56D9" />
+                              </IconButtonSquare>
+                              <IconButtonSquare
+                                onClick={() => {
                                   setIsTextFieldDisabled(false);
                                   //textfieldRef.current.focus();
                                   setIsEditing(true);
                                 }}
                               >
-                                <EditIcon />
+                                <EditIcon color="#7F56D9" />
                               </IconButtonSquare>
                               <IconButtonSquare
                                 sx={{ borderColor: "#FDA29B !important" }}
