@@ -37,6 +37,14 @@ export default async function handleAction(nextRequest, nextResponse) {
               params: queryParams,
             }
           );
+        } else if (method === httpRequestMethods.PUT) {
+          response = await axios.put(
+            endpoint,
+            { ...data },
+            {
+              params: queryParams,
+            }
+          );
         } else if (method === httpRequestMethods.DELETE) {
           response = await axios.delete(endpoint, {
             data: { ...data },
@@ -57,7 +65,7 @@ export default async function handleAction(nextRequest, nextResponse) {
           else nextResponse.send();
         }
       } catch (error) {
-        console.error("Action Route error", error?.response?.data);
+        console.error("Action Route error", error);
         const errorCode = error?.response?.status || 500;
         const errorMessage =
           error?.response?.data?.message || defaultErrorMessage;
