@@ -13,7 +13,7 @@ export const chipCategoryColors = {
     color: "#1570ef",
   },
   pending: {
-    bgColor: "#fef0c7",
+    bgColor: "#faf5e7",
     color: "#f79009",
   },
   info: {
