@@ -80,11 +80,16 @@ export default function useResourceInstance(
             endpoint: topologyDetails.clusterEndpoint
               ? topologyDetails.clusterEndpoint
               : "",
+            customDNSEndpoint: topologyDetails.customDNSEndpoint,
+            resourceId: resourceId,
+            resourceKey: topologyDetails.resourceKey,
+            resourceHasCompute: topologyDetails.hasCompute,
           };
           globalEndpoints.others = [];
         }
 
         const customMetrics = [];
+        // let otherResourcesCustomMetrics = [];
         const productTierFeatures = data?.productTierFeatures;
 
         if (productTierFeatures?.LOGS?.enabled) {
@@ -116,8 +121,7 @@ export default function useResourceInstance(
             });
           }
         }
-
-        if (topologyDetails?.hasCompute) {
+        if (topologyDetails?.hasCompute === true) {
           if (topologyDetails?.nodes) {
             topologyDetails.nodes.forEach((node) => {
               const nodeId = node.id;
@@ -185,21 +189,13 @@ export default function useResourceInstance(
 
               const clusterEndpoint = topologyDetails.clusterEndpoint;
               const [userPass, baseURL] = clusterEndpoint.split("@");
-              // console.log("CE", clusterEndpoint);
               if (userPass && baseURL) {
                 const [username, password] = userPass.split(":");
                 metricsSocketURL = `wss://${baseURL}/metrics?username=${username}&password=${password}`;
                 logsSocketURL = `wss://${baseURL}/logs?username=${username}&password=${password}`;
               }
-
-              globalEndpoints.others.push({
-                resourceName: topologyDetails.resourceName,
-                endpoint: topologyDetails.clusterEndpoint
-                  ? topologyDetails.clusterEndpoint
-                  : "",
-              });
             } else {
-              if (topologyDetails?.hasCompute) {
+              if (topologyDetails?.hasCompute === true) {
                 if (topologyDetails.nodes) {
                   topologyDetails.nodes.forEach((node) => {
                     const nodeId = node.id;
@@ -246,6 +242,10 @@ export default function useResourceInstance(
                 endpoint: topologyDetails.clusterEndpoint
                   ? topologyDetails.clusterEndpoint
                   : "",
+                customDNSEndpoint: topologyDetails.customDNSEndpoint,
+                resourceId: resourceId,
+                resourceKey: topologyDetails.resourceKey,
+                resourceHasCompute: topologyDetails.hasCompute,
               });
             }
           }
@@ -308,8 +308,8 @@ export default function useResourceInstance(
           logsSocketURL: logsSocketURL,
           healthStatusPercent: healthStatusPercent,
           active: data?.active,
-          customMetrics: customMetrics,
           mainResourceHasCompute: Boolean(topologyDetails?.hasCompute),
+          customMetrics: customMetrics,
         };
 
         return final;

@@ -1,10 +1,8 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
 import React from "react";
 import CopyToClipbpoardButton from "../CopyClipboardButton/CopyClipboardButton";
 import Link from "next/link";
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 
 // function isOverflown(element) {
 //   return (
@@ -25,6 +23,7 @@ const GridCellExpand = React.memo(function GridCellExpand(props) {
     href,
     target = "_self",
     justifyContent = "center",
+    externalLinkArrow,
   } = props;
   const wrapper = React.useRef(null);
   const cellDiv = React.useRef(null);
@@ -86,7 +85,11 @@ const GridCellExpand = React.memo(function GridCellExpand(props) {
       >
         {startIcon}
         {Boolean(copyButton && value) && (
-          <CopyToClipbpoardButton text={value} size="small" />
+          <CopyToClipbpoardButton
+            text={value}
+            size="small"
+            buttonStyles={{ marginLeft: "10px" }}
+          />
         )}
       </Box>
       <Box
@@ -100,6 +103,14 @@ const GridCellExpand = React.memo(function GridCellExpand(props) {
         {value}
       </Box>
       {endIcon}
+      {!endIcon && externalLinkArrow && (
+        <ArrowOutwardIcon
+          fontSize="small"
+          sx={{
+            color: "#7F56D9",
+          }}
+        />
+      )}
     </Box>
   );
   return (
@@ -130,6 +141,9 @@ const GridCellExpand = React.memo(function GridCellExpand(props) {
       {href ? (
         <Link
           style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: justifyContent,
             width: "100%",
           }}
           href={href}

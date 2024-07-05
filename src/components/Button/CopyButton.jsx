@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton } from "@mui/material";
 import clipboard from "clipboardy";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import Tooltip from "../Tooltip/Tooltip";
 
 const CopyButton = (props) => {
   const {
@@ -22,10 +23,9 @@ const CopyButton = (props) => {
 
   return (
     <Tooltip title={tooltipText} placement="top" {...tooltipProps}>
-      <IconButton>
+      <IconButton onClick={handleClick}>
         <ContentCopyIcon
           htmlColor="#7F56D9"
-          onClick={handleClick}
           sx={{ width: "16px", height: "18px", ...iconStyle }}
           {...iconProps}
         />

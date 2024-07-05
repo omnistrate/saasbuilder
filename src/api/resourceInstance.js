@@ -218,3 +218,55 @@ export const restoreResourceInstance = (payload) => {
     { params: queryParams }
   );
 };
+
+export const addCustomDNSToResourceInstance = (
+  serviceProviderId,
+  serviceKey,
+  serviceAPIVersion,
+  serviceEnvironmentKey,
+  serviceModelKey,
+  productTierKey,
+  resourceKey,
+  instanceId,
+  subscriptionID,
+  payload
+) => {
+  const queryParams = {};
+
+  if (subscriptionID) {
+    queryParams.subscriptionID = subscriptionID;
+  }
+
+  return axios.post(
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/custom-dns`,
+    payload,
+    {
+      params: queryParams,
+    }
+  );
+};
+
+export const removeCustomDNSFromResourceInstance = (
+  serviceProviderId,
+  serviceKey,
+  serviceAPIVersion,
+  serviceEnvironmentKey,
+  serviceModelKey,
+  productTierKey,
+  resourceKey,
+  instanceId,
+  subscriptionID
+) => {
+  const queryParams = {};
+
+  if (subscriptionID) {
+    queryParams.subscriptionID = subscriptionID;
+  }
+
+  return axios.delete(
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/custom-dns`,
+    {
+      params: queryParams,
+    }
+  );
+};
