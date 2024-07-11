@@ -1,9 +1,16 @@
-import { customerUserSignIn } from "src/server/api/customer-user";
+const { customerUserSignIn } = require("src/server/api/customer-user");
+const { getEnvironmentType } = require("src/server/utils/getEnvironmentType");
 
 export default async function handleSignIn(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {
     try {
-      const response = await customerUserSignIn(nextRequest.body);
+
+      const environmentType = getEnvironmentType()
+      const payload = {
+        ...nextRequest.body,
+        environmentType: environmentType,
+      };
+      const response = await customerUserSignIn(payload);
       nextResponse.status(200).send({ ...response.data });
     } catch (error) {
       let defaultErrorMessage =

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { listServiceOfferings } from "src/api/serviceOffering";
-import providerConfig from "src/providerConfig";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 
 const getAllCloudProvidersAcrossOfferings = (offerings) => {
   let allProviders = [];
@@ -25,11 +25,12 @@ const getServicePublicEnvironmentID = (offerings) => {
 };
 
 function useOrgServiceOfferings(queryOptions = {}, queryConfig = {}) {
+  const environmentType = useEnvironmentType();
   const query = useQuery(
     ["org-service-offerings"],
     () => {
       return listServiceOfferings({
-        visibility: "PUBLIC",
+        environmentType: environmentType,
       });
     },
     {
