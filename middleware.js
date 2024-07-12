@@ -1,17 +1,17 @@
 import { jwtDecode } from "jwt-decode";
 import { NextResponse } from "next/server";
 import { baseURL } from "src/axios";
-import { getEnvironmentType } from "src/server/utils/getEnvironmentType";
+// import { getEnvironmentType } from "src/server/utils/getEnvironmentType";
 
-const environmentType = getEnvironmentType();
+//const environmentType = getEnvironmentType();
 
 export async function middleware(request) {
   const authToken = request.cookies.get("token");
-  const path = request.nextUrl.pathname;
+  //const path = request.nextUrl.pathname;
 
-  if (path.startsWith("/signup")) {
-    if (environmentType === "PROD") return;
-  }
+  // if (path.startsWith("/signup")) {
+  //   if (environmentType === "PROD") return;
+  // }
 
   const redirectToSignIn = () => {
     const path = request.nextUrl.pathname;
@@ -62,6 +62,6 @@ export async function middleware(request) {
 
 export const config = {
   matcher: [
-    "/((?!api/action|api/signup|api/signin|api/reset-password|api/provider-details|idp-auth|api/sign-in-with-idp|privacy-policy|terms-of-use|reset-password|change-password|favicon.ico|_next/image|_next/static|static|validate-token).*)",
+    "/((?!api/action|api/signup|api/signin|api/reset-password|api/provider-details|idp-auth|api/sign-in-with-idp|privacy-policy|terms-of-use|signup|reset-password|change-password|favicon.ico|_next/image|_next/static|static|validate-token).*)",
   ],
 };

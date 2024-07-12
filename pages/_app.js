@@ -184,5 +184,5 @@ export default function App(props) {
 
 App.getInitialProps = async (context) => {
   //check for environment type in environment variables, default to prod
-  return { envType: process.env.ENV_TYPE || ENVIRONMENT_TYPES.PROD };
+  return { envType: process.env.ENVIRONMENT_TYPE || ENVIRONMENT_TYPES.PROD };
 };

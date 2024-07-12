@@ -21,7 +21,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import GithubLogin from "./components/GitHubLogin";
 import { useEffect } from "react";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
-import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
+// import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -126,7 +126,7 @@ const SigninPage = (props) => {
     }
   }
 
-  const shouldHideSignupLink = environmentType !== ENVIRONMENT_TYPES.PROD;
+  // const shouldHideSignupLink = environmentType !== ENVIRONMENT_TYPES.PROD;
 
   return (
     <MainImageLayout
@@ -232,21 +232,21 @@ const SigninPage = (props) => {
           </Stack>
         </>
       )}
-      {!shouldHideSignupLink && (
-        <Typography
-          mt="22px"
-          fontWeight="500"
-          fontSize="14px"
-          lineHeight="22px"
-          color="#A0AEC0"
-          textAlign="center"
-        >
-          You’re new in here?{" "}
-          <Link href="/signup" style={{ color: "#27A376" }}>
-            Create Account
-          </Link>
-        </Typography>
-      )}
+      {/* {!shouldHideSignupLink && ( */}
+      <Typography
+        mt="22px"
+        fontWeight="500"
+        fontSize="14px"
+        lineHeight="22px"
+        color="#A0AEC0"
+        textAlign="center"
+      >
+        You’re new in here?{" "}
+        <Link href="/signup" style={{ color: "#27A376" }}>
+          Create Account
+        </Link>
+      </Typography>
+      {/* )} */}
     </MainImageLayout>
   );
 };
