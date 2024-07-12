@@ -1,9 +1,17 @@
 import { jwtDecode } from "jwt-decode";
 import { NextResponse } from "next/server";
 import { baseURL } from "src/axios";
+// import { getEnvironmentType } from "src/server/utils/getEnvironmentType";
+
+//const environmentType = getEnvironmentType();
 
 export async function middleware(request) {
   const authToken = request.cookies.get("token");
+  //const path = request.nextUrl.pathname;
+
+  // if (path.startsWith("/signup")) {
+  //   if (environmentType === "PROD") return;
+  // }
 
   const redirectToSignIn = () => {
     const path = request.nextUrl.pathname;
