@@ -58,6 +58,8 @@ const ResourceConnectivityEndpoint = (props) => {
   const [showConfigurationDialog, setShowConfigurationDialog] = useState(false);
   const [isTextfieldDisabled, setIsTextFieldDisabled] = useState(false);
   const [shouldShowConfigDialog, setShouldShowConfigDialog] = useState(false);
+  const [isVerifyingDNSRemoval, setIsVerifyingDNSRemoval] = useState(false);
+  const [isVerifyingDNSSetup, setIsVerifyingDNSSetup] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const timeoutID = useRef(null);
@@ -108,6 +110,7 @@ const ResourceConnectivityEndpoint = (props) => {
     try {
       await addCustomDNSMutation?.mutateAsync(payload);
       setShouldShowConfigDialog(true);
+      setIsTextFieldDisabled(true);
     } catch {}
   }
 
@@ -164,14 +167,12 @@ const ResourceConnectivityEndpoint = (props) => {
       );
     },
     onSuccess: () => {
-      refetchInstance();
+      pollInstanceQueryToVerifyDNSSetupSuccess();
     },
   });
 
   const removeCustomDNSMutation = useMutation({
     mutationFn: (payload) => {
-      console.log("query data", queryData);
-      console.log("service provider id", queryData?.serviceProviderId);
       return removeCustomDNSFromResourceInstance(
         queryData?.serviceProviderId,
         queryData?.serviceKey,
@@ -195,7 +196,51 @@ const ResourceConnectivityEndpoint = (props) => {
     }
   }
 
+  function pollInstanceQueryToVerifyDNSSetupSuccess() {
+    setIsVerifyingDNSSetup(true);
+    clearExistingTimeout();
+    pollCount.current = 0;
+    verifyDNSSetupSuccess();
+
+    function verifyDNSSetupSuccess() {
+      if (pollCount.current < 5) {
+        pollCount.current++;
+        const id = setTimeout(() => {
+          getResourceInstanceDetails(
+            queryData?.serviceProviderId,
+            queryData?.serviceKey,
+            queryData?.serviceAPIVersion,
+            queryData?.serviceEnvironmentKey,
+            queryData?.serviceModelKey,
+            queryData?.productTierKey,
+            resourceKey,
+            queryData.resourceInstanceId,
+            queryData.subscriptionId
+          )
+            .then((response) => {
+              const topologyDetails =
+                response.data?.detailedNetworkTopology?.[resourceId];
+              //check for dnsName field in the response, absence means dns removal complete
+              if (Boolean(topologyDetails?.customDNSEndpoint.dnsName)) {
+                setIsVerifyingDNSSetup(false);
+                refetchInstance();
+              } else {
+                setIsVerifyingDNSSetup();
+              }
+            })
+            .catch((error) => {
+              setIsVerifyingDNSSetup();
+            });
+        }, 500);
+        timeoutID.current = id;
+      } else {
+        setIsVerifyingDNSRemoval(false);
+      }
+    }
+  }
+
   function pollInstanceQueryToVerifyDNSRemoval() {
+    setIsVerifyingDNSRemoval(true);
     clearExistingTimeout();
     pollCount.current = 0;
     verifyDNSRemoval();
@@ -220,6 +265,7 @@ const ResourceConnectivityEndpoint = (props) => {
                 response.data?.detailedNetworkTopology?.[resourceId];
               //check for dnsName field in the response, absence means dns removal complete
               if (!Boolean(topologyDetails?.customDNSEndpoint.dnsName)) {
+                setIsVerifyingDNSRemoval(false);
                 refetchInstance();
               } else {
                 verifyDNSRemoval();
@@ -230,6 +276,8 @@ const ResourceConnectivityEndpoint = (props) => {
             });
         }, 1500);
         timeoutID.current = id;
+      } else {
+        setIsVerifyingDNSRemoval(false);
       }
     }
   }
@@ -239,6 +287,12 @@ const ResourceConnectivityEndpoint = (props) => {
       clearExistingTimeout();
     };
   }, []);
+
+  const shouldDisableMutationButons =
+    isVerifyingDNSRemoval ||
+    removeCustomDNSMutation.isLoading ||
+    isVerifyingDNSSetup ||
+    addCustomDNSMutation.isLoading;
 
   return (
     <>
@@ -308,6 +362,9 @@ const ResourceConnectivityEndpoint = (props) => {
                           )}
                         />
                       )}
+                      {(isVerifyingDNSRemoval || isVerifyingDNSSetup) && (
+                        <LoadingSpinnerSmall />
+                      )}
                     </Stack>
                   </TableCell>
                 </TableRow>
@@ -354,7 +411,6 @@ const ResourceConnectivityEndpoint = (props) => {
                               <IconButtonSquare
                                 onClick={() => {
                                   setIsTextFieldDisabled(false);
-                                  //textfieldRef.current.focus();
                                   setIsEditing(true);
                                 }}
                               >
@@ -368,6 +424,7 @@ const ResourceConnectivityEndpoint = (props) => {
                                   );
                                   setShowDeleteConfirmationDialog(true);
                                 }}
+                                disabled={shouldDisableMutationButons}
                               >
                                 <DeleteIcon />
                               </IconButtonSquare>
@@ -382,6 +439,7 @@ const ResourceConnectivityEndpoint = (props) => {
                                 onClick={() => {
                                   customDNSFormik.submitForm();
                                 }}
+                                disabled={shouldDisableMutationButons}
                               >
                                 Verify{" "}
                                 {addCustomDNSMutation?.isLoading && (
