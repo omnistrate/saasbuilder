@@ -20,7 +20,7 @@ async function getSubscriptionResumedMailContent(
     "resumeSubscription.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL?.toLowerCase();
 
   const message = await ejs.renderFile(templatePath, {
     resume_subscription: `${baseURL}/public/mail/resume-subscription.png`,

@@ -9,10 +9,10 @@ import { styleConfig } from "src/providerConfig";
 import ServicesDropdown from "./ServicesDropdown";
 import useBillingDetails from "src/hooks/query/useBillingDetails";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
-import {
-  ENVIRONMENT_TYPES,
-} from "src/constants/environmentTypes";
+import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import EnvironmentTypeChip from "../EnvironmentTypeChip/EnvironmentTypeChip";
+import { useRef } from "react";
+import Tooltip from "../Tooltip/Tooltip";
 
 function DashboardHeader(props) {
   const {
@@ -24,14 +24,24 @@ function DashboardHeader(props) {
     currentSubscription,
     serviceName,
     serviceLogoURL,
+    noServicesAvailable,
   } = props;
-
+  const serviceNameRef = useRef();
   useUserData();
   //prefetch billing data
   useBillingDetails();
   const userAllData = useSelector(selectUserData);
   const { logout } = useLogout();
   const environmentType = useEnvironmentType();
+
+  let shouldShowTooltipOnServiceName = false;
+  if (serviceNameRef.current) {
+    if (
+      serviceNameRef.current.offsetWidth < serviceNameRef.current.scrollWidth
+    ) {
+      shouldShowTooltipOnServiceName = true;
+    }
+  }
 
   return (
     <Box
@@ -60,34 +70,39 @@ function DashboardHeader(props) {
         </Box>
 
         <Stack direction="row" alignItems="center" gap="10px" pr="16px">
-          {serviceLogoURL && (
+          {(serviceName || noServicesAvailable) && serviceLogoURL && (
             <img
               src={
                 serviceLogoURL ||
                 "/assets/images/dashboard/service/servicePlaceholder.png"
               }
               height={28}
-              width={40}
               style={{ maxHeight: "28px", width: "auto", maxWidth: "180px" }}
             />
           )}
           {serviceName && (
-            <Text
-              color={styleConfig.navbarTextColor}
-              sx={{
-                width: "100%",
-                maxWidth: "260px",
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-              }}
+            <Tooltip
+              isVisible={shouldShowTooltipOnServiceName}
+              title={serviceName}
             >
-              {serviceName}
-            </Text>
+              <Text
+                color={styleConfig.navbarTextColor}
+                sx={{
+                  width: "100%",
+                  maxWidth: "260px",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  display: "block",
+                }}
+                ref={serviceNameRef}
+              >
+                {serviceName}
+              </Text>
+            </Tooltip>
           )}
-          {environmentType !== ENVIRONMENT_TYPES.PROD && (
-            <EnvironmentTypeChip />
-          )}
+          {environmentType !== ENVIRONMENT_TYPES.PROD &&
+            (serviceName || noServicesAvailable) && <EnvironmentTypeChip />}
         </Stack>
       </Stack>
 

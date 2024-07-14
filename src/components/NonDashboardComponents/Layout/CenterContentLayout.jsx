@@ -29,6 +29,7 @@ const CenterContentLayout = ({
           backgroundImage: `url(${BackgroundImg.src})`,
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
+          paddingBottom: "60px",
         }}
       >
         <Stack gap="32px" maxWidth="480px">

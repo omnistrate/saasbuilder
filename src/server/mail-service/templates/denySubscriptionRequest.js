@@ -20,7 +20,7 @@ async function getDenySubscriptionMailContent(
     "denySubscriptionRequest.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL?.toLowerCase();
 
   const message = await ejs.renderFile(templatePath, {
     service_plan_name: servicePlanName,
