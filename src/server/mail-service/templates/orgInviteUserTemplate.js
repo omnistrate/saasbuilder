@@ -3,7 +3,7 @@ const path = require("path");
 
 async function getOrgInviteUserMailContent(inviteUserEventObj, orgLogoURL) {
   const signUpURL = encodeURI(
-    `${process.env.YOUR_SAAS_DOMAIN_URL}/signup?org=${encodeURIComponent(
+    `${process.env.YOUR_SAAS_DOMAIN_URL?.toLowerCase()}/signup?org=${encodeURIComponent(
       inviteUserEventObj.orgName
     )}&orgUrl=${encodeURI(
       inviteUserEventObj.orgURL
@@ -23,7 +23,7 @@ async function getOrgInviteUserMailContent(inviteUserEventObj, orgLogoURL) {
     "orgInviteUser.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL?.toLowerCase();
 
   const message = await ejs.renderFile(templatePath, {
     user_name: userName,

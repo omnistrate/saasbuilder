@@ -4,12 +4,12 @@ const { getEnvironmentType } = require("src/server/utils/getEnvironmentType");
 export default async function handleSignIn(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {
     try {
-
-      const environmentType = getEnvironmentType()
+      const environmentType = getEnvironmentType();
       const payload = {
         ...nextRequest.body,
         environmentType: environmentType,
       };
+      
       const response = await customerUserSignIn(payload);
       nextResponse.status(200).send({ ...response.data });
     } catch (error) {

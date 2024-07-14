@@ -29,6 +29,7 @@ export default function DashboardLayout(props) {
     isNotShow,
     currentSubscription,
     isServiceLength,
+    noServicesAvailable
   } = props;
   const open = useSelector(selectDrawerExpandedState);
   const notificationBar = useNotificationBar();
@@ -58,6 +59,7 @@ export default function DashboardLayout(props) {
         accessPage={accessPage}
         currentSubscription={currentSubscription}
         isServiceLength={isServiceLength}
+        noServicesAvailable={noServicesAvailable}
       />
       {!noSidebar && (
         <SideDrawer
