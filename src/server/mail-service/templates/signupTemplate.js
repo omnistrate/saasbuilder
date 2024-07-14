@@ -8,9 +8,7 @@ async function getSignUpMailContent(signUpEventObj, orgLogoURL) {
   // [username, provider] = email.split("@");
   //const encodedEmail = encodeURIComponent(username + `+${orgID}@` + provider);
   const activationURL = encodeURI(
-    `${
-      process.env.YOUR_SAAS_DOMAIN_URL
-    }/validate-token?email=${encodeURIComponent(
+    `${process.env.YOUR_SAAS_DOMAIN_URL?.toLowerCase()}/validate-token?email=${encodeURIComponent(
       email
     )}&token=${encodeURIComponent(signUpEventObj.eventPayload.token)}`
   );
@@ -24,7 +22,7 @@ async function getSignUpMailContent(signUpEventObj, orgLogoURL) {
     "userSignUp.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL?.toLowerCase();
 
   const message = await ejs.renderFile(templatePath, {
     logo_url: orgLogoURL,

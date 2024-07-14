@@ -23,7 +23,7 @@ async function getResetPasswordMailContent(resetPasswordEventObj, orgLogoURL) {
     "forgotPassword.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL?.toLowerCase();
 
   const message = await ejs.renderFile(templatePath, {
     logo_url: orgLogoURL,

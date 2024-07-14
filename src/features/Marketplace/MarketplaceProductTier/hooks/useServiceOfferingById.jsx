@@ -8,7 +8,7 @@ function useServiceOfferingById(serviceId) {
   const query = useQuery(
     ["service-offering-marketplace", serviceId],
     () => {
-      return describeServiceOfferingById(serviceId, { visibility: "PUBLIC" });
+      return describeServiceOfferingById(serviceId);
     },
     {
       enabled: isQueryEnabled,

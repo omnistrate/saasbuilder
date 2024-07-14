@@ -16,7 +16,7 @@ async function getInvoiceCreatedTemplate(invoiceCreatedEventObj, orgLogoURL) {
     "invoiceCreated.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL?.toLowerCase();
 
   const message = await ejs.renderFile(templatePath, {
     org_name: orgName,
