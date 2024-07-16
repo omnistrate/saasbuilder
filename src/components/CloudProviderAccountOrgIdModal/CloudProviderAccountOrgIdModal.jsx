@@ -21,37 +21,36 @@ const CloudFormationLink = ({ cloudFormationTemplateUrl }) => {
     "https://s3.amazonaws.com/omnistrate-cloudformation/account-config-setup-template-no-lb-policy.yaml";
 
   const updateTemplateURL = (url, newTemplateURL) => {
-    const parsedUrl = new URL(url);
-    const params = new URLSearchParams(parsedUrl.search);
+    // Parse the base URL and hash part
+    const [baseURL, hashPart] = url.split("#");
+    if (!hashPart) {
+      return url; // No hash part found, return the original URL
+    }
 
-    let hashArgs = decodeURIComponent(params.get("redirect_uri"));
-    const hashParams = new URLSearchParams(hashArgs.split("?")[1]);
+    // Parse the hash part to get the path and query parameters
+    const [basePath, queryParams] = hashPart.split("?");
+    const hashParams = new URLSearchParams(queryParams);
 
-    let quickCreateParams = new URLSearchParams(
-      decodeURIComponent(hashParams.get("hashArgs")).split("?")[1]
-    );
-    quickCreateParams.set("templateURL", newTemplateURL);
+    // Update the templateURL parameter
+    hashParams.set("templateURL", newTemplateURL);
 
-    hashParams.set(
-      "hashArgs",
-      encodeURIComponent("#/stacks/quickcreate?" + quickCreateParams.toString())
-    );
-    hashArgs = hashParams.toString();
-    params.set("redirect_uri", encodeURIComponent(hashArgs));
+    // Manually construct the query string to avoid encoding issues
+    const newQueryParams = Array.from(hashParams.entries())
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&");
 
-    parsedUrl.search = params.toString();
-    return parsedUrl.toString();
+    // Reconstruct the hash part with updated parameters
+    const newHashPart = `${basePath}?${newQueryParams}`;
+
+    return `${baseURL}#${newHashPart}`;
   };
 
   const updatedUrl = cloudFormationTemplateUrl
-    ? updateTemplateURL(cloudFormationTemplateUrl ?? "", linkURL)
+    ? updateTemplateURL(cloudFormationTemplateUrl, linkURL)
     : "";
+
   return (
-    <StyledLink
-      href={updatedUrl ?? ""}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <StyledLink href={updatedUrl} target="_blank" rel="noopener noreferrer">
       this
     </StyledLink>
   );
@@ -453,7 +452,7 @@ const NonCreatationTimeInstructions = (props) => {
 
               {cloudFormationTemplateUrl ? (
                 <>
-                  <Box display={"flex"} flexDirection={"column"}>
+                  <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
                     <Text size="medium" weight="regular" color="#374151">
                       <b>For AWS CloudFormation users:</b> Please create your
                       CloudFormation Stack using the provided template{" "}
