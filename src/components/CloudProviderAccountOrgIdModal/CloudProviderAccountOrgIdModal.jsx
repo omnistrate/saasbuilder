@@ -21,19 +21,28 @@ const CloudFormationLink = ({ cloudFormationTemplateUrl }) => {
     "https://s3.amazonaws.com/omnistrate-cloudformation/account-config-setup-template-no-lb-policy.yaml";
 
   const updateTemplateURL = (url, newTemplateURL) => {
-    const urlObj = new URL(url);
+    // Parse the base URL and hash part
+    const [baseURL, hashPart] = url.split("#");
+    if (!hashPart) {
+      return url; // No hash part found, return the original URL
+    }
 
-    // Extract the hash part (if any) and split it to access query parameters
-    const [basePath, queryParams] = urlObj.hash.split("?");
+    // Parse the hash part to get the path and query parameters
+    const [basePath, queryParams] = hashPart.split("?");
     const hashParams = new URLSearchParams(queryParams);
 
     // Update the templateURL parameter
     hashParams.set("templateURL", newTemplateURL);
 
-    // Reconstruct the hash part with updated parameters
-    urlObj.hash = `${basePath}?${hashParams.toString()}`;
+    // Manually construct the query string to avoid encoding issues
+    const newQueryParams = Array.from(hashParams.entries())
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&");
 
-    return urlObj.toString();
+    // Reconstruct the hash part with updated parameters
+    const newHashPart = `${basePath}?${newQueryParams}`;
+
+    return `${baseURL}#${newHashPart}`;
   };
 
   const updatedUrl = cloudFormationTemplateUrl
