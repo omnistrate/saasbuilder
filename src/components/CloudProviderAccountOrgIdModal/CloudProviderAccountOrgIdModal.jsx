@@ -21,37 +21,27 @@ const CloudFormationLink = ({ cloudFormationTemplateUrl }) => {
     "https://s3.amazonaws.com/omnistrate-cloudformation/account-config-setup-template-no-lb-policy.yaml";
 
   const updateTemplateURL = (url, newTemplateURL) => {
-    const parsedUrl = new URL(url);
-    const params = new URLSearchParams(parsedUrl.search);
+    const urlObj = new URL(url);
 
-    let hashArgs = decodeURIComponent(params.get("redirect_uri"));
-    const hashParams = new URLSearchParams(hashArgs.split("?")[1]);
+    // Extract the hash part (if any) and split it to access query parameters
+    const [basePath, queryParams] = urlObj.hash.split("?");
+    const hashParams = new URLSearchParams(queryParams);
 
-    let quickCreateParams = new URLSearchParams(
-      decodeURIComponent(hashParams.get("hashArgs")).split("?")[1]
-    );
-    quickCreateParams.set("templateURL", newTemplateURL);
+    // Update the templateURL parameter
+    hashParams.set("templateURL", newTemplateURL);
 
-    hashParams.set(
-      "hashArgs",
-      encodeURIComponent("#/stacks/quickcreate?" + quickCreateParams.toString())
-    );
-    hashArgs = hashParams.toString();
-    params.set("redirect_uri", encodeURIComponent(hashArgs));
+    // Reconstruct the hash part with updated parameters
+    urlObj.hash = `${basePath}?${hashParams.toString()}`;
 
-    parsedUrl.search = params.toString();
-    return parsedUrl.toString();
+    return urlObj.toString();
   };
 
   const updatedUrl = cloudFormationTemplateUrl
-    ? updateTemplateURL(cloudFormationTemplateUrl ?? "", linkURL)
+    ? updateTemplateURL(cloudFormationTemplateUrl, linkURL)
     : "";
+
   return (
-    <StyledLink
-      href={updatedUrl ?? ""}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <StyledLink href={updatedUrl} target="_blank" rel="noopener noreferrer">
       this
     </StyledLink>
   );
@@ -453,7 +443,7 @@ const NonCreatationTimeInstructions = (props) => {
 
               {cloudFormationTemplateUrl ? (
                 <>
-                  <Box display={"flex"} flexDirection={"column"}>
+                  <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
                     <Text size="medium" weight="regular" color="#374151">
                       <b>For AWS CloudFormation users:</b> Please create your
                       CloudFormation Stack using the provided template{" "}
