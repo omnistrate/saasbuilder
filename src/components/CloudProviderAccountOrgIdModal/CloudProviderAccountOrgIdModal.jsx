@@ -16,6 +16,47 @@ import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import InstructionsModalIcon from "../Icons/AccountConfig/InstructionsModalIcon";
 import { getResourceInstanceDetails } from "src/api/resourceInstance";
 
+const CloudFormationLink = ({ cloudFormationTemplateUrl }) => {
+  const linkURL =
+    "https://s3.amazonaws.com/omnistrate-cloudformation/account-config-setup-template-no-lb-policy.yaml";
+
+  const updateTemplateURL = (url, newTemplateURL) => {
+    const parsedUrl = new URL(url);
+    const params = new URLSearchParams(parsedUrl.search);
+
+    let hashArgs = decodeURIComponent(params.get("redirect_uri"));
+    const hashParams = new URLSearchParams(hashArgs.split("?")[1]);
+
+    let quickCreateParams = new URLSearchParams(
+      decodeURIComponent(hashParams.get("hashArgs")).split("?")[1]
+    );
+    quickCreateParams.set("templateURL", newTemplateURL);
+
+    hashParams.set(
+      "hashArgs",
+      encodeURIComponent("#/stacks/quickcreate?" + quickCreateParams.toString())
+    );
+    hashArgs = hashParams.toString();
+    params.set("redirect_uri", encodeURIComponent(hashArgs));
+
+    parsedUrl.search = params.toString();
+    return parsedUrl.toString();
+  };
+
+  const updatedUrl = cloudFormationTemplateUrl
+    ? updateTemplateURL(cloudFormationTemplateUrl ?? "", linkURL)
+    : "";
+  return (
+    <StyledLink
+      href={updatedUrl ?? ""}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      this
+    </StyledLink>
+  );
+};
+
 function CloudProviderAccountOrgIdModal(props) {
   const {
     open,
@@ -146,6 +187,11 @@ function CloudProviderAccountOrgIdModal(props) {
               fetchResourceInstancesOfSelectedResource={
                 fetchResourceInstancesOfSelectedResource
               }
+              cloudformationNoLBlink={
+                <CloudFormationLink
+                  cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+                />
+              }
             />
           ) : (
             <NonCreatationTimeInstructions
@@ -157,6 +203,11 @@ function CloudProviderAccountOrgIdModal(props) {
               terraformGuide={terraformGuide}
               orgId={orgId}
               cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+              cloudformationNoLBlink={
+                <CloudFormationLink
+                  cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+                />
+              }
             />
           )}
         </Content>
@@ -188,6 +239,7 @@ const CreationTimeInstructions = (props) => {
     selectedResourceKey,
     subscriptionId,
     fetchResourceInstancesOfSelectedResource,
+    cloudformationNoLBlink,
   } = props;
 
   const [isPolling, setIsPolling] = useState(true);
@@ -329,6 +381,16 @@ const CreationTimeInstructions = (props) => {
 
         <Text
           size="medium"
+          weight="regular"
+          color="#344054"
+          sx={{ marginTop: "24px" }}
+        >
+          If an existing AWSLoadBalancerControllerIAMPolicy policy causes an
+          error while creating the CloudFormation stack, use{" "}
+          {cloudformationNoLBlink} CloudFormation template instead.
+        </Text>
+        <Text
+          size="medium"
           weight="regualr"
           color="#344054"
           sx={{ marginTop: "24px" }}
@@ -371,6 +433,7 @@ const NonCreatationTimeInstructions = (props) => {
     terraformGuide,
     orgId,
     cloudFormationTemplateUrl,
+    cloudformationNoLBlink,
   } = props;
 
   return (
@@ -389,12 +452,22 @@ const NonCreatationTimeInstructions = (props) => {
               </ListItemIcon>
 
               {cloudFormationTemplateUrl ? (
-                <Text size="medium" weight="regular" color="#374151">
-                  <b>For AWS CloudFormation users:</b> Please create your
-                  CloudFormation Stack using the provided template{" "}
-                  {cloudformationlink}. Watch the CloudFormation{" "}
-                  {cloudFormationGuide} for help.
-                </Text>
+                <>
+                  <Box display={"flex"} flexDirection={"column"}>
+                    <Text size="medium" weight="regular" color="#374151">
+                      <b>For AWS CloudFormation users:</b> Please create your
+                      CloudFormation Stack using the provided template{" "}
+                      {cloudformationlink}. Watch the CloudFormation{" "}
+                      {cloudFormationGuide} for help.
+                    </Text>
+                    <Text size="medium" weight="regular" color="#374151">
+                      If an existing AWSLoadBalancerControllerIAMPolicy policy
+                      causes an error while creating the CloudFormation stack,
+                      use {cloudformationNoLBlink} CloudFormation template
+                      instead.
+                    </Text>
+                  </Box>
+                </>
               ) : (
                 <Text size="medium" weight="regular" color="#374151">
                   <b>For AWS CloudFormation users:</b> Your CloudFormation Stack
