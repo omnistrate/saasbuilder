@@ -1,22 +1,15 @@
-import Link from "next/link";
 import { useMemo } from "react";
-import { Box, styled } from "@mui/material";
-import {
-  CellDescription,
-  CellSubtext,
-  CellTitle,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-} from "../../InfoTable/InfoTable";
-import formatDateUTC from "../../../utils/formatDateUTC";
+import { Box } from "@mui/material";
 import capitalize from "lodash/capitalize";
+import formatDateUTC from "src/utils/formatDateUTC";
 
+import PropertyTable from "components/PropertyTable/PropertyTable";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import { PasswordWithOutBorderField } from "components/FormElementsv2/PasswordField/PasswordWithOutBorderField";
+
 import TerraformDownloadURL from "./TerraformDownloadURL";
+import NonOmnistrateIntegrationRow from "./NonOmnistrateIntegrationRow";
+import { INTEGRATION_TYPE_LABEL_MAP } from "src/constants/productTierFeatures";
 
 function ResourceInstanceDetails(props) {
   const {
@@ -28,6 +21,8 @@ function ResourceInstanceDetails(props) {
     modifiedAt,
     subscriptionId,
     serviceOffering,
+    nonOmnistrateInternalLogs,
+    nonOmnistrateInternalMetrics,
   } = props;
 
   const isResourceBYOA =
@@ -75,6 +70,102 @@ function ResourceInstanceDetails(props) {
     return result;
   }, [isResourceBYOA, resultParameters, resultParametersSchema]);
 
+  const rows = useMemo(() => {
+    const res = [
+      {
+        label: "Instance ID",
+        value: resourceInstanceId,
+      },
+      {
+        label: "Created at",
+        value: formatDateUTC(createdAt),
+      },
+      {
+        label: "Modified at",
+        value: formatDateUTC(modifiedAt),
+      },
+    ];
+
+    if (nonOmnistrateInternalMetrics?.Url) {
+      res.push({
+        label:
+          INTEGRATION_TYPE_LABEL_MAP[nonOmnistrateInternalMetrics.featureName],
+        value: (
+          <NonOmnistrateIntegrationRow
+            integration={nonOmnistrateInternalMetrics}
+          />
+        ),
+        valueType: "custom",
+      });
+    }
+
+    if (nonOmnistrateInternalLogs?.Url) {
+      res.push({
+        label:
+          INTEGRATION_TYPE_LABEL_MAP[nonOmnistrateInternalLogs.featureName],
+        value: (
+          <NonOmnistrateIntegrationRow
+            integration={nonOmnistrateInternalLogs}
+          />
+        ),
+        valueType: "custom",
+      });
+    }
+
+    resultParametersWithDescription.forEach((param) => {
+      if (param.type === "Password") {
+        res.push({
+          label: param.displayName,
+          description: param.description,
+          value: (
+            <PasswordWithOutBorderField>
+              {param.value}
+            </PasswordWithOutBorderField>
+          ),
+          valueType: "custom",
+        });
+      } else {
+        res.push({
+          label: capitalize(param.displayName) || param.key,
+          description: param.description,
+          value: param.value,
+        });
+      }
+    });
+
+    if (
+      serviceOffering &&
+      subscriptionId &&
+      resultParameters.account_configuration_method === "Terraform"
+    ) {
+      res.push({
+        label: "Terraform Download URL",
+        description:
+          "Terraform Kit URL to configure access to an AWS/GCP account",
+        value: (
+          <TerraformDownloadURL
+            serviceOffering={serviceOffering}
+            subscriptionId={subscriptionId}
+            cloud_provider={resultParameters.cloud_provider}
+          />
+        ),
+        valueType: "custom",
+      });
+    }
+
+    return res;
+  }, [
+    resourceInstanceId,
+    createdAt,
+    modifiedAt,
+    nonOmnistrateInternalMetrics,
+    nonOmnistrateInternalLogs,
+    resultParametersWithDescription,
+    serviceOffering,
+    subscriptionId,
+    resultParameters,
+  ]);
+
   if (isLoading) {
     return (
       <Box
@@ -90,190 +181,7 @@ function ResourceInstanceDetails(props) {
     );
   }
 
-  return (
-    <TableContainer
-      sx={{
-        mt: "24px",
-      }}
-    >
-      <Table sx={{ width: "100%" }}>
-        <TableBody sx={{ width: "100%" }}>
-          <TableRow>
-            <TableCell sx={{ verticalAlign: "baseline" }}>
-              <CellTitle>Instance ID </CellTitle>
-            </TableCell>
-            <TableCell
-              align="right"
-              sx={{ width: "50%", verticalAlign: "baseline" }}
-            >
-              <CellDescription>{resourceInstanceId}</CellDescription>
-            </TableCell>
-          </TableRow>
-
-          <TableRow>
-            <TableCell sx={{ verticalAlign: "baseline" }}>
-              <CellTitle>Created at</CellTitle>
-            </TableCell>
-            <TableCell
-              align="right"
-              sx={{ width: "50%", verticalAlign: "baseline" }}
-            >
-              <CellDescription>{formatDateUTC(createdAt)}</CellDescription>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell sx={{ verticalAlign: "baseline" }}>
-              <CellTitle>Modified at</CellTitle>
-            </TableCell>
-            <TableCell
-              align="right"
-              sx={{ width: "50%", verticalAlign: "baseline" }}
-            >
-              <CellDescription>{formatDateUTC(modifiedAt)}</CellDescription>
-            </TableCell>
-          </TableRow>
-
-          {resultParametersWithDescription.map((parameter, index) => {
-            const displayName = parameter.displayName;
-            if (parameter.type === "Password") {
-              return (
-                <TableRow key={parameter.key} sx={{ width: "100%" }}>
-                  <TableCell sx={{ verticalAlign: "baseline" }}>
-                    <CellTitle>
-                      {capitalize(displayName) || parameter.key}
-                    </CellTitle>
-                    <CellSubtext>{parameter.description}</CellSubtext>
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    sx={{ width: "50%", verticalAlign: "baseline" }}
-                  >
-                    <PasswordWithOutBorderField>
-                      {parameter.value}
-                    </PasswordWithOutBorderField>
-                  </TableCell>
-                </TableRow>
-              );
-            } else {
-              return (
-                <TableRow key={parameter.key} sx={{ width: "100%" }}>
-                  <TableCell sx={{ verticalAlign: "baseline" }}>
-                    <CellTitle>
-                      {capitalize(displayName) || parameter.key}
-                    </CellTitle>
-                    <CellSubtext>{parameter.description}</CellSubtext>
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    sx={{ width: "50%", verticalAlign: "baseline" }}
-                  >
-                    <CellDescription
-                      sx={{ wordBreak: "break-word", paddingLeft: "30px" }}
-                    >
-                      {parameter.value}
-                    </CellDescription>
-                  </TableCell>
-                </TableRow>
-              );
-            }
-          })}
-
-          {serviceOffering &&
-            subscriptionId &&
-            resultParameters.account_configuration_method === "Terraform" && (
-              <TerraformDownloadURL
-                serviceOffering={serviceOffering}
-                subscriptionId={subscriptionId}
-                cloud_provider={resultParameters.cloud_provider}
-              />
-            )}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+  return <PropertyTable rows={rows} />;
 }
 
 export default ResourceInstanceDetails;
-
-// const ResourceProxyEndpoint = (props) => {
-//   const {
-//     endpoint,
-//     primary,
-//     sx = {},
-//     serviceId,
-//     environmentId,
-//     searchInventoryView,
-//   } = props;
-
-//   //regex for instance id extraction from proxy endpoint
-//   const regex = /instance-([^\.]+)/;
-//   const match = endpoint.match(regex);
-//   let instanceId;
-
-//   if (match) {
-//     instanceId = match[0];
-//     console.log("instanceId", instanceId, match);
-//   }
-
-//   let resourceInstanceUrlLink;
-
-//   if (instanceId) {
-//     resourceInstanceUrlLink = getInventoryManagementInventoryRoute(
-//       serviceId,
-//       environmentId,
-//       instanceId,
-//       searchInventoryView
-//     );
-//   }
-
-//   return (
-//     <Stack
-//       direction="row"
-//       sx={{
-//         border: primary ? "2px solid #7F56D9" : "1px solid #EAECF0",
-//         background: primary ? "#F9F5FF" : "white",
-//         padding: "16px",
-//         borderRadius: "12px",
-//         ...sx,
-//       }}
-//     >
-//       <Image src={resourceEndpointIcon} alt="resource-endpoint" />
-//       <Box
-//         sx={{
-//           flexGrow: 1,
-//           marginLeft: "16px",
-//           textAlign: "left",
-//           alignSelf: "center",
-//         }}
-//       >
-//         <LinkResourceInstance
-//           href={resourceInstanceUrlLink ?? ""}
-//           target="_blank"
-//         >
-//           <Text
-//             size="small"
-//             weight="regular"
-//             color={primary ? "#6941C6" : ""}
-//             sx={{ wordBreak: "break-all" }}
-//           >
-//             {endpoint}
-//           </Text>
-//           <ArrowOutwardIcon />
-//         </LinkResourceInstance>
-//       </Box>
-//       {endpoint && (
-//         <Box alignSelf="start">
-//           <CopyToClipbpoardButton text={endpoint} />
-//         </Box>
-//       )}
-//     </Stack>
-//   );
-// };
-
-const LinkResourceInstance = styled(Link)(({ theme }) => ({
-  display: "flex",
-  color: "#6941C6",
-  fontWeight: 500,
-  gap: 2,
-  alignItems: "center",
-}));

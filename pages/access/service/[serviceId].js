@@ -98,7 +98,7 @@ import RestoreInstanceIcon from "src/components/Icons/RestoreInstance/RestoreIns
 import AccessSideRestoreInstance from "src/components/RestoreInstance/AccessSideRestoreInstance";
 import DataGridText from "src/components/DataGrid/DataGridText";
 import Head from "next/head";
-import { getResourceInstanceStatusStylesAndlabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 
 const instanceStatuses = {
   FAILED: "FAILED",
@@ -295,7 +295,7 @@ function MarketplaceService() {
               "DEPLOYING",
             ].includes(status);
           const statusSytlesAndLabel =
-            getResourceInstanceStatusStylesAndlabel(status);
+            getResourceInstanceStatusStylesAndLabel(status);
           return (
             <Stack
               direction={"row"}

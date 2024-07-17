@@ -1,8 +1,8 @@
 import StatusChip from "../StatusChip/StatusChip";
-import { getEventMessageStylesAndlabel } from "src/constants/statusChipStyles/eventMessage";
+import { getEventMessageStylesAndLabel } from "src/constants/statusChipStyles/eventMessage";
 
 function EventMessageChip({ message }) {
-  const { color, bgColor } = getEventMessageStylesAndlabel(message);
+  const { color, bgColor } = getEventMessageStylesAndLabel(message);
 
   return <StatusChip color={color} bgColor={bgColor} status={message} />;
 }
