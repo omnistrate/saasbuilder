@@ -32,6 +32,7 @@ const {
 } = require("./templates/invoiceCreatedTemplate");
 const { getProviderOrgDetails } = require("../api/customer-user");
 const { getNodeMailerConfig } = require("./mail-config");
+const { getEnvironmentType } = require("../utils/getEnvironmentType");
 
 let isRunning = false;
 
@@ -47,9 +48,10 @@ function startMailServiceCron() {
         mailTransporter = nodemailer.createTransport(getNodeMailerConfig());
       }
       await mailTransporter.verify();
+      const environmentType = getEnvironmentType();
 
       //Fetch all events
-      const eventsResponse = await getEventsList();
+      const eventsResponse = await getEventsList(environmentType);
       const events = eventsResponse.data.events || [];
       console.log("Events", events);
       const orgDetailsResponse = await getProviderOrgDetails();
