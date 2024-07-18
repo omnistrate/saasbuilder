@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getServiceOffering } from "../api/serviceOffering";
+import useEnvironmentType from "./useEnvironmentType";
 
-async function fetchServiceOffering(serviceId, productTierId) {
-  const response = await getServiceOffering(serviceId);
+async function fetchServiceOffering(serviceId, productTierId, environmentType) {
+  const response = await getServiceOffering(serviceId, environmentType);
   const { offerings, ...restData } = response.data;
   let offering = {};
   const offeringMatch = offerings.find((offering) => {
@@ -23,9 +24,10 @@ async function fetchServiceOffering(serviceId, productTierId) {
 }
 
 function useServiceOffering(serviceId, productTierId) {
+  const environmentType = useEnvironmentType();
   const query = useQuery(
     ["marketplace-service", serviceId],
-    () => fetchServiceOffering(serviceId, productTierId),
+    () => fetchServiceOffering(serviceId, productTierId, environmentType),
     {
       enabled: Boolean(serviceId),
       refetchOnWindowFocus: false,
