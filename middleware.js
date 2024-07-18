@@ -57,6 +57,10 @@ export async function middleware(request) {
     console.log("Middleware Error", error?.response?.data);
     redirectToSignIn();
   }
+
+  const response = NextResponse.next();
+  response.headers.set(`x-middleware-cache`, `no-cache`);
+  return response;
 }
 
 /*
