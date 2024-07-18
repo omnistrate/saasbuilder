@@ -18,7 +18,7 @@ const SignupNotification = ({ isVisible }) => {
         visibility: isVisible ? "visible" : "hidden",
       }}
     >
-      Thank you for signing up! A confirmation link has been sent to your email.
+      Thank you for signing up! We have sent a confirmation link to your email.
       Click the link to activate your account
     </Box>
   );
