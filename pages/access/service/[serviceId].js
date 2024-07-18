@@ -114,6 +114,12 @@ const instanceStatuses = {
   DELETING: "DELETING",
 };
 
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
 function MarketplaceService() {
   const [selectionModel, setSelectionModel] = useState([]);
   const [viewResourceInfo, setViewResourceInfo] = useState({});
