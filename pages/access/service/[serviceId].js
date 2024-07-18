@@ -181,6 +181,7 @@ function MarketplaceService() {
     id: "",
     name: "",
     isDeprecated: false,
+    isBackupEnabled: false,
   });
 
   let isCurrentResourceBYOA = false;
@@ -967,6 +968,7 @@ function MarketplaceService() {
             id: selectedResource.resourceId,
             name: selectedResource.name,
             isDeprecated: selectedResource.isDeprecated,
+            isBackupEnabled: selectedResource.isBackupEnabled,
           };
         } else {
           selectedResourceInfo = {
@@ -974,6 +976,7 @@ function MarketplaceService() {
             id: service?.resourceParameters[0].resourceId,
             name: service?.resourceParameters[0].name,
             isDeprecated: service?.resourceParameters[0].isDeprecated,
+            isBackupEnabled: service?.resourceParameters[0].isBackupEnabled,
           };
         }
 
@@ -1753,27 +1756,29 @@ function MarketplaceService() {
               Modify
             </Button>
 
-            <Button
-              variant="outlined"
-              startIcon={
-                <RestoreInstanceIcon
-                  disabled={
-                    isCurrentResourceBYOA ||
-                    !modifyAccessServiceAllowed ||
-                    !isRestoreActionEnabled
-                  }
-                />
-              }
-              disabled={
-                isCurrentResourceBYOA ||
-                !modifyAccessServiceAllowed ||
-                !isRestoreActionEnabled
-              }
-              sx={{ marginRight: 2 }}
-              onClick={handleRestoreInstanceModalOpen}
-            >
-              PiTR
-            </Button>
+            {selectedResource?.isBackupEnabled && (
+              <Button
+                variant="outlined"
+                startIcon={
+                  <RestoreInstanceIcon
+                    disabled={
+                      isCurrentResourceBYOA ||
+                      !modifyAccessServiceAllowed ||
+                      !isRestoreActionEnabled
+                    }
+                  />
+                }
+                disabled={
+                  isCurrentResourceBYOA ||
+                  !modifyAccessServiceAllowed ||
+                  !isRestoreActionEnabled
+                }
+                sx={{ marginRight: 2 }}
+                onClick={handleRestoreInstanceModalOpen}
+              >
+                PiTR
+              </Button>
+            )}
 
             <Button
               variant="outlined"
