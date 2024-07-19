@@ -61,7 +61,7 @@ function IDPAuth() {
       const jwtToken = response.data.jwtToken;
       sessionStorage.removeItem("authState");
       if (jwtToken) {
-        Cookies.set("token", jwtToken, { sameSite: "Strict", secure: true });
+        Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
         axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
         router.replace("/service-plans");
       }
