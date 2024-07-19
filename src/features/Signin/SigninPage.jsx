@@ -52,7 +52,7 @@ const SigninPage = (props) => {
 
   function handleSignInSuccess(jwtToken) {
     if (jwtToken) {
-      Cookies.set("token", jwtToken, { sameSite: "Strict", secure: true });
+      Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
       axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
       router.push("/service-plans");
     }
