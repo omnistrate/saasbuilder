@@ -148,7 +148,7 @@ function ResourceUpdateView(props) {
           <FieldContainer>
             <FieldLabel>ID</FieldLabel>
             <FieldDescription sx={{ mt: "5px" }}>
-              unique id of resource instance
+              Unique id of resource instance
             </FieldDescription>
             <TextField
               id="id"
@@ -287,11 +287,7 @@ function ResourceUpdateView(props) {
               if (param.type === "Password") {
                 return (
                   <FieldContainer key={param.key}>
-                    {param.required == true ? (
-                      <FieldLabel required>{param.displayName}</FieldLabel>
-                    ) : (
-                      <FieldLabel>{param.displayName}</FieldLabel>
-                    )}
+                    <FieldLabel>{param.displayName}</FieldLabel>
                     <FieldDescription sx={{ mt: "5px" }}>
                       {param.description}
                     </FieldDescription>
@@ -302,7 +298,6 @@ function ResourceUpdateView(props) {
                       onChange={formData.handleChange}
                       values={formData.values.requestParams[param.key]}
                       onBlur={formData.handleBlur}
-                      required={param.required == true ? "required" : ""}
                     />
                   </FieldContainer>
                 );
@@ -310,11 +305,7 @@ function ResourceUpdateView(props) {
               if (param.custom == true && param.type == "Boolean") {
                 return (
                   <FieldContainer key={param.key}>
-                    {param.required == true ? (
-                      <FieldLabel required>{param.displayName}</FieldLabel>
-                    ) : (
-                      <FieldLabel>{param.displayName}</FieldLabel>
-                    )}
+                    <FieldLabel>{param.displayName}</FieldLabel>
                     <FieldDescription sx={{ mt: "5px" }}>
                       {param.description}
                     </FieldDescription>
@@ -326,8 +317,6 @@ function ResourceUpdateView(props) {
                       value={formData.values.requestParams[param.key]}
                       onChange={formData.handleChange}
                       sx={{ marginTop: "16px" }}
-                      //modifiable={param.modifiable}
-                      required={param.required == true ? "required" : ""}
                     >
                       <FormControlLabel
                         value={true}
@@ -351,11 +340,8 @@ function ResourceUpdateView(props) {
 
                 return (
                   <FieldContainer key={param.key}>
-                    {param.required == true ? (
-                      <FieldLabel required>{param.displayName}</FieldLabel>
-                    ) : (
-                      <FieldLabel>{param.displayName}</FieldLabel>
-                    )}
+                    <FieldLabel>{param.displayName}</FieldLabel>
+
                     <FieldDescription sx={{ mt: "5px" }}>
                       {param.description}
                     </FieldDescription>
@@ -391,8 +377,6 @@ function ResourceUpdateView(props) {
                       }}
                       value={formData.values.requestParams[param.key] || []}
                       onChange={formData.handleChange}
-                      //modifiable={param.modifiable}
-                      required={param.required == true ? "required" : ""}
                     >
                       {options.map((option) => (
                         <MenuItem key={option} value={option}>
@@ -410,11 +394,7 @@ function ResourceUpdateView(props) {
                 const options = param.options ? param.options : [""];
                 return (
                   <FieldContainer key={param.key}>
-                    {param.required == true ? (
-                      <FieldLabel required>{param.displayName}</FieldLabel>
-                    ) : (
-                      <FieldLabel>{param.displayName}</FieldLabel>
-                    )}
+                    <FieldLabel>{param.displayName}</FieldLabel>
                     <FieldDescription sx={{ mt: "5px" }}>
                       {param.description}
                     </FieldDescription>
@@ -436,7 +416,6 @@ function ResourceUpdateView(props) {
                       onChange={formData.handleChange}
                       modifiable={param.modifiable}
                       sx={{ marginTop: "16px" }}
-                      required={param.required == true ? "required" : ""}
                     >
                       {options.map((option) => (
                         <MenuItem key={option} value={option}>
@@ -449,11 +428,7 @@ function ResourceUpdateView(props) {
               } else if (param.custom == true) {
                 return (
                   <FieldContainer key={param.key}>
-                    {param.required == true ? (
-                      <FieldLabel required>{param.displayName}</FieldLabel>
-                    ) : (
-                      <FieldLabel>{param.displayName}</FieldLabel>
-                    )}
+                    <FieldLabel>{param.displayName}</FieldLabel>
                     <FieldDescription sx={{ mt: "5px" }}>
                       {param.description}
                     </FieldDescription>
@@ -464,7 +439,6 @@ function ResourceUpdateView(props) {
                       onChange={formData.handleChange}
                       sx={{ marginTop: "16px" }}
                       modifiable={param.modifiable}
-                      required={param.required == true ? "required" : ""}
                     />
                   </FieldContainer>
                 );
@@ -481,11 +455,10 @@ function ResourceUpdateView(props) {
                 if (param.type === "Password") {
                   return (
                     <FieldContainer key={param.key}>
-                      {param.required == true ? (
-                        <FieldLabel required>{param.displayName}</FieldLabel>
-                      ) : (
-                        <FieldLabel>{param.displayName}</FieldLabel>
-                      )}
+                      <FieldLabel required={param.required === true}>
+                        {param.displayName}
+                      </FieldLabel>
+
                       <FieldDescription sx={{ mt: "5px" }}>
                         {param.description}
                       </FieldDescription>
@@ -496,7 +469,6 @@ function ResourceUpdateView(props) {
                         onChange={formData.handleChange}
                         values={formData.values.requestParams[param.key]}
                         onBlur={formData.handleBlur}
-                        required={param.required == true ? "required" : ""}
                       />
                     </FieldContainer>
                   );
@@ -504,11 +476,10 @@ function ResourceUpdateView(props) {
                 if (param.custom == true && param.type == "Boolean") {
                   return (
                     <FieldContainer key={param.key}>
-                      {param.required == true ? (
-                        <FieldLabel required>{param.displayName}</FieldLabel>
-                      ) : (
-                        <FieldLabel>{param.displayName}</FieldLabel>
-                      )}
+                      <FieldLabel required={param.required === true}>
+                        {param.displayName}
+                      </FieldLabel>
+
                       <FieldDescription sx={{ mt: "5px" }}>
                         {param.description}
                       </FieldDescription>
@@ -520,8 +491,6 @@ function ResourceUpdateView(props) {
                         value={formData.values.requestParams[param.key]}
                         onChange={formData.handleChange}
                         sx={{ marginTop: "16px" }}
-                        //modifiable={param.modifiable}
-                        required={param.required == true ? "required" : ""}
                         disabled
                       >
                         <FormControlLabel
@@ -554,11 +523,10 @@ function ResourceUpdateView(props) {
 
                   return (
                     <FieldContainer key={param.key}>
-                      {param.required == true ? (
-                        <FieldLabel required>{param.displayName}</FieldLabel>
-                      ) : (
-                        <FieldLabel>{param.displayName}</FieldLabel>
-                      )}
+                      <FieldLabel required={param.required === true}>
+                        {param.displayName}
+                      </FieldLabel>
+
                       <FieldDescription sx={{ mt: "5px" }}>
                         {param.description}
                       </FieldDescription>
@@ -599,8 +567,6 @@ function ResourceUpdateView(props) {
                         }}
                         value={formData.values.requestParams[param.key] || []}
                         onChange={formData.handleChange}
-                        //modifiable={param.modifiable}
-                        required={param.required == true ? "required" : ""}
                       >
                         {options.map((option) => (
                           <MenuItem key={option} value={option}>
@@ -618,11 +584,10 @@ function ResourceUpdateView(props) {
                   const options = param.options ? param.options : [""];
                   return (
                     <FieldContainer key={param.key}>
-                      {param.required == true ? (
-                        <FieldLabel required>{param.displayName}</FieldLabel>
-                      ) : (
-                        <FieldLabel>{param.displayName}</FieldLabel>
-                      )}
+                      <FieldLabel required={param.required === true}>
+                        {param.displayName}
+                      </FieldLabel>
+
                       <FieldDescription sx={{ mt: "5px" }}>
                         {param.description}
                       </FieldDescription>
@@ -649,7 +614,6 @@ function ResourceUpdateView(props) {
                         onChange={formData.handleChange}
                         modifiable={param.modifiable}
                         sx={{ marginTop: "16px" }}
-                        required={param.required == true ? "required" : ""}
                       >
                         {options.map((option) => (
                           <MenuItem key={option} value={option}>
@@ -662,11 +626,10 @@ function ResourceUpdateView(props) {
                 } else if (param.custom == true) {
                   return (
                     <FieldContainer key={param.key}>
-                      {param.required == true ? (
-                        <FieldLabel required>{param.displayName}</FieldLabel>
-                      ) : (
-                        <FieldLabel>{param.displayName}</FieldLabel>
-                      )}
+                      <FieldLabel required={param.required === true}>
+                        {param.displayName}
+                      </FieldLabel>
+
                       <FieldDescription sx={{ mt: "5px" }}>
                         {param.description}
                       </FieldDescription>
@@ -678,7 +641,6 @@ function ResourceUpdateView(props) {
                         onChange={formData.handleChange}
                         sx={{ marginTop: "16px" }}
                         modifiable={param.modifiable}
-                        required={param.required == true ? "required" : ""}
                       />
                     </FieldContainer>
                   );

@@ -851,14 +851,13 @@ function MarketplaceService() {
   }, [isOrgIdModalOpen]);
 
   const updateResourceInstanceMutation = useMutation(updateResourceInstance, {
-    onSuccess: async (response) => {
+    onSuccess: async () => {
       setSelectionModel([]);
       setUpdateDrawerOpen(false);
       fetchResourceInstances(selectedResource);
       updateformik.resetForm();
       snackbar.showSuccess("Updated Resource Instance");
     },
-    onError: (error) => {},
   });
 
   //-----------------------modify ends-------------------------------------
@@ -1247,70 +1246,79 @@ function MarketplaceService() {
       requestParams: selectedResourceInstance?.result_params,
       subscriptionId: subscriptionData?.id,
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const data = { ...values };
-      async function getSchema() {
-        try {
-          let schemaArray = [];
-          let schema = await describeServiceOfferingResource(
-            serviceId,
-            selectedResource.id,
-            values.id
+
+      try {
+        let schemaArray = [];
+        const schema = await describeServiceOfferingResource(
+          serviceId,
+          selectedResource.id,
+          values.id
+        );
+
+        schema.data.apis.forEach((api) => {
+          if (api.verb === "UPDATE") {
+            schemaArray = api.inputParameters;
+          }
+        });
+
+        schemaArray
+          .filter((field) => field.type === "Boolean" && field.custom === true)
+          .forEach((field) => {
+            if (!data.requestParams[field.key]) {
+              data.requestParams[field.key] = "false";
+            }
+          });
+
+        // Only send the fields that have changed
+        const requestParams = {},
+          oldResultParams = selectedResourceInstance?.result_params;
+
+        for (const key in data.requestParams) {
+          const value = data.requestParams[key];
+          if (oldResultParams[key] !== value) {
+            requestParams[key] = value;
+          }
+        }
+
+        data.requestParams = requestParams;
+
+        if (!Object.keys(requestParams).length) {
+          return snackbar.showError(
+            "Please update at least one field before submitting"
           );
+        }
 
-          schema.data.apis.forEach((api) => {
-            if (api.verb === "UPDATE") {
-              schemaArray = api.inputParameters;
-            }
+        Object.keys(data.requestParams).forEach((key) => {
+          const result = schemaArray.find((schemaParam) => {
+            return schemaParam.key === key;
           });
 
-          schemaArray
-            .filter(
-              (field) => field.type === "Boolean" && field.custom === true
-            )
-            .forEach((field) => {
-              if (!data.requestParams[field.key]) {
-                data.requestParams[field.key] = "false";
+          switch (result?.type) {
+            case "Number":
+              data.requestParams[key] = Number(data.requestParams[key]);
+              break;
+            case "Float64":
+              const output = Number(data.requestParams[key]);
+              if (!Number.isNaN(output)) {
+                data.requestParams[key] = Number(data.requestParams[key]);
+              } else {
+                snackbar.showError(`Invalid data in ${key}`);
               }
-            });
+              break;
+            case "Boolean":
+              if (data.requestParams[key] === "true")
+                data.requestParams[key] = true;
+              else data.requestParams[key] = false;
+              break;
+          }
+        });
 
-          Object.keys(data.requestParams).forEach((key) => {
-            const result = schemaArray.find((schemaParam) => {
-              return schemaParam.key === key;
-            });
-
-            switch (result?.type) {
-              case "Number":
-                {
-                  data.requestParams[key] = Number(data.requestParams[key]);
-                }
-                break;
-              case "Float64":
-                {
-                  var output = Number(data.requestParams[key]);
-                  {
-                    if (!Number.isNaN(output)) {
-                      data.requestParams[key] = Number(data.requestParams[key]);
-                    } else {
-                      snackbar.showError(`Invalid data in ${key}`);
-                    }
-                  }
-                }
-                break;
-              case "Boolean":
-                {
-                  if (data.requestParams[key] === "true")
-                    data.requestParams[key] = true;
-                  else data.requestParams[key] = false;
-                }
-                break;
-            }
-          });
-
-          updateResourceInstanceMutation.mutate(data);
-        } catch (err) {}
+        updateResourceInstanceMutation.mutate(data);
+      } catch (err) {
+        console.error("error", err);
       }
-      getSchema();
     },
     validateOnChange: false,
     enableReinitialize: true,
