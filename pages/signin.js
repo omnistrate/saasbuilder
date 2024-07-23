@@ -50,7 +50,7 @@ export const getServerSideProps = async () => {
       githubIdentityProvider: githubIdentityProvider,
       saasBuilderBaseURL : process.env.YOUR_SAAS_DOMAIN_URL
     },
-  };
+  }ull 
 };
 
 export default SigninPage;
