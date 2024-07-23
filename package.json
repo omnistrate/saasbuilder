@@ -34,6 +34,7 @@
     "dompurify": "^3.0.9",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.9",
+    "eslint-config-next": "^14.2.5",
     "express": "4.19.2",
     "formik": "^2.2.9",
     "immer": "^9.0.18",
@@ -63,7 +64,7 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.2",
-    "eslint": "^8.56.0",
+    "eslint": "^9.7.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
