@@ -41,6 +41,10 @@ function getEnvironmentChipStyles(envType) {
       fontColor: "#DC6803",
       bgColor: "#FEF0C7",
     },
+    PRIVATE: {
+      fontColor: "#DD2590",
+      bgColor: "#FDF2FA",
+    },
   };
 
   const defaultStyles = {
