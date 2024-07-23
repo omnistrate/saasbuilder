@@ -1,5 +1,6 @@
 const ejs = require("ejs");
 const path = require("path");
+const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
 async function getSubscriptionResumedMailContent(
   resumeSubscriptionEventObj,
@@ -20,7 +21,7 @@ async function getSubscriptionResumedMailContent(
     "resumeSubscription.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL?.toLowerCase();
+  const baseURL = getSaaSDomainURL();
 
   const message = await ejs.renderFile(templatePath, {
     resume_subscription: `${baseURL}/public/mail/resume-subscription.png`,
