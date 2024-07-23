@@ -29,7 +29,7 @@ const SwaggerDocs = dynamic(
 
 export const getServerSideProps = async () => {
   return {
-    props: { },
+    props: {},
   };
 };
 
