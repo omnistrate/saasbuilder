@@ -2,6 +2,7 @@ const {
   customerSignInWithIdentityProvider,
 } = require("src/server/api/customer-user");
 const { getEnvironmentType } = require("src/server/utils/getEnvironmentType");
+import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
 
 export default async function handleSignIn(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {
@@ -11,8 +12,9 @@ export default async function handleSignIn(nextRequest, nextResponse) {
         ...nextRequest.body,
         environmentType: environmentType,
       };
-
-      requestBody.redirectUri = `${process.env.YOUR_SAAS_DOMAIN_URL}/idp-auth`;
+      const saasDomainURL = getSaaSDomainURL();
+      
+      requestBody.redirectUri = `${saasDomainURL}/idp-auth`;
 
       const response = await customerSignInWithIdentityProvider(requestBody);
 
