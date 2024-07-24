@@ -27,6 +27,12 @@ const SwaggerDocs = dynamic(
   }
 );
 
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
 export default function ApiDocument(props) {
   const router = useRouter();
   const { serviceId, environmentId, source, productTierId, subscriptionId } =

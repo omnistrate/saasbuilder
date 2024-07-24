@@ -1,4 +1,5 @@
 import { customerSignInWithIdentityProvider } from "src/server/api/customer-user";
+import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
 
 export default async function handleAuth(nextRequest, nextResponse) {
   if (nextRequest.method === "GET") {
@@ -7,11 +8,12 @@ export default async function handleAuth(nextRequest, nextResponse) {
     let authRequestPayload = null;
 
     if (state === "google-auth" && code) {
+      const saasDomainURL = getSaaSDomainURL();
       const authorizationCode = code;
       authRequestPayload = {
         authorizationCode,
         identityProviderName: "Google",
-        redirectUri: `${process.env.YOUR_SAAS_DOMAIN_URL}/api/idp-auth`,
+        redirectUri: `${saasDomainURL}/api/idp-auth`,
       };
     } else if (state === "github-auth" && code) {
       const authorizationCode = code;
@@ -35,6 +37,6 @@ export default async function handleAuth(nextRequest, nextResponse) {
     }
   }
 
-  //something went wrong, redirect to signin page with 
+  //something went wrong, redirect to signin page with
   nextResponse.redirect(307, "/signin?redirect_reason=idp_auth_error");
 }

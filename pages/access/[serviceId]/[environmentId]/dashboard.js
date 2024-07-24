@@ -27,6 +27,12 @@ import useServiceHealth from "src/hooks/query/useServiceHealth";
 
 const pageTitle = "Dashboard";
 
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
 function Dashboard(props) {
   const router = useRouter();
   const { serviceId, environmentId, source, productTierId, subscriptionId } =

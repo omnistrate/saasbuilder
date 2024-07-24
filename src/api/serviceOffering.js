@@ -4,8 +4,15 @@ export const getServiceOfferingIds = () => {
   return axios.get("/service-offering");
 };
 
-export const getServiceOffering = (serviceId) => {
-  return axios.get(`/service-offering/${serviceId}`);
+export const getServiceOffering = (serviceId, environmentType) => {
+  const queryParams = {};
+  if (environmentType) {
+    queryParams["environmentType"] = environmentType;
+  }
+  
+  return axios.get(`/service-offering/${serviceId}`, {
+    params: queryParams,
+  });
 };
 
 export const describeServiceOfferingResource = (
@@ -24,8 +31,3 @@ export const listServiceOfferings = (query) => {
   });
 };
 
-export const describeServiceOfferingById = (serviceId, query) => {
-  return axios.get(`service-offering/${serviceId}`, {
-    params: query,
-  });
-};

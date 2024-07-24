@@ -30,6 +30,12 @@ import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI
 import { checkIfResouceIsBYOA } from "src/utils/access/byoaResource";
 import Link from "next/link";
 
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
 function ResourceInstance() {
   const router = useRouter();
   const [currentTab, setCurrentTab] = useState("Resource Instance Details");

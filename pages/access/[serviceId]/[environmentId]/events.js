@@ -29,6 +29,12 @@ import Head from "next/head";
 
 const pageTitle = "Events";
 
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
 function Events() {
   const router = useRouter();
   const { serviceId, environmentId, source, productTierId, subscriptionId } =

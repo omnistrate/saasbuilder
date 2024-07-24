@@ -23,6 +23,8 @@ import EllipsisTooltipText from "../Tooltip/EllipsisTooltip";
 import { getSettingsRoute } from "src/utils/route/settings/settings";
 import { styleConfig } from "src/providerConfig";
 import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
+import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 
 function ProfileDropdown(props) {
   const {
@@ -44,7 +46,7 @@ function ProfileDropdown(props) {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
+  const environmentType = useEnvironmentType();
   const settingsPath = getSettingsRoute(accessPage, marketplacePage);
 
   const handleMenuOpen = (e) => {
@@ -56,7 +58,7 @@ function ProfileDropdown(props) {
     setAnchorEl(null);
   };
 
-
+  const isProdEnvironment = environmentType === ENVIRONMENT_TYPES.PROD;
 
   return (
     <Box sx={{ display: "flex", gap: "11px", alignItems: "center" }}>
@@ -159,15 +161,17 @@ function ProfileDropdown(props) {
               </DropdownMenuLink>
             </MenuItem>,
           ]}
-        <MenuItem key="Subscriptions">
-          <DropdownMenuLink href="/subscriptions">
-            <SubscriptionsIcon />
-            <Text weight="medium" size="small" color="#344054">
-              Subscriptions
-            </Text>
-          </DropdownMenuLink>
-        </MenuItem>
-        {accessPage && currentSubscription?.id && (
+        {isProdEnvironment && (
+          <MenuItem key="Subscriptions">
+            <DropdownMenuLink href="/subscriptions">
+              <SubscriptionsIcon />
+              <Text weight="medium" size="small" color="#344054">
+                Subscriptions
+              </Text>
+            </DropdownMenuLink>
+          </MenuItem>
+        )}
+        {isProdEnvironment && accessPage && currentSubscription?.id && (
           <MenuItem
             sx={{
               borderBottom: "1px solid #EAECF0",
