@@ -27,7 +27,6 @@ import useSnackbar from "src/hooks/useSnackbar";
 import useUserSubscriptions from "src/hooks/query/useUserSubscriptions";
 import { getResourceRouteWithoutEnv } from "src/utils/route/access/accessRoute";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
-import Head from "next/head";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
 
@@ -311,9 +310,6 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
 
   return (
     <>
-      <Head>
-        <title>Subscriptions</title>
-      </Head>
       <DashboardLayout
         noSidebar
         // SidebarUI={<MarketplaceServiceSidebar active={"subscription"} />}

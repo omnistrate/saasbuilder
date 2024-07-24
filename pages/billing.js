@@ -1,6 +1,5 @@
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import BillingPage from "src/features/Billing/BillingPage";
-import Head from "next/head";
 import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
 
 export const getServerSideProps = async () => {
@@ -29,9 +28,6 @@ export default function Billing({ orgLogoURL, orgName }) {
       serviceLogoURL={orgLogoURL || "/assets/images/logos/no-logo.png"}
       serviceName={orgName}
     >
-      <Head>
-        <title>Billing</title>
-      </Head>
       <BillingPage orgLogoURL={orgLogoURL} orgName={orgName} />
     </DashboardLayout>
   );

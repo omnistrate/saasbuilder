@@ -52,9 +52,6 @@ import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscription
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import HeaderTitle from "src/components/Headers/Header";
 import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
-import Head from "next/head";
-
-const pageTitle = "Access Control";
 
 export const getServerSideProps = async () => {
   return {
@@ -319,9 +316,6 @@ function AccessControl() {
         serviceName={service?.serviceName}
         serviceLogoURL={service?.serviceLogoURL}
       >
-        <Head>
-          <title>{pageTitle}</title>
-        </Head>
         <LoadingSpinner />
       </DashboardLayout>
     );
@@ -358,9 +352,6 @@ function AccessControl() {
         serviceName={service?.serviceName}
         serviceLogoURL={service?.serviceLogoURL}
       >
-        <Head>
-          <title>{pageTitle}</title>
-        </Head>
         <SubscriptionNotFoundUI />
       </DashboardLayout>
     );
@@ -381,9 +372,6 @@ function AccessControl() {
         accessPage
         currentSubscription={subscriptionData}
       >
-        <Head>
-          <title>{pageTitle}</title>
-        </Head>
         <ServiceOfferingUnavailableUI />
       </DashboardLayout>
     );
@@ -419,9 +407,6 @@ function AccessControl() {
       customLogo
       serviceLogoURL={service?.serviceLogoURL}
     >
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
       {isFetchingUsers || isLoadingSubscription ? (
         <Box display="flex" justifyContent="center" mt="200px">
           <CircularProgress />
