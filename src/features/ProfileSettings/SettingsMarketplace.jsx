@@ -32,7 +32,7 @@ function SettingsMarketplace({ orgLogoURL, orgName }) {
       sx={{ padding: 0 }}
       noSidebar
       marketplacePage
-      serviceLogoURL={orgLogoURL || "/assets/images/logos/no-logo.png"}
+      serviceLogoURL={orgLogoURL}
       serviceName={orgName}
     >
       <Head>
