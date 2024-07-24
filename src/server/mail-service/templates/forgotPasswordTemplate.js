@@ -1,15 +1,16 @@
 const ejs = require("ejs");
 const path = require("path");
+const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
 async function getResetPasswordMailContent(resetPasswordEventObj, orgLogoURL) {
   const orgName = resetPasswordEventObj.orgName;
   const email = resetPasswordEventObj.userEmail;
   const token = resetPasswordEventObj.eventPayload.token;
 
+  const saasDomainURL = getSaaSDomainURL();
+
   const resetPasswordPageURL = encodeURI(
-    `${
-      process.env.YOUR_SAAS_DOMAIN_URL
-    }/change-password?email=${encodeURIComponent(
+    `${saasDomainURL}/change-password?email=${encodeURIComponent(
       email
     )}&token=${encodeURIComponent(token)}`
   );
@@ -23,7 +24,7 @@ async function getResetPasswordMailContent(resetPasswordEventObj, orgLogoURL) {
     "forgotPassword.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = saasDomainURL;
 
   const message = await ejs.renderFile(templatePath, {
     logo_url: orgLogoURL,

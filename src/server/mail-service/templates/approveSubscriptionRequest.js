@@ -1,5 +1,6 @@
 const ejs = require("ejs");
 const path = require("path");
+const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
 async function getApproveSubscriptionMailContent(
   approveSubsriptionEventObj,
@@ -20,7 +21,7 @@ async function getApproveSubscriptionMailContent(
     "approveSubscriptionRequest.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = getSaaSDomainURL();
 
   const message = await ejs.renderFile(templatePath, {
     service_plan_name: servicePlanName,

@@ -20,6 +20,8 @@ import { IDENTITY_PROVIDER_STATUS_TYPES } from "./constants";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import GithubLogin from "./components/GitHubLogin";
 import { useEffect } from "react";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
+import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -37,7 +39,7 @@ const SigninPage = (props) => {
     saasBuilderBaseURL,
   } = props;
   const router = useRouter();
-
+  const environmentType = useEnvironmentType();
   const { redirect_reason } = router.query;
   const snackbar = useSnackbar();
 
@@ -50,7 +52,7 @@ const SigninPage = (props) => {
 
   function handleSignInSuccess(jwtToken) {
     if (jwtToken) {
-      Cookies.set("token", jwtToken, { sameSite: "Strict", secure: true });
+      Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
       axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
       router.push("/service-plans");
     }
@@ -124,15 +126,17 @@ const SigninPage = (props) => {
     }
   }
 
+  const shouldHideSignupLink = environmentType !== ENVIRONMENT_TYPES.PROD;
+
   return (
     <MainImageLayout
       pageTitle="Sign in"
       orgName={orgName}
       orgLogoURL={orgLogoURL}
     >
-      <PageHeading>Login to your account</PageHeading>
+      <PageHeading mt="24px">Login to your account</PageHeading>
 
-      <Stack component="form" gap="32px">
+      <Stack component="form" gap="32px" mt="44px">
         {/* Signin Form */}
         <Stack gap="30px">
           <FieldContainer>
@@ -162,18 +166,19 @@ const SigninPage = (props) => {
               helperText={touched.password && errors.password}
             />
           </FieldContainer>
-
-          <Link
-            href="/reset-password"
-            style={{
-              fontWeight: "500",
-              fontSize: "14px",
-              lineHeight: "22px",
-              color: "#687588",
-            }}
-          >
-            Forgot Password
-          </Link>
+          {!shouldHideSignupLink && (
+            <Link
+              href="/reset-password"
+              style={{
+                fontWeight: "500",
+                fontSize: "14px",
+                lineHeight: "22px",
+                color: "#687588",
+              }}
+            >
+              Forgot Password
+            </Link>
+          )}
         </Stack>
 
         {/* Login and Google Button */}
@@ -190,7 +195,7 @@ const SigninPage = (props) => {
       </Stack>
       {Boolean(googleIdentityProvider || githubIdentityProvider) && (
         <>
-          <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="8px">
+          <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="40px">
             <Box
               display="inline-block"
               paddingLeft="16px"
@@ -205,16 +210,12 @@ const SigninPage = (props) => {
               Or login with
             </Box>
           </Box>
-          <Stack direction="row" justifyContent="center" mt="-6px" gap="16px">
+          <Stack direction="row" justifyContent="center" mt="20px" gap="16px">
             {showGoogleLoginButton && (
               <GoogleOAuthProvider
                 clientId={googleIDPClientID}
-                onScriptLoadError={() => {
-                  console.log("Script load error");
-                }}
-                onScriptLoadSuccess={() => {
-                  console.log("Script load success");
-                }}
+                onScriptLoadError={() => {}}
+                onScriptLoadSuccess={() => {}}
               >
                 <GoogleLogin
                   disabled={isGoogleLoginDisabled}
@@ -232,20 +233,21 @@ const SigninPage = (props) => {
           </Stack>
         </>
       )}
-
-      {/* Signup Link */}
-      <Typography
-        fontWeight="500"
-        fontSize="14px"
-        lineHeight="22px"
-        color="#A0AEC0"
-        textAlign="center"
-      >
-        You’re new in here?{" "}
-        <Link href="/signup" style={{ color: "#27A376" }}>
-          Create Account
-        </Link>
-      </Typography>
+      {!shouldHideSignupLink && (
+        <Typography
+          mt="22px"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="22px"
+          color="#A0AEC0"
+          textAlign="center"
+        >
+          You’re new in here?{" "}
+          <Link href="/signup" style={{ color: "#27A376" }}>
+            Create Account
+          </Link>
+        </Typography>
+      )}
     </MainImageLayout>
   );
 };

@@ -56,6 +56,12 @@ import Head from "next/head";
 
 const pageTitle = "Access Control";
 
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
 function AccessControl() {
   const router = useRouter();
   const { serviceId, environmentId, source, productTierId, subscriptionId } =

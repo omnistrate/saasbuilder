@@ -1,4 +1,3 @@
-import { Box, Stack } from "@mui/material";
 import {
   CellDescription,
   CellSubtext,
@@ -9,63 +8,53 @@ import {
   TableRow,
   TableContainer,
 } from "../../InfoTable/InfoTable";
-import Image from "next/image";
-import resourceEndpointIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/resource-endpoint.svg";
-import resourcePortsIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/ports.svg";
 import { Text } from "../../Typography/Typography";
-import CopyToClipbpoardButton from "../../CopyClipboardButton/CopyClipboardButton";
 import Button from "../../Button/Button";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { useEffect, useState } from "react";
 import Card from "src/components/Card/Card";
+import ResourceConnectivityEndpoint from "./ConnectivityEndpoint";
+import { Stack } from "@mui/material";
 
 function Connectivity(props) {
   const {
     networkType,
-    clusterEndpoint,
-    nodeEndpoints,
     ports,
-    // availabilityZones,
     publiclyAccessible,
     privateNetworkCIDR,
     privateNetworkId,
     globalEndpoints,
-    proxyEndpointDetails,
-    serviceId,
-    environmentId,
-    searchInventoryView,
-    context,
     nodes,
+    queryData,
+    refetchInstance,
   } = props;
   const [availabilityZones, setAvailabilityZones] = useState("");
   let sectionLabel = "Resource";
 
-  if (context === "inventory") {
-    sectionLabel = "Service Component";
-  }
-
   const primaryResourceName = globalEndpoints?.primary?.resourceName;
   const primaryResourceEndpoint = globalEndpoints?.primary?.endpoint;
   const primaryResourcePorts = ports?.[0];
+
   const otherResourcePorts = ports?.slice(1) ?? [];
 
   const otherEndpoints = globalEndpoints?.others;
 
   const otherResourceFilteredPorts = [];
   const otherResourceFilteredEndpoints = [];
-  otherEndpoints.forEach(({ resourceName, endpoint }) => {
+
+  otherEndpoints?.forEach((endpointData) => {
+    const { resourceName, endpoint } = endpointData;
     if (resourceName && endpoint) {
       const matchingResourcePort = otherResourcePorts.find(
         (port) => port.resourceName === resourceName && port.ports
       );
       if (matchingResourcePort) {
-        //filter out omnistrate observability
         if (resourceName === "Omnistrate Observability") {
           return;
         }
         otherResourceFilteredPorts.push(matchingResourcePort);
-        otherResourceFilteredEndpoints.push({ resourceName, endpoint });
+        otherResourceFilteredEndpoints.push(endpointData);
       }
     }
   });
@@ -132,11 +121,19 @@ function Connectivity(props) {
               </TableCell>
               <TableCell align="right" sx={{ paddingRight: 0 }}>
                 {primaryResourceName && primaryResourceEndpoint && (
-                  <ResourceGlobalEndpoint
-                    primary
+                  <ResourceConnectivityEndpoint
+                    isPrimaryResource={true}
                     resourceName={primaryResourceName}
-                    text={primaryResourceEndpoint}
-                    type="endpoint"
+                    viewType="endpoint"
+                    endpointURL={primaryResourceEndpoint}
+                    customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
+                    queryData={queryData}
+                    resourceKey={globalEndpoints?.primary?.resourceKey}
+                    resourceId={globalEndpoints?.primary?.resourceId}
+                    refetchInstance={refetchInstance}
+                    resourceHasCompute={
+                      globalEndpoints?.primary?.resourceHasCompute
+                    }
                   />
                 )}
                 {otherResourceFilteredEndpoints?.length > 0 && (
@@ -161,14 +158,28 @@ function Connectivity(props) {
                     {(isEndpointsExpanded ||
                       !(primaryResourceName && primaryResourceEndpoint)) &&
                       otherResourceFilteredEndpoints.map((obj) => {
-                        const { resourceName, endpoint } = obj;
+                        const {
+                          resourceName,
+                          endpoint,
+                          resourceId,
+                          customDNSEndpoint,
+                          resourceKey,
+                          resourceHasCompute,
+                        } = obj;
                         return (
-                          <ResourceGlobalEndpoint
+                          <ResourceConnectivityEndpoint
+                            key={resourceId}
+                            isPrimaryResource={false}
                             resourceName={resourceName}
-                            text={endpoint}
-                            type="endpoint"
-                            key={obj.resourceName}
-                            sx={{ marginTop: "16px" }}
+                            viewType="endpoint"
+                            endpointURL={endpoint}
+                            customDNSData={customDNSEndpoint}
+                            queryData={queryData}
+                            resourceKey={resourceKey}
+                            resourceId={resourceId}
+                            refetchInstance={refetchInstance}
+                            containerStyles={{ marginTop: "16px" }}
+                            resourceHasCompute={resourceHasCompute}
                           />
                         );
                       })}
@@ -181,17 +192,17 @@ function Connectivity(props) {
             primaryResourcePorts?.ports) ||
             otherResourceFilteredPorts?.length > 0) && (
             <TableRow>
-              <TableCell>
+              <TableCell sx={{ verticalAlign: "baseline" }}>
                 <CellTitle>Port(s)</CellTitle>
               </TableCell>
               <TableCell align="right" sx={{ paddingRight: 0 }}>
                 {primaryResourcePorts?.resourceName &&
                   primaryResourcePorts?.ports && (
-                    <ResourceGlobalEndpoint
-                      primary
+                    <ResourceConnectivityEndpoint
+                      isPrimaryResource={true}
                       resourceName={primaryResourcePorts?.resourceName}
-                      text={primaryResourcePorts?.ports}
-                      type="ports"
+                      viewType="ports"
+                      ports={primaryResourcePorts?.ports}
                     />
                   )}
                 {otherResourceFilteredPorts?.length > 0 && (
@@ -222,10 +233,10 @@ function Connectivity(props) {
                       otherResourceFilteredPorts.map((obj) => {
                         const { resourceName, ports } = obj;
                         return (
-                          <ResourceGlobalEndpoint
+                          <ResourceConnectivityEndpoint
                             resourceName={resourceName}
-                            text={ports}
-                            type="ports"
+                            ports={ports}
+                            viewType="ports"
                             key={obj.resourceName}
                             sx={{ marginTop: "16px" }}
                           />
@@ -236,42 +247,6 @@ function Connectivity(props) {
               </TableCell>
             </TableRow>
           )}
-          {/* proxt endpoint */}
-          {/* {proxyEndpointDetails && proxyEndpointDetails.proxyEndpoint && (
-            <TableRow>
-              <TableCell sx={{ verticalAlign: "baseline" }}>
-                <CellTitle>Proxy Endpoint</CellTitle>
-                <CellSubtext>
-                  The proxy endpoint of the {sectionLabel.toLowerCase()}
-                </CellSubtext>
-              </TableCell>
-              <TableCell align="right" sx={{ paddingRight: 0 }}>
-                <ResourceProxyEndpoint
-                  primary
-                  endpoint={proxyEndpointDetails.proxyEndpoint}
-                  serviceId={serviceId}
-                  environmentId={environmentId}
-                  searchInventoryView={searchInventoryView}
-                />
-              </TableCell>
-            </TableRow>
-          )} */}
-
-          {/* proxy ports */}
-
-          {/* {proxyEndpointDetails && proxyEndpointDetails.openPorts && (
-            <TableRow>
-              <TableCell>
-                <CellTitle>Proxy Port(s)</CellTitle>
-              </TableCell>
-              <TableCell align="right">
-                <CellDescription>
-                  {proxyEndpointDetails.openPorts}
-                </CellDescription>
-              </TableCell>
-            </TableRow>
-          )} */}
-
           <TableRow>
             <TableCell>
               <CellTitle>Availability zones</CellTitle>
@@ -326,45 +301,3 @@ function Connectivity(props) {
 }
 
 export default Connectivity;
-
-const ResourceGlobalEndpoint = (props) => {
-  const { resourceName, text, type, primary, sx = {} } = props;
-
-  return (
-    <Stack
-      direction="row"
-      sx={{
-        border: primary ? "2px solid #7F56D9" : "1px solid #EAECF0",
-        background: primary ? "#F9F5FF" : "white",
-        padding: "16px",
-        borderRadius: "12px",
-        ...sx,
-      }}
-    >
-      {type === "endpoint" ? (
-        <Image src={resourceEndpointIcon} alt="resource-endpoint" />
-      ) : (
-        <Image src={resourcePortsIcon} alt="resource-ports" />
-      )}
-      <Box
-        sx={{
-          flexGrow: 1,
-          marginLeft: "16px",
-          textAlign: "left",
-        }}
-      >
-        <Text size="small" weight="medium" color="#53389E">
-          {resourceName}
-        </Text>
-        <Text size="small" weight="regular" color={primary ? "#6941C6" : ""}>
-          {text}
-        </Text>
-      </Box>
-      {text && (
-        <Box alignSelf="start">
-          <CopyToClipbpoardButton text={text} />
-        </Box>
-      )}
-    </Stack>
-  );
-};

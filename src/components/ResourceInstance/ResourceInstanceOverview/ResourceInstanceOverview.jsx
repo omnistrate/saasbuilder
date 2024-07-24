@@ -1,7 +1,6 @@
 import { Box, Stack } from "@mui/material";
 import AwsLogo from "src/components/Logos/AwsLogo/AwsLogo";
 import GcpLogo from "src/components/Logos/GcpLogo/GcpLogo";
-import ResourceInstanceStatusChip from "../ResourceInstanceStatusChip/ResourceInstanceStatusChip";
 import { Text } from "src/components/Typography/Typography";
 import _ from "lodash";
 import {
@@ -14,6 +13,8 @@ import {
 } from "components/InfoTable/InfoTable";
 import GradientProgressBar from "src/components/GradientProgessBar/GradientProgressBar";
 import RegionIcon from "src/components/Region/RegionIcon";
+import { getResourceInstanceStatusStylesAndlabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import StatusChip from "src/components/StatusChip/StatusChip";
 
 function ResourceInstanceOverview(props) {
   const {
@@ -38,6 +39,8 @@ function ResourceInstanceOverview(props) {
   if (isResourceBYOA) {
     sectionLabel = "Account";
   }
+
+  const statusStylesAndLabel = getResourceInstanceStatusStylesAndlabel(status);
 
   return (
     <>
@@ -129,7 +132,7 @@ function ResourceInstanceOverview(props) {
                 >
                   {" "}
                   {status ? (
-                    <ResourceInstanceStatusChip status={status} />
+                    <StatusChip status={status} {...statusStylesAndLabel} />
                   ) : (
                     <Box sx={{ color: "#475467" }}>NA</Box>
                   )}

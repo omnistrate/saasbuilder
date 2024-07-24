@@ -3,7 +3,7 @@ import Button from "src/components/Button/Button";
 
 const StyledButton = styled(Button)({
   width: "fit-content",
-  padding: "12px !important",
+  padding: "12px 30px !important",
   minWidth: "auto",
   borderRadius: "12px",
   boxShadow: "none",

@@ -7,7 +7,7 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Button from "../Button/Button";
 import FieldContainer from "../FormElements/FieldContainer/FieldContainer";
 import FieldDescription from "../FormElements/FieldDescription/FieldDescription";
@@ -21,6 +21,7 @@ import { describeServiceOfferingResource } from "../../api/serviceOffering";
 import Select from "../FormElements/Select/Select";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import { PasswordField } from "../FormElementsv2/PasswordField/PasswordField";
+import { cloudProviderLabels } from "src/constants/cloudProviders";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -84,6 +85,28 @@ function ResourceUpdateView(props) {
     }
     getSchema();
   }, []);
+
+  const shouldShowParamField = useCallback(
+    (paramKey) => {
+      if (
+        paramKey === "aws_bootstrap_role_arn" ||
+        paramKey === "account_configuration_method" ||
+        paramKey === "gcp_service_account_email"
+      ) {
+        return false;
+      }
+
+      // formData.values.cloud_provider can be 'aws', 'gcp' or 'azure'. Field names with same prefix must be shown
+      if (
+        formData.values.cloud_provider &&
+        paramKey.startsWith(formData.values.cloud_provider)
+      ) {
+        return true;
+      }
+      return false;
+    },
+    [formData.values.cloud_provider]
+  );
 
   const customAvailabilityZoneQuery = useAvailabilityZone(
     formData.values.region,
@@ -152,9 +175,8 @@ function ResourceUpdateView(props) {
                 name="cloud_provider"
                 disabled="true"
                 value={
-                  isCurrentResourceBYOA
-                    ? "Amazon Web Services"
-                    : formData.values.cloud_provider
+                  cloudProviderLabels[formData.values.cloud_provider] ||
+                  formData.values.cloud_provider
                 }
                 sx={{ marginTop: "16px" }}
               />
@@ -258,6 +280,10 @@ function ResourceUpdateView(props) {
               ""
             )}
             {viewParams.map((param) => {
+              if (isCurrentResourceBYOA && !shouldShowParamField(param.key)) {
+                return null;
+              }
+
               if (param.type === "Password") {
                 return (
                   <FieldContainer key={param.key}>
@@ -447,6 +473,10 @@ function ResourceUpdateView(props) {
 
             {/* show non modifiable params in disabled mode */}
             {nonModifiableviewParams.map((param) => {
+              if (isCurrentResourceBYOA && !shouldShowParamField(param.key)) {
+                return null;
+              }
+
               if (param.key !== "custom_availability_zone") {
                 if (param.type === "Password") {
                   return (

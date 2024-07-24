@@ -58,8 +58,8 @@ export default function SideDrawer(props) {
         "&::-webkit-scrollbar": {
           display: "none" /* Hide scrollbar for Chrome, Safari and Opera */,
         },
-        "-ms-overflow-style": "none" /* IE and Edge */,
-        "scrollbar-width": "none" /* Firefox */,
+        "msOverflowStyle": "none" /* IE and Edge */,
+        "scrollbarWidth": "none" /* Firefox */,
       }}
     >
       <Box>{SidebarUI ? SidebarUI : ""}</Box>

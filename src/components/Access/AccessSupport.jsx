@@ -128,7 +128,7 @@ export const AccessSupport = (props) => {
   );
 };
 
-const Logo = styled(Image)({
+const Logo = styled("img")({
   height: 40,
   width: 40,
 });

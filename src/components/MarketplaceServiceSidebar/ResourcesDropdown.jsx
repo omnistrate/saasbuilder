@@ -125,6 +125,7 @@ const ResourcesDropdown = ({
         {resourceParameters?.length
           ? resourceParameters.map((resourceParameter, index) => (
               <ResourceListItem
+                key={resourceParameter.resourceId}
                 href={`${resourceUrlLink}&resourceId=${resourceParameter.resourceId}`}
                 resourceName={resourceParameter.name}
                 isActive={

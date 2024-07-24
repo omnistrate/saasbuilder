@@ -1,15 +1,18 @@
 const ejs = require("ejs");
 const path = require("path");
+const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
 async function getOrgInviteUserMailContent(inviteUserEventObj, orgLogoURL) {
+  const saasDomainURL = getSaaSDomainURL();
+
   const signUpURL = encodeURI(
-    `${process.env.YOUR_SAAS_DOMAIN_URL}/signup?org=${encodeURIComponent(
+    `${saasDomainURL}/signup?org=${encodeURIComponent(
       inviteUserEventObj.orgName
     )}&orgUrl=${encodeURI(
       inviteUserEventObj.orgURL
     )}&email=${encodeURIComponent(inviteUserEventObj.userEmail)}`
   );
-  const signInURL = `${process.env.YOUR_SAAS_DOMAIN_URL}/signin`;
+  const signInURL = `${saasDomainURL}/signin`;
 
   const userName = inviteUserEventObj.eventPayload.inviting_user_name;
   const serviceName = inviteUserEventObj.eventPayload.service_name;
@@ -23,7 +26,7 @@ async function getOrgInviteUserMailContent(inviteUserEventObj, orgLogoURL) {
     "orgInviteUser.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = saasDomainURL;
 
   const message = await ejs.renderFile(templatePath, {
     user_name: userName,

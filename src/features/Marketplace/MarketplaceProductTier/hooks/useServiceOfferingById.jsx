@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
-import { describeServiceOfferingById } from "src/api/serviceOffering";
+import { getServiceOffering } from "src/api/serviceOffering";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 
 function useServiceOfferingById(serviceId) {
   const isQueryEnabled = Boolean(serviceId);
-
+  const environmentType = useEnvironmentType();
   const query = useQuery(
     ["service-offering-marketplace", serviceId],
     () => {
-      return describeServiceOfferingById(serviceId, { visibility: "PUBLIC" });
+      return getServiceOffering(serviceId, environmentType);
     },
     {
       enabled: isQueryEnabled,
