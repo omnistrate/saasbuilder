@@ -4,6 +4,7 @@ export const ENVIRONMENT_TYPES = {
   QA: "QA",
   STAGING: "STAGING",
   CANARY: "CANARY",
+  PRIVATE: "PRIVATE",
 };
 
 export const ENVIRONMENT_TYPE_LABEL = {
@@ -12,6 +13,5 @@ export const ENVIRONMENT_TYPE_LABEL = {
   QA: "QA",
   STAGING: "Staging",
   CANARY: "Canary",
+  PRIVATE: "Private",
 };
-
-
