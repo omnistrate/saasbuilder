@@ -314,7 +314,7 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
         noSidebar
         // SidebarUI={<MarketplaceServiceSidebar active={"subscription"} />}
         marketplacePage
-        serviceLogoURL={orgLogoURL || "/assets/images/logos/no-logo.png"}
+        serviceLogoURL={orgLogoURL}
         serviceName={orgName}
       >
         <Stack sx={{ minHeight: "calc(100vh - 180px)" }}>
