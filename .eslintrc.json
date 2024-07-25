@@ -17,6 +17,7 @@
         "functions": false
       }
     ],
+    "no-undef": "warn",
     "no-unused-vars": "warn",
     "react/jsx-uses-vars": "warn",
     "no-duplicate-imports": "warn",

@@ -13,7 +13,7 @@ import {
 } from "components/InfoTable/InfoTable";
 import GradientProgressBar from "src/components/GradientProgessBar/GradientProgressBar";
 import RegionIcon from "src/components/Region/RegionIcon";
-import { getResourceInstanceStatusStylesAndlabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import StatusChip from "src/components/StatusChip/StatusChip";
 
 function ResourceInstanceOverview(props) {
@@ -40,7 +40,7 @@ function ResourceInstanceOverview(props) {
     sectionLabel = "Account";
   }
 
-  const statusStylesAndLabel = getResourceInstanceStatusStylesAndlabel(status);
+  const statusStylesAndLabel = getResourceInstanceStatusStylesAndLabel(status);
 
   return (
     <>
