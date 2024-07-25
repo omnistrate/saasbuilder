@@ -5,7 +5,6 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import MuiTableCell from "@mui/material/TableCell";
 import { Text } from "src/components/Typography/Typography";
-import CopyToClipbpoardButton from "src/components/CopyClipboardButton/CopyClipboardButton";
 import resourcePortsIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/ports.svg";
 import resourceEndpointIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/resource-endpoint.svg";
 import { useEffect, useRef, useState } from "react";
