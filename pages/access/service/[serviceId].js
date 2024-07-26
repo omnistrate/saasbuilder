@@ -601,11 +601,20 @@ function MarketplaceService() {
     setViewInfoDrawerOpen(false);
   };
 
+  let defaultCloudProvider = "";
+  if (service?.cloudProviders?.length > 0) {
+    if (service?.cloudProviders?.includes("aws")) {
+      defaultCloudProvider = "aws";
+    } else {
+      defaultCloudProvider = "gcp";
+    }
+  }
+
   //create resource instance
   const createformik = useFormik({
     initialValues: {
       serviceId: serviceId,
-      cloud_provider: "aws",
+      cloud_provider: defaultCloudProvider,
       network_type: "",
       region: "",
       requestParams: { ...requestParams },
