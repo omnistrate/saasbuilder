@@ -703,7 +703,15 @@ function MarketplaceService() {
           for (let key in data.requestParams) {
             let value = data.requestParams[key];
 
-            if (value === undefined) {
+            //for gcp cloud provider remove cloud_provider_native_network_id field
+            if (
+              key === "cloud_provider_native_network_id" &&
+              values.cloud_provider === "gcp"
+            ) {
+              delete data.requestParams[key];
+            }
+
+            if (value === undefined || value === "") {
               delete data.requestParams[key];
             }
           }
