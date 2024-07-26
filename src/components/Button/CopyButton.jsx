@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { IconButton } from "@mui/material";
 import clipboard from "clipboardy";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { IconButton } from "@mui/material";
+import CopyIcon from "components/Icons/CopyIcon/DataGridCopyIcon";
 import Tooltip from "../Tooltip/Tooltip";
 
-const CopyButton = (props) => {
-  const {
-    text = "",
-    tooltipProps = {},
-    iconProps = {},
-    iconStyle = {},
-  } = props;
+const CopyButton = ({
+  text = "",
+  tooltipProps = {},
+  iconProps = {},
+  iconStyle = {},
+}) => {
   const [tooltipText, setTooltipText] = useState("Click to copy");
 
   function handleClick() {
@@ -24,7 +23,7 @@ const CopyButton = (props) => {
   return (
     <Tooltip title={tooltipText} placement="top" {...tooltipProps}>
       <IconButton onClick={handleClick}>
-        <ContentCopyIcon
+        <CopyIcon
           htmlColor="#7F56D9"
           sx={{ width: "16px", height: "18px", ...iconStyle }}
           {...iconProps}

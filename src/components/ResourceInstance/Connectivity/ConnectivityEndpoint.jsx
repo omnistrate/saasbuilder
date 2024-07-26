@@ -5,7 +5,6 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import MuiTableCell from "@mui/material/TableCell";
 import { Text } from "src/components/Typography/Typography";
-import CopyToClipbpoardButton from "src/components/CopyClipboardButton/CopyClipboardButton";
 import resourcePortsIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/ports.svg";
 import resourceEndpointIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/resource-endpoint.svg";
 import { useEffect, useRef, useState } from "react";
@@ -32,6 +31,7 @@ import {
 } from "src/api/resourceInstance";
 import { useMutation } from "@tanstack/react-query";
 import ViewInstructionsIcon from "src/components/Icons/ViewInstructions/ViewInstructions";
+import CopyButton from "src/components/Button/CopyButton";
 
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
@@ -332,7 +332,7 @@ const ResourceConnectivityEndpoint = (props) => {
               <TableCell sx={{ paddingLeft: "8px" }}>
                 {Boolean(endpointURL || ports) && (
                   <Box alignSelf="start">
-                    <CopyToClipbpoardButton
+                    <CopyButton
                       text={viewType === "endpoint" ? endpointURL : ports}
                     />
                   </Box>

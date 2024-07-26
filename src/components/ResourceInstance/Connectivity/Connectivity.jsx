@@ -1,21 +1,12 @@
-import {
-  CellDescription,
-  CellSubtext,
-  CellTitle,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableContainer,
-} from "../../InfoTable/InfoTable";
-import { Text } from "../../Typography/Typography";
-import Button from "../../Button/Button";
+import { Stack } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import { useEffect, useState } from "react";
-import Card from "src/components/Card/Card";
+import Card from "components/Card/Card";
+import Button from "components/Button/Button";
+import { Text } from "components/Typography/Typography";
 import ResourceConnectivityEndpoint from "./ConnectivityEndpoint";
-import { Stack } from "@mui/material";
+import PropertyTable from "components/PropertyTable/PropertyTable";
 
 function Connectivity(props) {
   const {
@@ -25,39 +16,49 @@ function Connectivity(props) {
     privateNetworkCIDR,
     privateNetworkId,
     globalEndpoints,
+    context,
     nodes,
-    queryData,
+    addCustomDNSMutation,
+    removeCustomDNSMutation,
+    accessQueryParams,
+    fleetQueryParams,
     refetchInstance,
   } = props;
-  const [availabilityZones, setAvailabilityZones] = useState("");
-  let sectionLabel = "Resource";
 
+  const [availabilityZones, setAvailabilityZones] = useState("");
   const primaryResourceName = globalEndpoints?.primary?.resourceName;
   const primaryResourceEndpoint = globalEndpoints?.primary?.endpoint;
   const primaryResourcePorts = ports?.[0];
 
-  const otherResourcePorts = ports?.slice(1) ?? [];
+  const [otherResourceFilteredPorts, otherResourceFilteredEndpoints] =
+    useMemo(() => {
+      const otherResourcePorts = ports?.slice(1) ?? [];
+      const otherEndpoints = globalEndpoints?.others;
 
-  const otherEndpoints = globalEndpoints?.others;
+      const otherResourceFilteredPorts = [];
+      const otherResourceFilteredEndpoints = [];
 
-  const otherResourceFilteredPorts = [];
-  const otherResourceFilteredEndpoints = [];
-
-  otherEndpoints?.forEach((endpointData) => {
-    const { resourceName, endpoint } = endpointData;
-    if (resourceName && endpoint) {
-      const matchingResourcePort = otherResourcePorts.find(
-        (port) => port.resourceName === resourceName && port.ports
-      );
-      if (matchingResourcePort) {
-        if (resourceName === "Omnistrate Observability") {
-          return;
+      otherEndpoints?.forEach((endpointData) => {
+        const { resourceName, endpoint } = endpointData;
+        if (resourceName && endpoint) {
+          const matchingResourcePort = otherResourcePorts.find(
+            (port) => port.resourceName === resourceName && port.ports
+          );
+          if (matchingResourcePort) {
+            //on access side filter out omnistrate observability
+            if (
+              context === "access" &&
+              resourceName === "Omnistrate Observability"
+            ) {
+              return;
+            }
+            otherResourceFilteredPorts.push(matchingResourcePort);
+            otherResourceFilteredEndpoints.push(endpointData);
+          }
         }
-        otherResourceFilteredPorts.push(matchingResourcePort);
-        otherResourceFilteredEndpoints.push(endpointData);
-      }
-    }
-  });
+      });
+      return [otherResourceFilteredPorts, otherResourceFilteredEndpoints];
+    }, [context, ports, globalEndpoints]);
 
   const noConnectivityData =
     !globalEndpoints?.primary &&
@@ -83,9 +84,211 @@ function Connectivity(props) {
     setAvailabilityZones(availabilityZone);
   }, [nodes]);
 
+  const rows = useMemo(() => {
+    let sectionLabel = "Resource";
+
+    if (context === "inventory") {
+      sectionLabel = "Service Component";
+    }
+
+    const res = [
+      {
+        label: "Network type",
+        description: "Type of network",
+        value: networkType,
+      },
+    ];
+
+    if (
+      (primaryResourceName && primaryResourceEndpoint) ||
+      otherResourceFilteredEndpoints?.length > 0
+    ) {
+      res.push({
+        label: "Global endpoint",
+        description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
+        valueType: "custom",
+        value: (
+          <>
+            {primaryResourceName && primaryResourceEndpoint && (
+              <ResourceConnectivityEndpoint
+                context={context}
+                isPrimaryResource={true}
+                resourceName={primaryResourceName}
+                viewType="endpoint"
+                endpointURL={primaryResourceEndpoint}
+                customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
+                fleetQueryParams={fleetQueryParams}
+                accessQueryParams={accessQueryParams}
+                resourceKey={globalEndpoints?.primary?.resourceKey}
+                resourceId={globalEndpoints?.primary?.resourceId}
+                refetchInstance={refetchInstance}
+                resourceHasCompute={
+                  globalEndpoints?.primary?.resourceHasCompute
+                }
+              />
+            )}
+            {otherResourceFilteredEndpoints?.length > 0 && (
+              <>
+                {primaryResourceName && primaryResourceEndpoint && (
+                  <Stack direction="row" justifyContent="center">
+                    <Button
+                      sx={{ color: "#6941C6", marginTop: "16px" }}
+                      endIcon={
+                        isEndpointsExpanded ? (
+                          <RemoveCircleOutlineIcon />
+                        ) : (
+                          <AddCircleOutlineIcon />
+                        )
+                      }
+                      onClick={toggleExpanded}
+                    >
+                      {isEndpointsExpanded ? "View Less" : "View More"}
+                    </Button>
+                  </Stack>
+                )}
+                {(isEndpointsExpanded ||
+                  !(primaryResourceName && primaryResourceEndpoint)) &&
+                  otherResourceFilteredEndpoints.map((obj) => {
+                    const {
+                      resourceName,
+                      endpoint,
+                      resourceId,
+                      customDNSEndpoint,
+                      resourceKey,
+                      resourceHasCompute,
+                    } = obj;
+                    return (
+                      <ResourceConnectivityEndpoint
+                        key={resourceId}
+                        context={context}
+                        isPrimaryResource={false}
+                        resourceName={resourceName}
+                        viewType="endpoint"
+                        endpointURL={endpoint}
+                        customDNSData={customDNSEndpoint}
+                        fleetQueryParams={fleetQueryParams}
+                        accessQueryParams={accessQueryParams}
+                        resourceKey={resourceKey}
+                        resourceId={resourceId}
+                        refetchInstance={refetchInstance}
+                        containerStyles={{ marginTop: "16px" }}
+                        resourceHasCompute={resourceHasCompute}
+                      />
+                    );
+                  })}
+              </>
+            )}
+          </>
+        ),
+      });
+    }
+
+    if (
+      (primaryResourcePorts?.resourceName && primaryResourcePorts?.ports) ||
+      otherResourceFilteredPorts?.length > 0
+    ) {
+      const { resourceName, ports } = primaryResourcePorts;
+
+      res.push({
+        label: "Port(s)",
+        valueType: "custom",
+        value: (
+          <>
+            {resourceName && ports && (
+              <ResourceConnectivityEndpoint
+                isPrimaryResource={true}
+                resourceName={primaryResourcePorts?.resourceName}
+                viewType="ports"
+                ports={primaryResourcePorts?.ports}
+              />
+            )}
+            {otherResourceFilteredPorts?.length > 0 && (
+              <>
+                {resourceName && ports && (
+                  <Stack direction="row" justifyContent="center">
+                    <Button
+                      sx={{ color: "#6941C6", marginTop: "16px" }}
+                      endIcon={
+                        isPortsExpanded ? (
+                          <RemoveCircleOutlineIcon />
+                        ) : (
+                          <AddCircleOutlineIcon />
+                        )
+                      }
+                      onClick={() => setIsPortsExpanded(!isPortsExpanded)}
+                    >
+                      {isPortsExpanded ? "View Less" : "View More"}
+                    </Button>
+                  </Stack>
+                )}
+                {(isPortsExpanded || !(resourceName && ports)) &&
+                  otherResourceFilteredPorts.map((obj) => {
+                    const { resourceName, ports } = obj;
+                    return (
+                      <ResourceConnectivityEndpoint
+                        resourceName={resourceName}
+                        ports={ports}
+                        viewType="ports"
+                        key={obj.resourceName}
+                        containerStyles={{ marginTop: "16px" }}
+                      />
+                    );
+                  })}
+              </>
+            )}
+          </>
+        ),
+      });
+    }
+
+    res.push({
+      label: "Availability zones",
+      description: `The availability zone of the ${sectionLabel.toLowerCase()}`,
+      value: availabilityZones,
+    });
+
+    res.push({
+      label: "Publicly accessible",
+      value: publiclyAccessible ? "Yes" : "No",
+    });
+
+    if (privateNetworkCIDR) {
+      res.push({
+        label: "Private network CIDR",
+        description: `The private network CIDR of the ${sectionLabel.toLowerCase()}`,
+        value: privateNetworkCIDR,
+      });
+
+      res.push({
+        label: "Private network id",
+        description: `The private network ID of the ${sectionLabel.toLowerCase()}`,
+        value: privateNetworkId,
+      });
+    }
+
+    return res;
+  }, [
+    context,
+    networkType,
+    primaryResourceName,
+    primaryResourceEndpoint,
+    otherResourceFilteredEndpoints,
+    primaryResourcePorts,
+    otherResourceFilteredPorts,
+    availabilityZones,
+    publiclyAccessible,
+    privateNetworkCIDR,
+    globalEndpoints?.primary?.customDNSEndpoint,
+    addCustomDNSMutation,
+    removeCustomDNSMutation,
+    isEndpointsExpanded,
+    isPortsExpanded,
+    privateNetworkId,
+  ]);
+
   if (noConnectivityData) {
     return (
-      <Card mt="54px" sx={{ minHeight: "500px" }}>
+      <Card sx={{ minHeight: "500px" }}>
         <Stack direction="row" justifyContent="center" marginTop="200px">
           <Text size="xlarge">No Connectivity data</Text>
         </Stack>
@@ -93,211 +296,7 @@ function Connectivity(props) {
     );
   }
 
-  return (
-    <TableContainer
-      sx={{
-        mt: "54px",
-      }}
-    >
-      <Table>
-        <TableBody>
-          <TableRow>
-            <TableCell>
-              <CellTitle>Network type</CellTitle>
-              <CellSubtext>Type of network</CellSubtext>
-            </TableCell>
-            <TableCell align="right" sx={{ width: "50%" }}>
-              <CellDescription>{networkType}</CellDescription>
-            </TableCell>
-          </TableRow>
-          {((primaryResourceName && primaryResourceEndpoint) ||
-            otherResourceFilteredEndpoints?.length > 0) && (
-            <TableRow>
-              <TableCell sx={{ verticalAlign: "baseline" }}>
-                <CellTitle>Global endpoint</CellTitle>
-                <CellSubtext>
-                  The global endpoint of the {sectionLabel.toLowerCase()}
-                </CellSubtext>
-              </TableCell>
-              <TableCell align="right" sx={{ paddingRight: 0 }}>
-                {primaryResourceName && primaryResourceEndpoint && (
-                  <ResourceConnectivityEndpoint
-                    isPrimaryResource={true}
-                    resourceName={primaryResourceName}
-                    viewType="endpoint"
-                    endpointURL={primaryResourceEndpoint}
-                    customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
-                    queryData={queryData}
-                    resourceKey={globalEndpoints?.primary?.resourceKey}
-                    resourceId={globalEndpoints?.primary?.resourceId}
-                    refetchInstance={refetchInstance}
-                    resourceHasCompute={
-                      globalEndpoints?.primary?.resourceHasCompute
-                    }
-                  />
-                )}
-                {otherResourceFilteredEndpoints?.length > 0 && (
-                  <>
-                    {primaryResourceName && primaryResourceEndpoint && (
-                      <Stack direction="row" justifyContent="center">
-                        <Button
-                          sx={{ color: "#6941C6", marginTop: "16px" }}
-                          endIcon={
-                            isEndpointsExpanded ? (
-                              <RemoveCircleOutlineIcon />
-                            ) : (
-                              <AddCircleOutlineIcon />
-                            )
-                          }
-                          onClick={toggleExpanded}
-                        >
-                          {isEndpointsExpanded ? "View Less" : "View More"}
-                        </Button>
-                      </Stack>
-                    )}
-                    {(isEndpointsExpanded ||
-                      !(primaryResourceName && primaryResourceEndpoint)) &&
-                      otherResourceFilteredEndpoints.map((obj) => {
-                        const {
-                          resourceName,
-                          endpoint,
-                          resourceId,
-                          customDNSEndpoint,
-                          resourceKey,
-                          resourceHasCompute,
-                        } = obj;
-                        return (
-                          <ResourceConnectivityEndpoint
-                            key={resourceId}
-                            isPrimaryResource={false}
-                            resourceName={resourceName}
-                            viewType="endpoint"
-                            endpointURL={endpoint}
-                            customDNSData={customDNSEndpoint}
-                            queryData={queryData}
-                            resourceKey={resourceKey}
-                            resourceId={resourceId}
-                            refetchInstance={refetchInstance}
-                            containerStyles={{ marginTop: "16px" }}
-                            resourceHasCompute={resourceHasCompute}
-                          />
-                        );
-                      })}
-                  </>
-                )}
-              </TableCell>
-            </TableRow>
-          )}
-          {((primaryResourcePorts?.resourceName &&
-            primaryResourcePorts?.ports) ||
-            otherResourceFilteredPorts?.length > 0) && (
-            <TableRow>
-              <TableCell sx={{ verticalAlign: "baseline" }}>
-                <CellTitle>Port(s)</CellTitle>
-              </TableCell>
-              <TableCell align="right" sx={{ paddingRight: 0 }}>
-                {primaryResourcePorts?.resourceName &&
-                  primaryResourcePorts?.ports && (
-                    <ResourceConnectivityEndpoint
-                      isPrimaryResource={true}
-                      resourceName={primaryResourcePorts?.resourceName}
-                      viewType="ports"
-                      ports={primaryResourcePorts?.ports}
-                    />
-                  )}
-                {otherResourceFilteredPorts?.length > 0 && (
-                  <>
-                    {primaryResourcePorts?.resourceName &&
-                      primaryResourcePorts?.ports && (
-                        <Stack direction="row" justifyContent="center">
-                          <Button
-                            sx={{ color: "#6941C6", marginTop: "16px" }}
-                            endIcon={
-                              isPortsExpanded ? (
-                                <RemoveCircleOutlineIcon />
-                              ) : (
-                                <AddCircleOutlineIcon />
-                              )
-                            }
-                            onClick={() => setIsPortsExpanded(!isPortsExpanded)}
-                          >
-                            {isPortsExpanded ? "View Less" : "View More"}
-                          </Button>
-                        </Stack>
-                      )}
-                    {(isPortsExpanded ||
-                      !(
-                        primaryResourcePorts?.resourceName &&
-                        primaryResourcePorts?.ports
-                      )) &&
-                      otherResourceFilteredPorts.map((obj) => {
-                        const { resourceName, ports } = obj;
-                        return (
-                          <ResourceConnectivityEndpoint
-                            resourceName={resourceName}
-                            ports={ports}
-                            viewType="ports"
-                            key={obj.resourceName}
-                            sx={{ marginTop: "16px" }}
-                          />
-                        );
-                      })}
-                  </>
-                )}
-              </TableCell>
-            </TableRow>
-          )}
-          <TableRow>
-            <TableCell>
-              <CellTitle>Availability zones</CellTitle>
-              <CellSubtext>
-                The availability zone of the {sectionLabel.toLowerCase()}
-              </CellSubtext>
-            </TableCell>
-            <TableCell align="right">
-              <CellDescription>{availabilityZones}</CellDescription>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell sx={{ borderBottom: "none" }}>
-              <CellTitle>Publicly accessible</CellTitle>
-            </TableCell>
-            <TableCell align="right" sx={{ borderBottom: "none" }}>
-              <CellDescription>
-                {publiclyAccessible ? "Yes" : "No"}
-              </CellDescription>
-            </TableCell>
-          </TableRow>
-          {privateNetworkCIDR && (
-            <TableRow>
-              <TableCell>
-                <CellTitle>Private network CIDR</CellTitle>
-                <CellSubtext>
-                  The private network CIDR of the {sectionLabel.toLowerCase()}
-                </CellSubtext>
-              </TableCell>
-              <TableCell align="right">
-                <CellDescription>{privateNetworkCIDR}</CellDescription>
-              </TableCell>
-            </TableRow>
-          )}
-          {privateNetworkCIDR && (
-            <TableRow>
-              <TableCell>
-                <CellTitle>Private network ID</CellTitle>
-                <CellSubtext>
-                  The private network ID of the {sectionLabel.toLowerCase()}
-                </CellSubtext>
-              </TableCell>
-              <TableCell align="right">
-                <CellDescription>{privateNetworkId}</CellDescription>
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+  return <PropertyTable rows={rows} />;
 }
 
 export default Connectivity;
