@@ -189,7 +189,10 @@ export default function NodesTable(props) {
             <>
               {params.row?.detailedHealth ? (
                 <>
-                  <NodeStatus detailedHealth={params.row?.detailedHealth} />
+                  <NodeStatus
+                    detailedHealth={params.row?.detailedHealth}
+                    isStopped={params.row.healthStatus === "STOPPED"}
+                  />
                 </>
               ) : (
                 <StatusChip

@@ -3,7 +3,7 @@ import StatusChipPulsateDot from "src/components/StatusChipPulsateDot/StatusChip
 import { useEffect, useState } from "react";
 
 export const NodeStatus = (props) => {
-  const { detailedHealth } = props;
+  const { detailedHealth, isStopped } = props;
   const [activeDot, setActiveDot] = useState(0);
   const ConnectivityStatus = detailedHealth?.ConnectivityStatus;
   const DiskHealth = detailedHealth?.DiskHealth;
@@ -32,7 +32,7 @@ export const NodeStatus = (props) => {
         {detailedHealthStatus.map((status, index) => (
           <StatusChipPulsateDot
             key={index}
-            status={status}
+            status={isStopped ? "UNKNOWN" : status}
             color={index < activeDot && "gray"}
             pulsateDot={true}
           />
