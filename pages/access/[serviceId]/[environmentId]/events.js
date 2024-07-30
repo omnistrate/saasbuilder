@@ -25,9 +25,12 @@ import {
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
-import Head from "next/head";
 
-const pageTitle = "Events";
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
 
 function Events() {
   const router = useRouter();
@@ -102,9 +105,6 @@ function Events() {
         serviceName={serviceOffering?.serviceName}
         serviceLogoURL={serviceOffering?.serviceLogoURL}
       >
-        <Head>
-          <title>{pageTitle}</title>
-        </Head>
         <LoadingSpinner />
       </DashboardLayout>
     );
@@ -135,9 +135,6 @@ function Events() {
         serviceName={serviceOffering?.serviceName}
         serviceLogoURL={serviceOffering?.serviceLogoURL}
       >
-        <Head>
-          <title>{pageTitle}</title>
-        </Head>
         <SubscriptionNotFoundUI />
       </DashboardLayout>
     );
@@ -174,9 +171,6 @@ function Events() {
         accessPage
         currentSubscription={subscriptionData}
       >
-        <Head>
-          <title>{pageTitle}</title>
-        </Head>
         <ServiceOfferingUnavailableUI />
       </DashboardLayout>
     );
@@ -212,9 +206,6 @@ function Events() {
       customLogo
       serviceLogoURL={serviceOffering?.serviceLogoURL}
     >
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
       <DisplayText sx={{ marginTop: "20px" }}>Events</DisplayText>
       {/* <Text size="medium" weight="regular" color="#475467" mt="4px">
         Events

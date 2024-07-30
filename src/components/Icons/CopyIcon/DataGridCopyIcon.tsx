@@ -1,7 +1,17 @@
-const DataGridCopyIcon = ({
+import type * as CSS from "csstype";
+import { FC } from "react";
+
+type DataGridTextProps = {
+  color?: string;
+  style?: CSS.Properties;
+  onClick?: () => void;
+};
+
+const DataGridCopyIcon: FC<DataGridTextProps> = ({
   color = "black",
   style = {},
   onClick = () => {},
+  ...otherProps
 }) => {
   return (
     <svg
@@ -12,6 +22,7 @@ const DataGridCopyIcon = ({
       xmlns="http://www.w3.org/2000/svg"
       style={style}
       onClick={onClick}
+      {...otherProps}
     >
       <g clipPath="url(#clip0_2953_69188)">
         <path

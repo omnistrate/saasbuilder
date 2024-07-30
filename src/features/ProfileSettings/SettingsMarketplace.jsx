@@ -8,8 +8,6 @@ import PasswordForm from "./components/PasswordForm";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import UserInfoBanner from "./components/UserInfoBanner";
 import ProfileForm from "./components/ProfileForm";
-import Head from "next/head";
-import NoLogoImage from "public/assets/images/logos/no-logo.png";
 import { tabs } from "./constants";
 import BillingAddress from "./components/BillingAddress";
 
@@ -33,12 +31,9 @@ function SettingsMarketplace({ orgLogoURL, orgName }) {
       sx={{ padding: 0 }}
       noSidebar
       marketplacePage
-      serviceLogoURL={orgLogoURL || NoLogoImage}
+      serviceLogoURL={orgLogoURL}
       serviceName={orgName}
     >
-      <Head>
-        <title>Profile Settings</title>
-      </Head>
       {query.isRefetching === true || query.isLoading === true ? (
         <LoadingSpinner />
       ) : (

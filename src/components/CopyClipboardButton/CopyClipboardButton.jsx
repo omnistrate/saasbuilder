@@ -2,12 +2,11 @@ import { useState } from "react";
 import clipboard from "clipboardy";
 import Tooltip from "../Tooltip/Tooltip";
 import { IconButton, styled } from "@mui/material";
-import { MdContentCopy } from "react-icons/md";
 import copyIcon from "../../../public/assets/images/dashboard/copy.svg";
 import Image from "next/image";
 
 const CopyToClipbpoardButton = (props) => {
-  const { text = "", size = "medium" } = props;
+  const { text = "", size = "medium", buttonStyles = {} } = props;
   const [tooltipText, setTooltipText] = useState("Click to copy");
 
   function handleClick() {
@@ -33,7 +32,7 @@ const CopyToClipbpoardButton = (props) => {
       }}
       placement="top"
     >
-      <IconButton sx={{ ml: "10px" }} onClick={handleClick}>
+      <IconButton onClick={handleClick} sx={buttonStyles}>
         <CopyIcon src={copyIcon} size={size} alt="copy" />
       </IconButton>
     </Tooltip>

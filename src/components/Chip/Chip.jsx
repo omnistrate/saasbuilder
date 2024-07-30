@@ -8,13 +8,16 @@ const Chip = styled(
   },
   {
     shouldForwardProp: (prop) => {
-      return prop !== "fontColor" && prop !== "bgColor";
+      return (
+        prop !== "fontColor" && prop !== "bgColor" && prop !== "borderColor"
+      );
     },
   }
-)(({ theme, fontColor, bgColor }) => ({
+)(({ theme, fontColor, bgColor, borderColor }) => ({
   height: "auto",
   padding: "2px 8px",
   background: bgColor ? bgColor : "#F9F5FF",
+  border: borderColor ? `1px solid ${borderColor}` : " none",
   [`& .${chipClasses.label}`]: {
     paddingLeft: 0,
     paddingRight: 0,

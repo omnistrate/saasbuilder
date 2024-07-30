@@ -18,6 +18,10 @@ import "../styles/nprogress.css";
 import { theme as dashboardTheme } from "../styles/theme";
 import _ from "lodash";
 import ProviderFavicon from "src/components/ProviderFavicon/ProviderFavicon";
+import EnvironmentTypeProvider from "src/context/EnvironmentTypeProvider";
+import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
+import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
+import Head from "next/head";
 
 NProgress.configure({
   trickleSpeed: 50,
@@ -67,6 +71,7 @@ export default function App(props) {
   const isDashboardRoute = !nonDashboardRoutes.find((route) => {
     return route === router.pathname;
   });
+  const pageTitle = PAGE_TITLE_MAP[router.pathname] || "Omnistrate";
   const { handleLogout } = useLogout();
 
   function handleClose() {
@@ -148,6 +153,9 @@ export default function App(props) {
 
   return (
     <>
+      <Head>
+        <title>{pageTitle}</title>
+      </Head>
       <CacheProvider value={emotionCache}>
         <Provider store={store}>
           <QueryClientProvider client={queryQlient}>
@@ -157,7 +165,9 @@ export default function App(props) {
                 <ThemeProvider
                   theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}
                 >
-                  <Component {...pageProps} />
+                  <EnvironmentTypeProvider envType={props.envType}>
+                    <Component {...pageProps} />
+                  </EnvironmentTypeProvider>
                 </ThemeProvider>
               </NotificationBarProvider>
             </SnackbarProvider>
@@ -177,3 +187,8 @@ export default function App(props) {
     </>
   );
 }
+
+App.getInitialProps = async (context) => {
+  //check for environment type in environment variables, default to prod
+  return { envType: process.env.ENVIRONMENT_TYPE || ENVIRONMENT_TYPES.PROD };
+};

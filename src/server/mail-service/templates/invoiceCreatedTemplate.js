@@ -1,13 +1,15 @@
 const ejs = require("ejs");
 const path = require("path");
+const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
 async function getInvoiceCreatedTemplate(invoiceCreatedEventObj, orgLogoURL) {
   const userEmail = invoiceCreatedEventObj.eventPayload.user_email;
   const invoiceId = invoiceCreatedEventObj.eventPayload.invoice_id;
   const orgName = invoiceCreatedEventObj.orgName;
+  const saasDomainURL = getSaaSDomainURL();
 
   const subject = `${orgName} new invoice ${invoiceId} is now available`;
-  const signInURL = `${process.env.YOUR_SAAS_DOMAIN_URL}/signin`;
+  const signInURL = `${saasDomainURL}/signin`;
 
   const templatePath = path.resolve(
     __dirname,
@@ -16,7 +18,7 @@ async function getInvoiceCreatedTemplate(invoiceCreatedEventObj, orgLogoURL) {
     "invoiceCreated.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = saasDomainURL;
 
   const message = await ejs.renderFile(templatePath, {
     org_name: orgName,

@@ -2,6 +2,7 @@ import SigninPage from "src/features/Signin/SigninPage";
 import { IDENTITY_PROVIDER_TYPES } from "src/features/Signin/constants";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import { getIdentityProvidersList } from "src/server/api/identity-provider";
+import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
 
 export const getServerSideProps = async () => {
   let orgName = "";
@@ -48,7 +49,7 @@ export const getServerSideProps = async () => {
       orgLogoURL: orgLogoURL,
       googleIdentityProvider: googleIdentityProvider,
       githubIdentityProvider: githubIdentityProvider,
-      saasBuilderBaseURL : process.env.YOUR_SAAS_DOMAIN_URL
+      saasBuilderBaseURL: getSaaSDomainURL(),
     },
   };
 };

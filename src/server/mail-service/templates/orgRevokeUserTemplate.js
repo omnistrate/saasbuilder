@@ -1,5 +1,6 @@
 const ejs = require("ejs");
 const path = require("path");
+const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
 async function getOrgRevokeUserMailContent(revokeUserEventObj, orgLogoURL) {
   const userName = revokeUserEventObj.eventPayload.inviting_user_name;
@@ -14,7 +15,7 @@ async function getOrgRevokeUserMailContent(revokeUserEventObj, orgLogoURL) {
     "revokeAccess.ejs"
   );
 
-  const baseURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  const baseURL = getSaaSDomainURL();
 
   const message = await ejs.renderFile(templatePath, {
     user_name: userName,

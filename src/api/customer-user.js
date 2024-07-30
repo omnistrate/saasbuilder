@@ -15,3 +15,7 @@ export function customerUserResetPassword(payload) {
 export function getProviderOrgDetails() {
   return axios.get(`/api/provider-details`);
 }
+
+export function customerSignInWithIdentityProvider(payload){
+  return axios.post("/api/sign-in-with-idp", payload)
+}

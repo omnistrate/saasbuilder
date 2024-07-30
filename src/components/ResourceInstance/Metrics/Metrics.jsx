@@ -374,7 +374,7 @@ function Metrics(props) {
             metric.Name === "disk_throughput_bytes_per_sec" &&
             metric.Labels.type === "read"
           ) {
-            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
+            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
             const label = metric.Labels.disk;
 
             setDiskThroughputReadLabels((prev) => {
@@ -396,7 +396,7 @@ function Metrics(props) {
             metric.Name === "disk_throughput_bytes_per_sec" &&
             metric.Labels.type === "write"
           ) {
-            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
+            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
             const label = metric.Labels.disk;
 
             setDiskThroughputWriteLabels((prev) => {
@@ -418,7 +418,7 @@ function Metrics(props) {
             metric.Name === "net_throughput_bytes_per_sec" &&
             metric.Labels.direction === "recv"
           ) {
-            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
+            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
             const label = metric.Labels.interface;
 
             setNetThroughputReceiveLabels((prev) => {
@@ -440,7 +440,7 @@ function Metrics(props) {
             metric.Name === "net_throughput_bytes_per_sec" &&
             metric.Labels.direction === "sent"
           ) {
-            const value = Number(metric.Value / Math.pow(1024, 2)).toFixed(2);
+            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
             const label = metric.Labels.interface;
 
             setNetThroughputSendLabels((prev) => {

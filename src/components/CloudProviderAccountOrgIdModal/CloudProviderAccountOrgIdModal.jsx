@@ -16,15 +16,56 @@ import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import InstructionsModalIcon from "../Icons/AccountConfig/InstructionsModalIcon";
 import { getResourceInstanceDetails } from "src/api/resourceInstance";
 
+const CloudFormationLink = ({ cloudFormationTemplateUrl }) => {
+  const linkURL =
+    "https://s3.amazonaws.com/omnistrate-cloudformation/account-config-setup-template-no-lb-policy.yaml";
+
+  const updateTemplateURL = (url, newTemplateURL) => {
+    // Parse the base URL and hash part
+    const [baseURL, hashPart] = url.split("#");
+    if (!hashPart) {
+      return url; // No hash part found, return the original URL
+    }
+
+    // Parse the hash part to get the path and query parameters
+    const [basePath, queryParams] = hashPart.split("?");
+    const hashParams = new URLSearchParams(queryParams);
+
+    // Update the templateURL parameter
+    hashParams.set("templateURL", newTemplateURL);
+
+    // Manually construct the query string to avoid encoding issues
+    const newQueryParams = Array.from(hashParams.entries())
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&");
+
+    // Reconstruct the hash part with updated parameters
+    const newHashPart = `${basePath}?${newQueryParams}`;
+
+    return `${baseURL}#${newHashPart}`;
+  };
+
+  const updatedUrl = cloudFormationTemplateUrl
+    ? updateTemplateURL(cloudFormationTemplateUrl, linkURL)
+    : "";
+
+  return (
+    <StyledLink href={updatedUrl} target="_blank" rel="noopener noreferrer">
+      this
+    </StyledLink>
+  );
+};
+
 function CloudProviderAccountOrgIdModal(props) {
   const {
     open,
     handleClose,
     orgId,
     isAccountCreation,
-    isCloudFormation,
+    accountConfigMethod,
     cloudFormationTemplateUrl,
     cloudProvider,
+    isAccessPage = false,
     downloadTerraformKitMutation,
     accountConfigStatus,
     accountConfigId,
@@ -32,9 +73,10 @@ function CloudProviderAccountOrgIdModal(props) {
     selectedResourceKey,
     subscriptionId,
     setCloudFormationTemplateUrl,
+    fetchResourceInstancesOfSelectedResource,
   } = props;
 
-  const terraformlink = (
+  const terraformlink = isAccessPage ? (
     <>
       <Box
         sx={{
@@ -55,6 +97,14 @@ function CloudProviderAccountOrgIdModal(props) {
         <LoadingSpinnerSmall sx={{ color: "black", ml: "16px" }} size={12} />
       )}
     </>
+  ) : (
+    <StyledLink
+      href="https://github.com/omnistrate/account-setup"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      here
+    </StyledLink>
   );
 
   const cloudformationlink = (
@@ -67,7 +117,7 @@ function CloudProviderAccountOrgIdModal(props) {
     </StyledLink>
   );
 
-  const terraformGuide = (
+  const terraformGuide = isAccessPage ? (
     <StyledLink
       href="https://youtu.be/l6lMEZdMMxs"
       target="_blank"
@@ -75,11 +125,27 @@ function CloudProviderAccountOrgIdModal(props) {
     >
       here
     </StyledLink>
+  ) : (
+    <StyledLink
+      href="https://youtu.be/eKktc4QKgaA"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      here
+    </StyledLink>
   );
 
-  const cloudFormationGuide = (
+  const cloudFormationGuide = isAccessPage ? (
     <StyledLink
       href="https://youtu.be/c3HNnM8UJBE"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {isAccountCreation ? "here" : "guide"}
+    </StyledLink>
+  ) : (
+    <StyledLink
+      href="https://youtu.be/Mu-4jppldwk"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -104,7 +170,7 @@ function CloudProviderAccountOrgIdModal(props) {
         <Content>
           {isAccountCreation ? (
             <CreationTimeInstructions
-              isCloudFormation={isCloudFormation}
+              accountConfigMethod={accountConfigMethod}
               cloudformationlink={cloudformationlink}
               terraformlink={terraformlink}
               cloudFormationGuide={cloudFormationGuide}
@@ -117,9 +183,18 @@ function CloudProviderAccountOrgIdModal(props) {
               service={service}
               selectedResourceKey={selectedResourceKey}
               subscriptionId={subscriptionId}
+              fetchResourceInstancesOfSelectedResource={
+                fetchResourceInstancesOfSelectedResource
+              }
+              cloudformationNoLBlink={
+                <CloudFormationLink
+                  cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+                />
+              }
             />
           ) : (
             <NonCreatationTimeInstructions
+              accountConfigMethod={accountConfigMethod}
               cloudProvider={cloudProvider}
               cloudformationlink={cloudformationlink}
               terraformlink={terraformlink}
@@ -127,6 +202,11 @@ function CloudProviderAccountOrgIdModal(props) {
               terraformGuide={terraformGuide}
               orgId={orgId}
               cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+              cloudformationNoLBlink={
+                <CloudFormationLink
+                  cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+                />
+              }
             />
           )}
         </Content>
@@ -144,7 +224,7 @@ export default CloudProviderAccountOrgIdModal;
 
 const CreationTimeInstructions = (props) => {
   const {
-    isCloudFormation,
+    accountConfigMethod,
     cloudformationlink,
     terraformlink,
     cloudFormationGuide,
@@ -157,6 +237,8 @@ const CreationTimeInstructions = (props) => {
     service,
     selectedResourceKey,
     subscriptionId,
+    fetchResourceInstancesOfSelectedResource,
+    cloudformationNoLBlink,
   } = props;
 
   const [isPolling, setIsPolling] = useState(true);
@@ -197,6 +279,7 @@ const CreationTimeInstructions = (props) => {
       const resourceInstance = res.data;
       const url = resourceInstance?.result_params?.cloudformation_url;
       if (url) {
+        fetchResourceInstancesOfSelectedResource?.();
         setCloudFormationTemplateUrl(url);
         setIsPolling(false);
         clearInterval(pollTimerRef.current);
@@ -210,7 +293,11 @@ const CreationTimeInstructions = (props) => {
   };
 
   useEffect(() => {
-    if (accountConfigId && isCloudFormation && !cloudFormationTemplateUrl) {
+    if (
+      accountConfigId &&
+      accountConfigMethod === "CloudFormation" &&
+      !cloudFormationTemplateUrl
+    ) {
       countDownTimerTRef.current = setInterval(handleChangeDuration, 1000);
       pollTimerRef.current = setInterval(fetchAccountConfig, 3000);
     } else if (cloudFormationTemplateUrl) {
@@ -233,7 +320,7 @@ const CreationTimeInstructions = (props) => {
     );
   }
 
-  if (isCloudFormation) {
+  if (accountConfigMethod === "CloudFormation") {
     if (isPolling) {
       return (
         <Box
@@ -293,6 +380,16 @@ const CreationTimeInstructions = (props) => {
 
         <Text
           size="medium"
+          weight="regular"
+          color="#344054"
+          sx={{ marginTop: "24px" }}
+        >
+          If an existing AWSLoadBalancerControllerIAMPolicy policy causes an
+          error while creating the CloudFormation stack, use{" "}
+          {cloudformationNoLBlink} CloudFormation template instead.
+        </Text>
+        <Text
+          size="medium"
           weight="regualr"
           color="#344054"
           sx={{ marginTop: "24px" }}
@@ -327,6 +424,7 @@ const CreationTimeInstructions = (props) => {
 
 const NonCreatationTimeInstructions = (props) => {
   const {
+    accountConfigMethod,
     cloudProvider,
     terraformlink,
     cloudformationlink,
@@ -334,7 +432,9 @@ const NonCreatationTimeInstructions = (props) => {
     terraformGuide,
     orgId,
     cloudFormationTemplateUrl,
+    cloudformationNoLBlink,
   } = props;
+
   return (
     <>
       <Box width={"100%"} mb="30px">
@@ -343,7 +443,8 @@ const NonCreatationTimeInstructions = (props) => {
         </Text>
 
         <List>
-          {cloudProvider === "aws" && (
+          {(!accountConfigMethod ||
+            accountConfigMethod === "CloudFormation") && (
             <ListItem>
               <ListItemIcon>
                 <ArrowBullet />
@@ -351,12 +452,20 @@ const NonCreatationTimeInstructions = (props) => {
 
               {cloudFormationTemplateUrl ? (
                 <>
-                  <Text size="medium" weight="regular" color="#374151">
-                    <b>For AWS CloudFormation users:</b> Please create your
-                    CloudFormation Stack using the provided template{" "}
-                    {cloudformationlink}. Watch the CloudFormation{" "}
-                    {cloudFormationGuide} for help.
-                  </Text>
+                  <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
+                    <Text size="medium" weight="regular" color="#374151">
+                      <b>For AWS CloudFormation users:</b> Please create your
+                      CloudFormation Stack using the provided template{" "}
+                      {cloudformationlink}. Watch the CloudFormation{" "}
+                      {cloudFormationGuide} for help.
+                    </Text>
+                    <Text size="medium" weight="regular" color="#374151">
+                      If an existing AWSLoadBalancerControllerIAMPolicy policy
+                      causes an error while creating the CloudFormation stack,
+                      use {cloudformationNoLBlink} CloudFormation template
+                      instead.
+                    </Text>
+                  </Box>
                 </>
               ) : (
                 <Text size="medium" weight="regular" color="#374151">
@@ -367,19 +476,20 @@ const NonCreatationTimeInstructions = (props) => {
               )}
             </ListItem>
           )}
+          {(!accountConfigMethod || accountConfigMethod === "Terraform") && (
+            <ListItem>
+              <ListItemIcon>
+                <ArrowBullet />
+              </ListItemIcon>
 
-          <ListItem>
-            <ListItemIcon>
-              <ArrowBullet />
-            </ListItemIcon>
-
-            <Text size="medium" weight="regular" color="#374151">
-              <b>For AWS/GCP Terraform users:</b> Execute the Terraform scripts
-              available {terraformlink}, by using the Account Config Identity ID
-              below. For guidance our Terraform instructional video is{" "}
-              {terraformGuide}.
-            </Text>
-          </ListItem>
+              <Text size="medium" weight="regular" color="#374151">
+                <b>For AWS/GCP Terraform users:</b> Execute the Terraform
+                scripts available {terraformlink}, by using the Account Config
+                Identity ID below. For guidance our Terraform instructional
+                video is {terraformGuide}.
+              </Text>
+            </ListItem>
+          )}
         </List>
       </Box>
 

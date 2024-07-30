@@ -7,9 +7,6 @@ import ProductTiers from "src/features/ProductTiers/ProductTiers";
 import useUserSubscriptions from "src/hooks/query/useUserSubscriptions";
 import useProductTierRedirect from "./hooks/useProductTierRedirect";
 import NoServiceFoundUI from "../components/NoServiceFoundUI";
-import Head from "next/head";
-// import NoLogoImage from "public/assets/images/logos/no-logo.png";
-import placeholderService from "public/assets/images/dashboard/service/servicePlaceholder.png";
 import useSubscriptionRequests from "./hooks/useSubscriptionRequests";
 import { useMemo } from "react";
 
@@ -46,14 +43,12 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
   if (shouldDisplayServiceNotFoundUI || shouldDisplayNoServicesUI) {
     return (
       <>
-        <Head>
-          <title>Service Plans</title>
-        </Head>
         <DashboardLayout
           noSidebar
           marketplacePage
           serviceName={orgName}
-          serviceLogoURL={orgLogoURL || placeholderService}
+          serviceLogoURL={orgLogoURL}
+          noServicesAvailable={true}
         >
           <NoServiceFoundUI
             text={
@@ -69,17 +64,12 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
 
   return (
     <>
-      <Head>
-        <title>Service Plans</title>
-      </Head>
       <DashboardLayout
         noSidebar
         marketplacePage
         serviceName={serviceOfferingData?.serviceName}
         serviceLogoURL={
-          serviceOfferingData?.offerings?.[0].serviceLogoURL ||
-          orgLogoURL ||
-          placeholderService
+          serviceOfferingData?.offerings?.[0].serviceLogoURL || orgLogoURL
         }
       >
         {!serviceId ||

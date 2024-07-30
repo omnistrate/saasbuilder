@@ -28,6 +28,11 @@ import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import { PasswordField } from "../FormElementsv2/PasswordField/PasswordField";
 import { cloudProviderLabels } from "src/utils/constants/cloudProviders";
+import {
+  AWSAccountIDDescription,
+  GCPProjectIDDescription,
+  GCPProjectNumberDescription,
+} from "./AccountConfigFormElements";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -377,7 +382,10 @@ function CreateResourceInstanceForm(props) {
                 >
                   {accountCreationMethods.map((confgiMethod) => (
                     <MenuItem key={confgiMethod} value={confgiMethod}>
-                      {confgiMethod}
+                      {confgiMethod}{" "}
+                      {confgiMethod ===
+                        ACCOUNT_CREATION_METHODS.CLOUDFORMATION &&
+                        "(Recommended)"}
                     </MenuItem>
                   ))}
                 </Select>
@@ -699,6 +707,15 @@ function CreateResourceInstanceForm(props) {
                             </Link>
                             .{" "}
                           </>
+                        )}
+                        {param.key === "aws_account_id" && (
+                          <AWSAccountIDDescription />
+                        )}
+                        {param.key === "gcp_project_id" && (
+                          <GCPProjectIDDescription />
+                        )}
+                        {param.key === "gcp_project_number" && (
+                          <GCPProjectNumberDescription />
                         )}
                       </FieldDescription>
                       <TextField

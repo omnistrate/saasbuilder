@@ -22,10 +22,13 @@ import {
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
-import Head from "next/head";
 import useServiceHealth from "src/hooks/query/useServiceHealth";
 
-const pageTitle = "Dashboard";
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
 
 function Dashboard(props) {
   const router = useRouter();
@@ -120,9 +123,6 @@ function Dashboard(props) {
         serviceName={serviceOffering?.serviceName}
         serviceLogoURL={serviceOffering?.serviceLogoURL}
       >
-        <Head>
-          <title>{pageTitle}</title>
-        </Head>
         <LoadingSpinner />
       </DashboardLayout>
     );
@@ -153,9 +153,6 @@ function Dashboard(props) {
         serviceName={serviceOffering?.serviceName}
         serviceLogoURL={serviceOffering?.serviceLogoURL}
       >
-        <Head>
-          <title>{pageTitle}</title>
-        </Head>
         <SubscriptionNotFoundUI />
       </DashboardLayout>
     );
@@ -193,9 +190,6 @@ function Dashboard(props) {
         accessPage
         currentSubscription={subscriptionData}
       >
-        <Head>
-          <title>{pageTitle}</title>
-        </Head>
         <ServiceOfferingUnavailableUI />
       </DashboardLayout>
     );
@@ -231,9 +225,6 @@ function Dashboard(props) {
       customLogo
       serviceLogoURL={serviceOffering?.serviceLogoURL}
     >
-      <Head>
-        <title>{pageTitle}</title>
-      </Head>
       <Statistics
         serviceHealthQuery={serviceHealthQuery}
         numResourceInstances={numResourceInstances}

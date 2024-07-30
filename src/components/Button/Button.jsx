@@ -70,6 +70,7 @@ const Button = styled(
     ...buttonStyles,
     borderRadius: 8,
     textTransform: "none",
+    minWidth: "auto",
     [`&.${buttonClasses.contained}`]: {
       color: "#FFF",
       background: bgColor ? bgColor : theme.palette.primary.main,
