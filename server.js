@@ -31,7 +31,7 @@ app.prepare().then(async () => {
   }
   expressApp.set("view engine", "ejs");
   expressApp.set("views", path.join(__dirname, "src/server/views"));
-  expressApp.use(express.static(path.join(__dirname)));
+  expressApp.use(express.static(path.join(__dirname,"/public")));
   expressApp.use(async (request, response) => {
     try {
       if (!isVerified && process.env.NODE_ENV === "development") {
