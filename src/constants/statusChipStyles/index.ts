@@ -1,9 +1,22 @@
-export const defaultChipStyles = {
+export type Category =
+  | "success"
+  | "inProgress"
+  | "pending"
+  | "info"
+  | "terminated"
+  | "failed"
+  | "unknown";
+export type ColorObject = {
+  bgColor: string;
+  color: string;
+};
+
+export const defaultChipStyles: ColorObject = {
   bgColor: "#f2f4f7",
   color: "#667085",
 };
 
-export const chipCategoryColors = {
+export const chipCategoryColors: Record<Category, ColorObject> = {
   success: {
     bgColor: "#ecfdf3",
     color: "#039855",

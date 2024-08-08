@@ -93,12 +93,11 @@ import DeleteAccountConfigConfirmationDialog from "src/components/DeleteAccountC
 import { selectUserrootData } from "src/slices/userDataSlice";
 import { cloneDeep } from "lodash";
 import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
-import AccessServiceHealthStatus from "src/components/ServiceHealthStatus/AccessServicehealthStatus";
+import AccessServiceHealthStatus from "src/components/ServiceHealthStatus/AccessServiceHealthStatus";
 import RestoreInstanceIcon from "src/components/Icons/RestoreInstance/RestoreInstanceIcon";
 import AccessSideRestoreInstance from "src/components/RestoreInstance/AccessSideRestoreInstance";
 import DataGridText from "src/components/DataGrid/DataGridText";
-import Head from "next/head";
-import { getResourceInstanceStatusStylesAndlabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 
 const instanceStatuses = {
   FAILED: "FAILED",
@@ -302,7 +301,7 @@ function MarketplaceService() {
               "DEPLOYING",
             ].includes(status);
           const statusSytlesAndLabel =
-            getResourceInstanceStatusStylesAndlabel(status);
+            getResourceInstanceStatusStylesAndLabel(status);
           return (
             <Stack
               direction={"row"}
@@ -602,11 +601,20 @@ function MarketplaceService() {
     setViewInfoDrawerOpen(false);
   };
 
+  let defaultCloudProvider = "";
+  if (service?.cloudProviders?.length > 0) {
+    if (service?.cloudProviders?.includes("aws")) {
+      defaultCloudProvider = "aws";
+    } else {
+      defaultCloudProvider = "gcp";
+    }
+  }
+
   //create resource instance
   const createformik = useFormik({
     initialValues: {
       serviceId: serviceId,
-      cloud_provider: "aws",
+      cloud_provider: defaultCloudProvider,
       network_type: "",
       region: "",
       requestParams: { ...requestParams },
@@ -695,7 +703,15 @@ function MarketplaceService() {
           for (let key in data.requestParams) {
             let value = data.requestParams[key];
 
-            if (value === undefined) {
+            //for gcp cloud provider remove cloud_provider_native_network_id field
+            if (
+              key === "cloud_provider_native_network_id" &&
+              values.cloud_provider === "gcp"
+            ) {
+              delete data.requestParams[key];
+            }
+
+            if (value === undefined || value === "") {
               delete data.requestParams[key];
             }
           }
@@ -851,14 +867,13 @@ function MarketplaceService() {
   }, [isOrgIdModalOpen]);
 
   const updateResourceInstanceMutation = useMutation(updateResourceInstance, {
-    onSuccess: async (response) => {
+    onSuccess: async () => {
       setSelectionModel([]);
       setUpdateDrawerOpen(false);
       fetchResourceInstances(selectedResource);
       updateformik.resetForm();
       snackbar.showSuccess("Updated Resource Instance");
     },
-    onError: (error) => {},
   });
 
   //-----------------------modify ends-------------------------------------
@@ -1247,70 +1262,79 @@ function MarketplaceService() {
       requestParams: selectedResourceInstance?.result_params,
       subscriptionId: subscriptionData?.id,
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const data = { ...values };
-      async function getSchema() {
-        try {
-          let schemaArray = [];
-          let schema = await describeServiceOfferingResource(
-            serviceId,
-            selectedResource.id,
-            values.id
+
+      try {
+        let schemaArray = [];
+        const schema = await describeServiceOfferingResource(
+          serviceId,
+          selectedResource.id,
+          values.id
+        );
+
+        schema.data.apis.forEach((api) => {
+          if (api.verb === "UPDATE") {
+            schemaArray = api.inputParameters;
+          }
+        });
+
+        schemaArray
+          .filter((field) => field.type === "Boolean" && field.custom === true)
+          .forEach((field) => {
+            if (!data.requestParams[field.key]) {
+              data.requestParams[field.key] = "false";
+            }
+          });
+
+        // Only send the fields that have changed
+        const requestParams = {},
+          oldResultParams = selectedResourceInstance?.result_params;
+
+        for (const key in data.requestParams) {
+          const value = data.requestParams[key];
+          if (oldResultParams[key] !== value) {
+            requestParams[key] = value;
+          }
+        }
+
+        data.requestParams = requestParams;
+
+        if (!Object.keys(requestParams).length) {
+          return snackbar.showError(
+            "Please update at least one field before submitting"
           );
+        }
 
-          schema.data.apis.forEach((api) => {
-            if (api.verb === "UPDATE") {
-              schemaArray = api.inputParameters;
-            }
+        Object.keys(data.requestParams).forEach((key) => {
+          const result = schemaArray.find((schemaParam) => {
+            return schemaParam.key === key;
           });
 
-          schemaArray
-            .filter(
-              (field) => field.type === "Boolean" && field.custom === true
-            )
-            .forEach((field) => {
-              if (!data.requestParams[field.key]) {
-                data.requestParams[field.key] = "false";
+          switch (result?.type) {
+            case "Number":
+              data.requestParams[key] = Number(data.requestParams[key]);
+              break;
+            case "Float64":
+              const output = Number(data.requestParams[key]);
+              if (!Number.isNaN(output)) {
+                data.requestParams[key] = Number(data.requestParams[key]);
+              } else {
+                snackbar.showError(`Invalid data in ${key}`);
               }
-            });
+              break;
+            case "Boolean":
+              if (data.requestParams[key] === "true")
+                data.requestParams[key] = true;
+              else data.requestParams[key] = false;
+              break;
+          }
+        });
 
-          Object.keys(data.requestParams).forEach((key) => {
-            const result = schemaArray.find((schemaParam) => {
-              return schemaParam.key === key;
-            });
-
-            switch (result?.type) {
-              case "Number":
-                {
-                  data.requestParams[key] = Number(data.requestParams[key]);
-                }
-                break;
-              case "Float64":
-                {
-                  var output = Number(data.requestParams[key]);
-                  {
-                    if (!Number.isNaN(output)) {
-                      data.requestParams[key] = Number(data.requestParams[key]);
-                    } else {
-                      snackbar.showError(`Invalid data in ${key}`);
-                    }
-                  }
-                }
-                break;
-              case "Boolean":
-                {
-                  if (data.requestParams[key] === "true")
-                    data.requestParams[key] = true;
-                  else data.requestParams[key] = false;
-                }
-                break;
-            }
-          });
-
-          updateResourceInstanceMutation.mutate(data);
-        } catch (err) {}
+        updateResourceInstanceMutation.mutate(data);
+      } catch (err) {
+        console.error("error", err);
       }
-      getSchema();
     },
     validateOnChange: false,
     enableReinitialize: true,
@@ -1328,9 +1352,6 @@ function MarketplaceService() {
         customLogo
         currentSubscription={subscriptionData}
       >
-        <Head>
-          <title>Resources</title>
-        </Head>
         <Box
           display="flex"
           justifyContent="center"
@@ -1374,9 +1395,6 @@ function MarketplaceService() {
         accessPage
         currentSubscription={subscriptionData}
       >
-        <Head>
-          <title>Resources</title>
-        </Head>
         <OfferingUnavailableUI />
       </DashboardLayout>
     );
@@ -1418,9 +1436,6 @@ function MarketplaceService() {
           />
         }
       >
-        <Head>
-          <title>Resources</title>
-        </Head>
         <Card mt={3} style={{ height: "700px", width: "100%" }}>
           <Box>
             <Image
@@ -1529,9 +1544,6 @@ function MarketplaceService() {
         currentSubscription={subscriptionData}
       >
         <>
-          <Head>
-            <title>Resources</title>
-          </Head>
           <SubscriptionNotFoundUI />
         </>
       </DashboardLayout>
@@ -1573,9 +1585,6 @@ function MarketplaceService() {
           />
         }
       >
-        <Head>
-          <title>Resources</title>
-        </Head>
         <Stack
           direction="row"
           justifyContent={"space-between"}

@@ -18,7 +18,6 @@ import { getAPIDocsRoute } from "../../src/utils/route/access/accessRoute";
 import useSubscription from "../../src/hooks/query/useSubscription";
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
-import Head from "next/head";
 
 const SwaggerDocs = dynamic(
   () => import("../../src/components/SwaggerDocs/SwaggerDocs"),
@@ -90,9 +89,6 @@ export default function ApiDocument(props) {
 
   return (
     <>
-      <Head>
-        <title>API Documentation</title>
-      </Head>
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}

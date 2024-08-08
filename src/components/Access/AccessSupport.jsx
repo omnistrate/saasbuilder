@@ -1,8 +1,6 @@
 import { Box, styled } from "@mui/material";
 import * as DOMPurify from "dompurify";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import servicePlanIcons from "../../../public/assets/images/dashboard/service/latest_icons/service_env.svg";
 import Tooltip from "..//Tooltip/Tooltip";
 import MarketplaceServiceDefinitionsTab, {
   tabs,
@@ -33,14 +31,14 @@ export const AccessSupport = (props) => {
     >
       <Box display="flex" justifyContent="space-between" mt="14px">
         {/* <Image src={servicePlanMainIcons} alt="image-icon" /> */}
-        <Logo
-          src={
-            service?.serviceLogoURL ? service?.serviceLogoURL : servicePlanIcons
-          }
-          height={40}
-          width={40}
-          alt="service-icon"
-        />
+        {service?.serviceLogoURL && (
+          <Logo
+            src={service?.serviceLogoURL}
+            height={40}
+            width={40}
+            alt="service-icon"
+          />
+        )}
         <Box flexGrow={1} ml="14px">
           <Tooltip placement="bottom" title={service?.serviceName}>
             <DisplayText
