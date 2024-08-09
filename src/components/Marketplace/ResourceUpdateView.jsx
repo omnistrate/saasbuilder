@@ -22,6 +22,9 @@ import Select from "../FormElements/Select/Select";
 import { cloudProviderLabels } from "src/constants/cloudProviders";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import { PasswordField } from "../FormElementsv2/PasswordField/PasswordField";
+import Autocomplete, {
+  StyledTextField,
+} from "../FormElementsv2/AutoComplete/AutoComplete";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -342,45 +345,25 @@ function ResourceUpdateView(props) {
                     <FieldDescription sx={{ mt: "5px" }}>
                       {param.description}
                     </FieldDescription>
-                    <Select
+                    <Autocomplete
                       multiple
                       fullWidth
-                      sx={{ display: "block", marginTop: "16px" }}
                       id={`requestParams.${param.key}`}
                       name={`requestParams.${param.key}`}
-                      renderValue={(selectedList) => {
-                        if (selectedList.length === 0) {
-                          return <em>None</em>;
-                        }
-                        const plist = selectedList
-                          .map((valInList) => {
-                            const returnVal = formData.values.requestParams[
-                              param.key
-                            ].find((val) => {
-                              return val === valInList;
-                            });
-                            return returnVal;
-                          })
-                          .join(", ");
-                        return (
-                          <Box
-                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
-                          >
-                            {plist.split(",").map((value) => (
-                              <Chip key={value} label={value} />
-                            ))}
-                          </Box>
+                      value={
+                        formData.values.requestParams[param.key]?.length
+                          ? formData.values.requestParams[param.key]
+                          : []
+                      }
+                      sx={{ marginTop: "16px" }}
+                      options={options?.length > 0 ? options : []}
+                      onChange={(e, value) => {
+                        formData.setFieldValue(
+                          `requestParams.${param.key}`,
+                          value
                         );
                       }}
-                      value={formData.values.requestParams[param.key] || []}
-                      onChange={formData.handleChange}
-                    >
-                      {options.map((option) => (
-                        <MenuItem key={option} value={option}>
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    />
                   </FieldContainer>
                 );
               } else if (
@@ -395,31 +378,25 @@ function ResourceUpdateView(props) {
                     <FieldDescription sx={{ mt: "5px" }}>
                       {param.description}
                     </FieldDescription>
-                    <Select
+                    <Autocomplete
                       fullWidth
-                      MenuProps={MenuProps}
                       id={`requestParams.${param.key}`}
                       name={`requestParams.${param.key}`}
-                      value={formData.values.requestParams[param.key] || []}
-                      renderValue={(selectedVal) => {
-                        return (
-                          <Box
-                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
-                          >
-                            {<Chip key={selectedVal} label={selectedVal} />}
-                          </Box>
+                      value={
+                        formData.values.requestParams[param.key]
+                          ? formData.values.requestParams[param.key]
+                          : ""
+                      }
+                      sx={{ marginTop: "16px" }}
+                      required={param.required == true ? "required" : ""}
+                      options={options?.length > 0 ? options : []}
+                      onChange={(e, value) => {
+                        formData.setFieldValue(
+                          `requestParams.${param.key}`,
+                          value
                         );
                       }}
-                      onChange={formData.handleChange}
-                      modifiable={param.modifiable}
-                      sx={{ marginTop: "16px" }}
-                    >
-                      {options.map((option) => (
-                        <MenuItem key={option} value={option}>
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    />
                   </FieldContainer>
                 );
               } else if (param.custom == true) {
@@ -519,50 +496,26 @@ function ResourceUpdateView(props) {
                       <FieldDescription sx={{ mt: "5px" }}>
                         {param.description}
                       </FieldDescription>
-                      <Select
+                      <Autocomplete
                         disabled
                         multiple
                         fullWidth
-                        sx={{ display: "block", marginTop: "16px" }}
                         id={`requestParams.${param.key}`}
                         name={`requestParams.${param.key}`}
-                        renderValue={(selectedList) => {
-                          if (selectedList.length === 0) {
-                            return <em>None</em>;
-                          }
-                          const plist = selectedList
-                            .map((valInList) => {
-                              const returnVal = formData.values.requestParams[
-                                param.key
-                              ].find((val) => {
-                                return val === valInList;
-                              });
-                              return returnVal;
-                            })
-                            .join(", ");
-                          return (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 0.5,
-                              }}
-                            >
-                              {plist.split(",").map((value) => (
-                                <Chip key={value} label={value} />
-                              ))}
-                            </Box>
+                        value={
+                          formData.values.requestParams[param.key]?.length
+                            ? formData.values.requestParams[param.key]
+                            : []
+                        }
+                        sx={{ marginTop: "16px" }}
+                        options={options?.length > 0 ? options : []}
+                        onChange={(e, value) => {
+                          formData.setFieldValue(
+                            `requestParams.${param.key}`,
+                            value
                           );
                         }}
-                        value={formData.values.requestParams[param.key] || []}
-                        onChange={formData.handleChange}
-                      >
-                        {options.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                      />
                     </FieldContainer>
                   );
                 } else if (
@@ -579,36 +532,26 @@ function ResourceUpdateView(props) {
                       <FieldDescription sx={{ mt: "5px" }}>
                         {param.description}
                       </FieldDescription>
-                      <Select
+                      <Autocomplete
                         disabled
                         fullWidth
-                        MenuProps={MenuProps}
                         id={`requestParams.${param.key}`}
                         name={`requestParams.${param.key}`}
-                        value={formData.values.requestParams[param.key] || []}
-                        renderValue={(selectedVal) => {
-                          return (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 0.5,
-                              }}
-                            >
-                              {<Chip key={selectedVal} label={selectedVal} />}
-                            </Box>
+                        value={
+                          formData.values.requestParams[param.key]
+                            ? formData.values.requestParams[param.key]
+                            : ""
+                        }
+                        sx={{ marginTop: "16px" }}
+                        required={param.required == true ? "required" : ""}
+                        options={options?.length > 0 ? options : []}
+                        onChange={(e, value) => {
+                          formData.setFieldValue(
+                            `requestParams.${param.key}`,
+                            value
                           );
                         }}
-                        onChange={formData.handleChange}
-                        modifiable={param.modifiable}
-                        sx={{ marginTop: "16px" }}
-                      >
-                        {options.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                      />
                     </FieldContainer>
                   );
                 } else if (param.custom == true) {
