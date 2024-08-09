@@ -38,9 +38,9 @@ const StyledAutoComplete = styled(MuiAutocomplete, {
   },
   ".MuiOutlinedInput-root.Mui-focused": {
     [`& .MuiOutlinedInput-notchedOutline`]: {
-      border: `1px solid  ${theme.palette.primary["300"]}`,
-      boxShadow:
-        "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+      border: `2px solid  ${theme.palette.primary["main"]}`,
+      // boxShadow:
+      //   "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
     },
   },
   ".MuiOutlinedInput-root.Mui-error": {
@@ -105,10 +105,10 @@ const StyledListOption = styled("li")(() => ({
   justifyContent: "space-between !important",
   width: "100%",
   '&.MuiAutocomplete-option[aria-selected="true"]': {
-    backgroundColor: "rgba(158, 119, 237, 0.08)",
+    backgroundColor: "rgba(3, 152, 85, 0.08)",
   },
   '&.MuiAutocomplete-option[aria-selected="true"].Mui-focused': {
-    backgroundColor: "rgba(158, 119, 237, 0.12)",
+    backgroundColor: "rgba(3, 152, 85, 0.12)",
   },
 }));
 
@@ -118,7 +118,7 @@ const StyledListOptionText = styled("p")(({ theme }) => ({
 }));
 
 const StyledDoneIcon = styled(DoneIcon)(({ theme }) => ({
-  color: theme.palette.primary["600"],
+  color: theme.palette.primary.main,
 }));
 
 //getOptionLabel prop should be passed if option is an object
