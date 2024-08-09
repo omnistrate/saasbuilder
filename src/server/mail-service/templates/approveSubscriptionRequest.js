@@ -27,9 +27,9 @@ async function getApproveSubscriptionMailContent(
     service_plan_name: servicePlanName,
     service_name: serviceName,
     logo_url: orgLogoURL,
-    bottom_bg_image_url: `${baseURL}/public/mail/bottom-bg.png`,
-    hero_banner: `${baseURL}/public/mail/cloud-hero-section.png`,
-    approve_subscription_request: `${baseURL}/public/mail/approve-subscription-request.png`,
+    bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
+    hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
+    approve_subscription_request: `${baseURL}/mail/approve-subscription-request.png`,
     get_started: `${baseURL}/signin`,
   });
 
