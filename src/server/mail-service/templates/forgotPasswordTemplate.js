@@ -28,9 +28,9 @@ async function getResetPasswordMailContent(resetPasswordEventObj, orgLogoURL) {
 
   const message = await ejs.renderFile(templatePath, {
     logo_url: orgLogoURL,
-    bottom_bg_image_url: `${baseURL}/public/mail/bottom-bg.png`,
-    hero_banner: `${baseURL}/public/mail/cloud-hero-section.png`,
-    reset_password: `${baseURL}/public/mail/reset-password.png`,
+    bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
+    hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
+    reset_password: `${baseURL}/mail/reset-password.png`,
     get_started: resetPasswordPageURL,
   });
 

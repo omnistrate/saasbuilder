@@ -32,9 +32,9 @@ async function getOrgInviteUserMailContent(inviteUserEventObj, orgLogoURL) {
     user_name: userName,
     service_name: serviceName,
     logo_url: orgLogoURL,
-    bottom_bg_image_url: `${baseURL}/public/mail/bottom-bg.png`,
-    hero_banner: `${baseURL}/public/mail/cloud-hero-section.png`,
-    invite_user: `${baseURL}/public/mail/invite-user.png`,
+    bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
+    hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
+    invite_user: `${baseURL}/mail/invite-user.png`,
     get_started: inviteUserEventObj.eventPayload.is_user_enabled
       ? signInURL
       : signUpURL,

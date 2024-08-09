@@ -27,9 +27,9 @@ async function getSignUpMailContent(signUpEventObj, orgLogoURL) {
 
   const message = await ejs.renderFile(templatePath, {
     logo_url: orgLogoURL,
-    bottom_bg_image_url: `${baseURL}/public/mail/bottom-bg.png`,
-    hero_banner: `${baseURL}/public/mail/cloud-hero-section.png`,
-    user_signup: `${baseURL}/public/mail/user-signup.png`,
+    bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
+    hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
+    user_signup: `${baseURL}/mail/user-signup.png`,
     get_started: activationURL,
   });
 

@@ -24,12 +24,12 @@ async function getSubscriptionResumedMailContent(
   const baseURL = getSaaSDomainURL();
 
   const message = await ejs.renderFile(templatePath, {
-    resume_subscription: `${baseURL}/public/mail/resume-subscription.png`,
+    resume_subscription: `${baseURL}/mail/resume-subscription.png`,
     service_plan_name: servicePlanName,
     service_name: serviceName,
     logo_url: orgLogoURL,
-    bottom_bg_image_url: `${baseURL}/public/mail/bottom-bg.png`,
-    hero_banner: `${baseURL}/public/mail/cloud-hero-section.png`,
+    bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
+    hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
   });
 
   // const message = `
