@@ -27,9 +27,9 @@ async function getSubscriptionSuspendedMailContent(
     service_plan_name: servicePlanName,
     service_name: serviceName,
     logo_url: orgLogoURL,
-    bottom_bg_image_url: `${baseURL}/public/mail/bottom-bg.png`,
-    hero_banner: `${baseURL}/public/mail/cloud-hero-section.png`,
-    approve_subscription_request: `${baseURL}/public/mail/suspend-subscription.png`,
+    bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
+    hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
+    approve_subscription_request: `${baseURL}/mail/suspend-subscription.png`,
     get_started: `${baseURL}/signin`,
   });
 

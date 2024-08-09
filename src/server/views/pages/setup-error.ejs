@@ -28,7 +28,7 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        background-image: url("/public/assets/images/non-dashboard/wave-background.svg");
+        background-image: url("/assets/images/non-dashboard/wave-background.svg");
         background-repeat: no-repeat;
         background-size: cover;
       }
@@ -77,7 +77,7 @@
         <div class="card-content">
           <div style="text-align: center">
             <img
-              src="/public/assets/images/setup-error.png"
+              src="/assets/images/setup-error.png"
               alt="setup-error"
             />
           </div>
@@ -85,7 +85,7 @@
           <ul>
             <% envVariablesStatus.forEach(function(envVariable){ %>
             <li class="list-item" title="<%= envVariable.status %>">
-              <img src="/public/assets/icons/<%= envVariable.status === 'Verified' ? 'check.png' : envVariable.status === 'Not Defined' ? 'cross.png' : 'alert.png'  %>" alt="status" />
+              <img src="/assets/icons/<%= envVariable.status === 'Verified' ? 'check.png' : envVariable.status === 'Not Defined' ? 'cross.png' : 'alert.png'  %>" alt="status" />
               <span><%= envVariable.name %></span>
             </li>
             <% }) %>
