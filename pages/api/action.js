@@ -2,6 +2,10 @@ import { httpRequestMethods } from "src/server/utils/constants/httpsRequestMetho
 import Axios from "axios";
 //omnistrate backend base url
 import { baseURL } from "src/axios";
+import {
+  passwordRegex,
+  passwordText as passwordRegexFailText,
+} from "src/utils/passwordRegex";
 
 const axios = Axios.create({
   baseURL: baseURL,
@@ -15,8 +19,19 @@ export default async function handleAction(nextRequest, nextResponse) {
     const { endpoint, method, data = {}, queryParams = {} } = nextRequest.body;
 
     if (endpoint && method && endpoint?.startsWith("/")) {
+
       let response = null;
       try {
+        if (endpoint === "/change-password") {
+          const password = data.password;
+          if (password && typeof password === "string") {
+            if (!password.match(passwordRegex)) {
+              return nextResponse
+                .status(400)
+                .send({ message: passwordRegexFailText });
+            }
+          }
+        }
         if (method === httpRequestMethods.GET) {
           response = await axios.get(endpoint, {
             params: queryParams,
