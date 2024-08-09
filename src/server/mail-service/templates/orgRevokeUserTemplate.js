@@ -21,9 +21,9 @@ async function getOrgRevokeUserMailContent(revokeUserEventObj, orgLogoURL) {
     user_name: userName,
     service_name: serviceName,
     logo_url: orgLogoURL,
-    bottom_bg_image_url: `${baseURL}/public/mail/bottom-bg.png`,
-    hero_banner: `${baseURL}/public/mail/cloud-hero-section.png`,
-    revoke_access: `${baseURL}/public/mail/revoke-access.png`,
+    bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
+    hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
+    revoke_access: `${baseURL}/mail/revoke-access.png`,
   });
 
   // const message = `

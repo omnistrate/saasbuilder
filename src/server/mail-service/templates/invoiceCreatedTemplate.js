@@ -23,9 +23,9 @@ async function getInvoiceCreatedTemplate(invoiceCreatedEventObj, orgLogoURL) {
   const message = await ejs.renderFile(templatePath, {
     org_name: orgName,
     logo_url: orgLogoURL,
-    bottom_bg_image_url: `${baseURL}/public/mail/bottom-bg.png`,
-    hero_banner: `${baseURL}/public/mail/cloud-hero-section.png`,
-    invoice_created: `${baseURL}/public/mail/invoice-create.png`,
+    bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
+    hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
+    invoice_created: `${baseURL}/mail/invoice-create.png`,
     view_invoice: `${baseURL}/signin`,
   });
 

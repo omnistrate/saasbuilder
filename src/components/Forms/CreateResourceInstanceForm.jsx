@@ -33,6 +33,9 @@ import {
   GCPProjectIDDescription,
   GCPProjectNumberDescription,
 } from "./AccountConfigFormElements";
+import Autocomplete, {
+  StyledTextField,
+} from "../FormElementsv2/AutoComplete/AutoComplete";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -564,10 +567,9 @@ function CreateResourceInstanceForm(props) {
                       <FieldDescription sx={{ mt: "5px" }}>
                         {param.description}
                       </FieldDescription>
-                      <Select
+                      <Autocomplete
                         multiple
                         fullWidth
-                        MenuProps={MenuProps}
                         id={`requestParams.${param.key}`}
                         name={`requestParams.${param.key}`}
                         value={
@@ -575,45 +577,23 @@ function CreateResourceInstanceForm(props) {
                             ? formData.values.requestParams[param.key]
                             : []
                         }
-                        renderValue={(selectedList) => {
-                          if (selectedList.length === 0) {
-                            return <em>None</em>;
-                          }
-                          const plist = selectedList
-                            .map((valInList) => {
-                              const returnVal = formData.values.requestParams[
-                                param.key
-                              ].find((val) => {
-                                return val === valInList;
-                              });
-                              return returnVal;
-                            })
-                            .join(", ");
-                          return (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 0.5,
-                              }}
-                            >
-                              {plist.split(",").map((value) => (
-                                <Chip key={value} label={value} />
-                              ))}
-                            </Box>
+                        sx={{ marginTop: "16px" }}
+                        options={options?.length > 0 ? options : []}
+                        onChange={(e, value) => {
+                          formData.setFieldValue(
+                            `requestParams.${param.key}`,
+                            value
                           );
                         }}
-                        onChange={formData.handleChange}
-                        modifiable={param.modifiable}
-                        sx={{ marginTop: "16px" }}
-                        required={param.required == true ? "required" : ""}
-                      >
-                        {options.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                        renderInput={(params) => (
+                          <StyledTextField
+                            {...params}
+                            required={
+                              !formData.values.requestParams[param.key]?.length
+                            }
+                          />
+                        )}
+                      />
                     </FieldContainer>
                   );
                 } else if (
@@ -632,40 +612,30 @@ function CreateResourceInstanceForm(props) {
                       <FieldDescription sx={{ mt: "5px" }}>
                         {param.description}
                       </FieldDescription>
-                      <Select
+                      <Autocomplete
                         fullWidth
-                        MenuProps={MenuProps}
                         id={`requestParams.${param.key}`}
                         name={`requestParams.${param.key}`}
                         value={
                           formData.values.requestParams[param.key]
                             ? formData.values.requestParams[param.key]
-                            : []
+                            : ""
                         }
-                        renderValue={(selectedVal) => {
-                          return (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 0.5,
-                              }}
-                            >
-                              {<Chip key={selectedVal} label={selectedVal} />}
-                            </Box>
+                        sx={{ marginTop: "16px" }}
+                        options={options?.length > 0 ? options : []}
+                        onChange={(e, value) => {
+                          formData.setFieldValue(
+                            `requestParams.${param.key}`,
+                            value
                           );
                         }}
-                        onChange={formData.handleChange}
-                        modifiable={param.modifiable}
-                        sx={{ marginTop: "16px" }}
-                        required={param.required == true ? "required" : ""}
-                      >
-                        {options.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                        renderInput={(params) => (
+                          <StyledTextField
+                            {...params}
+                            required={!formData.values.requestParams[param.key]}
+                          />
+                        )}
+                      />
                     </FieldContainer>
                   );
                 } else if (

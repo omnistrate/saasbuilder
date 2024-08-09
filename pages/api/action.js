@@ -14,7 +14,7 @@ export default async function handleAction(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {
     const { endpoint, method, data = {}, queryParams = {} } = nextRequest.body;
 
-    if (endpoint && method) {
+    if (endpoint && method && endpoint?.startsWith("/")) {
       let response = null;
       try {
         if (method === httpRequestMethods.GET) {
