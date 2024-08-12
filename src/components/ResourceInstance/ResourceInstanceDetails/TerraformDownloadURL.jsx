@@ -5,7 +5,7 @@ import { getTerraformKit, getTerraformKitURL } from "src/api/resourceInstance";
 
 import { Text } from "components/Typography/Typography";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
-import CopyToClipbpoardButton from "components/CopyClipboardButton/CopyClipboardButton";
+import CopyButton from "src/components/Button/CopyButton";
 
 const TerraformDownloadURL = ({
   serviceOffering,
@@ -53,6 +53,7 @@ const TerraformDownloadURL = ({
       direction="row"
       alignItems="center"
       justifyContent="flex-end"
+      gap="4px"
     >
       <LoadingSpinnerSmall
         sx={{
@@ -64,7 +65,7 @@ const TerraformDownloadURL = ({
         }}
       />
       <Text
-        size="large"
+        size="small"
         color="#7F56D9"
         sx={{ cursor: "pointer" }}
         onClick={() => downloadTerraformKitMutation.mutate()}
@@ -73,7 +74,11 @@ const TerraformDownloadURL = ({
       </Text>
 
       {/* Show Spinner when Loading */}
-      <CopyToClipbpoardButton text={terraformURL} />
+      <CopyButton
+        text={terraformURL}
+        iconProps={{ color: "#6941C6", width: 20, height: 20 }}
+        iconStyle={{ flexShrink: 0 }}
+      />
     </Stack>
   );
 };
