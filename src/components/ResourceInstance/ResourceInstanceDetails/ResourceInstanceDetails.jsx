@@ -126,7 +126,7 @@ function ResourceInstanceDetails(props) {
         });
       } else {
         res.push({
-          label: capitalize(param.displayName) || param.key,
+          label: param.displayName || param.key,
           description: param.description,
           value: param.value,
         });
@@ -146,7 +146,7 @@ function ResourceInstanceDetails(props) {
           <TerraformDownloadURL
             serviceOffering={serviceOffering}
             subscriptionId={subscriptionId}
-            cloud_provider={resultParameters.cloud_provider}
+            cloud_provider={resultParameters.aws_account_id ? "aws" : "gcp"}
           />
         ),
         valueType: "custom",
