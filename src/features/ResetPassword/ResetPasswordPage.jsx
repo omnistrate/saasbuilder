@@ -11,6 +11,8 @@ import FieldContainer from "components/NonDashboardComponents/FormElementsV2/Fie
 import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
 import CenterContentLayout from "components/NonDashboardComponents/Layout/CenterContentLayout";
 import { customerUserResetPassword } from "src/api/customer-user";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useRef, useState } from "react";
 
 const resetPasswordValidationSchema = Yup.object({
   email: Yup.string()
@@ -19,8 +21,12 @@ const resetPasswordValidationSchema = Yup.object({
 });
 
 const ResetPasswordPage = (props) => {
-  const { orgName, orgLogoURL } = props;
+  const { orgName, orgLogoURL, googleReCaptchaSiteKey, isReCaptchaSetup } =
+    props;
   const snackbar = useSnackbar();
+  const reCaptchaRef = useRef(null);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+  const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
 
   const resetPasswordMutation = useMutation(
     (payload) => {
@@ -42,22 +48,29 @@ const ResetPasswordPage = (props) => {
     }
   );
 
+  async function handleFormSubmit(values) {
+    const data = {};
+
+    if (reCaptchaRef.current && !hasCaptchaErrored) {
+      const token = await reCaptchaRef.current.executeAsync();
+      reCaptchaRef.current.reset();
+      data["reCaptchaToken"] = token;
+    }
+
+    for (const key in values) {
+      if (values[key]) {
+        data[key] = values[key];
+      }
+    }
+    resetPasswordMutation.mutate(data);
+  }
+
   const formik = useFormik({
     initialValues: {
       email: "",
     },
     enableReinitialize: true,
-    onSubmit: (values) => {
-      let data = {};
-
-      for (let key in values) {
-        if (values[key]) {
-          data[key] = values[key];
-        }
-      }
-
-      resetPasswordMutation.mutate(data);
-    },
+    onSubmit: handleFormSubmit,
     validationSchema: resetPasswordValidationSchema,
   });
 
@@ -93,11 +106,24 @@ const ResetPasswordPage = (props) => {
       <SubmitButton
         type="submit"
         onClick={formik.handleSubmit}
-        disabled={!formik.isValid}
+        disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
         loading={resetPasswordMutation.isLoading}
       >
         Submit
       </SubmitButton>
+      {isReCaptchaSetup && (
+        <ReCAPTCHA
+          size="invisible"
+          sitekey={googleReCaptchaSiteKey}
+          ref={reCaptchaRef}
+          asyncScriptOnLoad={() => {
+            setIsScriptLoaded(true);
+          }}
+          onErrored={() => {
+            setHasCaptchaErrored(true);
+          }}
+        />
+      )}
     </CenterContentLayout>
   );
 };

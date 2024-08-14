@@ -1,12 +1,25 @@
 import { customerUserResetPassword } from "src/server/api/customer-user";
+import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
+import CaptchaVerificationError from "src/server/errors/CaptchaVerificationError";
 
 export default async function handleResetPassword(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {
     try {
-      const response = await customerUserResetPassword(nextRequest.body);
+      const requestBody = nextRequest.body || {};
+
+      if (
+        process.env.GOOGLE_RECAPTCHA_SECRET_KEY &&
+        process.env.GOOGLE_RECAPTCHA_SITE_KEY
+      ) {
+        const { reCaptchaToken } = requestBody;
+        const isVerified = await verifyRecaptchaToken(reCaptchaToken);
+        if (!isVerified) throw new CaptchaVerificationError();
+      }
+
+      await customerUserResetPassword(requestBody);
       nextResponse.status(200).send();
     } catch (error) {
-      let defaultErrorMessage = "Something went wrong. Please retry";
+      const defaultErrorMessage = "Something went wrong. Please retry";
 
       if (
         error.name === "ProviderAuthError" ||
@@ -16,10 +29,10 @@ export default async function handleResetPassword(nextRequest, nextResponse) {
           message: defaultErrorMessage,
         });
       } else {
-        let responseErrorMessage = error.response?.data?.message;
+        const responseErrorMessage = error.response?.data?.message;
 
         if (responseErrorMessage === "user not found: record not found") {
-            nextResponse.status(200).send()
+          nextResponse.status(200).send();
         }
 
         nextResponse.status(error.response?.status || 500).send({
