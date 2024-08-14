@@ -335,7 +335,7 @@ function ResourceInstance() {
             resourceSchemaQuery?.data?.DESCRIBE?.outputParameters
           }
           serviceOffering={serviceOffering}
-          subscriptionId={subscriptionId}
+          subscriptionId={subscriptionData?.id}
         />
       )}
       {currentTab === tabs.connectivity && (
