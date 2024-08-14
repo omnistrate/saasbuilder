@@ -34,11 +34,12 @@ import SideDrawerRight from "../SideDrawerRight/SideDrawerRight";
 import { AccessSupport } from "../Access/AccessSupport";
 import useServiceOffering from "src/hooks/useServiceOffering";
 import { useRouter } from "next/router";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 
 const MarketplaceStaticNavList = (props) => {
-  const isNavDrawerExpanded = useSelector(selectDrawerExpandedState);
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
   const [currentTabValue, setCurrentTabValue] = useState(false);
+  const environmentType = useEnvironmentType();
   const router = useRouter();
 
   const {
@@ -79,27 +80,17 @@ const MarketplaceStaticNavList = (props) => {
     setCurrentTabValue(tab);
   };
 
-  const onDownloadClick = () => {
-    if (!isDownloading) {
-      downloadCLI(serviceId, serviceApiId, subscriptionId);
-    }
-  };
-
   const NavLinks = [
-    // {
-    //   text: "API Documentation",
-    //   isDisabled: false,
-    //   isActive: isActive,
-    //   href: apiDocs ?? apiDocsUrl,
-    //   icon: APIDocsIcon,
-    //   newTab: apiDocs ? false : true,
-    // },
     {
       text: "Download CLI",
       isDisabled: isDownloading,
       isLoading: isDownloading,
       icon: DownloadCLIIcon,
-      onClick: onDownloadClick,
+      onClick: () => {
+        if (!isDownloading) {
+          downloadCLI(serviceId, serviceApiId, subscriptionId);
+        }
+      },
     },
     {
       text: "Support",
@@ -123,6 +114,17 @@ const MarketplaceStaticNavList = (props) => {
       onClick: () => openDrawer(tabs.documentation),
     },
   ];
+
+  if (environmentType !== "PROD") {
+    NavLinks.unshift({
+      text: "API Documentation",
+      isDisabled: false,
+      isActive: isActive,
+      href: apiDocs ?? apiDocsUrl,
+      icon: APIDocsIcon,
+      newTab: apiDocs ? false : true,
+    });
+  }
 
   return (
     <Box>
