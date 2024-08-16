@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
@@ -21,6 +21,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLogin from "../Signin/components/GoogleLogin";
 import GithubLogin from "../Signin/components/GitHubLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "../Signin/constants";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -43,37 +44,18 @@ const SignupPage = (props) => {
     googleIdentityProvider,
     githubIdentityProvider,
     saasBuilderBaseURL,
+    googleReCaptchaSiteKey,
+    isReCaptchaSetup,
   } = props;
+
   const router = useRouter();
   const { org, orgUrl, email, userSource } = router.query;
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+  const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
+
   const snackbar = useSnackbar();
-
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      legalcompanyname: "",
-      companydescription: "",
-      companyurl: "",
-      userSource: "",
-    },
-    enableReinitialize: true,
-    onSubmit: (values) => {
-      let data = {};
-
-      for (let key in values) {
-        if (values[key]) {
-          data[key] = values[key];
-        }
-      }
-
-      signupMutation.mutate(data);
-    },
-    validationSchema: signupValidationSchema,
-  });
+  const reCaptchaRef = useRef(null);
 
   const signupMutation = useMutation(
     (payload) => {
@@ -93,6 +75,40 @@ const SignupPage = (props) => {
       },
     }
   );
+
+  async function handleFormSubmit(values) {
+    const data = {};
+
+    if (reCaptchaRef.current && !hasCaptchaErrored) {
+      const token = await reCaptchaRef.current.executeAsync();
+      reCaptchaRef.current.reset();
+      data["reCaptchaToken"] = token;
+    }
+
+    for (const key in values) {
+      if (values[key]) {
+        data[key] = values[key];
+      }
+    }
+
+    signupMutation.mutate(data);
+  }
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      legalcompanyname: "",
+      companydescription: "",
+      companyurl: "",
+      userSource: "",
+    },
+    enableReinitialize: true,
+    onSubmit: handleFormSubmit,
+    validationSchema: signupValidationSchema,
+  });
 
   useEffect(() => {
     const updatedValues = {};
@@ -299,11 +315,24 @@ const SignupPage = (props) => {
             <SubmitButton
               type="submit"
               onClick={formik.handleSubmit}
-              disabled={!formik.isValid}
+              disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
               loading={signupMutation.isLoading}
             >
               Create Account
             </SubmitButton>
+            {isReCaptchaSetup && (
+              <ReCAPTCHA
+                size="invisible"
+                sitekey={googleReCaptchaSiteKey}
+                ref={reCaptchaRef}
+                asyncScriptOnLoad={() => {
+                  setIsScriptLoaded(true);
+                }}
+                onErrored={() => {
+                  setHasCaptchaErrored(true);
+                }}
+              />
+            )}
           </Stack>
         </Box>
         {Boolean(googleIdentityProvider || githubIdentityProvider) && (
@@ -373,7 +402,6 @@ const SignupPage = (props) => {
           >
             Privacy Policy
           </Link>
-          
         </Typography>
         {/* Signup Link */}
         <Typography
