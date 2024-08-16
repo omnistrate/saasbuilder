@@ -14,6 +14,10 @@ export const getServerSideProps = async () => {
     props: {
       orgName: orgName,
       orgLogoURL: orgLogoURL,
+      googleReCaptchaSiteKey: process.env.GOOGLE_RECAPTCHA_SITE_KEY || null,
+      isReCaptchaSetup:
+        Boolean(process.env.GOOGLE_RECAPTCHA_SITE_KEY) &&
+        Boolean(process.env.GOOGLE_RECAPTCHA_SECRET_KEY),
     },
   };
 };
