@@ -17,7 +17,7 @@ export default async function handleSignIn(nextRequest, nextResponse) {
 
       const response = await customerUserSignIn(payload, {
         "Client-IP": clientIP,
-        "SaasBuilder-IP": saasBuilderIP,
+        "SaaSBuilder-IP": saasBuilderIP,
       });
       nextResponse.status(200).send({ ...response.data });
     } catch (error) {

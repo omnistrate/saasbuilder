@@ -23,7 +23,7 @@ export default async function handleSignup(nextRequest, nextResponse) {
 
       await customerUserSignUp(nextRequest.body, {
         "Client-IP": clientIP,
-        "SaasBuilder-IP": saasBuilderIP,
+        "SaaSBuilder-IP": saasBuilderIP,
       });
 
       nextResponse.status(200).send();
