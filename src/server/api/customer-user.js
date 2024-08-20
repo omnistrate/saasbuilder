@@ -9,7 +9,7 @@ const withProviderTokenExpirationHanding = require("../utils/withProviderTokenEx
 function customerUserSignUp(payload, ipHeaders = {}) {
   return axios
     .post("/customer-user-signup", payload, {
-      Headers: ipHeaders,
+      headers: ipHeaders,
     })
     .catch((error) => {
       console.log("Sign up error", error);
@@ -24,7 +24,7 @@ function customerUserSignUp(payload, ipHeaders = {}) {
 function customerUserSignIn(payload, ipHeaders = {}) {
   return axios
     .post("/customer-user-signin", payload, {
-      Headers: ipHeaders,
+      headers: ipHeaders,
     })
     .catch((error) => {
       console.log("Sign in error", error);
@@ -39,7 +39,7 @@ function customerUserSignIn(payload, ipHeaders = {}) {
 function customerSignInWithIdentityProvider(payload, ipHeaders = {}) {
   return axios
     .post("/customer-login-with-identity-provider", payload, {
-      Headers: ipHeaders,
+      headers: ipHeaders,
     })
     .catch((error) => {
       console.log("IDP Sign in error", error);
@@ -54,7 +54,7 @@ function customerSignInWithIdentityProvider(payload, ipHeaders = {}) {
 function customerUserResetPassword(payload, ipHeaders = {}) {
   return axios
     .post("/customer-reset-password", payload, {
-      Headers: ipHeaders,
+      headers: ipHeaders,
     })
     .catch((error) => {
       console.log("Reset password error", error);
