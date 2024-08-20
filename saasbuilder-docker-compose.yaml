@@ -102,19 +102,3 @@ services:
         required: false
         export: true
         defaultValue: Google Analytics tag ID
-      - key: googleReCaptchaSiteKey
-        description: Add Google ReCAPTCHA v2(Invisible) Site Key, leave blank if you dont have any
-        name: Google ReCAPTCHA v2 (Invisible) Site Key
-        type: String
-        modifiable: true
-        required: false
-        export: true
-        defaultValue: ''                
-      - key: googleReCaptchaSecretKey
-        description: Add Google ReCAPTCHA v2(Invisible) Secret Key, leave blank if you dont have any
-        name: Google ReCAPTCHA v2 (Invisible) Secret Key
-        type: String
-        modifiable: true
-        required: false
-        export: true
-        defaultValue: ''
