@@ -2,12 +2,6 @@ const { customerUserSignIn } = require("src/server/api/customer-user");
 const { getEnvironmentType } = require("src/server/utils/getEnvironmentType");
 
 export default async function handleSignIn(nextRequest, nextResponse) {
-  const xForwardedForHeader =  nextRequest.get("X-Forwarded-For") || "";
-  const clientIP = xForwardedForHeader.split(",").shift().trim();
-
-  console.log("Client IP", clientIP);
-  console.log("Pod IP", process.env.POD_IP);
-  
   if (nextRequest.method === "POST") {
     try {
       const environmentType = getEnvironmentType();
@@ -15,8 +9,16 @@ export default async function handleSignIn(nextRequest, nextResponse) {
         ...nextRequest.body,
         environmentType: environmentType,
       };
+      //xForwardedForHeader has multiple IPs in the format <client>, <proxy1>, <proxy2>
+      //get the first IP (client IP)
+      const xForwardedForHeader = nextRequest.get("X-Forwarded-For") || "";
+      const clientIP = xForwardedForHeader.split(",").shift().trim();
+      const saasBuilderIP = process.env.POD_IP;
 
-      const response = await customerUserSignIn(payload);
+      const response = await customerUserSignIn(payload, {
+        "Client-IP": clientIP,
+        "SaasBuilder-IP": saasBuilderIP,
+      });
       nextResponse.status(200).send({ ...response.data });
     } catch (error) {
       let defaultErrorMessage =
