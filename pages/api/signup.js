@@ -3,11 +3,24 @@ import {
   passwordRegex,
   passwordText as passwordRegexFailText,
 } from "src/utils/passwordRegex";
+import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
+import CaptchaVerificationError from "src/server/errors/CaptchaVerificationError";
 
 export default async function handleSignup(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {
     try {
-      const password = nextRequest.body.password;
+      const requestBody = nextRequest.body || {};
+
+      if (
+        process.env.GOOGLE_RECAPTCHA_SECRET_KEY &&
+        process.env.GOOGLE_RECAPTCHA_SITE_KEY
+      ) {
+        const { reCaptchaToken } = requestBody;
+        const isVerified = await verifyRecaptchaToken(reCaptchaToken);
+        if (!isVerified) throw new CaptchaVerificationError();
+      }
+
+      const password = requestBody;
       if (password && typeof password === "string") {
         if (!password.match(passwordRegex)) {
           return nextResponse
@@ -19,7 +32,7 @@ export default async function handleSignup(nextRequest, nextResponse) {
       //get the first IP (client IP)
       const xForwardedForHeader = nextRequest.get("X-Forwarded-For") || "";
       const clientIP = xForwardedForHeader.split(",").shift().trim();
-      const saasBuilderIP = process.env.POD_IP;
+      const saasBuilderIP = process.env.POD_IP || "";
 
       await customerUserSignUp(nextRequest.body, {
         "Client-IP": clientIP,

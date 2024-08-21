@@ -50,6 +50,10 @@ export const getServerSideProps = async () => {
       googleIdentityProvider: googleIdentityProvider,
       githubIdentityProvider: githubIdentityProvider,
       saasBuilderBaseURL: getSaaSDomainURL(),
+      googleReCaptchaSiteKey: process.env.GOOGLE_RECAPTCHA_SITE_KEY || null,
+      isReCaptchaSetup:
+        Boolean(process.env.GOOGLE_RECAPTCHA_SITE_KEY) &&
+        Boolean(process.env.GOOGLE_RECAPTCHA_SECRET_KEY),
     },
   };
 };
