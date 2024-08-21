@@ -1,16 +1,15 @@
 import { customerUserResetPassword } from "src/server/api/customer-user";
 import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
 import CaptchaVerificationError from "src/server/errors/CaptchaVerificationError";
+import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
 
 export default async function handleResetPassword(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {
     try {
       const requestBody = nextRequest.body || {};
+      const isReCaptchaSetup = checkReCaptchaSetup();
 
-      if (
-        process.env.GOOGLE_RECAPTCHA_SECRET_KEY &&
-        process.env.GOOGLE_RECAPTCHA_SITE_KEY
-      ) {
+      if (isReCaptchaSetup) {
         const { reCaptchaToken } = requestBody;
         const isVerified = await verifyRecaptchaToken(reCaptchaToken);
         if (!isVerified) throw new CaptchaVerificationError();

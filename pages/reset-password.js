@@ -1,5 +1,6 @@
 import ResetPasswordPage from "src/features/ResetPassword/ResetPasswordPage";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
+import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
 
 export const getServerSideProps = async () => {
   let orgName = "";
@@ -15,9 +16,7 @@ export const getServerSideProps = async () => {
       orgName: orgName,
       orgLogoURL: orgLogoURL,
       googleReCaptchaSiteKey: process.env.GOOGLE_RECAPTCHA_SITE_KEY || null,
-      isReCaptchaSetup:
-        Boolean(process.env.GOOGLE_RECAPTCHA_SITE_KEY) &&
-        Boolean(process.env.GOOGLE_RECAPTCHA_SECRET_KEY),
+      isReCaptchaSetup: checkReCaptchaSetup(),
     },
   };
 };
