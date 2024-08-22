@@ -4,17 +4,15 @@ import {
   passwordText as passwordRegexFailText,
 } from "src/utils/passwordRegex";
 import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
+import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
 import CaptchaVerificationError from "src/server/errors/CaptchaVerificationError";
 
 export default async function handleSignup(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {
     try {
       const requestBody = nextRequest.body || {};
-
-      if (
-        process.env.GOOGLE_RECAPTCHA_SECRET_KEY &&
-        process.env.GOOGLE_RECAPTCHA_SITE_KEY
-      ) {
+      const isReCaptchaSetup = checkReCaptchaSetup();
+      if (isReCaptchaSetup) {
         const { reCaptchaToken } = requestBody;
         const isVerified = await verifyRecaptchaToken(reCaptchaToken);
         if (!isVerified) throw new CaptchaVerificationError();
@@ -42,7 +40,7 @@ export default async function handleSignup(nextRequest, nextResponse) {
       nextResponse.status(200).send();
     } catch (error) {
       console.error(error?.response?.data);
-      let defaultErrorMessage = "Something went wrong. Please retry";
+      const defaultErrorMessage = "Something went wrong. Please retry";
 
       if (
         error.name === "ProviderAuthError" ||
@@ -52,7 +50,7 @@ export default async function handleSignup(nextRequest, nextResponse) {
           message: defaultErrorMessage,
         });
       } else {
-        let responseErrorMessage = error.response?.data?.message;
+        const responseErrorMessage = error.response?.data?.message;
 
         if (responseErrorMessage === "tenant already exists") {
           nextResponse.status(400).send({

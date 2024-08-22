@@ -87,6 +87,8 @@ yarn install
 | MAIL_USER_PASSWORD    | The email account password |
 | MAIL_FROM | Gmail account from which emails will be sent (might be different than MAIL_USER_EMAIL). If this environment variable is not configured, the mails will be sent using MAIL_USER_EMAIL |
 | GOOGLE_ANALYTICS_TAG_ID | Google Analytics tag ID |
+| GOOGLE_RECAPTCHA_SITE_KEY | Google reCAPTCHA v2 (Invisible) Site Key |
+| GOOGLE_RECAPTCHA_SECRET_KEY | Google reCAPTCHA v2 (Invisible) Secret Key |
 
 6. Run the development server:
 
