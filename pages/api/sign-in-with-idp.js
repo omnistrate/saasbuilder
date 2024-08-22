@@ -13,10 +13,19 @@ export default async function handleSignIn(nextRequest, nextResponse) {
         environmentType: environmentType,
       };
       const saasDomainURL = getSaaSDomainURL();
-      
+
       requestBody.redirectUri = `${saasDomainURL}/idp-auth`;
 
-      const response = await customerSignInWithIdentityProvider(requestBody);
+      //xForwardedForHeader has multiple IPs in the format <client>, <proxy1>, <proxy2>
+      //get the first IP (client IP)
+      const xForwardedForHeader = nextRequest.get("X-Forwarded-For") || "";
+      const clientIP = xForwardedForHeader.split(",").shift().trim();
+      const saasBuilderIP = process.env.POD_IP;
+
+      const response = await customerSignInWithIdentityProvider(requestBody, {
+        "Client-IP": clientIP,
+        "SaaSBuilder-IP": saasBuilderIP,
+      });
 
       nextResponse.status(200).send({ ...response.data });
     } catch (error) {

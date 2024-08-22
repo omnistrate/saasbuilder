@@ -26,7 +26,17 @@ export default async function handleSignup(nextRequest, nextResponse) {
             .send({ message: passwordRegexFailText });
         }
       }
-      await customerUserSignUp(requestBody);
+      //xForwardedForHeader has multiple IPs in the format <client>, <proxy1>, <proxy2>
+      //get the first IP (client IP)
+      const xForwardedForHeader = nextRequest.get("X-Forwarded-For") || "";
+      const clientIP = xForwardedForHeader.split(",").shift().trim();
+      const saasBuilderIP = process.env.POD_IP || "";
+
+      await customerUserSignUp(nextRequest.body, {
+        "Client-IP": clientIP,
+        "SaaSBuilder-IP": saasBuilderIP,
+      });
+
       nextResponse.status(200).send();
     } catch (error) {
       console.error(error?.response?.data);
