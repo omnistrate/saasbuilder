@@ -5,6 +5,12 @@ import CaptchaVerificationError from "src/server/errors/CaptchaVerificationError
 export default async function handleResetPassword(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {
     try {
+      //xForwardedForHeader has multiple IPs in the format <client>, <proxy1>, <proxy2>
+      //get the first IP (client IP)
+      const xForwardedForHeader = nextRequest.get("X-Forwarded-For") || "";
+      const clientIP = xForwardedForHeader.split(",").shift().trim();
+      const saasBuilderIP = process.env.POD_IP || "";
+
       const requestBody = nextRequest.body || {};
 
       if (
@@ -16,7 +22,10 @@ export default async function handleResetPassword(nextRequest, nextResponse) {
         if (!isVerified) throw new CaptchaVerificationError();
       }
 
-      await customerUserResetPassword(requestBody);
+      await customerUserResetPassword(requestBody, {
+        "Client-IP": clientIP,
+        "SaaSBuilder-IP": saasBuilderIP,
+      });
       nextResponse.status(200).send();
     } catch (error) {
       const defaultErrorMessage = "Something went wrong. Please retry";
