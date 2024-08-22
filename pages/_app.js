@@ -80,7 +80,7 @@ export default function App(props) {
   }
 
   axios.interceptors.request.use((config) => {
-    if (!config.url.startsWith("/api")) {
+    if (!config.url.startsWith("/api") && config.url.startsWith("/")) {
       // console.log("Axios request original config", _.cloneDeep(config));
 
       //the original request url
