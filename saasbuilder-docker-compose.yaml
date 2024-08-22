@@ -17,6 +17,8 @@ services:
       - MAIL_USER_PASSWORD=$var.senderPassword
       - MAIL_FROM=$var.senderFrom
       - GOOGLE_ANALYTICS_TAG_ID=$var.googleAnalyticsTagID
+      - GOOGLE_RECAPTCHA_SITE_KEY=$var.googleReCaptchaSiteKey
+      - GOOGLE_RECAPTCHA_SECRET_KEY=$var.googleReCaptchaSecretKey
     x-omnistrate-compute:
       instanceTypes:
         - cloudProvider: aws
