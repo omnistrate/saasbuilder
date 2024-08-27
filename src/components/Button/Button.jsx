@@ -1,8 +1,9 @@
 import MuiButton, { buttonClasses } from "@mui/material/Button";
-import { Tooltip, styled } from "@mui/material";
-import { Text, textStyles, weights } from "../Typography/Typography";
+import { styled } from "@mui/material";
+import { textStyles, weights } from "../Typography/Typography";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import { styleConfig } from "src/providerConfig";
+import Tooltip from "../Tooltip/Tooltip";
 
 const Button = styled(
   ({ children, isLoading, disabledMessage, ...restProps }) => {
@@ -15,23 +16,9 @@ const Button = styled(
 
     if (disabledMessage && restProps.disabled) {
       return (
-        <Tooltip
-          title={
-            <Text
-              color="white"
-              size="xsmall"
-              style={{
-                textAlign: "center",
-              }}
-            >
-              {disabledMessage}
-            </Text>
-          }
-          placement="top"
-          arrow
-        >
-          {/* Wrapper Div Necessary for Tooltip */}
-          <div>{button}</div>
+        <Tooltip title={disabledMessage} placement="top-end" arrow>
+          {/* Wrapper Necessary for Tooltip */}
+          <span>{button}</span>
         </Tooltip>
       );
     }
