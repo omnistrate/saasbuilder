@@ -1,18 +1,43 @@
 import MuiButton, { buttonClasses } from "@mui/material/Button";
-import { styled } from "@mui/material";
-import { textStyles, weights } from "../Typography/Typography";
+import { Tooltip, styled } from "@mui/material";
+import { Text, textStyles, weights } from "../Typography/Typography";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import { styleConfig } from "src/providerConfig";
 
 const Button = styled(
-  ({ children, isLoading, ...restProps }) => (
-    <MuiButton {...restProps}>
-      <>
+  ({ children, isLoading, disabledMessage, ...restProps }) => {
+    const button = (
+      <MuiButton {...restProps}>
         {children}
         {isLoading && <LoadingSpinnerSmall />}
-      </>
-    </MuiButton>
-  ),
+      </MuiButton>
+    );
+
+    if (disabledMessage && restProps.disabled) {
+      return (
+        <Tooltip
+          title={
+            <Text
+              color="white"
+              size="xsmall"
+              style={{
+                textAlign: "center",
+              }}
+            >
+              {disabledMessage}
+            </Text>
+          }
+          placement="top"
+          arrow
+        >
+          {/* Wrapper Div Necessary for Tooltip */}
+          <div>{button}</div>
+        </Tooltip>
+      );
+    }
+
+    return button;
+  },
   {
     shouldForwardProp: (prop) => {
       return ![
