@@ -193,7 +193,7 @@ Configuring Google Account for sending out emails is a two step process. First t
 #### How to configure Google reCAPTCHA?
 
 SaaSBuilder uses Google reCAPTCHA v2 (Invisible) to protect certain pages from attacks against bots. To configure reCAPTCHA,
-  1. Register a new site at by navigating to https://www.google.com/recaptcha/admin/create
+  1. Register a new site by navigating to https://www.google.com/recaptcha/admin/create
   2. On the site registration form, choose "Challenge(v2)" as the reCAPTCHA type and then choose the 
   "Invisible reCAPTCHA badge" option
 
