@@ -202,7 +202,7 @@ SaaSBuilder uses Google reCAPTCHA v2 (Invisible) to protect certain pages from a
   3. Provide the other required details and submit the form.
   4. Google will generate a Site Key and a Secret Key for your site.
 
-  ![Alt text](https://drive.google.com/uc?id=1_LsnRbSX4-XHEw3IAXZHKYqaetH7tqFn "reCAPTHCA Key")
+  ![Alt text](https://drive.google.com/uc?id=1Ntk2NzpRC545X-7pw24nxs-ZhjVLiS_E "reCAPTHCA Key")
 
 
 #### How do I resolve "node version not compatible" errors?
