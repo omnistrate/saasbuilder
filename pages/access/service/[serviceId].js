@@ -98,6 +98,9 @@ import RestoreInstanceIcon from "src/components/Icons/RestoreInstance/RestoreIns
 import AccessSideRestoreInstance from "src/components/RestoreInstance/AccessSideRestoreInstance";
 import DataGridText from "src/components/DataGrid/DataGridText";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import RemoveCapacityIcon from "src/components/Icons/RemoveCapacity/RemoveCapacityIcon";
+import AddCapacityIcon from "src/components/Icons/AddCapacity/AddCapacityIcon";
+import CapacityDialog from "src/components/CapacityDialog/CapacityDialog";
 
 const instanceStatuses = {
   FAILED: "FAILED",
@@ -141,6 +144,9 @@ function MarketplaceService() {
   const [accountConfigStatus, setAccountConfigStatus] = useState("");
   const [accountConfigId, setAccountConfigId] = useState("");
   //this is required to show some extra text on CloudProviderAccountModal on creation
+
+  const [showCapacityDialog, setShowCapacityDialog] = useState(false);
+  const [currentCapacityAction, setCurrentCapacityAction] = useState("add");
 
   const [isCreateInstanceSchemaFetching, setIsCreateInstanceSchemaFetching] =
     useState(false);
@@ -1195,6 +1201,8 @@ function MarketplaceService() {
   let isModifyActionEnabled = false;
   let isRestoreActionEnabled = false;
   let isDeleteActionEnabled = false;
+  let isAddCapacityActiondEnabled = false;
+  let isRemoveCapacityActionEnabled = false;
 
   let selectedResourceInstance = null;
   if (isSingleInstanceSelected) {
@@ -1206,9 +1214,12 @@ function MarketplaceService() {
       if (instanceStatus === instanceStatuses.STOPPED) {
         isStartActionEnabled = true;
       }
-      //enable stop action
+      //enable stop, reboot, AddCapacity and RemoveCapacity action
       if (instanceStatus === instanceStatuses.RUNNING) {
         isStopActionEnabled = true;
+        isRebootActiondEnabled = true;
+        isAddCapacityActiondEnabled = true;
+        isRemoveCapacityActionEnabled = true;
       }
 
       //enable modify action
@@ -1221,11 +1232,6 @@ function MarketplaceService() {
         ].includes(instanceStatus)
       ) {
         isModifyActionEnabled = true;
-      }
-
-      //enable reboot action
-      if (instanceStatus === instanceStatuses.RUNNING) {
-        isRebootActiondEnabled = true;
       }
 
       // enable restore if earliestRestoreTime is present in backupStatus
@@ -1339,6 +1345,20 @@ function MarketplaceService() {
     validateOnChange: false,
     enableReinitialize: true,
   });
+
+  //Capacity payload data
+  const capacityData = useMemo(() => {
+    return {
+      instanceId: selectedResourceInstance?.id,
+      serviceProviderId: service?.serviceProviderId,
+      serviceKey: service?.serviceURLKey,
+      serviceAPIVersion: service?.serviceAPIVersion,
+      serviceEnvironmentKey: service?.serviceEnvironmentURLKey,
+      serviceModelKey: service?.serviceModelURLKey,
+      productTierKey: service?.productTierURLKey,
+      resourceKey: selectedResource?.key,
+    };
+  }, [selectedResourceInstance, service, selectedResource]);
 
   if (isServiceLoading || isLoadingSubscription) {
     return (
@@ -1764,7 +1784,47 @@ function MarketplaceService() {
             >
               Modify
             </Button>
-
+            <Button
+              variant="outlined"
+              startIcon={
+                <AddCapacityIcon
+                  disabled={
+                    !isAddCapacityActiondEnabled || !modifyAccessServiceAllowed
+                  }
+                />
+              }
+              sx={{ marginRight: 2 }}
+              disabled={
+                !isAddCapacityActiondEnabled || !modifyAccessServiceAllowed
+              }
+              onClick={() => {
+                setShowCapacityDialog(true);
+                setCurrentCapacityAction("add");
+              }}
+            >
+              Add Capacity
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={
+                <RemoveCapacityIcon
+                  disabled={
+                    !isRemoveCapacityActionEnabled ||
+                    !modifyAccessServiceAllowed
+                  }
+                />
+              }
+              sx={{ marginRight: 2 }}
+              disabled={
+                !isRemoveCapacityActionEnabled || !modifyAccessServiceAllowed
+              }
+              onClick={() => {
+                setShowCapacityDialog(true);
+                setCurrentCapacityAction("remove");
+              }}
+            >
+              Remove Capacity
+            </Button>
             {selectedResource?.isBackupEnabled && (
               <Button
                 variant="outlined"
@@ -1896,7 +1956,14 @@ function MarketplaceService() {
                   />
                 }
               />
-
+              <CapacityDialog
+                open={showCapacityDialog}
+                handleClose={() => {
+                  setShowCapacityDialog(false);
+                }}
+                data={capacityData}
+                currentCapacityAction={currentCapacityAction}
+              />
               {isCurrentResourceBYOA ? (
                 <DeleteAccountConfigConfirmationDialog
                   open={isConfirmationDialog}

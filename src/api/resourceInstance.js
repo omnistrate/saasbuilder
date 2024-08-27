@@ -270,3 +270,42 @@ export const removeCustomDNSFromResourceInstance = (
     }
   );
 };
+
+//Add Capacity to resource instance
+export const addCapacityResourceInstanceAccess = ({ data, count }) => {
+  const {
+    serviceProviderId,
+    serviceKey,
+    serviceAPIVersion,
+    serviceEnvironmentKey,
+    serviceModelKey,
+    productTierKey,
+    resourceKey,
+    instanceId,
+  } = data;
+
+  return axios.post(
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/add-capacity`,
+    { capacityToBeAdded: count }
+  );
+};
+
+//Remove Capacity to resource instance
+export const removeCapacityResourceInstanceAccess = ({ data, count }) => {
+  const {
+    serviceProviderId,
+    serviceKey,
+    serviceAPIVersion,
+    serviceEnvironmentKey,
+    serviceModelKey,
+    productTierKey,
+    resourceKey,
+    instanceId,
+  } = data;
+  return axios.post(
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/remove-capacity`,
+    {
+      capacityToBeRemoved: count,
+    }
+  );
+};
