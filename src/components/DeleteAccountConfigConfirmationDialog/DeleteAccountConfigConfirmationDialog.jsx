@@ -171,7 +171,7 @@ const DeleteInstructions = () => {
             <StyledLink
               target="_blank"
               rel="noopener noreferrer"
-              href="https://docs.omnistrate.com/getting-started/account-offboarding/?h=off"
+              href="https://docs.omnistrate.com/getting-started/account-offboarding/"
             >
               here
             </StyledLink>{" "}
