@@ -1963,6 +1963,7 @@ function MarketplaceService() {
                 }}
                 data={capacityData}
                 currentCapacityAction={currentCapacityAction}
+                refetch={fetchResourceInstancesOfSelectedResource}
               />
               {isCurrentResourceBYOA ? (
                 <DeleteAccountConfigConfirmationDialog

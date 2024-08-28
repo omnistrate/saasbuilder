@@ -29,6 +29,7 @@ import AddCapacityIcon from "../Icons/AddCapacity/AddCapacityIcon";
 type CapacityDialogProps = {
   open: boolean;
   handleClose: () => void;
+  refetch: () => void;
   data: AccessCapacityDataType;
   currentCapacityAction: CapacityAction;
   contextType?: ContextType;
@@ -39,6 +40,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
   handleClose,
   data,
   currentCapacityAction,
+  refetch,
 }) => {
   const snackbar = useSnackbar();
 
@@ -74,7 +76,8 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
       onSuccess: () => {
         snackbar.showSuccess("Capacity updated successfully");
         capacityFormik.resetForm();
-        // handleClose();
+        handleClose();
+        refetch();
       },
     }
   );
