@@ -190,6 +190,21 @@ Configuring Google Account for sending out emails is a two step process. First t
 
   8. Treat the app password like your regular password and store it securely.
 
+#### How to configure Google reCAPTCHA?
+
+SaaSBuilder uses Google reCAPTCHA v2 (Invisible) to protect certain pages from attacks against bots. To configure reCAPTCHA,
+  1. Register a new site by navigating to https://www.google.com/recaptcha/admin/create
+  2. On the site registration form, choose "Challenge(v2)" as the reCAPTCHA type and then choose the 
+  "Invisible reCAPTCHA badge" option
+
+  ![Alt text](https://drive.google.com/uc?id=1_LsnRbSX4-XHEw3IAXZHKYqaetH7tqFn "reCAPTHCA Site Registration")
+
+  3. Provide the other required details and submit the form.
+  4. Google will generate a Site Key and a Secret Key for your site.
+
+  ![Alt text](https://drive.google.com/uc?id=1Ntk2NzpRC545X-7pw24nxs-ZhjVLiS_E "reCAPTHCA Key")
+
+
 #### How do I resolve "node version not compatible" errors?
 
 Ensure that you have the correct Node.js version installed. SaaSBuilder requires Node.js version 20.11.1 as mentioned in the guide. You can check your current Node version by running node --version in your terminal. If the version is incorrect, download and install the correct version from Node.js [official website](https://nodejs.org/).

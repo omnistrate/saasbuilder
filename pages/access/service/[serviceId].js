@@ -206,6 +206,21 @@ function MarketplaceService() {
     isLoading: isServiceLoading,
   } = useServiceOffering(serviceId, productTierId);
 
+  const maxNumberOfInstancesReached = useMemo(() => {
+    if (!service || !resourceInstanceList || !service.billingPlans) {
+      return false;
+    }
+
+    // Count Instances that are not in FAILED, DELETING, DELETED status
+    const instancesToCount = resourceInstanceList.filter(
+      (el) => !["FAILED", "DELETING", "DELETED"].includes(el.status)
+    );
+
+    return (
+      instancesToCount.length >= service.billingPlans?.[0]?.maxNumberofInstances
+    );
+  }, [resourceInstanceList, service]);
+
   const environmentId = service?.serviceEnvironmentID;
 
   const [creationDrawerOpen, setCreationDrawerOpen] = useState(false);
@@ -1652,12 +1667,23 @@ function MarketplaceService() {
                     variant="contained"
                     sx={{ ml: 1.5 }}
                     disabled={
+                      isLoading ||
                       !service.resourceParameters ||
                       selectedResource.isDeprecated ||
-                      !createAccessServiceAllowed
+                      !createAccessServiceAllowed ||
+                      maxNumberOfInstancesReached
                     }
                     onClick={openCreationDrawer}
                     startIcon={<AddIcon />}
+                    disabledMessage={
+                      maxNumberOfInstancesReached
+                        ? `You have reached the maximum number of instances allowed`
+                        : !createAccessServiceAllowed
+                          ? "You do not have permission to create instances"
+                          : selectedResource.isDeprecated
+                            ? "Resource deprecated, instance creation not allowed"
+                            : ""
+                    }
                   >
                     Create {selectedResource.name} Instance
                   </Button>
