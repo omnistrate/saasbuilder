@@ -22,9 +22,8 @@ import TextField from "components/FormElements/TextField/TextField";
 import Form from "components/FormElements/Form/Form";
 import { Text } from "../Typography/Typography";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-
 import { AccessCapacityDataType, CapacityAction, ContextType } from "./enums";
-import AddCapacityIcon from "../Icons/AddCapacity/AddCapacityIcon";
+import CapacityIcon from "../Icons/Capacity/CapacityIcon";
 
 type CapacityDialogProps = {
   open: boolean;
@@ -50,7 +49,6 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     message:
       "Enter the number of replicas you want to remove from your capacity",
     buttonLabel: "Remove",
-    buttonColor: "#D92D20",
   };
   if (currentCapacityAction === "add") {
     labelObj.title = "Add Capacity";
@@ -58,7 +56,6 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     labelObj.message =
       "Enter the number of replicas you want to add to your capacity";
     labelObj.buttonLabel = "Add";
-    labelObj.buttonColor = "#7F56D9";
   }
 
   const capacityMutation = useMutation(
@@ -113,7 +110,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
             justifyContent="space-between"
           >
             <Stack direction="row" alignItems="center" gap="16px">
-              <AddCapacityIcon />
+              <CapacityIcon />
               <Text size="large" weight="bold">
                 {labelObj.title}
               </Text>
@@ -182,7 +179,6 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
             type="submit"
             variant="contained"
             disabled={capacityMutation.isLoading}
-            bgColor={labelObj.buttonColor}
           >
             {labelObj.buttonLabel}
             {capacityMutation.isLoading && <LoadingSpinnerSmall />}
