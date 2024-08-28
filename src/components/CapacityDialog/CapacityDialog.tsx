@@ -46,14 +46,17 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
 
   let labelObj = {
     title: "Remove Capacity",
-    subtitle: "Remove",
-    message: "Count",
+    subtitle: "Number of Replicas to Remove",
+    message:
+      "Enter the number of replicas you want to remove from your capacity",
     buttonLabel: "Remove",
     buttonColor: "#D92D20",
   };
   if (currentCapacityAction === "add") {
     labelObj.title = "Add Capacity";
-    labelObj.subtitle = "Add";
+    labelObj.subtitle = "Number of Replicas to Add";
+    labelObj.message =
+      "Enter the number of replicas you want to add to your capacity";
     labelObj.buttonLabel = "Add";
     labelObj.buttonColor = "#7F56D9";
   }
