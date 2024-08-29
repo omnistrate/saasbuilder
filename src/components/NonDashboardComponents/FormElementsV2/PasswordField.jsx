@@ -29,6 +29,7 @@ const PasswordField = (props) => {
           color: "#111827",
           fontWeight: "500",
           boxShadow: "0px 1px 2px 0px #1018280D",
+          paddingRight: "0",
           "& .MuiOutlinedInput-input": {
             padding: "10px 12px",
             backgroundColor: "#FFF",
@@ -55,7 +56,7 @@ const PasswordField = (props) => {
                 color: "#7F56D9",
                 cursor: "pointer",
                 userSelect: "none",
-                paddingRight: "14px",
+                paddingRight: "12px",
                 width: "46px",
                 textAlign: "center",
               }}
