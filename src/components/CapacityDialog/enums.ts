@@ -1,4 +1,4 @@
-// Action Hooks
+
 export type AccessCapacityDataType = {
   serviceProviderId: string;
   serviceKey: string;
