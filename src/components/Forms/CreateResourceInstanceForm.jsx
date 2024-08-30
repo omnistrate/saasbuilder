@@ -416,9 +416,10 @@ function CreateResourceInstanceForm(props) {
                       id={`requestParams.${param.key}`}
                       name={`requestParams.${param.key}`}
                       onChange={formData.handleChange}
-                      values={formData.values.requestParams[param.key]}
+                      value={formData.values.requestParams[param.key]}
                       onBlur={formData.handleBlur}
                       required={param.required == true ? "required" : ""}
+                      showPasswordGenerator
                     />
                   </FieldContainer>
                 );

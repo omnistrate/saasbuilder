@@ -297,8 +297,9 @@ function ResourceUpdateView(props) {
                       id={`requestParams.${param.key}`}
                       name={`requestParams.${param.key}`}
                       onChange={formData.handleChange}
-                      values={formData.values.requestParams[param.key]}
+                      value={formData.values.requestParams[param.key]}
                       onBlur={formData.handleBlur}
+                      showPasswordGenerator
                     />
                   </FieldContainer>
                 );
@@ -440,7 +441,7 @@ function ResourceUpdateView(props) {
                         id={`requestParams.${param.key}`}
                         name={`requestParams.${param.key}`}
                         onChange={formData.handleChange}
-                        values={formData.values.requestParams[param.key]}
+                        value={formData.values.requestParams[param.key]}
                         onBlur={formData.handleBlur}
                       />
                     </FieldContainer>
