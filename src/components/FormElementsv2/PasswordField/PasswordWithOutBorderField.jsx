@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { IconButton, InputAdornment, Stack, Tooltip } from "@mui/material";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOff";
+import { InputAdornment, Stack, Tooltip, Typography } from "@mui/material";
 import { Text } from "src/components/Typography/Typography";
 
 function convertToAsterisks(str) {
@@ -13,12 +11,10 @@ function convertToAsterisks(str) {
 
   return asterisks;
 }
+
 export const PasswordWithOutBorderField = (props) => {
   const { children } = props;
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const toggleVisibility = () => {
-    setIsPasswordVisible((prev) => !prev);
-  };
 
   return (
     <Stack direction="row" alignItems="center" justifyContent="flex-end">
@@ -55,13 +51,18 @@ export const PasswordWithOutBorderField = (props) => {
       </div>
       {children && typeof children === "string" && (
         <InputAdornment position="end">
-          <IconButton size="small" onClick={toggleVisibility}>
-            {isPasswordVisible ? (
-              <VisibilityOffOutlinedIcon sx={{ fontSize: "24px" }} />
-            ) : (
-              <VisibilityOutlinedIcon sx={{ fontSize: "24px" }} />
-            )}
-          </IconButton>
+          <Typography
+            fontSize="12px"
+            color="#7F56D9"
+            style={{
+              cursor: "pointer",
+              userSelect: "none",
+              paddingRight: "14px",
+            }}
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            {isPasswordVisible ? "Hide" : "Show"}
+          </Typography>
         </InputAdornment>
       )}
     </Stack>
