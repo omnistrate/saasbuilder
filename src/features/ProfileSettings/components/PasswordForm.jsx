@@ -6,13 +6,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import useSnackbar from "src/hooks/useSnackbar";
 import Form from "src/components/FormElements/Form/Form";
-import { PasswordInput } from "src/components/NonDashboardComponents/FormElements/FormElements";
 import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
 import styled from "@emotion/styled";
 import Button from "src/components/Button/Button";
 import { updatePassword } from "src/api/users";
 import useLogout from "src/hooks/useLogout";
 import { passwordRegex, passwordText } from "src/utils/passwordRegex";
+import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
+import { PasswordField } from "src/components/FormElementsv2/PasswordField/PasswordField";
 
 function ChangePassword() {
   const snackbar = useSnackbar();
@@ -85,60 +86,66 @@ function ChangePassword() {
       <Form onSubmit={formik.handleSubmit}>
         <Box display="flex" alignItems="center" mt="20px">
           <FieldLabel required>Current Password</FieldLabel>
-          <PasswordInput
-            name="currentPassword"
-            required
-            id="currentPassword"
-            placeholder="Current Password*"
-            value={formik.values.currentPassword}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            sx={{ marginLeft: "150px", width: "600px" }}
-            error={
-              formik.touched.currentPassword && formik.errors.currentPassword
-            }
-            errorMsg={formik.errors.currentPassword}
-            fullWidth
-            mt="12px"
-          />
+          <Box marginLeft="150px">
+            <PasswordField
+              required
+              name="currentPassword"
+              id="currentPassword"
+              placeholder="Current Password*"
+              value={formik.values.currentPassword}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={
+                formik.touched.currentPassword && formik.errors.currentPassword
+              }
+              sx={{ marginTop: "12px", width: "600px" }}
+            />
+            <FieldError>
+              {formik.touched.currentPassword && formik.errors.currentPassword}
+            </FieldError>
+          </Box>
         </Box>
         <Divider sx={{ mt: 2.5, mb: 2.5 }} />
         <Box display="flex" alignItems="center">
           <FieldLabel required>New Password</FieldLabel>
-          <PasswordInput
-            name="password"
-            id="password"
-            required
-            placeholder="New Password*"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            sx={{ marginLeft: "170px", width: "600px" }}
-            onBlur={formik.handleBlur}
-            error={formik.touched.password && formik.errors.password}
-            errorMsg={formik.errors.password}
-            fullWidth
-            mt="12px"
-          />
+          <Box marginLeft="170px">
+            <PasswordField
+              required
+              name="password"
+              id="password"
+              placeholder="New Password*"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.password && formik.errors.password}
+              sx={{ marginTop: "12px", width: "600px" }}
+            />
+            <FieldError>
+              {formik.touched.password && formik.errors.password}
+            </FieldError>
+          </Box>
         </Box>
         <Divider sx={{ mt: 2.5, mb: 2.5 }} />
         <Box display="flex" alignItems="center">
           <FieldLabel required>Confirm New Password</FieldLabel>
-          <PasswordInput
-            name="confirmPassword"
-            id="confirmPassword"
-            required
-            placeholder="Confirm New Password*"
-            value={formik.values.confirmPassword}
-            onChange={formik.handleChange}
-            sx={{ marginLeft: "110px", width: "600px" }}
-            onBlur={formik.handleBlur}
-            error={
-              formik.touched.confirmPassword && formik.errors.confirmPassword
-            }
-            errorMsg={formik.errors.confirmPassword}
-            fullWidth
-            mt="12px"
-          />
+          <Box marginLeft="110px">
+            <PasswordField
+              required
+              name="confirmPassword"
+              id="confirmPassword"
+              placeholder="Confirm New Password*"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={
+                formik.touched.confirmPassword && formik.errors.confirmPassword
+              }
+              sx={{ marginTop: "12px", width: "600px" }}
+            />
+            <FieldError>
+              {formik.touched.confirmPassword && formik.errors.confirmPassword}
+            </FieldError>
+          </Box>
         </Box>
         <Divider sx={{ mt: 3, mb: 3 }} />
         <Box>
