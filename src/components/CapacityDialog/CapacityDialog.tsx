@@ -49,6 +49,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     message:
       "Enter the number of replicas you want to remove from your capacity",
     buttonLabel: "Remove",
+    successLabel: "Removed",
   };
   if (currentCapacityAction === "add") {
     labelObj.title = "Add Capacity";
@@ -56,6 +57,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     labelObj.message =
       "Enter the number of replicas you want to add to your capacity";
     labelObj.buttonLabel = "Add";
+    labelObj.successLabel = "Added";
   }
 
   const capacityMutation = useMutation(
@@ -74,7 +76,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     },
     {
       onSuccess: () => {
-        snackbar.showSuccess("Capacity updated successfully");
+        snackbar.showSuccess(`Capacity ${labelObj.successLabel} successfully`);
         capacityFormik.resetForm();
         handleClose();
         refetch();
@@ -89,8 +91,8 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     validationSchema: Yup.object({
       count: Yup.number()
         .required("Capacity count is required")
-        .min(1, "Capacity count must be at least 1")
-        .max(5, "Capacity count must be at gretered 5"),
+        .min(1, "Capacity count must be at least 1"),
+      // .max(5, "Capacity count must be at gretered 5"),
     }),
     onSubmit: (values) => {
       capacityMutation.mutate(values);
