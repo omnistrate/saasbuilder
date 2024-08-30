@@ -49,7 +49,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     message:
       "Enter the number of replicas you want to remove from your capacity",
     buttonLabel: "Remove",
-    successLabel: "Removed",
+    successLabel: "removed",
   };
   if (currentCapacityAction === "add") {
     labelObj.title = "Add Capacity";
@@ -57,7 +57,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     labelObj.message =
       "Enter the number of replicas you want to add to your capacity";
     labelObj.buttonLabel = "Add";
-    labelObj.successLabel = "Added";
+    labelObj.successLabel = "added";
   }
 
   const capacityMutation = useMutation(
