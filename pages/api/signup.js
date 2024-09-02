@@ -18,7 +18,7 @@ export default async function handleSignup(nextRequest, nextResponse) {
         if (!isVerified) throw new CaptchaVerificationError();
       }
 
-      const password = requestBody;
+      const { password } = requestBody;
       if (password && typeof password === "string") {
         if (!password.match(passwordRegex)) {
           return nextResponse
@@ -39,7 +39,7 @@ export default async function handleSignup(nextRequest, nextResponse) {
 
       nextResponse.status(200).send();
     } catch (error) {
-      console.error(error?.response?.data);
+      console.error(error?.response);
       const defaultErrorMessage = "Something went wrong. Please retry";
 
       if (
