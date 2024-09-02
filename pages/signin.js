@@ -3,6 +3,7 @@ import { IDENTITY_PROVIDER_TYPES } from "src/features/Signin/constants";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import { getIdentityProvidersList } from "src/server/api/identity-provider";
 import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
+import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
 
 export const getServerSideProps = async () => {
   let orgName = "";
@@ -50,6 +51,8 @@ export const getServerSideProps = async () => {
       googleIdentityProvider: googleIdentityProvider,
       githubIdentityProvider: githubIdentityProvider,
       saasBuilderBaseURL: getSaaSDomainURL(),
+      googleReCaptchaSiteKey: process.env.GOOGLE_RECAPTCHA_SITE_KEY || null,
+      isReCaptchaSetup: checkReCaptchaSetup(),
     },
   };
 };
