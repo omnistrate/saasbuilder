@@ -6,7 +6,7 @@ const RebootIcon = (props) => {
   }
 
   if (disabled) {
-    color = "#E0E0E0";
+    color = "#a3a6ac";
   }
 
   return (
