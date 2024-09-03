@@ -1,19 +1,10 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
-import resourceIcon from "../../../public/assets/images/dashboard/sidebar/resource.svg";
 import { selectDrawerExpandedState } from "../../slices/dashboardSideDrawerSlice";
-import {
-  // ListItem,
-  ListItemIcon,
-  ListItemText,
-  MenuHoverTooltip,
-  MenuHoverTooltipTitle,
-  StyledLinkContainer,
-} from "../DashboardLayout/NavItem";
+
 import AccessControlNavIcon from "../Icons/SideNavbar/AccessControl/AccessControl";
 import DashboardNavIcon from "../Icons/SideNavbar/Dashboard/Dashboard";
 import EventsNavIcon from "../Icons/SideNavbar/Events/Events";
-import Tooltip from "../Tooltip/Tooltip";
 import {
   getEnumFromUserRoleString,
   isOperationAllowedByRBAC,
@@ -27,7 +18,6 @@ import {
   getEventRoute,
   getResourceRoute,
 } from "../../utils/route/access/accessRoute";
-import { People } from "@mui/icons-material";
 import { styleConfig } from "src/providerConfig";
 import SidebarListItem from "../DashboardLayout/SidebarListItem";
 import ResourcesDropdown from "./ResourcesDropdown";
@@ -45,23 +35,18 @@ function MarketplaceServiceSidebar(props) {
     productTierId,
     environmentId,
     resourceParameters = [],
-    isLoading,
     active,
-    onResourceInstanceClick = () => {},
     selectedResource,
-    serviceName,
-    isResourceInstanceLoading = true,
     activeResourceId,
-    currentSource,
     currentSubscription,
+    isCustomNetworkEnabled,
+    isCustomNetworkActive,
   } = props;
-  const isDrawerExpanded = useSelector(selectDrawerExpandedState);
 
   const isAccessControlActive = active === sidebarActiveOptions.accessControl;
   const isEventsActive = active === sidebarActiveOptions.events;
   const isDashboardActive = active === sidebarActiveOptions.dashboard;
 
-  const selectUser = useSelector(selectUserrootData);
   const role = getEnumFromUserRoleString(currentSubscription?.roleType);
 
   const listingAllowedForAccessService = isOperationAllowedByRBAC(
@@ -135,6 +120,8 @@ function MarketplaceServiceSidebar(props) {
         selectedResource={selectedResource}
         resourceUrlLink={resourceUrlLink}
         resourceParameters={resourceParameters}
+        isCustomNetworkEnabled={isCustomNetworkEnabled}
+        isCustomNetworkActive={isCustomNetworkActive}
       />
     </Box>
   );

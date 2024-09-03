@@ -68,8 +68,10 @@ const ResourcesDropdown = ({
   activeResourceId,
   selectedResource,
   resourceUrlLink,
-  resourceParameters,
+  resourceParameters = [],
   isDisabled = false,
+  isCustomNetworkEnabled,
+  isCustomNetworkActive,
 }) => {
   const [isExpaned, setIsExpaned] = useState(
     !!selectedResource || !!activeResourceId
@@ -86,6 +88,20 @@ const ResourcesDropdown = ({
     );
     return index;
   }, [selectedResource, activeResourceId]);
+
+  let resourceParametersList = [...resourceParameters];
+  if (isCustomNetworkEnabled) {
+    resourceParametersList = [
+      ...resourceParametersList,
+      {
+        name: "Custom Networks",
+        href: `${resourceUrlLink}&&viewType=custom-networks`,
+        isActive: isCustomNetworkActive,
+        custom: true,
+        customResourceType: "customNetwork",
+      },
+    ];
+  }
 
   return (
     <Box width="100%">
@@ -116,26 +132,41 @@ const ResourcesDropdown = ({
       <Box
         sx={{
           maxHeight: isExpaned
-            ? resourceItemHeight * resourceParameters.length
+            ? resourceItemHeight * resourceParametersList.length
             : 0,
           transition: "max-height 0.3s ease",
           overflow: "hidden",
         }}
       >
-        {resourceParameters?.length
-          ? resourceParameters.map((resourceParameter, index) => (
-              <ResourceListItem
-                key={resourceParameter.resourceId}
-                href={`${resourceUrlLink}&resourceId=${resourceParameter.resourceId}`}
-                resourceName={resourceParameter.name}
-                isActive={
-                  resourceParameter.urlKey === selectedResource ||
-                  resourceParameter.resourceId === activeResourceId
-                }
-                isHighlighted={index < selectedResourceIndex} // For highlighting the ResourceDropdownLine
-                isLastItem={index === resourceParameters.length - 1} // For not showing the ResourceDropdownLine
-              />
-            ))
+        {resourceParametersList?.length
+          ? resourceParametersList.map((resourceParameter, index) => {
+              if (resourceParameter.custom) {
+                return (
+                  <ResourceListItem
+                    key={index}
+                    href={resourceParameter.href}
+                    resourceName={resourceParameter.name}
+                    isActive={resourceParameter.isActive}
+                    isHighlighted={index < selectedResourceIndex} // For highlighting the ResourceDropdownLine
+                    isLastItem={index === resourceParametersList.length - 1} // For not showing the ResourceDropdownLine
+                  />
+                );
+              } else
+                return (
+                  <ResourceListItem
+                    key={resourceParameter.resourceId}
+                    href={`${resourceUrlLink}&resourceId=${resourceParameter.resourceId}`}
+                    resourceName={resourceParameter.name}
+                    isActive={
+                      (!isCustomNetworkActive &&
+                        resourceParameter.urlKey === selectedResource) ||
+                      resourceParameter.resourceId === activeResourceId
+                    }
+                    isHighlighted={index < selectedResourceIndex} // For highlighting the ResourceDropdownLine
+                    isLastItem={index === resourceParametersList.length - 1} // For not showing the ResourceDropdownLine
+                  />
+                );
+            })
           : "No Resources Found"}
       </Box>
     </Box>

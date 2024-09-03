@@ -22,6 +22,7 @@ import { AccessSupport } from "src/components/Access/AccessSupport";
 import {
   getAPIDocsRoute,
   getMarketplaceRoute,
+  getResourceInstancesDetailsRoute,
   getResourceInstancesDetailswithKeyRoute,
   getResourceInstancesRoute,
 } from "src/utils/route/access/accessRoute";
@@ -146,6 +147,40 @@ function ResourceInstance() {
     }
   }
 
+  const cloudProviderAccountInstanceURL = useMemo(() => {
+    let resourceId = null;
+    let instanceURL = null;
+    if (serviceOffering) {
+      const cloudProviderResource = serviceOffering.resourceParameters?.find(
+        (resource) => resource?.resourceId.startsWith("r-injectedaccountconfig")
+      );
+      if (cloudProviderResource) resourceId = cloudProviderResource.resourceId;
+    }
+
+    if (
+      resourceId &&
+      resourceInstanceData?.resultParameters?.cloud_provider_account_config_id
+    ) {
+      instanceURL = getResourceInstancesDetailsRoute(
+        serviceId,
+        environmentId,
+        productTierId,
+        resourceId,
+        resourceInstanceData?.resultParameters
+          ?.cloud_provider_account_config_id,
+        subscriptionData?.id
+      );
+    }
+    return instanceURL;
+  }, [
+    serviceOffering,
+    resourceInstanceData,
+    serviceId,
+    environmentId,
+    productTierId,
+    subscriptionData?.id,
+  ]);
+
   useEffect(() => {
     if (router.isReady) {
       if (view in tabs) {
@@ -165,6 +200,19 @@ function ResourceInstance() {
     resourceInstanceId: resourceInstanceId,
   };
 
+  const isCustomNetworkEnabled = useMemo(() => {
+    let enabled = false;
+
+    if (
+      serviceOffering?.serviceModelFeatures?.find((featureObj) => {
+        return featureObj.feature === "CUSTOM_NETWORKS";
+      })
+    )
+      enabled = true;
+
+    return enabled;
+  }, [serviceOffering]);
+
   if (isLoading || isLoadingSubscription || !resourceInstanceData) {
     return (
       <DashboardLayout
@@ -183,6 +231,7 @@ function ResourceInstance() {
             serviceName={serviceOffering?.serviceName}
             productTierId={productTierId}
             currentSubscription={subscriptionData}
+            isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
         }
         serviceName={serviceOffering?.serviceName}
@@ -215,6 +264,7 @@ function ResourceInstance() {
             serviceName={serviceOffering?.serviceName}
             productTierId={productTierId}
             currentSubscription={subscriptionData}
+            isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
         }
         serviceName={serviceOffering?.serviceName}
@@ -268,6 +318,7 @@ function ResourceInstance() {
           productTierId={productTierId}
           currentSource={currentSource}
           currentSubscription={subscriptionData}
+          isCustomNetworkEnabled={isCustomNetworkEnabled}
         />
       }
       serviceName={serviceOffering?.serviceName}
@@ -336,6 +387,8 @@ function ResourceInstance() {
           }
           serviceOffering={serviceOffering}
           subscriptionId={subscriptionData?.id}
+          cloudProviderAccountInstanceURL={cloudProviderAccountInstanceURL}
+          customNetworkDetails={resourceInstanceData.customNetworkDetails}
         />
       )}
       {currentTab === tabs.connectivity && (
