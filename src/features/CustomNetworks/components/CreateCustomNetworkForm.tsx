@@ -23,8 +23,8 @@ type CustomNetworkFormProps = {
   cloudProviders: CloudProvider[];
   cloudProviderRegions: any[];
   //array of supported aws, gcp region codes
-  supportedAWSRegions?: string[];
-  supportedGCPRegions?: string[];
+  supportedAWSRegions: string[];
+  supportedGCPRegions: string[];
 };
 
 const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
@@ -83,13 +83,13 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
         return region.cloudProviderName === selectedCloudProvider;
       });
 
-      if (selectedCloudProvider === "aws" && supportedAWSRegions) {
+      if (selectedCloudProvider === "aws") {
         regions = regions.filter((region) =>
           supportedAWSRegions.includes(region.code)
         );
       }
 
-      if (selectedCloudProvider === "gcp" && supportedGCPRegions) {
+      if (selectedCloudProvider === "gcp") {
         regions = regions.filter((region) =>
           supportedGCPRegions.includes(region.code)
         );

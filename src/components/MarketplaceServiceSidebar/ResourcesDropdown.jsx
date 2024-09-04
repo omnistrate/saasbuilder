@@ -95,7 +95,7 @@ const ResourcesDropdown = ({
       ...resourceParametersList,
       {
         name: "Custom Networks",
-        href: `${resourceUrlLink}&&viewType=custom-networks`,
+        href: `${resourceUrlLink}&viewType=custom-networks`,
         isActive: isCustomNetworkActive,
         custom: true,
         customResourceType: "customNetwork",

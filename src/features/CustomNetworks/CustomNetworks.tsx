@@ -62,8 +62,6 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
   const filteredCustomNetworks = useMemo(() => {
     let filtered = customNetworks;
 
-    console.log("Supported AWS regions", supportedAWSRegions);
-    console.log("Supported GCP regions", supportedGCPRegions);
 
     filtered = customNetworks.filter((customNetwork) => {
       const cloudProvider = customNetwork.cloudProviderName;
