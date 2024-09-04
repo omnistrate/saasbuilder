@@ -80,7 +80,7 @@ import AccessSideRestoreInstance from "src/components/RestoreInstance/AccessSide
 import DataGridText from "src/components/DataGrid/DataGridText";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import CapacityDialog from "src/components/CapacityDialog/CapacityDialog";
-import InstancesTableHeader from "./components/InstancesTableHeader";
+import InstancesTableHeader from "../../../src/features/ResourceInstance/components/InstancesTableHeader";
 
 export const getServerSideProps = async () => {
   return {

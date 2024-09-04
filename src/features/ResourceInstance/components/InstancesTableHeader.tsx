@@ -14,10 +14,11 @@ import Button from "src/components/Button/Button";
 import AddIcon from "@mui/icons-material/Add";
 import DeprecateIcon from "src/components/Icons/DeprecateIcon/DeprecateIcon";
 import { Text } from "src/components/Typography/Typography";
-import { AccessResourceInstance, RESOURCE_TYPES, SetState } from "./enums";
+import { AccessResourceInstance, RESOURCE_TYPES } from "./enums";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import ResourceInstanceControlPanel from "./ResourceInstanceControlPanel";
 import SearchInput from "src/components/DataGrid/SearchInput";
+import { SetState } from "src/types/common/reactGenerics";
 
 type InstancesTableHeaderProps = {
   count?: number;

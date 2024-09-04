@@ -3,7 +3,7 @@ export const RESOURCE_TYPES = {
   Kustomize: "Kustomize",
 };
 
-export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
+
 
 type RESOURCETYPES = "OperatorCRD" | "Kustomize";
 
