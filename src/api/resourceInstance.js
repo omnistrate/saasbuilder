@@ -13,6 +13,7 @@ export const createResourceInstance = (payload) => {
       network_type: payload.network_type,
       region: payload.region,
       requestParams: payload.requestParams,
+      custom_network_id: payload.custom_network_id,
     },
     { params: queryParams }
   );

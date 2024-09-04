@@ -3,7 +3,6 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import {
   Box,
   CircularProgress,
-  Divider,
   IconButton,
   InputAdornment,
   MenuItem,
@@ -13,22 +12,18 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import { useMutation } from "@tanstack/react-query";
 import { FieldArray, FormikProvider, useFormik } from "formik";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useMemo, useState } from "react";
 import Button from "../../../../src/components/Button/Button";
-import Card from "../../../../src/components/Card/Card";
 import DashboardLayout from "../../../../src/components/DashboardLayout/DashboardLayout";
 import Form from "../../../../src/components/FormElements/Form/Form";
 import TextField from "../../../../src/components/FormElements/TextField/TextField";
 import { P } from "../../../../src/components/Typography/Typography";
 import useSnackbar from "../../../../src/hooks/useSnackbar";
-import { selectUserrootData } from "../../../../src/slices/userDataSlice";
 import LoadingSpinnerSmall from "../../../../src/components/CircularProgress/CircularProgress";
 import { useRouter } from "next/router";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { AccessSupport } from "../../../../src/components/Access/AccessSupport";
 import Chip from "../../../../src/components/Chip/Chip";
-import Select from "../../../../src/components/FormElements/Select/Select";
 import MarketplaceServiceSidebar, {
   sidebarActiveOptions,
 } from "../../../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
@@ -272,6 +267,20 @@ function AccessControl() {
       serviceEnvironmentId: "All",
     };
   };
+
+  const isCustomNetworkEnabled = useMemo(() => {
+    let enabled = false;
+
+    if (
+      service?.serviceModelFeatures?.find((featureObj) => {
+        return featureObj.feature === "CUSTOM_NETWORKS";
+      })
+    )
+      enabled = true;
+
+    return enabled;
+  }, [service]);
+
   const servicePlanUrlLink = getMarketplaceRoute(
     serviceId,
     environmentId,
@@ -311,6 +320,7 @@ function AccessControl() {
             currentSource={currentSource}
             subscriptionId={subscriptionData?.id}
             currentSubscription={subscriptionData}
+            isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
         }
         serviceName={service?.serviceName}
@@ -347,6 +357,7 @@ function AccessControl() {
             currentSource={currentSource}
             subscriptionId={subscriptionData?.id}
             currentSubscription={subscriptionData}
+            isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
         }
         serviceName={service?.serviceName}
@@ -401,6 +412,7 @@ function AccessControl() {
           productTierId={productTierId}
           currentSource={currentSource}
           currentSubscription={subscriptionData}
+          isCustomNetworkEnabled={isCustomNetworkEnabled}
         />
       }
       serviceName={service?.serviceName}

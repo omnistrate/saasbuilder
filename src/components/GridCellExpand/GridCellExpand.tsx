@@ -11,7 +11,23 @@ import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 //   );
 // }
 
-const GridCellExpand = React.memo(function GridCellExpand(props) {
+type GridCellExpandProps = {
+  width?: any;
+  value: string;
+  copyButton?: boolean;
+  startIcon?: any;
+  endIcon?: any;
+  textStyles?: any;
+  onClick?: () => void;
+  href?: string;
+  target?: "_self" | "_blank";
+  justifyContent?: string;
+  externalLinkArrow?: boolean;
+};
+
+const GridCellExpand = React.memo(function GridCellExpand(
+  props: GridCellExpandProps
+) {
   const {
     width,
     value,

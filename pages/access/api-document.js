@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import apiDocsIcon from "../../public/assets/images/marketplace/APIDocs.svg";
 import DashboardLayout from "../../src/components/DashboardLayout/DashboardLayout";
 import MarketplaceServiceSidebar from "../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
@@ -15,7 +15,6 @@ import SideDrawerRight from "../../src/components/SideDrawerRight/SideDrawerRigh
 import { AccessSupport } from "../../src/components/Access/AccessSupport";
 
 import { getAPIDocsRoute } from "../../src/utils/route/access/accessRoute";
-import useSubscription from "../../src/hooks/query/useSubscription";
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 
@@ -53,15 +52,7 @@ export default function ApiDocument(props) {
     setSupportDrawerOpen(false);
   };
 
-  const modelType = serviceOffering?.serviceModelType;
-  let deploymentHeader = "";
-  if (modelType === "CUSTOMER_HOSTED") {
-    deploymentHeader = "Provider Account";
-  } else if (modelType === "OMNISTRATE_HOSTED") {
-    deploymentHeader = "Omnistrate Account";
-  } else if (modelType === "BYOA") {
-    deploymentHeader = "Bring Your Own Account (BYOA)";
-  }
+
 
   const subscriptionForAccessQuery = useSubscriptionForProductTierAccess(
     serviceId,
@@ -86,6 +77,19 @@ export default function ApiDocument(props) {
     productTierId,
     subscriptionId || subscriptionData?.id
   );
+
+  const isCustomNetworkEnabled = useMemo(() => {
+    let enabled = false;
+
+    if (
+      serviceOffering?.serviceModelFeatures?.find((featureObj) => {
+        return featureObj.feature === "CUSTOM_NETWORKS";
+      })
+    )
+      enabled = true;
+
+    return enabled;
+  }, [serviceOffering]);
 
   return (
     <>
@@ -112,6 +116,7 @@ export default function ApiDocument(props) {
             productTierId={productTierId}
             currentSource={currentSource}
             currentSubscription={subscriptionData}
+            isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
         }
         serviceName={serviceOffering?.serviceName}

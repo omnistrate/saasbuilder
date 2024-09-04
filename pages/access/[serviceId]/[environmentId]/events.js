@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import DashboardLayout from "../../../../src/components/DashboardLayout/DashboardLayout";
 import {
   DisplayText,
@@ -78,6 +78,19 @@ function Events() {
   const { isLoading: isEventsLoading, isRefetching: isEventsRefetching } =
     eventsQuery;
 
+  const isCustomNetworkEnabled = useMemo(() => {
+    let enabled = false;
+
+    if (
+      serviceOffering?.serviceModelFeatures?.find((featureObj) => {
+        return featureObj.feature === "CUSTOM_NETWORKS";
+      })
+    )
+      enabled = true;
+
+    return enabled;
+  }, [serviceOffering]);
+
   const isLoading = isServiceOfferingLoading || isEventsLoading;
 
   if (isLoading || isLoadingSubscription) {
@@ -100,6 +113,7 @@ function Events() {
             active={sidebarActiveOptions.events}
             currentSource={currentSource}
             currentSubscription={subscriptionData}
+            isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
         }
         serviceName={serviceOffering?.serviceName}
@@ -130,6 +144,7 @@ function Events() {
             active={sidebarActiveOptions.events}
             currentSource={currentSource}
             currentSubscription={subscriptionData}
+            isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
         }
         serviceName={serviceOffering?.serviceName}
@@ -170,6 +185,7 @@ function Events() {
         servicePlanUrlLink={servicePlanUrlLink}
         accessPage
         currentSubscription={subscriptionData}
+        isCustomNetworkEnabled={isCustomNetworkEnabled}
       >
         <ServiceOfferingUnavailableUI />
       </DashboardLayout>
@@ -200,6 +216,7 @@ function Events() {
           active={sidebarActiveOptions.events}
           currentSource={currentSource}
           currentSubscription={subscriptionData}
+          isCustomNetworkEnabled={isCustomNetworkEnabled}
         />
       }
       serviceName={serviceOffering?.serviceName}
