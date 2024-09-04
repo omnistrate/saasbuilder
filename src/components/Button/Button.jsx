@@ -89,7 +89,7 @@ const Button = styled(
       color: fontColor ? fontColor : styleConfig.primaryTextColor,
       boxShadow: "none",
       "&:hover": {
-        background: theme.palette.primary.hover,
+        background: bgColor ? bgColor : theme.palette.primary.hover,
       },
     },
     [`&.${buttonClasses.contained}:disabled`]: {
