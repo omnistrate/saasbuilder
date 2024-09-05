@@ -5,6 +5,36 @@ import { getEnvironmentType } from "src/server/utils/getEnvironmentType";
 
 const environmentType = getEnvironmentType();
 
+const redirectToSignIn = (request) => {
+  const path = request.nextUrl.pathname;
+
+  // Prevent Redirecting to the Same Page
+  if (path.startsWith("/signin")) return;
+
+  const redirectPath = "/signin";
+
+  const response = NextResponse.redirect(new URL(redirectPath, request.url));
+  response.headers.set(`x-middleware-cache`, `no-cache`);
+  return response;
+};
+
+const redirectToDestination = (request) => {
+  // Get the Destination URL from the Query Parameters
+  const destination = request.nextUrl.searchParams.get("destination");
+
+  // Decode the Destination URL if it starts with %2Fservice-plans - Allow Redirecting to Service Plans Page
+  const decodedDestination =
+    destination && destination.startsWith("%2Fservice-plans")
+      ? decodeURIComponent(destination)
+      : "/service-plans";
+
+  const response = NextResponse.redirect(
+    new URL(decodedDestination, request.url)
+  );
+  response.headers.set(`x-middleware-cache`, `no-cache`);
+  return response;
+};
+
 export async function middleware(request) {
   const authToken = request.cookies.get("token");
   const path = request.nextUrl.pathname;
@@ -17,21 +47,8 @@ export async function middleware(request) {
     if (environmentType === "PROD") return;
   }
 
-  const redirectToSignIn = () => {
-    const path = request.nextUrl.pathname;
-
-    // Prevent Redirecting to the Same Page
-    if (path.startsWith("/signin")) return;
-
-    let redirectPath = "/signin";
-
-    const response = NextResponse.redirect(new URL(redirectPath, request.url));
-    response.headers.set(`x-middleware-cache`, `no-cache`);
-    return response;
-  };
-
   if (!authToken?.value || jwtDecode(authToken.value).exp < Date.now() / 1000) {
-    return redirectToSignIn();
+    return redirectToSignIn(request);
   }
 
   try {
@@ -43,29 +60,21 @@ export async function middleware(request) {
     });
 
     if (userData?.status !== 200) {
-      return redirectToSignIn();
+      return redirectToSignIn(request);
     }
     //subscriptions page should only be accessible in PROD
     if (request.nextUrl.pathname.startsWith("/subscriptions")) {
       if (environmentType !== "PROD") {
-        const response = NextResponse.redirect(
-          new URL("/service-plans", request.url)
-        );
-        response.headers.set(`x-middleware-cache`, `no-cache`);
-        return response;
+        redirectToDestination(request);
       }
     }
 
     if (request.nextUrl.pathname.startsWith("/signin")) {
-      const response = NextResponse.redirect(
-        new URL("/service-plans", request.url)
-      );
-      response.headers.set(`x-middleware-cache`, `no-cache`);
-      return response;
+      redirectToDestination(request);
     }
   } catch (error) {
     console.log("Middleware Error", error?.response?.data);
-    redirectToSignIn();
+    redirectToSignIn(request);
   }
 
   const response = NextResponse.next();

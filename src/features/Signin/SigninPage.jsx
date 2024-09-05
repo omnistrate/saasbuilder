@@ -43,7 +43,7 @@ const SigninPage = (props) => {
   } = props;
   const router = useRouter();
   const environmentType = useEnvironmentType();
-  const { redirect_reason } = router.query;
+  const { redirect_reason, destination } = router.query;
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
   const reCaptchaRef = useRef(null);
@@ -60,7 +60,13 @@ const SigninPage = (props) => {
     if (jwtToken) {
       Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
       axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
-      router.push("/service-plans");
+
+      // Redirect to the Destination URL
+      if (destination && destination.startsWith("%2Fservice-plans")) {
+        router.replace(decodeURIComponent(destination));
+      } else {
+        router.replace("/service-plans");
+      }
     }
   }
 

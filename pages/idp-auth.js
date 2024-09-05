@@ -10,7 +10,7 @@ import useSnackbar from "src/hooks/useSnackbar";
 
 function IDPAuth() {
   const router = useRouter();
-  const { state, code } = router.query;
+  const { state, code, destination } = router.query;
   const isRouterReady = router.isReady;
   const snackbar = useSnackbar();
 
@@ -63,7 +63,13 @@ function IDPAuth() {
       if (jwtToken) {
         Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
         axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
-        router.replace("/service-plans");
+
+        // Redirect to the Destination URL
+        if (destination && destination.startsWith("%2Fservice-plans")) {
+          router.replace(decodeURIComponent(destination));
+        } else {
+          router.replace("/service-plans");
+        }
       }
     } catch (error) {
       sessionStorage.removeItem("authState");
