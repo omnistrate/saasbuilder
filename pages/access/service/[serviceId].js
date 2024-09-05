@@ -97,7 +97,7 @@ function MarketplaceService() {
   const [currentSource, setCurrentSource] = React.useState("");
   const [cloudProviderAccounts, setCloudProviderAccounts] = useState([]);
   const [cloudProviderResource, setCloudProviderResource] = useState(null);
-
+  const [searchText, setSearchText] = useState(""); // Data Grid Search Field Text
   const [isRestoreInstanceModalOpen, setIsResourceInstanceModalOpen] =
     useState(false);
 
