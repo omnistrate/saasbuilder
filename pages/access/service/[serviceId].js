@@ -82,6 +82,7 @@ import DataGridText from "src/components/DataGrid/DataGridText";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import CustomNetworks from "src/features/CustomNetworks/CustomNetworks";
 import CapacityDialog from "src/components/CapacityDialog/CapacityDialog";
+import InstancesTableHeader from "src/features/ResourceInstance/components/InstancesTableHeader";
 
 export const getServerSideProps = async () => {
   return {
