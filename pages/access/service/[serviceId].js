@@ -133,7 +133,18 @@ function MarketplaceService() {
   const handleRestoreInstanceModalClose = () => {
     setIsResourceInstanceModalOpen(false);
   };
+  const filteredInstances = useMemo(() => {
+    if (!resourceInstanceList?.length) {
+      return [];
+    }
 
+    if (searchText) {
+      return resourceInstanceList.filter((instance) =>
+        instance?.id.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+    return resourceInstanceList;
+  }, [resourceInstanceList, searchText]);
   const resourceInstancesHashmap = useMemo(() => {
     const hashmap = {};
     resourceInstanceList.forEach((instance) => {
@@ -458,7 +469,7 @@ function MarketplaceService() {
     }
 
     return columnDefinition;
-  }, [serviceId, selectedResource, resourceInstanceList]);
+  }, [serviceId, selectedResource, filteredInstances]);
 
   const snackbar = useSnackbar();
   const dispatch = useDispatch();
