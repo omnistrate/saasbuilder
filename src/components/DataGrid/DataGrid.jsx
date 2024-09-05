@@ -1,10 +1,10 @@
-import { styled } from "@mui/material";
+import { Stack, styled } from "@mui/material";
 import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
 import DataGridCustomPagination from "./DataGridCustomPagination";
 import CustomCheckbox from "../Checkbox/Checkbox";
 
 const DataGrid = styled(
-  ({ components, ...restProps }) => (
+  ({ components, noRowsText = "No Rows", ...restProps }) => (
     <MuiDataGrid
       rowsPerPageOptions={[10]}
       pageSize={10}
@@ -12,6 +12,11 @@ const DataGrid = styled(
       components={{
         BaseCheckbox: CustomCheckbox,
         Pagination: DataGridCustomPagination,
+        NoRowsOverlay: () => (
+          <Stack height="100%" alignItems="center" justifyContent="center">
+            {noRowsText}
+          </Stack>
+        ),
         ...components,
       }}
       hideFooterSelectedRowCount
@@ -30,6 +35,9 @@ const DataGrid = styled(
     height: "491px", // height of rows container to have 10 rows(each of height 52px) without scroll inside table
   },
   border: "1px solid #EAECF0",
+  "& .MuiDataGrid-main": {
+    height: "591px", // height of rows container to have 10 rows(each of height 52px) without scroll inside table
+  },
   "& .MuiDataGrid-row:nth-of-type(2n+1)": {
     background: "#F9FAFB",
   },
@@ -45,7 +53,7 @@ const DataGrid = styled(
     display: "none",
   },
   "& .MuiDataGrid-cell": {
-    padding: "0px 24px",
+    padding: "0px 12px",
     color: "#475467",
     fontSize: "12px",
     fontWeight: 500,

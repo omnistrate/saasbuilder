@@ -258,9 +258,11 @@ function Connectivity(props) {
         description: `The private network CIDR of the ${sectionLabel.toLowerCase()}`,
         value: privateNetworkCIDR,
       });
+    }
 
+    if (privateNetworkId) {
       res.push({
-        label: "Private network id",
+        label: "Private network ID",
         description: `The private network ID of the ${sectionLabel.toLowerCase()}`,
         value: privateNetworkId,
       });

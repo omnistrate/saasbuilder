@@ -19,9 +19,10 @@ import GoogleLogin from "./components/GoogleLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "./constants";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import GithubLogin from "./components/GitHubLogin";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -37,10 +38,15 @@ const SigninPage = (props) => {
     googleIdentityProvider,
     githubIdentityProvider,
     saasBuilderBaseURL,
+    googleReCaptchaSiteKey,
+    isReCaptchaSetup,
   } = props;
   const router = useRouter();
   const environmentType = useEnvironmentType();
   const { redirect_reason } = router.query;
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+  const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
+  const reCaptchaRef = useRef(null);
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -82,16 +88,25 @@ const SigninPage = (props) => {
     }
   );
 
+  async function handleFormSubmit(values) {
+    let data = { ...values };
+
+    if (reCaptchaRef.current && !hasCaptchaErrored) {
+      const token = await reCaptchaRef.current.executeAsync();
+      reCaptchaRef.current.reset();
+      data["reCaptchaToken"] = token;
+    }
+
+    signInMutation.mutate(data);
+  }
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     enableReinitialize: true,
-    onSubmit: (values) => {
-      let data = { ...values };
-      signInMutation.mutate(data);
-    },
+    onSubmit: handleFormSubmit,
     validationSchema: createSigninValidationSchema,
   });
 
@@ -186,11 +201,24 @@ const SigninPage = (props) => {
           <SubmitButton
             type="submit"
             onClick={formik.handleSubmit}
-            disabled={!formik.isValid}
+            disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
             loading={signInMutation.isLoading}
           >
             Login
           </SubmitButton>
+          {isReCaptchaSetup && (
+            <ReCAPTCHA
+              size="invisible"
+              sitekey={googleReCaptchaSiteKey}
+              ref={reCaptchaRef}
+              asyncScriptOnLoad={() => {
+                setIsScriptLoaded(true);
+              }}
+              onErrored={() => {
+                setHasCaptchaErrored(true);
+              }}
+            />
+          )}
         </Stack>
       </Stack>
       {Boolean(googleIdentityProvider || githubIdentityProvider) && (

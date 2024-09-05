@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import DashboardLayout from "../../../../src/components/DashboardLayout/DashboardLayout";
 import { useRouter } from "next/router";
 import useServiceOffering from "../../../../src/hooks/useServiceOffering";
@@ -92,6 +92,19 @@ function Dashboard(props) {
 
   const events = useSelector(selectEvents);
 
+  const isCustomNetworkEnabled = useMemo(() => {
+    let enabled = false;
+
+    if (
+      serviceOffering?.serviceModelFeatures?.find((featureObj) => {
+        return featureObj.feature === "CUSTOM_NETWORKS";
+      })
+    )
+      enabled = true;
+
+    return enabled;
+  }, [serviceOffering]);
+
   const isLoading =
     isServiceOfferingLoading ||
     isEventsLoading ||
@@ -118,6 +131,7 @@ function Dashboard(props) {
             active={sidebarActiveOptions.dashboard}
             currentSource={currentSource}
             currentSubscription={subscriptionData}
+            isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
         }
         serviceName={serviceOffering?.serviceName}
@@ -148,6 +162,7 @@ function Dashboard(props) {
             active={sidebarActiveOptions.dashboard}
             currentSource={currentSource}
             currentSubscription={subscriptionData}
+            isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
         }
         serviceName={serviceOffering?.serviceName}
@@ -219,6 +234,7 @@ function Dashboard(props) {
           active={sidebarActiveOptions.dashboard}
           currentSource={currentSource}
           currentSubscription={subscriptionData}
+          isCustomNetworkEnabled={isCustomNetworkEnabled}
         />
       }
       serviceName={serviceOffering?.serviceName}
