@@ -29,6 +29,9 @@ type ResourceInstanceControlPanelProps = {
   isAddCapacity?: boolean;
   isRemoveCapacity?: boolean;
   isLoading?: boolean;
+  isVisibleRestore?: boolean;
+  isVisibleCapacity?: boolean;
+  isVisibleBYOA?: boolean;
 };
 
 const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
@@ -50,9 +53,12 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
   isLoading,
   isAddCapacity,
   isRemoveCapacity,
+  isVisibleRestore,
+  isVisibleCapacity,
+  isVisibleBYOA,
 }) => {
-  const buttons = useMemo(
-    () => [
+  const buttons = useMemo(() => {
+    const buttonsAction = [
       {
         isVisible: !isCurrentResourceBYOA,
         label: "Reboot",
@@ -60,72 +66,83 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
         icon: RestartIcon,
         isDisabled: isRestartDisabled,
       },
-      {
-        isVisible: !isCurrentResourceBYOA,
-        label: "Start",
-        onClick: handleStart,
-        icon: StartIcon,
-        isDisabled: isStartDisabled,
-      },
-      {
-        isVisible: !isCurrentResourceBYOA,
-        label: "Stop",
-        onClick: handleStop,
-        icon: StopIcon,
-        isDisabled: isStopDisabled,
-      },
-      {
-        isVisible: !!handleModify,
-        label: "Modify",
-        onClick: handleModify,
-        icon: ModifyIcon,
-        isDisabled: isModifyDisabled,
-      },
-      {
+    ];
+    if (!isVisibleBYOA) {
+      buttonsAction.push(
+        {
+          isVisible: !isCurrentResourceBYOA,
+          label: "Start",
+          onClick: handleStart,
+          icon: StartIcon,
+          isDisabled: isStartDisabled,
+        },
+        {
+          isVisible: !isCurrentResourceBYOA,
+          label: "Stop",
+          onClick: handleStop,
+          icon: StopIcon,
+          isDisabled: isStopDisabled,
+        }
+      );
+    }
+    buttonsAction.push({
+      isVisible: !!handleModify,
+      label: "Modify",
+      onClick: handleModify,
+      icon: ModifyIcon,
+      isDisabled: isModifyDisabled,
+    });
+    if (isVisibleRestore) {
+      buttonsAction.push({
         isVisible: !!handleRestore,
         label: "PiTR",
         onClick: handleRestore,
         icon: RestoreInstanceIcon,
         isDisabled: isRestoreDisabled,
-      },
-      {
-        isVisible: !!handleAddCapacity,
-        label: "Add Capacity",
-        onClick: handleAddCapacity,
-        icon: AddCapacityIcon,
-        isDisabled: isAddCapacity,
-      },
-      {
-        isVisible: !!handleRemoveCapacity,
-        label: "Remove Capacity",
-        onClick: handleRemoveCapacity,
-        icon: RemoveCapacityIcon,
-        isDisabled: isRemoveCapacity,
-      },
-      {
-        isVisible: !!handleDelete,
-        label: "Delete",
-        onClick: handleDelete,
-        icon: DeleteIcon,
-        isDisabled: isDeleteDisabled,
-      },
-    ],
-    [
-      handleDelete,
-      handleModify,
-      handleRestart,
-      handleStart,
-      handleStop,
-      handleRestore,
-      isCurrentResourceBYOA,
-      isDeleteDisabled,
-      isModifyDisabled,
-      isRestartDisabled,
-      isStartDisabled,
-      isStopDisabled,
-      isRestoreDisabled,
-    ]
-  );
+      });
+    }
+    if (isVisibleCapacity) {
+      buttonsAction.push(
+        {
+          isVisible: !!handleAddCapacity,
+          label: "Add Capacity",
+          onClick: handleAddCapacity,
+          icon: AddCapacityIcon,
+          isDisabled: isAddCapacity,
+        },
+        {
+          isVisible: !!handleRemoveCapacity,
+          label: "Remove Capacity",
+          onClick: handleRemoveCapacity,
+          icon: RemoveCapacityIcon,
+          isDisabled: isRemoveCapacity,
+        }
+      );
+    }
+    buttonsAction.push({
+      isVisible: !!handleDelete,
+      label: "Delete",
+      onClick: handleDelete,
+      icon: DeleteIcon,
+      isDisabled: isDeleteDisabled,
+    });
+    return buttonsAction;
+  }, [
+    handleDelete,
+    handleModify,
+    handleRestart,
+    handleStart,
+    handleStop,
+    handleRestore,
+    isCurrentResourceBYOA,
+    isDeleteDisabled,
+    isModifyDisabled,
+    isRestartDisabled,
+    isStartDisabled,
+    isStopDisabled,
+    isRestoreDisabled,
+    isVisibleRestore,
+  ]);
 
   return (
     <Select

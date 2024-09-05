@@ -42,6 +42,8 @@ type InstancesTableHeaderProps = {
   maxNumberOfInstancesReached?: boolean;
   isDeprecated?: boolean;
   isResourceParameters?: boolean;
+  isVisibleRestore?: boolean;
+  isVisibleCapacity?: boolean;
 };
 
 const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
@@ -66,6 +68,8 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
   roleType,
   isDeprecated,
   isResourceParameters,
+  isVisibleRestore,
+  isVisibleCapacity = true,
 }) => {
   const role = getEnumFromUserRoleString(roleType);
   const view = viewEnum.Access_Resources;
@@ -261,6 +265,9 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
             isRestoreDisabled={!actions.restore}
             isLoading={isFetchingInstances || !selectedInstance}
             isModifyDisabled={!actions.modify}
+            isVisibleRestore={isVisibleRestore}
+            isVisibleCapacity={isVisibleCapacity}
+            isVisibleBYOA={isCurrentResourceBYOA}
           />
         </Stack>
       </Stack>

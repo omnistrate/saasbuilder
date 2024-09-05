@@ -1603,6 +1603,7 @@ function MarketplaceService() {
                   roleType: subscriptionData?.roleType,
                   isDeprecated: selectedResource?.isDeprecated,
                   isResourceParameters: service?.resourceParameters,
+                  isVisibleRestore: selectedResource?.isBackupEnabled,
                 },
               }}
               noRowsText={`No instance of ${selectedResource.name} found for ${service?.serviceName}`}
