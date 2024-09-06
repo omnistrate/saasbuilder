@@ -1,51 +1,21 @@
-import React from "react";
-import { Box, Stack, chipClasses } from "@mui/material";
+import React, { FC } from "react";
+import {
+  Box,
+  Stack,
+  SxProps,
+  Theme,
+  chipClasses,
+  ChipProps as MuiChipProps,
+} from "@mui/material";
 import _ from "lodash";
 import Chip from "../Chip/Chip";
 import Dot from "../Dot/Dot";
 import TickIcon from "../Icons/Tick/TickIcon";
 import { PulsatingDot } from "../PulsatingDot/PulsatingDot";
-
-function StatusChip(props) {
-  const {
-    status,
-    sx = {},
-    dot,
-    pulsateDot,
-    tick,
-    color,
-    bgColor,
-    ...restProps
-  } = props;
-  const chipStyles = getChipStyles(status);
-  const label = statuses[status];
-
-  const fontColor = color ? color : chipStyles.color;
-  const backgroundColor = bgColor ? bgColor : chipStyles.backgroundColor;
-
-  return (
-    <Chip
-      label={
-        <Stack direction="row" alignItems="center" gap={"5px"}>
-          {pulsateDot && <PulsatingDot color={fontColor} />}
-          {dot && <Dot color={fontColor} />}
-          {tick && <TickIcon />}
-          <Box component="span">{label ? label : _.capitalize(status)}</Box>
-        </Stack>
-      }
-      sx={{
-        backgroundColor: backgroundColor,
-        [`& .${chipClasses.label}`]: {
-          color: fontColor,
-        },
-        ...sx,
-      }}
-      {...restProps}
-    />
-  );
-}
-
-export default StatusChip;
+import {
+  Category,
+  chipCategoryColors,
+} from "src/constants/statusChipStyles/index";
 
 export const statuses = {
   FAILED: "Failed",
@@ -64,6 +34,10 @@ export const statuses = {
   UNKNOWN: "Unknown",
   IN_PROGRESS: "In Progress",
   DELETED: "Deleted",
+  PAUSED: "Paused",
+  TERMINATED: "Terminated",
+  COMPLETED: "Completed",
+  NOT_ENABLED: "Not Enabled",
 };
 
 export const statusStyles = {
@@ -83,6 +57,10 @@ export const statusStyles = {
     backgroundColor: "#ECFDF3",
     color: "#027A48",
   },
+  COMPLETED: {
+    backgroundColor: "#ECFDF3",
+    color: "#027A48",
+  },
   DELETING: {
     backgroundColor: "#FEF3F2",
     color: "#B42318",
@@ -91,7 +69,6 @@ export const statusStyles = {
     backgroundColor: "#FFF4ED",
     color: "#EAAA08",
   },
-
   DEPRECATED: {
     backgroundColor: "#FEF3F2",
     color: "#B42318",
@@ -116,6 +93,10 @@ export const statusStyles = {
     backgroundColor: "#F8F9FC",
     color: "#669F2A",
   },
+  NOT_ENABLED: {
+    backgroundColor: "#FEF3F2",
+    color: "#C83532",
+  },
   Open: {
     backgroundColor: "#EFF8FF",
     color: "#1942C6",
@@ -127,6 +108,10 @@ export const statusStyles = {
   Paid: {
     backgroundColor: "#ECFDF3",
     color: "#4F9F52",
+  },
+  PAUSED: {
+    backgroundColor: "#FEF3F2",
+    color: "#C83532",
   },
   PENDING: {
     backgroundColor: "#EFF8FF",
@@ -168,6 +153,14 @@ export const statusStyles = {
     backgroundColor: "#ECFDF3",
     color: "#66C61C",
   },
+  SUSPENDED: {
+    backgroundColor: "#F8EEEE",
+    color: "#B42318",
+  },
+  TERMINATED: {
+    backgroundColor: "#FEF3F2",
+    color: "#FA113D",
+  },
   UNHEALTHY: {
     backgroundColor: "#FEF3F2",
     color: "#B42318",
@@ -181,6 +174,81 @@ export const statusStyles = {
     color: "#C83532",
   },
 };
+
+type StatusChipProps = {
+  status?: string;
+  sx?: SxProps<Theme>;
+  fontStyles?: SxProps<Theme>;
+  dot?: boolean;
+  pulsateDot?: boolean;
+  tick?: boolean;
+  color?: string;
+  bgColor?: string;
+  capitalize?: boolean;
+  label?: string;
+  category?: Category;
+};
+
+type ChipProps = Omit<MuiChipProps, "color">;
+
+const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
+  const {
+    status,
+    sx = {},
+    fontStyles = { fontSize: "12px", lineHeight: "18px" },
+    dot,
+    pulsateDot,
+    tick,
+    color,
+    bgColor,
+    capitalize = true,
+    label = statuses[status],
+    category,
+    ...restProps
+  } = props;
+  let chipStyles = null;
+
+  chipStyles = getChipStyles(status);
+
+  if (category) {
+    chipStyles = {
+      color: chipCategoryColors[category].color,
+      backgroundColor: chipCategoryColors[category].bgColor,
+    };
+  }
+
+  const fontColor = color ? color : chipStyles.color;
+  const backgroundColor = bgColor ? bgColor : chipStyles.backgroundColor;
+
+  return (
+    <Chip
+      label={
+        <Stack direction="row" alignItems="center" gap={"5px"}>
+          {pulsateDot && <PulsatingDot color={fontColor} />}
+          {dot && <Dot color={fontColor} />}
+          {tick && <TickIcon />}
+          <Box
+            component="span"
+            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+          >
+            {label ? label : capitalize ? _.capitalize(status) : status}
+          </Box>
+        </Stack>
+      }
+      sx={{
+        backgroundColor: backgroundColor,
+        [`& .${chipClasses.label}`]: {
+          color: fontColor,
+          ...fontStyles,
+        },
+        ...sx,
+      }}
+      {...restProps}
+    />
+  );
+};
+
+export default StatusChip;
 
 export function getChipStyles(resourceInstanceStatus) {
   let chipStyles = statusStyles[resourceInstanceStatus];
