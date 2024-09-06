@@ -510,7 +510,16 @@ function MarketplaceService() {
     }
 
     return columnDefinition;
-  }, [serviceId, selectedResource, resourceInstanceList]);
+  }, [
+    serviceId,
+    selectedResource,
+    resourceInstanceList,
+    currentSource,
+    environmentId,
+    isCurrentResourceBYOA,
+    subscriptionData?.id,
+    productTierId,
+  ]);
 
   const snackbar = useSnackbar();
   const dispatch = useDispatch();
@@ -518,6 +527,7 @@ function MarketplaceService() {
   const handleConfirmationClose = () => {
     setIsConfirmationDialog(false);
   };
+  let selectedResourceInstance = null;
 
   const loadingStatus = useSelector(selectResourceInstanceListLoadingStatus);
   const isLoading = loadingStatus === loadingStatuses.loading;
@@ -527,6 +537,7 @@ function MarketplaceService() {
     },
     onSubmit: (values) => {
       if (values.deleteme === "deleteme") {
+        //eslint-disable-next-line no-use-before-define
         deleteResourceInstanceMutation.mutate();
       } else {
         snackbar.showError("Please enter deleteme");
@@ -571,7 +582,7 @@ function MarketplaceService() {
         setViewInfoDrawerOpen(false);
         setIsConfirmationDialog(false);
       },
-      onError: (error) => {
+      onError: () => {
         deleteformik.resetForm();
       },
     }
@@ -602,7 +613,6 @@ function MarketplaceService() {
         document.body.removeChild(link);
         URL.revokeObjectURL(href);
       },
-      onError: (error) => {},
     }
   );
 
@@ -1248,7 +1258,6 @@ function MarketplaceService() {
   let isAddCapacityActiondEnabled = false;
   let isRemoveCapacityActionEnabled = false;
 
-  let selectedResourceInstance = null;
   if (isSingleInstanceSelected) {
     selectedResourceInstance = selectedResourceInstances[0];
     if (selectedResourceInstance) {

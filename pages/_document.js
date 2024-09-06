@@ -52,6 +52,7 @@ export default class MyDocument extends Document {
         <body>
           {process.env.GOOGLE_ANALYTICS_TAG_ID && (
             <noscript>
+              {/* eslint-disable-next-line react/self-closing-comp */}
               <iframe
                 src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_ANALYTICS_TAG_ID}`}
                 height="0"
