@@ -216,7 +216,7 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
           }}
           componentsProps={{
             header: {
-              count: customNetworks.length,
+              count: filteredCustomNetworks.length,
               openSideDrawer,
               refetchCustomNetworks,
               isFetchingCustomNetworks,
