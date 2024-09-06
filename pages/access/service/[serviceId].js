@@ -401,7 +401,7 @@ function MarketplaceService() {
         headerAlign: "center",
         renderCell: (params) => {
           const status = params?.row?.status;
-          
+
           if (status === "STOPPED")
             return <StatusChip category="unknown" label="N/A" />;
 
@@ -1217,7 +1217,7 @@ function MarketplaceService() {
       serviceModelKey: service?.serviceModelURLKey,
       productTierKey: service?.productTierURLKey,
       resourceKey: selectedResource.key,
-      requestParams: selectedResourceInstance?.result_params,
+      requestParams: selectedResourceInstance?.result_params || {},
       subscriptionId: subscriptionData?.id,
     },
     onSubmit: async (values) => {
