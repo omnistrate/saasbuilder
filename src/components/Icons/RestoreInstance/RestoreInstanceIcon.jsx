@@ -2,7 +2,7 @@ const RestoreInstanceIcon = (props) => {
   const { disabled, ...restProps } = props;
   let { color = "#7F56D9" } = props;
   if (disabled) {
-    color = "#E0E0E0";
+    color = "#a3a6ac";
   }
 
   return (
