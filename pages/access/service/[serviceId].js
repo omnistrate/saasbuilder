@@ -469,7 +469,7 @@ function MarketplaceService() {
     }
 
     return columnDefinition;
-  }, [serviceId, selectedResource, filteredInstances]);
+  }, [serviceId, selectedResource, resourceInstanceList]);
 
   const snackbar = useSnackbar();
   const dispatch = useDispatch();

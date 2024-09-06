@@ -1,17 +1,16 @@
+import {
+  CloudProvider,
+  InstanceStatus,
+  NetworkType,
+  RESOURCETYPES,
+} from "./common/enums";
+
 export const RESOURCE_TYPES = {
   OperatorCRD: "OperatorCRD",
   Kustomize: "Kustomize",
 };
 
-
-
-type RESOURCETYPES = "OperatorCRD" | "Kustomize";
-
-// Cloud Provider Types
-export type CloudProvider = "aws" | "gcp" | "azure";
-
 type ResourceNetworkTopology = {
-  // TODO: Fix this Type Entirely
   allowedIPRanges?: string[];
   clusterEndpoint?: string;
   clusterPorts?: number[];
@@ -29,23 +28,6 @@ type ResourceNetworkTopology = {
   resourceKey?: string;
   resourceName?: string;
 };
-
-// Network Types
-export type NetworkType = "PUBLIC" | "PRIVATE_VPC_PEERING" | "PRIVATE_LINK";
-
-export type InstanceStatus =
-  | "FAILED"
-  | "CANCELLED"
-  | "PENDING_DEPENDENCY"
-  | "PENDING"
-  | "RUNNING"
-  | "DEPLOYING"
-  | "READY"
-  | "SUCCESS"
-  | "COMPLETE"
-  | "STOPPED"
-  | "DELETING"
-  | "UNKNOWN";
 
 //Access Resource Instance
 export type AccessResourceInstance = {
