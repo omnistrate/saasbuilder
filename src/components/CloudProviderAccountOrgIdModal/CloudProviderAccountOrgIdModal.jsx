@@ -242,28 +242,14 @@ const CreationTimeInstructions = (props) => {
   } = props;
 
   const [isPolling, setIsPolling] = useState(true);
-
-  const countDownTimerTRef = useRef(null);
-  const pollTimerRef = useRef(null);
-
-  const [countDown, setCountDown] = useState(30);
   const [isTimeout, setIsTimeout] = useState(false);
-
-  const handleChangeDuration = () => {
-    setCountDown((prev) => {
-      if (prev > 0) {
-        return prev - 1;
-      } else {
-        clearInterval(pollTimerRef.current);
-        clearInterval(countDownTimerTRef.current);
-        setIsTimeout(true);
-        setIsPolling(false);
-        return prev;
-      }
-    });
-  };
+  const pollCount = useRef(0);
+  const pollTimerRef = useRef(null);
+  const isMounted = useRef(true); //to track the component mount state and stop polling if component is unmounted
 
   const fetchAccountConfig = async () => {
+    if (!isMounted.current) return;
+
     try {
       const res = await getResourceInstanceDetails(
         service.serviceProviderId,
@@ -276,16 +262,22 @@ const CreationTimeInstructions = (props) => {
         accountConfigId,
         subscriptionId
       );
+      if (!isMounted.current) return;
+
       const resourceInstance = res.data;
       const url = resourceInstance?.result_params?.cloudformation_url;
       if (url) {
         fetchResourceInstancesOfSelectedResource?.();
         setCloudFormationTemplateUrl(url);
         setIsPolling(false);
-        clearInterval(pollTimerRef.current);
-        clearInterval(countDownTimerTRef.current);
       } else {
-        handleChangeDuration();
+        if (pollCount.current < 10) {
+          pollTimerRef.current = setTimeout(fetchAccountConfig, 3000); // check for every 3 sec
+          pollCount.current += 1;
+        } else {
+          setIsTimeout(true);
+          setIsPolling(false);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -293,19 +285,20 @@ const CreationTimeInstructions = (props) => {
   };
 
   useEffect(() => {
+    //if method is cloud formation then clodformation url might not be returned immediately.If it
+    //doesn't exist poll the api to check cloudformation template url for 30 seconds
     if (
       accountConfigId &&
       accountConfigMethod === "CloudFormation" &&
       !cloudFormationTemplateUrl
     ) {
-      countDownTimerTRef.current = setInterval(handleChangeDuration, 1000);
-      pollTimerRef.current = setInterval(fetchAccountConfig, 3000);
+      fetchAccountConfig();
     } else if (cloudFormationTemplateUrl) {
       setIsPolling(false);
     }
-
+    isMounted.current = true;
     return () => {
-      clearInterval(countDownTimerTRef.current);
+      isMounted.current = false;
       clearInterval(pollTimerRef.current);
     };
   }, []);
