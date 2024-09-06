@@ -401,6 +401,9 @@ function MarketplaceService() {
         headerAlign: "center",
         renderCell: (params) => {
           const status = params?.row?.status;
+          
+          if (status === "STOPPED")
+            return <StatusChip category="unknown" label="N/A" />;
 
           const healthPercentage = calculateInstanceHealthPercentage(
             params.row.detailedNetworkTopology,
