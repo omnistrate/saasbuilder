@@ -6,9 +6,9 @@ const StopIcon = (props) => {
   }
 
   if (disabled) {
-    color = "#E0E0E0";
+    color = "#a3a6ac";
   }
-  
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

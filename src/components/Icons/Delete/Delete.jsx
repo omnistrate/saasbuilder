@@ -6,7 +6,7 @@ const DeleteIcon = (props) => {
     color = "#D92D20";
   }
   if (disabled) {
-    color = "#E0E0E0";
+    color = "#a3a6ac";
   }
 
   return (

@@ -182,6 +182,11 @@ export default function NodesTable(props) {
         headerAlign: "center",
         align: "center",
         renderCell: (params) => {
+          const lifecycleStatus = params.row.status;
+
+          if (lifecycleStatus === "STOPPED")
+            return <StatusChip category="unknown" label="N/A" />;
+
           const status = params.row.healthStatus
             ? params.row.healthStatus
             : "UNKNOWN";

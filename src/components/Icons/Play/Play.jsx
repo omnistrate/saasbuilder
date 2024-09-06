@@ -5,7 +5,7 @@ const PlayIcon = (props) => {
     color = "#039855";
   }
   if (disabled) {
-    color = "#E0E0E0";
+    color = "#a3a6ac";
   }
   return (
     <svg
