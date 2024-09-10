@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 import MuiDivider from "@mui/material/Divider";
 
-const Divider = styled(MuiDivider)(({ theme }) => ({
+const Divider = styled(MuiDivider)(() => ({
   borderColor: "#EAECF0",
 }));
 

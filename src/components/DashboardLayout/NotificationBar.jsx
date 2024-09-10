@@ -1,11 +1,11 @@
 import { Box, IconButton, styled } from "@mui/material";
 import { Text } from "../Typography/Typography";
-import { forwardRef, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Close } from "@mui/icons-material";
 import useNotificationBar from "../../hooks/useNotificationBar";
 import MuiLink from "next/link";
 
-const NotificationBar = (props) => {
+const NotificationBar = () => {
   const notificationBar = useNotificationBar();
   const ref = useRef();
 
@@ -15,8 +15,7 @@ const NotificationBar = (props) => {
     } else {
       notificationBar.setHeight(0);
     }
-  }, [ref.current]);
-  // console.log("NB", notificationBar);
+  }, [ref, notificationBar]);
 
   return (
     <Container ref={ref}>
@@ -45,7 +44,7 @@ const NotificationBar = (props) => {
 
 export default NotificationBar;
 
-const Container = styled(Box)(({ theme }) => ({
+const Container = styled(Box)(() => ({
   padding: "16px",
   background: "#F9F5FF",
   position: "fixed",
@@ -56,7 +55,7 @@ const Container = styled(Box)(({ theme }) => ({
   textAlign: "center",
 }));
 
-const Link = styled(MuiLink)(({ theme }) => ({
+const Link = styled(MuiLink)(() => ({
   borderBottom: "1px solid #6941C6",
   display: "inline-block",
   paddingLeft: 2,

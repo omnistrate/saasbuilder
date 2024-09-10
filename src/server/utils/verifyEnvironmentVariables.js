@@ -75,7 +75,7 @@ async function verifyEnvrionmentVariables() {
   const providerPassword = isUsingHashedPassword
     ? process.env.PROVIDER_HASHED_PASS
     : process.env.PROVIDER_PASSWORD;
-  const saasURL = process.env.YOUR_SAAS_DOMAIN_URL;
+  // const saasURL = process.env.YOUR_SAAS_DOMAIN_URL;
   const mailUserEmail = process.env.MAIL_USER_EMAIL;
   const mailUserPassword = process.env.MAIL_USER_PASSWORD;
 

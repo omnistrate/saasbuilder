@@ -96,23 +96,14 @@ const ResourceConnectivityEndpoint = (props) => {
     onSubmit: async (values) => {
       if (values.confirmationText === "deleteme") {
         try {
+          /*eslint-disable-next-line no-use-before-define */
           await removeCustomDNSMutation?.mutateAsync();
           setShowDeleteConfirmationDialog(false);
           removeCustomDNSFormik.resetForm();
-        } catch (err) {
-          console.log(error);
-        }
+        } catch (err) {}
       }
     },
   });
-
-  async function handleAddDNS(payload) {
-    try {
-      await addCustomDNSMutation?.mutateAsync(payload);
-      setShouldShowConfigDialog(true);
-      setIsTextFieldDisabled(true);
-    } catch {}
-  }
 
   useEffect(() => {
     if (customDNSData.enabled === true && customDNSData.dnsName) {
@@ -171,8 +162,16 @@ const ResourceConnectivityEndpoint = (props) => {
     },
   });
 
+  async function handleAddDNS(payload) {
+    try {
+      await addCustomDNSMutation?.mutateAsync(payload);
+      setShouldShowConfigDialog(true);
+      setIsTextFieldDisabled(true);
+    } catch {}
+  }
+
   const removeCustomDNSMutation = useMutation({
-    mutationFn: (payload) => {
+    mutationFn: () => {
       return removeCustomDNSFromResourceInstance(
         queryData?.serviceProviderId,
         queryData?.serviceKey,
@@ -228,7 +227,7 @@ const ResourceConnectivityEndpoint = (props) => {
                 setIsVerifyingDNSSetup();
               }
             })
-            .catch((error) => {
+            .catch(() => {
               setIsVerifyingDNSSetup();
             });
         }, 500);
@@ -271,7 +270,7 @@ const ResourceConnectivityEndpoint = (props) => {
                 verifyDNSRemoval();
               }
             })
-            .catch((error) => {
+            .catch(() => {
               verifyDNSRemoval();
             });
         }, 1500);
@@ -509,7 +508,7 @@ const ResourceConnectivityEndpoint = (props) => {
 
 export default ResourceConnectivityEndpoint;
 
-const getCustomDNSStatusStylesAndLabel = (status) => {
+function getCustomDNSStatusStylesAndLabel(status) {
   const statusStylesMap = {
     PENDING: {
       label: "Pending",
@@ -533,4 +532,4 @@ const getCustomDNSStatusStylesAndLabel = (status) => {
     const styles = statusStylesMap[status];
     return styles;
   }
-};
+}

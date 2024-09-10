@@ -16,7 +16,7 @@ const servicesMarketplaceSlice = createSlice({
       state.loadingStatus = initialState.loadingStatus;
       state.allService = initialState.allService;
     },
-    initMarketplaceServices: (state, action) => {
+    initMarketplaceServices: (state) => {
       state.loadingStatus = initialState.loadingStatus;
       state.allService = initialState.allService;
     },

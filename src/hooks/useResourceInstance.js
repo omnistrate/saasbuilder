@@ -180,7 +180,7 @@ export default function useResourceInstance(
 
         const topologyDetailsOtherThanMain = Object.entries(
           data.detailedNetworkTopology ?? {}
-        )?.filter(([resourceId, topologyDetails]) => {
+        )?.filter(([, topologyDetails]) => {
           return topologyDetails.main === false;
         });
 

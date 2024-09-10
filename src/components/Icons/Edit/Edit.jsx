@@ -1,7 +1,9 @@
 import * as React from "react";
 
 const EditIcon = (props) => {
-  let { color, disabled = false } = props;
+  let { color } = props;
+  const { disabled = false } = props;
+  
   if (!color) {
     color = "#9F1AB1";
   }

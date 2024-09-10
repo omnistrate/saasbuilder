@@ -1,17 +1,16 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 export const NotificationBarContext = createContext(null);
 
 export default function NotificationBarProvider(props) {
   const [isVisible, setIsVisible] = useState(false);
-  const [text, setText] = useState("");
   const [notificationBarHeight, setNotificationBarHeight] = useState(0);
 
   function showNotificationBar() {
     setIsVisible(true);
   }
 
-  function hideNotificationBar(setLocalStorageKey = false) {
+  function hideNotificationBar() {
     // if (setLocalStorageKey)
     localStorage.setItem("paymentNotificationHidden", "true");
     setIsVisible(false);

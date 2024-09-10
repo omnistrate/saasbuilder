@@ -89,7 +89,7 @@ export default function ConfirmationDialog(props) {
             <FieldDescription
               dangerouslySetInnerHTML={{ __html: message }}
               sx={{ mt: "5px", fontSize: "16px" }}
-            ></FieldDescription>
+            />
             <TextField
               id="deleteme"
               name="deleteme"
@@ -97,7 +97,7 @@ export default function ConfirmationDialog(props) {
               onChange={formData.handleChange}
               onBlur={formData.handleBlur}
               sx={{ marginTop: "16px" }}
-            ></TextField>
+            />
           </FieldContainer>
         </DialogContent>
         <DialogActions>

@@ -18,10 +18,6 @@ function Connectivity(props) {
     globalEndpoints,
     context,
     nodes,
-    addCustomDNSMutation,
-    removeCustomDNSMutation,
-    accessQueryParams,
-    fleetQueryParams,
     refetchInstance,
   } = props;
 
@@ -117,8 +113,6 @@ function Connectivity(props) {
                 viewType="endpoint"
                 endpointURL={primaryResourceEndpoint}
                 customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
-                fleetQueryParams={fleetQueryParams}
-                accessQueryParams={accessQueryParams}
                 resourceKey={globalEndpoints?.primary?.resourceKey}
                 resourceId={globalEndpoints?.primary?.resourceId}
                 refetchInstance={refetchInstance}
@@ -166,8 +160,6 @@ function Connectivity(props) {
                         viewType="endpoint"
                         endpointURL={endpoint}
                         customDNSData={customDNSEndpoint}
-                        fleetQueryParams={fleetQueryParams}
-                        accessQueryParams={accessQueryParams}
                         resourceKey={resourceKey}
                         resourceId={resourceId}
                         refetchInstance={refetchInstance}
@@ -280,12 +272,11 @@ function Connectivity(props) {
     availabilityZones,
     publiclyAccessible,
     privateNetworkCIDR,
-    globalEndpoints?.primary?.customDNSEndpoint,
-    addCustomDNSMutation,
-    removeCustomDNSMutation,
     isEndpointsExpanded,
     isPortsExpanded,
     privateNetworkId,
+    globalEndpoints,
+    refetchInstance
   ]);
 
   if (noConnectivityData) {

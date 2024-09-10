@@ -33,7 +33,8 @@ const ResetPasswordPage = (props) => {
       return customerUserResetPassword(payload);
     },
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
+        /*eslint-disable-next-line no-use-before-define*/
         formik.resetForm();
         snackbar.showSuccess(
           "If an account associated with this email exists, you will be sent a link to reset your password"

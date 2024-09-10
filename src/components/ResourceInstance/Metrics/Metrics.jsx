@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, styled } from "@mui/material";
+import { Box, Stack, styled } from "@mui/material";
 import { DisplayText, Text } from "../../Typography/Typography";
 import Select from "../../FormElements/Select/Select";
 import Divider from "../../Divider/Divider";
@@ -57,7 +57,6 @@ function Metrics(props) {
     resourceKey,
     resourceInstanceId,
     customMetrics = [],
-    mainResourceHasCompute,
     productTierType,
   } = props;
   let firstNode = null;
@@ -77,9 +76,7 @@ function Metrics(props) {
 
   const socketOpenTime = useRef(null);
   const [isMetricsDataLoaded, setIsMetricsDataLoaded] = useState(false);
-  const [socketConnectionStatus, setConnectionStatus] = useState(
-    connectionStatuses.idle
-  );
+  const [, setConnectionStatus] = useState(connectionStatuses.idle);
   const numConnectError = useRef(0);
   const [cpuUsageData, setCpuUsageData] = useState({
     current: "",
@@ -121,21 +118,21 @@ function Metrics(props) {
   const [customMetricsChartData, setCustomMetricsChartData] = useState({});
 
   const { getWebSocket } = useWebSocket(metricsSocketEndpoint, {
-    onOpen: (event) => {
+    onOpen: () => {
       setIsMetricsDataLoaded(false);
       socketOpenTime.current = Date.now() / 1000;
       setConnectionStatus(connectionStatuses.connected);
       numConnectError.current = 0;
     },
-    onError: (event) => {
+    onError: () => {
       // console.log("Error socket", event);
       numConnectError.current = numConnectError.current + 1;
     },
-    onMessage: (event) => {
+    onMessage: () => {
       const data = JSON.parse(event.data);
       handleIncomingMetricEvent(data);
     },
-    onClose: (event) => {
+    onClose: () => {
       //console.log("Socket connection closed");
     },
     shouldReconnect: () => true,
@@ -145,7 +142,7 @@ function Metrics(props) {
       const interval = Math.pow(2, attemptNumber) * 1000;
       return interval;
     },
-    onReconnectStop: (numAttempts) => {
+    onReconnectStop: () => {
       // console.log("Stopping", numAttempts);
       if (isMetricsDataLoaded) {
         snackbar.showError(
@@ -178,7 +175,7 @@ function Metrics(props) {
         //console.log("Closing socket");
       }
     };
-  }, [metricsSocketEndpoint]);
+  }, [metricsSocketEndpoint, getWebSocket, snackbar]);
 
   const initialiseCustomMetricsData = useCallback(() => {
     const initialCustomMetricData = customMetrics.reduce((acc, curr) => {
@@ -267,7 +264,7 @@ function Metrics(props) {
     }
   }
 
-  const handleIncomingMetricEvent = (data) => {
+  function handleIncomingMetricEvent(data) {
     const messageTime = data.UnixEpochTimestamp;
 
     const metrics = data.Metrics;
@@ -294,13 +291,13 @@ function Metrics(props) {
         let totalMemoryBytes = null;
         let memoryUsagePercent = null;
         let systemUptime = null;
-        let diskIOPSRead = { time: formattedDate };
-        let diskIOPSWrite = { time: formattedDate };
-        let diskThroughputRead = { time: formattedDate };
-        let diskThroughputWrite = { time: formattedDate };
-        let netThroughputReceive = { time: formattedDate };
-        let netThroughputSend = { time: formattedDate };
-        let diskUsage = { time: formattedDate };
+        const diskIOPSRead = { time: formattedDate };
+        const diskIOPSWrite = { time: formattedDate };
+        const diskThroughputRead = { time: formattedDate };
+        const diskThroughputWrite = { time: formattedDate };
+        const netThroughputReceive = { time: formattedDate };
+        const netThroughputSend = { time: formattedDate };
+        const diskUsage = { time: formattedDate };
 
         const customMetricsData = {};
 
@@ -374,7 +371,9 @@ function Metrics(props) {
             metric.Name === "disk_throughput_bytes_per_sec" &&
             metric.Labels.type === "read"
           ) {
-            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
+            const value = Number(
+              Number(metric.Value / Math.pow(1024, 2)).toFixed(2)
+            );
             const label = metric.Labels.disk;
 
             setDiskThroughputReadLabels((prev) => {
@@ -396,7 +395,9 @@ function Metrics(props) {
             metric.Name === "disk_throughput_bytes_per_sec" &&
             metric.Labels.type === "write"
           ) {
-            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
+            const value = Number(
+              Number(metric.Value / Math.pow(1024, 2)).toFixed(2)
+            );
             const label = metric.Labels.disk;
 
             setDiskThroughputWriteLabels((prev) => {
@@ -418,7 +419,9 @@ function Metrics(props) {
             metric.Name === "net_throughput_bytes_per_sec" &&
             metric.Labels.direction === "recv"
           ) {
-            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
+            const value = Number(
+              Number(metric.Value / Math.pow(1024, 2)).toFixed(2)
+            );
             const label = metric.Labels.interface;
 
             setNetThroughputReceiveLabels((prev) => {
@@ -440,7 +443,9 @@ function Metrics(props) {
             metric.Name === "net_throughput_bytes_per_sec" &&
             metric.Labels.direction === "sent"
           ) {
-            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
+            const value = Number(
+              Number(metric.Value / Math.pow(1024, 2)).toFixed(2)
+            );
             const label = metric.Labels.interface;
 
             setNetThroughputSendLabels((prev) => {
@@ -711,7 +716,7 @@ function Metrics(props) {
         }
       }
     }
-  };
+  }
 
   function handleNodeChange(event) {
     setIsMetricsDataLoaded(false);
@@ -881,29 +886,12 @@ function isOlderThanFourHours(unixTimestampSeconds) {
   return false;
 }
 
-export const MetricsCardsContainer = styled(Box)(({ theme }) => ({
+export const MetricsCardsContainer = styled(Box)(() => ({
   display: "grid",
   gridTemplateColumns: "repeat(5, 1fr)",
   columnGap: "24px",
 }));
 
-const ConnectionFailureUI = () => {
-  return (
-    <Card
-      mt={3}
-      sx={{
-        paddingTop: "12.5px",
-        paddingLeft: "20px",
-        paddingRight: "20px",
-        minHeight: "500px",
-      }}
-    >
-      <Stack direction="row" justifyContent="center" marginTop="200px">
-        <Text size="xlarge">Failed to get metrics data</Text>
-      </Stack>
-    </Card>
-  );
-};
 
 const ContainerCard = ({ children }) => {
   return (

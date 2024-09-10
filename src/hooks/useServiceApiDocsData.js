@@ -11,7 +11,7 @@ function useServiceApiDocsData(serviceId, serviceApiId, subscriptionId) {
       enabled: Boolean(serviceId && serviceApiId && subscriptionId),
       refetchOnWindowFocus: false,
 
-      onError: (error) => {},
+      onError: () => {},
       select: (response) => {
         return response.data;
       },

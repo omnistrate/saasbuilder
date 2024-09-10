@@ -1,6 +1,6 @@
 import { Box, styled } from "@mui/material";
 
-export const InfoCardContainer = styled(Box)(({ theme }) => ({
+export const InfoCardContainer = styled(Box)(() => ({
   background: "#FFFFFF",
   border: "1px solid #EAECF0",
   boxShadow:
@@ -11,11 +11,6 @@ export const InfoCardContainer = styled(Box)(({ theme }) => ({
   marginTop: "20px",
 }));
 
-const FlexItem = styled(Box)({
-  flexGrow: 1,
-  display: "flex",
-  flexDirection: "column",
-});
 
 export const ColumnTitle = styled("h4")({
   fontWeight: 600,

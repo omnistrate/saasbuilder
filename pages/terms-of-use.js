@@ -36,38 +36,38 @@ const DefaultTermsOfUse = ({ orgName }) => {
         Convention on Contracts for the International Sale of Goods shall not
         apply to this Agreement. You hereby expressly consent to the personal
         jurisdiction and venue in the state and federal courts for the county in
-        which {orgName}'s principal place of business is located for any lawsuit
-        filed there against you by {orgName} arising from or related to this
-        Agreement. We and our suppliers make no representation that the Services
-        are appropriate or available for use in locations other than the United
-        States. If you use the Services from outside the United States, you are
-        solely responsible for compliance with all applicable laws, including
-        without limitation export and import regulations of other countries. You
-        may not assign, subcontract, delegate, or otherwise transfer these
-        Terms, or your rights and obligations herein, without obtaining our
-        prior written consent. We may freely assign these Terms. Any waiver or
-        failure to enforce any provision of this Agreement on one occasion will
-        not be deemed a waiver of any other provision or of such provision on
-        any other occasion. If any provision of this Agreement is, for any
-        reason, held to be invalid or unenforceable, the other provisions of
-        this Agreement will remain enforceable and the invalid or unenforceable
-        provision will be deemed modified so that it is valid and enforceable to
-        the maximum extent permitted by law. These Terms are the final, complete
-        and exclusive agreement of the parties with respect to the subject
-        matters hereof and supersede and merge all prior discussions between the
-        parties with respect to such subject matters. No modification of or
-        amendment to these Terms, or any waiver of any rights under these Terms,
-        will be effective unless in writing and signed by an authorized
-        signatory of you and an officer of {orgName}.
+        which {orgName}&apos;s principal place of business is located for any
+        lawsuit filed there against you by {orgName} arising from or related to
+        this Agreement. We and our suppliers make no representation that the
+        Services are appropriate or available for use in locations other than
+        the United States. If you use the Services from outside the United
+        States, you are solely responsible for compliance with all applicable
+        laws, including without limitation export and import regulations of
+        other countries. You may not assign, subcontract, delegate, or otherwise
+        transfer these Terms, or your rights and obligations herein, without
+        obtaining our prior written consent. We may freely assign these Terms.
+        Any waiver or failure to enforce any provision of this Agreement on one
+        occasion will not be deemed a waiver of any other provision or of such
+        provision on any other occasion. If any provision of this Agreement is,
+        for any reason, held to be invalid or unenforceable, the other
+        provisions of this Agreement will remain enforceable and the invalid or
+        unenforceable provision will be deemed modified so that it is valid and
+        enforceable to the maximum extent permitted by law. These Terms are the
+        final, complete and exclusive agreement of the parties with respect to
+        the subject matters hereof and supersede and merge all prior discussions
+        between the parties with respect to such subject matters. No
+        modification of or amendment to these Terms, or any waiver of any rights
+        under these Terms, will be effective unless in writing and signed by an
+        authorized signatory of you and an officer of {orgName}.
       </SectionDescription>
       <SectionHeading>Disclaimer of Warranties</SectionHeading>
       <SectionDescription>
-        {orgName} IS PROVIDING THE SERVICES ON AN "AS IS" BASIS FOR USE AT YOUR
-        OWN RISK. {orgName} DOES NOT WARRANT THAT THE OPERATION OF THE SERVICES
-        WILL BE UNINTERRUPTED OR ERROR-FREE. {orgName} DISCLAIMS ALL WARRANTIES,
-        WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING WITHOUT LIMITATION, ANY
-        IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT OF THIRD PARTY RIGHTS,
-        MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+        {orgName} IS PROVIDING THE SERVICES ON AN &quot;AS IS&quot; BASIS FOR
+        USE AT YOUR OWN RISK. {orgName} DOES NOT WARRANT THAT THE OPERATION OF
+        THE SERVICES WILL BE UNINTERRUPTED OR ERROR-FREE. {orgName} DISCLAIMS
+        ALL WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING WITHOUT
+        LIMITATION, ANY IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT OF THIRD
+        PARTY RIGHTS, MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
       </SectionDescription>
       <SectionHeading>Limitation of Liability</SectionHeading>
       <SectionDescription>
@@ -80,7 +80,7 @@ const DefaultTermsOfUse = ({ orgName }) => {
         PROVIDED ALONG WITH THE SERVICES OR IN CONNECTION WITH ANY OTHER CLAIM
         ARISING FROM THIS AGREEMENT, EVEN IF {orgName}
         HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. TO THE MAXIMUM
-        EXTENT PERMITTED BY LAW, {orgName}'S AGGREGATE CUMULATIVE LIABILITY
+        EXTENT PERMITTED BY LAW, {orgName}&apos;S AGGREGATE CUMULATIVE LIABILITY
         HEREUNDER SHALL NOT EXCEED FIFTY DOLLARS ($50.00).
       </SectionDescription>
       <SectionHeading>Indemnity</SectionHeading>
@@ -91,9 +91,9 @@ const DefaultTermsOfUse = ({ orgName }) => {
         and liability caused by your use of the Services, your violation of
         these Terms, your violation of any applicable law, regulation or rule,
         including, but not limited to, the Health Insurance Portability and
-        Accountability Act of 1996, the Children's Online Privacy Protection Act
-        of 1998, or the Gramm-Leach-Bliley Act of 1999, or your violation of any
-        rights of a third party through use of the Services.
+        Accountability Act of 1996, the Children&apos;s Online Privacy
+        Protection Act of 1998, or the Gramm-Leach-Bliley Act of 1999, or your
+        violation of any rights of a third party through use of the Services.
       </SectionDescription>
       <SectionHeading>Conditions of Use</SectionHeading>
       <SectionDescription>
@@ -112,27 +112,27 @@ const DefaultTermsOfUse = ({ orgName }) => {
         in any manner other than as expressly permitted in this Agreement. You
         are responsible for notifying any end user of your products or services
         that access the Services that your products or services will transmit
-        personal data to us through the Services and obtaining such end user's
-        consent to the collection of such personal data by us.
+        personal data to us through the Services and obtaining such end
+        user&apos;s consent to the collection of such personal data by us.
       </SectionDescription>
       <SectionHeading>Your Content</SectionHeading>
       <SectionDescription>
         You are solely responsible for any content and other material that you
         submit, publish, transmit, or display on, through, or with our Services
-        ("Content"). You grant us a non-exclusive, worldwide, royalty-free and
-        fully paid license to use the Content, as necessary, for purposes of
-        providing the Services to you and other users of the Services. All
-        rights in and to the Content not expressly granted to us in this
-        Agreement are reserved by you. You will not use our Services to: (i)
-        upload, post, email, or otherwise transmit any Content that contains
+        (&quot;Content&quot;). You grant us a non-exclusive, worldwide,
+        royalty-free and fully paid license to use the Content, as necessary,
+        for purposes of providing the Services to you and other users of the
+        Services. All rights in and to the Content not expressly granted to us
+        in this Agreement are reserved by you. You will not use our Services to:
+        (i) upload, post, email, or otherwise transmit any Content that contains
         unlawful, harmful, threatening, abusive, harassing, tortious,
-        defamatory, vulgar, obscene, libelous, invasive of another's privacy,
-        hateful, or racially, ethnically or otherwise objectionable; (ii) harm
-        us or third parties in any way; (iii) impersonate any person or entity,
-        or otherwise misrepresent your affiliation with any person or entity;
-        (iv) upload, post, email, or otherwise transmit any Content that you do
-        not have a right to transmit under any law or under contractual or
-        fiduciary relationships (such as inside information, proprietary and
+        defamatory, vulgar, obscene, libelous, invasive of another&apos;s
+        privacy, hateful, or racially, ethnically or otherwise objectionable;
+        (ii) harm us or third parties in any way; (iii) impersonate any person
+        or entity, or otherwise misrepresent your affiliation with any person or
+        entity; (iv) upload, post, email, or otherwise transmit any Content that
+        you do not have a right to transmit under any law or under contractual
+        or fiduciary relationships (such as inside information, proprietary and
         confidential information learned or disclosed as part of employment
         relationships or under nondisclosure agreements); (v) upload, post,
         email or otherwise transmit any Content that contains confidential
@@ -148,44 +148,45 @@ const DefaultTermsOfUse = ({ orgName }) => {
         otherwise transmit any Content that infringes any patent, trademark,
         trade secret, copyright, or other right of any party; (xi) upload, post,
         email, or otherwise transmit any unsolicited or unauthorized
-        advertising, promotional materials, "junk mail," "spam," "chain
-        letters," "pyramid schemes," or any other forms of solicitation; (xii)
-        upload, post, email, or otherwise transmit any Content that contains
-        software viruses or any other computer code, files, or programs designed
-        to interrupt, destroy, or limit the functionality of any computer
-        software or hardware or telecommunications equipment; (xiii) interfere
-        with or disrupt the Services or servers or networks connected to the
-        Services, or disobey any requirements, procedures, policies or
-        regulations of networks connected to the Services; (xiv) intentionally
-        or unintentionally violate any applicable local, state, national or
-        international law or regulation; (xv) "stalk" or otherwise harass
-        another user of the Services. You agree that we may (but has no
-        obligation to), in our sole discretion, remove or modify any Content
-        which we deem to violate this section.
+        advertising, promotional materials, &quot;junk mail&quot;,
+        &quot;spam&quot;, &quot;chain letters&quot;, &quot;pyramid
+        schemes&quot;, or any other forms of solicitation; (xii) upload, post,
+        email, or otherwise transmit any Content that contains software viruses
+        or any other computer code, files, or programs designed to interrupt,
+        destroy, or limit the functionality of any computer software or hardware
+        or telecommunications equipment; (xiii) interfere with or disrupt the
+        Services or servers or networks connected to the Services, or disobey
+        any requirements, procedures, policies or regulations of networks
+        connected to the Services; (xiv) intentionally or unintentionally
+        violate any applicable local, state, national or international law or
+        regulation; (xv) &quot;stalk&quot; or otherwise harass another user of
+        the Services. You agree that we may (but has no obligation to), in our
+        sole discretion, remove or modify any Content which we deem to violate
+        this section.
       </SectionDescription>
       <SectionHeading>Term and Termination</SectionHeading>
       <SectionDescription>
         These Terms will continue to apply until terminated by either you or
-        {orgName} as set forth below (the "Term"). If you want to terminate your
-        agreement with us, you may do so by (a) notifying us at any time; and
-        (b) closing your accounts for the Services, where we have made this
-        option available to you. Your notice should be sent, in writing, to
-        Company's address set forth below. We may at any time terminate our
-        agreement with you if (a) you have breached any provision of these Terms
-        (or have acted in a manner that clearly shows you do not intend to, or
-        are unable to, comply with these Terms); (b) we are required to do so by
-        law (for example, where the provision of the Services to you is, or
-        becomes, unlawful); (c) the provision of the Services to you by us is,
-        in our opinion, no longer commercially viable; or (d) we have elected to
-        discontinue the Services (or any part thereof). Termination of your
-        account includes: (a) removal of access to all offerings within the
-        Services; (b) deletion of your password and all related information; and
-        (c) barring of further use of the Services. Upon expiration or
-        termination, you shall promptly discontinue use of the Services.
-        However, the sections titled IP Ownership, Your Content, Feedback,
-        Disclaimer of Warranties, Limitation of Liability, Indemnity, Term and
-        Termination and General of these Terms will survive any termination of
-        the Terms.
+        {orgName} as set forth below (the &quot;Term&quot;). If you want to
+        terminate your agreement with us, you may do so by (a) notifying us at
+        any time; and (b) closing your accounts for the Services, where we have
+        made this option available to you. Your notice should be sent, in
+        writing, to Company&apos;s address set forth below. We may at any time
+        terminate our agreement with you if (a) you have breached any provision
+        of these Terms (or have acted in a manner that clearly shows you do not
+        intend to, or are unable to, comply with these Terms); (b) we are
+        required to do so by law (for example, where the provision of the
+        Services to you is, or becomes, unlawful); (c) the provision of the
+        Services to you by us is, in our opinion, no longer commercially viable;
+        or (d) we have elected to discontinue the Services (or any part
+        thereof). Termination of your account includes: (a) removal of access to
+        all offerings within the Services; (b) deletion of your password and all
+        related information; and (c) barring of further use of the Services.
+        Upon expiration or termination, you shall promptly discontinue use of
+        the Services. However, the sections titled IP Ownership, Your Content,
+        Feedback, Disclaimer of Warranties, Limitation of Liability, Indemnity,
+        Term and Termination and General of these Terms will survive any
+        termination of the Terms.
       </SectionDescription>
       <SectionHeading>IP Ownership</SectionHeading>
       <SectionDescription>
@@ -208,10 +209,10 @@ const DefaultTermsOfUse = ({ orgName }) => {
       <SectionDescription>
         We reserve the right to terminate our agreement with any customer who
         repeatedly infringes third party copyright rights upon prompt
-        notification to us by the copyright owner or the copyright owner's legal
-        agent. Without limiting the foregoing, if you believe that a copyrighted
-        work has been copied and posted via the Services in a way that
-        constitutes copyright infringement, you shall provide us with the
+        notification to us by the copyright owner or the copyright owner&apos;s
+        legal agent. Without limiting the foregoing, if you believe that a
+        copyrighted work has been copied and posted via the Services in a way
+        that constitutes copyright infringement, you shall provide us with the
         following information: (a) an electronic or physical signature of the
         person authorized to act on behalf of the owner of the copyrighted work;
         (b) an identification and location in connection with the Service of the
@@ -221,9 +222,9 @@ const DefaultTermsOfUse = ({ orgName }) => {
         contact information, such as telephone number or email address; and (e)
         a statement by you that the above information in your notice is accurate
         and, under penalty of perjury, that you are the copyright owner or
-        authorized to act on the copyright owner's behalf. Contact information
-        for our Copyright Agent for notice of claims of copyright infringement
-        is as follows:
+        authorized to act on the copyright owner&apos;s behalf. Contact
+        information for our Copyright Agent for notice of claims of copyright
+        infringement is as follows:
         <br />
         <Box
           component={"span"}
@@ -253,8 +254,8 @@ const DefaultTermsOfUse = ({ orgName }) => {
       <SectionHeading>Feedback</SectionHeading>
       <SectionDescription>
         You acknowledge and agree that any comments, ideas and/or reports
-        provided to {orgName} ("Feedback") shall be the property of {orgName}{" "}
-        and you hereby irrevocably transfer and assign to
+        provided to {orgName} (&quot;Feedback&quot;) shall be the property of{" "}
+        {orgName} and you hereby irrevocably transfer and assign to
         {orgName} such Feedback, and all associated intellectual property
         rights, provided however that you shall be free to use such Feedback in
         the ordinary conduct of your business.

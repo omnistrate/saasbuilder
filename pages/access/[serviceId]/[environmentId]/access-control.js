@@ -127,7 +127,7 @@ function AccessControl() {
         })
       );
       snackbar.showSuccess("Invites Sent");
-      //eslint-disable-next-line no-use-before-define
+      /*eslint-disable-next-line no-use-before-define*/
       formik.resetForm();
       refetch();
     } catch (error) {

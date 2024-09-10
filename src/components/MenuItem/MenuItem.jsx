@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 import MuiMenuItem from "@mui/material/MenuItem";
 
-const MenuItem = styled(MuiMenuItem)(({ theme }) => {
+const MenuItem = styled(MuiMenuItem)(() => {
   return {
     fontSize: "14px",
     lineHeight: "20px",

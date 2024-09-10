@@ -20,7 +20,8 @@ function TimeSelectComponent({ formData }) {
     setFilteredTimeOptions(
       getFilteredTimeOptions(values.earliestRestoreTime, values.date)
     );
-  }, [values.date]);
+    /*eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, [values.date, setFieldTouched, setFieldValue]);
 
   return (
     <Autocomplete

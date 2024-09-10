@@ -31,7 +31,7 @@ function CpuUsageChart(props) {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="x" tickLine={false} tickFormatter={(value) => ""} />
+            <XAxis dataKey="x" tickLine={false} tickFormatter={() => ""} />
             <YAxis domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
             <Tooltip
               formatter={(value, name, props) => {

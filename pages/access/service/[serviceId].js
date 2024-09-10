@@ -1,5 +1,4 @@
-import AddIcon from "@mui/icons-material/Add";
-import { Box, CircularProgress, Divider, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import Image from "next/image";
@@ -401,7 +400,7 @@ function MarketplaceService() {
         headerAlign: "center",
         renderCell: (params) => {
           const status = params?.row?.status;
-          
+
           if (status === "STOPPED")
             return <StatusChip category="unknown" label="N/A" />;
 
@@ -499,7 +498,7 @@ function MarketplaceService() {
     },
     onSubmit: (values) => {
       if (values.deleteme === "deleteme") {
-        //eslint-disable-next-line no-use-before-define
+        /*eslint-disable-next-line no-use-before-define*/
         deleteResourceInstanceMutation.mutate();
       } else {
         snackbar.showError("Please enter deleteme");
@@ -645,7 +644,7 @@ function MarketplaceService() {
     enableReinitialize: true,
     onSubmit: (values) => {
       const data = {};
-      for (let key in values) {
+      for (const key in values) {
         if (values[key]) {
           if (values[key] === "requestParams") {
             data["requestParams"] = cloneDeep(values["requestParams"]);
@@ -658,7 +657,7 @@ function MarketplaceService() {
       async function getSchema() {
         try {
           let schemaArray = [];
-          let schema = await describeServiceOfferingResource(
+          const schema = await describeServiceOfferingResource(
             serviceId,
             selectedResource.id,
             "none"
@@ -713,8 +712,8 @@ function MarketplaceService() {
 
           //remove empty fields from data.requestParams
           //remove the field from payload if it has an empty value ("", )
-          for (let key in data.requestParams) {
-            let value = data.requestParams[key];
+          for (const key in data.requestParams) {
+            const value = data.requestParams[key];
 
             //for gcp cloud provider remove cloud_provider_native_network_id field
             if (
@@ -734,7 +733,7 @@ function MarketplaceService() {
           //other required parameters should be present in data.requestParameters
           let isError = false;
           let requiredFieldName = "";
-          for (let param of schemaArray) {
+          for (const param of schemaArray) {
             if (param.required) {
               if (
                 [
@@ -800,6 +799,7 @@ function MarketplaceService() {
           if (isError) {
             snackbar.showError(`${requiredFieldName} is required`);
           } else {
+            /* eslint-disable-next-line no-use-before-define */
             createResourceInstanceMutation.mutate(data);
           }
         } catch (err) {
@@ -869,7 +869,6 @@ function MarketplaceService() {
         createformik.resetForm();
         setCreationDrawerOpen(false);
       },
-      onError: (error) => {},
     }
   );
 
@@ -891,6 +890,7 @@ function MarketplaceService() {
       setSelectionModel([]);
       setUpdateDrawerOpen(false);
       fetchResourceInstances(selectedResource);
+      /*eslint-disable-next-line no-use-before-define*/
       updateformik.resetForm();
       snackbar.showSuccess("Updated Resource Instance");
     },
@@ -899,7 +899,7 @@ function MarketplaceService() {
   //-----------------------modify ends-------------------------------------
 
   const startResourceInstanceMutation = useMutation(startResourceInstance, {
-    onSuccess: async (response) => {
+    onSuccess: async () => {
       setSelectionModel([]);
 
       fetchResourceInstances(selectedResource);
@@ -908,7 +908,7 @@ function MarketplaceService() {
   });
 
   const stopResourceInstanceMutation = useMutation(stopResourceInstance, {
-    onSuccess: async (response) => {
+    onSuccess: async () => {
       setSelectionModel([]);
 
       fetchResourceInstances(selectedResource);
@@ -917,7 +917,7 @@ function MarketplaceService() {
   });
 
   const restartResourceInstanceMutation = useMutation(restartResourceInstance, {
-    onSuccess: async (response) => {
+    onSuccess: async () => {
       setSelectionModel([]);
       fetchResourceInstances(selectedResource);
       snackbar.showSuccess("Rebooting Resource Instance");
@@ -926,18 +926,6 @@ function MarketplaceService() {
 
   const handleRefresh = () => {
     fetchResourceInstances(selectedResource);
-  };
-
-  const handleStart = () => {
-    startResourceInstanceMutation.mutate(updateformik.values);
-  };
-
-  const handleStop = () => {
-    stopResourceInstanceMutation.mutate(updateformik.values);
-  };
-
-  const handleReboot = () => {
-    restartResourceInstanceMutation.mutate(updateformik.values);
   };
 
   const AccountConfigCell = ({ id, logo: Logo }) => {
@@ -968,14 +956,14 @@ function MarketplaceService() {
       isSubscriptionDataFetched
     ) {
       if (service?.resourceParameters?.length > 0) {
-        let cloudProviderRes = service.resourceParameters.filter(
+        const cloudProviderRes = service.resourceParameters.filter(
           // this is a temporary fix to unblock production for customer
           // but backend should ensure that id should always be exactly r-injectedaccountconfig
           (param) => param.resourceId?.startsWith("r-injectedaccountconfig")
         );
 
         if (cloudProviderRes?.length > 0) {
-          let cloudProviderResourceInfo = {
+          const cloudProviderResourceInfo = {
             key: cloudProviderRes[0].urlKey,
             id: cloudProviderRes[0].resourceId,
             name: cloudProviderRes[0].name,
@@ -1020,6 +1008,7 @@ function MarketplaceService() {
         setViewInfoDrawerOpen(false);
       }
     }
+    /*eslint-disable-next-line react-hooks/exhaustive-deps*/
   }, [servicesLoadingStatus, resourceId, isSubscriptionDataFetched]);
 
   async function fetchCloudProviderResourceInstances(
@@ -1038,7 +1027,7 @@ function MarketplaceService() {
 
     const cloudProviderResourceInstanceIds =
       resourceInstanceIdsResponse.data.ids;
-    let cloudProviderResInstances = [];
+    const cloudProviderResInstances = [];
 
     await Promise.all(
       cloudProviderResourceInstanceIds.map(async (instanceId) => {
@@ -1197,7 +1186,7 @@ function MarketplaceService() {
       selectedInstances.push(instance);
     });
     setSelectedResourceInstances(selectedInstances);
-  }, [selectionModel]);
+  }, [selectionModel, resourceInstancesHashmap]);
 
   const openClickDelete = () => {
     setIsConfirmationDialog(true);
@@ -1307,6 +1296,18 @@ function MarketplaceService() {
     enableReinitialize: true,
   });
 
+  const handleStart = () => {
+    startResourceInstanceMutation.mutate(updateformik.values);
+  };
+
+  const handleStop = () => {
+    stopResourceInstanceMutation.mutate(updateformik.values);
+  };
+
+  const handleReboot = () => {
+    restartResourceInstanceMutation.mutate(updateformik.values);
+  };
+
   //Capacity payload data
   const capacityData = useMemo(() => {
     return {
@@ -1329,7 +1330,7 @@ function MarketplaceService() {
         isNotShow
         accessPage
         marketplacePage={currentSource === "access" ? false : true}
-        SidebarUI={<div></div>}
+        SidebarUI={""}
         customLogo
         currentSubscription={subscriptionData}
       >
@@ -1535,7 +1536,7 @@ function MarketplaceService() {
 
   if (service) {
     const modelType = service?.serviceModelType;
-    let deploymentHeader = getTheHostingModel(modelType);
+    const deploymentHeader = getTheHostingModel(modelType);
 
     return (
       <DashboardLayout

@@ -8,7 +8,7 @@ const dashboardSideDrawerSlice = createSlice({
   name: "dashboardSidebar",
   initialState,
   reducers: {
-    toggleDrawer: (state, action) => {
+    toggleDrawer: (state) => {
       state.isExpanded = !state.isExpanded;
     },
   },

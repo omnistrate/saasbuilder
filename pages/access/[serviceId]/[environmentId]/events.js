@@ -1,9 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import DashboardLayout from "../../../../src/components/DashboardLayout/DashboardLayout";
-import {
-  DisplayText,
-  Text,
-} from "../../../../src/components/Typography/Typography";
+import { DisplayText } from "../../../../src/components/Typography/Typography";
 import EventsTable from "../../../../src/components/EventsTable/EventsTable";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";

@@ -19,7 +19,7 @@ function useIsEllipsisActive() {
     // remove resize listener again on "unmount"
 
     return () => window.removeEventListener("resize", compareSize);
-  }, [textElementRef.current]);
+  }, [textElementRef]);
 
   return { hasEllipsis, textElementRef };
 }

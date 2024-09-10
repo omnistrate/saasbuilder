@@ -1,29 +1,19 @@
-import { Box, CircularProgress, Hidden, MenuItem, styled } from "@mui/material";
-import React, { createContext, useEffect, useState } from "react";
-import Button from "../Button/Button";
+import { Box } from "@mui/material";
+import React from "react";
 import FieldContainer from "../FormElements/FieldContainer/FieldContainer";
 import FieldDescription from "../FormElements/FieldDescription/FieldDescription";
 import FieldLabel from "../FormElements/FieldLabel/FieldLabel";
-import Form from "../FormElements/Form/Form";
-import { FormControlLabel } from "../FormElements/Radio/Radio";
 import TextField from "../FormElements/TextField/TextField";
 import { H6, P } from "../Typography/Typography";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
-import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import { format } from "date-fns";
-import CalendarIcon from "../CalendarIcon/CalendarIcon";
-import { padding } from "@mui/system";
-import ErrorLabel from "../ErrorLabel/ErrorLabel";
 import formatDateUTC from "../../utils/formatDateUTC";
 
 function ResourceInfoView(props) {
   const { data, serviceName } = props;
-  const { isLoading, setIsLoading } = useState(false);
 
   const objects = Object.entries(data.result_params).map((param) => {
     return { key: param[0], val: param[1] };
   });
-  var viewAPIOutputParams = [];
+  let viewAPIOutputParams = [];
   data.schema.apis.forEach((api) => {
     if (api.verb === "DESCRIBE") {
       viewAPIOutputParams = api.outputParameters;
@@ -70,7 +60,7 @@ function ResourceInfoView(props) {
               caretColor: "transparent",
             }}
             value={data.id}
-          ></TextField>
+          />
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Cloud Provider</FieldLabel>
@@ -84,7 +74,7 @@ function ResourceInfoView(props) {
             copyButton
             value={data.cloud_provider}
             sx={{ marginTop: "16px" }}
-          ></TextField>
+          />
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Region</FieldLabel>
@@ -100,7 +90,7 @@ function ResourceInfoView(props) {
               cursor: "default",
               caretColor: "transparent",
             }}
-          ></TextField>
+          />
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Network Type</FieldLabel>
@@ -114,7 +104,7 @@ function ResourceInfoView(props) {
             copyButton
             value={data.network_type}
             sx={{ marginTop: "16px" }}
-          ></TextField>
+          />
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Status</FieldLabel>
@@ -132,7 +122,7 @@ function ResourceInfoView(props) {
               caretColor: "transparent",
             }}
             value={data.status}
-          ></TextField>
+          />
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Created On</FieldLabel>
@@ -149,7 +139,7 @@ function ResourceInfoView(props) {
               caretColor: "transparent",
             }}
             value={formatDateUTC(data.created_at)}
-          ></TextField>
+          />
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Modified At</FieldLabel>
@@ -168,7 +158,7 @@ function ResourceInfoView(props) {
               caretColor: "transparent",
             }}
             value={formatDateUTC(data.last_modified_at)}
-          ></TextField>
+          />
         </FieldContainer>
         <Box mt={5}>
           {viewParams.length > 0 ? (
@@ -192,7 +182,7 @@ function ResourceInfoView(props) {
                   value={param.val}
                   sx={{ marginTop: "16px" }}
                   copyButton
-                ></TextField>
+                />
               </FieldContainer>
             );
           })}

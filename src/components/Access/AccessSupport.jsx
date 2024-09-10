@@ -55,8 +55,6 @@ export const AccessSupport = (props) => {
             </DisplayText>
           </Tooltip>
         </Box>
-        <Box alignSelf="flex-end" sx={{ textAlign: "right" }}></Box>
-        <Box></Box>
       </Box>
       <Box mt="40px">
         <MarketplaceServiceDefinitionsTab
@@ -76,7 +74,7 @@ export const AccessSupport = (props) => {
                     service?.productTierPlanDescription
                   ),
                 }}
-              ></Box>
+              />
             </Box>
           </Box>
         )}
@@ -89,7 +87,7 @@ export const AccessSupport = (props) => {
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(service?.productTierDocumentation),
                 }}
-              ></Box>
+              />
             </Box>
           </Box>
         )}
@@ -104,7 +102,7 @@ export const AccessSupport = (props) => {
                     service?.productTierPricing?.value
                   ),
                 }}
-              ></Box>
+              />
             </Box>
           </Box>
         )}
@@ -117,7 +115,7 @@ export const AccessSupport = (props) => {
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(service?.productTierSupport),
                 }}
-              ></Box>
+              />
             </Box>
           </Box>
         )}

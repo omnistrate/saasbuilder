@@ -1,6 +1,5 @@
 import React from "react";
 import { Stack, chipClasses } from "@mui/material";
-import _ from "lodash";
 import Chip from "../Chip/Chip";
 import { PulsatingDot } from "../PulsatingDot/PulsatingDot";
 import { getChipStyles } from "../StatusChip/StatusChip";
@@ -9,9 +8,7 @@ function StatusChipPulsateDot(props) {
   const {
     status,
     sx = {},
-    dot,
     pulsateDot,
-    tick,
     color,
     bgColor,
     ...restProps

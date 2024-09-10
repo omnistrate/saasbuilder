@@ -28,8 +28,9 @@ function ChangePassword() {
       return updatePassword(payload);
     },
     {
-      onSuccess: (response) => {
+      onSuccess: () => {
         snackbar.showSuccess("Updated password successfully!");
+        /*eslint-disable-next-line no-use-before-define*/
         formik.resetForm();
         logout();
       },
@@ -174,6 +175,6 @@ function ChangePassword() {
 
 export default ChangePassword;
 
-const Header2 = styled(Box)(({ theme }) => ({
+const Header2 = styled(Box)(() => ({
   width: "100%",
 }));
