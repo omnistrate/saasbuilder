@@ -52,7 +52,12 @@ const SigninPage = (props) => {
   useEffect(() => {
     if (redirect_reason === "idp_auth_error") {
       snackbar.showError("Something went wrong. Please retry");
-      router.replace("/signin");
+
+      if (destination)
+        router.replace(
+          `/signin?destination=${encodeURIComponent(destination)}`
+        );
+      else router.replace("/signin");
     }
   }, [redirect_reason]);
 
@@ -62,7 +67,11 @@ const SigninPage = (props) => {
       axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
 
       // Redirect to the Destination URL
-      if (destination && destination.startsWith("%2Fservice-plans")) {
+      if (
+        destination &&
+        (destination.startsWith("/service-plans") ||
+          destination.startsWith("%2Fservice-plans"))
+      ) {
         router.replace(decodeURIComponent(destination));
       } else {
         router.replace("/service-plans");

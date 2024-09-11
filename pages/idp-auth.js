@@ -50,7 +50,11 @@ function IDPAuth() {
           router.replace("/signin?redirect_reason=idp_auth_error");
         }
       } else {
-        router.replace("/signin");
+        if (destination)
+          router.replace(
+            `/signin?destination=${encodeURIComponent(destination)}`
+          );
+        else router.replace("/signin");
       }
     }
   }, [state, code, isRouterReady]);
@@ -65,7 +69,11 @@ function IDPAuth() {
         axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
 
         // Redirect to the Destination URL
-        if (destination && destination.startsWith("%2Fservice-plans")) {
+        if (
+          destination &&
+          (destination.startsWith("/service-plans") ||
+            destination.startsWith("%2Fservice-plans"))
+        ) {
           router.replace(decodeURIComponent(destination));
         } else {
           router.replace("/service-plans");

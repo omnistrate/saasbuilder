@@ -24,7 +24,9 @@ const redirectToDestination = (request) => {
 
   // Decode the Destination URL if it starts with %2Fservice-plans - Allow Redirecting to Service Plans Page
   const decodedDestination =
-    destination && destination.startsWith("%2Fservice-plans")
+    destination &&
+    (destination.startsWith("%2Fservice-plans") ||
+      destination.startsWith("/service-plans"))
       ? decodeURIComponent(destination)
       : "/service-plans";
 
