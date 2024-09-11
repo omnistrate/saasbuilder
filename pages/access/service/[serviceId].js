@@ -586,10 +586,12 @@ function MarketplaceService() {
 
   const closeUpdateDrawer = () => {
     setUpdateDrawerOpen(false);
+    updateformik.resetForm();
   };
 
   const closeCreationDrawer = () => {
     setCreationDrawerOpen(false);
+    createformik.resetForm();
   };
 
   const closeSupportDrawer = () => {
@@ -1288,6 +1290,18 @@ function MarketplaceService() {
               break;
           }
         });
+
+        // Remove Empty Fields from data.requestParams
+        for (const key in data.requestParams) {
+          const value = data.requestParams[key];
+
+          if (
+            value === undefined ||
+            (typeof value === "string" && !value.trim())
+          ) {
+            delete data.requestParams[key];
+          }
+        }
 
         updateResourceInstanceMutation.mutate(data);
       } catch (err) {
