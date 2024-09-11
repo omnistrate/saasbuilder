@@ -90,7 +90,7 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
       label: "Modify",
       onClick: handleModify,
       icon: ModifyIcon,
-      // isDisabled: isModifyDisabled,
+      isDisabled: isModifyDisabled,
     });
     if (isVisibleRestore) {
       buttonsAction.push({
