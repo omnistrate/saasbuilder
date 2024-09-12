@@ -4,7 +4,6 @@ import FieldContainer from "../FormElements/FieldContainer/FieldContainer";
 import FieldDescription from "../FormElements/FieldDescription/FieldDescription";
 import FieldLabel from "../FormElements/FieldLabel/FieldLabel";
 import TextField from "../FormElements/TextField/TextField";
-import { H6, P } from "../Typography/Typography";
 import formatDateUTC from "../../utils/formatDateUTC";
 import FormTitle from "../FormElements/FormTitle/FormTitle";
 import FormDescription from "../FormElements/FormDescription/FormDescription";
