@@ -35,13 +35,6 @@ const initialMemUsagePercentData = {
   data: [],
 };
 
-const connectionStatuses = {
-  idle: "idle",
-  connected: "connected",
-  failed: "error",
-  disconnected: "disconnected",
-};
-
 //store 4 hr data
 const maxStorageTime = 3600 * 4;
 //websocket reveives a new message every 60 seconds
@@ -76,7 +69,6 @@ function Metrics(props) {
 
   const socketOpenTime = useRef(null);
   const [isMetricsDataLoaded, setIsMetricsDataLoaded] = useState(false);
-  const [, setConnectionStatus] = useState(connectionStatuses.idle);
   const numConnectError = useRef(0);
   const [cpuUsageData, setCpuUsageData] = useState({
     current: "",
@@ -121,7 +113,6 @@ function Metrics(props) {
     onOpen: () => {
       setIsMetricsDataLoaded(false);
       socketOpenTime.current = Date.now() / 1000;
-      setConnectionStatus(connectionStatuses.connected);
       numConnectError.current = 0;
     },
     onError: () => {
