@@ -13,9 +13,11 @@ const RefreshWithToolTip: React.FC<RefreshWithToolTipProps> = (props) => {
 
   return (
     <Tooltip placement="top" title="Refresh" isVisible={isVisible}>
-      <IconButton size="small" disabled={disabled} onClick={refetch}>
-        <RefreshIcon disabled={disabled} />
-      </IconButton>
+      <span>
+        <IconButton size="small" disabled={disabled} onClick={refetch}>
+          <RefreshIcon disabled={disabled} />
+        </IconButton>
+      </span>
     </Tooltip>
   );
 };

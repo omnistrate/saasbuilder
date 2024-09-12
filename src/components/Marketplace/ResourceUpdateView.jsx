@@ -22,6 +22,8 @@ import { cloudProviderLabels } from "src/constants/cloudProviders";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import { PasswordField } from "../FormElementsv2/PasswordField/PasswordField";
 import Autocomplete from "../FormElementsv2/AutoComplete/AutoComplete";
+import FormTitle from "../FormElements/FormTitle/FormTitle";
+import FormDescription from "../FormElements/FormDescription/FormDescription";
 
 function ResourceUpdateView(props) {
   const {
@@ -119,15 +121,8 @@ function ResourceUpdateView(props) {
 
   return (
     <>
-      <H6 weight="extrabold" variant="mobile">
-        Update {serviceName}
-      </H6>
-      <P
-        weight="semibold"
-        sx={{ color: (theme) => theme.palette.neutral[600], mt: "14px" }}
-      >
-        {serviceName} Instance Details
-      </P>
+      <FormTitle>Update {serviceName}</FormTitle>
+      <FormDescription>{serviceName} Instance Details</FormDescription>
       <Form onSubmit={formData.handleSubmit}>
         <>
           <FieldContainer>
