@@ -20,7 +20,7 @@ import ResourceInstanceControlPanel from "./ResourceInstanceControlPanel";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import { SetState } from "src/types/common/reactGenerics";
 import { AccessResourceInstance } from "src/types/resourceInstance";
-import { RESOURCE_TYPES } from "src/constants/resource";
+import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 
 type InstancesTableHeaderProps = {
   count?: number;
@@ -98,11 +98,9 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
       return actionsObj;
     }
 
-    const isResourceTypeKustomize =
-      selectedInstance.resourceType === RESOURCE_TYPES.Kustomize;
-
-    const isOperatorTypeResource =
-      selectedInstance.resourceType === RESOURCE_TYPES.OperatorCRD;
+    const cliManagedResource = CLI_MANAGED_RESOURCES.includes(
+      selectedInstance.resourceType
+    );
 
     const isUpdateAllowedByRBAC = isOperationAllowedByRBAC(
       operationEnum.Update,
@@ -118,32 +116,15 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
 
     const { status, backupStatus } = selectedInstance || {};
 
-    if (
-      status === "STOPPED" &&
-      isUpdateAllowedByRBAC &&
-      !isResourceTypeKustomize &&
-      !isOperatorTypeResource &&
-      !isCurrentResourceBYOA
-    ) {
+    if (status === "STOPPED" && isUpdateAllowedByRBAC && !cliManagedResource) {
       actionsObj.start = true;
     }
 
-    if (
-      status === "RUNNING" &&
-      isUpdateAllowedByRBAC &&
-      !isResourceTypeKustomize &&
-      !isOperatorTypeResource &&
-      !isCurrentResourceBYOA
-    ) {
+    if (status === "RUNNING" && isUpdateAllowedByRBAC && !cliManagedResource) {
       actionsObj.stop = true;
     }
 
-    if (
-      status === "RUNNING" &&
-      isUpdateAllowedByRBAC &&
-      !isResourceTypeKustomize &&
-      !isOperatorTypeResource
-    ) {
+    if (status === "RUNNING" && isUpdateAllowedByRBAC && !cliManagedResource) {
       actionsObj.modify = true;
       actionsObj.addCapacity = true;
       actionsObj.removeCapacity = true;
@@ -152,8 +133,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     if (
       (status === "RUNNING" || status === "FAILED") &&
       isUpdateAllowedByRBAC &&
-      !isResourceTypeKustomize &&
-      !isOperatorTypeResource &&
+      !cliManagedResource &&
       !isCurrentResourceBYOA
     ) {
       actionsObj.restart = true;
@@ -166,8 +146,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     if (
       backupStatus?.earliestRestoreTime &&
       isUpdateAllowedByRBAC &&
-      !isResourceTypeKustomize &&
-      !isOperatorTypeResource
+      !cliManagedResource
     ) {
       actionsObj.restore = true;
     }
