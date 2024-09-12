@@ -205,6 +205,9 @@ export default function useResourceInstance(
                 endpoint: topologyDetails.clusterEndpoint
                   ? topologyDetails.clusterEndpoint
                   : "",
+                customDNSEndpoint: topologyDetails.customDNSEndpoint,
+                resourceId: resourceId,
+                resourceKey: topologyDetails.resourceKey,
               });
             } else {
               if (topologyDetails?.hasCompute === true) {
