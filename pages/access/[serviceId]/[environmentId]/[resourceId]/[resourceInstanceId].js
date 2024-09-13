@@ -30,6 +30,7 @@ import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscription
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import { checkIfResouceIsBYOA } from "src/utils/access/byoaResource";
 import Link from "next/link";
+import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 
 export const getServerSideProps = async () => {
   return {
@@ -58,6 +59,7 @@ function ResourceInstance() {
 
   let resourceName = "";
   let resourceKey = "";
+  let resourceType = "";
 
   if (serviceOffering && resourceId) {
     const resource = serviceOffering.resourceParameters.find(
@@ -66,6 +68,7 @@ function ResourceInstance() {
     if (resource) {
       resourceName = resource.name;
       resourceKey = resource.urlKey;
+      resourceType = resource.resourceType;
     }
   }
 
@@ -125,11 +128,18 @@ function ResourceInstance() {
     subscriptionData?.id
   );
 
+  const isCliManagedResource = useMemo(
+    () => CLI_MANAGED_RESOURCES.includes(resourceType),
+
+    [resourceType]
+  );
+
   const tabs = getTabs(
     resourceInstanceData?.isMetricsEnabled,
     resourceInstanceData?.isLogsEnabled,
     resourceInstanceData?.active,
-    isResourceBYOA
+    isResourceBYOA,
+    isCliManagedResource
   );
 
   let pageTitle = "Resource";
@@ -466,16 +476,24 @@ function ResourceInstance() {
 
 export default ResourceInstance;
 
-function getTabs(isMetricsEnabled, isLogsEnabled, isActive, isResourceBYOA) {
+function getTabs(
+  isMetricsEnabled,
+  isLogsEnabled,
+  isActive,
+  isResourceBYOA,
+  isCliManagedResource
+) {
   const tabs = {
     resourceInstanceDetails: "Resource Instance Details",
     connectivity: "Connectivity",
     nodes: "Containers",
   };
-  if (isMetricsEnabled && !isResourceBYOA) tabs["metrics"] = "Metrics";
-  if (isLogsEnabled && !isResourceBYOA) tabs["logs"] = "Logs";
+  if (isMetricsEnabled && !isResourceBYOA && !isCliManagedResource)
+    tabs["metrics"] = "Metrics";
+  if (isLogsEnabled && !isResourceBYOA && !isCliManagedResource)
+    tabs["logs"] = "Logs";
 
-  if (!isActive) {
+  if (!isActive || isCliManagedResource) {
     delete tabs.connectivity;
     delete tabs.nodes;
   }
