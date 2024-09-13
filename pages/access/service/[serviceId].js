@@ -22,9 +22,7 @@ import {
   updateResourceInstance,
 } from "../../../src/api/resourceInstance";
 import { describeServiceOfferingResource } from "../../../src/api/serviceOffering";
-import Button from "../../../src/components/Button/Button";
 import Card from "../../../src/components/Card/Card";
-import LoadingSpinnerSmall from "../../../src/components/CircularProgress/CircularProgress";
 import DashboardLayout from "../../../src/components/DashboardLayout/DashboardLayout";
 import DataGrid, {
   selectSingleItem,
@@ -32,15 +30,7 @@ import DataGrid, {
 import ConfirmationDialog from "../../../src/components/Dialog/ConfirmDialog";
 import CreateResourceInstanceForm from "../../../src/components/Forms/CreateResourceInstanceForm";
 import GridCellExpand from "../../../src/components/GridCellExpand/GridCellExpand";
-import HeaderTitle from "../../../src/components/Headers/Header";
 import LogoHeader from "../../../src/components/Headers/LogoHeader";
-import DeleteIcon from "../../../src/components/Icons/Delete/Delete";
-import DeprecateIcon from "../../../src/components/Icons/DeprecateIcon/DeprecateIcon";
-import EditIcon from "../../../src/components/Icons/Edit/Edit";
-import PlayIcon from "../../../src/components/Icons/Play/Play";
-import RebootIcon from "../../../src/components/Icons/Reboot/Reboot";
-import RefreshIcon from "../../../src/components/Icons/Refresh/Refresh";
-import StopIcon from "../../../src/components/Icons/Stop/Stop";
 import AwsCloudIcon from "../../../public/assets/images/logos/awsCloud.svg";
 import GcpCloudIcon from "../../../public/assets/images/logos/gcpCloud.svg";
 import AwsLogo from "../../../src/components/Logos/AwsLogo/AwsLogo";
@@ -63,12 +53,6 @@ import {
 } from "../../../src/slices/resourceInstanceListSlice";
 import loadingStatuses from "../../../src/utils/constants/loadingStatuses";
 import formatDateUTC from "../../../src/utils/formatDateUTC";
-import {
-  getEnumFromUserRoleString,
-  isOperationAllowedByRBAC,
-  operationEnum,
-  viewEnum,
-} from "../../../src/utils/isAllowedByRBAC";
 import MarketplaceServiceSidebar from "../../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import AccessHeaderCard from "src/components/AccessHeader/AccessHeaderCard";
 import { AccessSupport } from "src/components/Access/AccessSupport";
@@ -93,29 +77,12 @@ import { selectUserrootData } from "src/slices/userDataSlice";
 import { cloneDeep } from "lodash";
 import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
 import AccessServiceHealthStatus from "src/components/ServiceHealthStatus/AccessServiceHealthStatus";
-import RestoreInstanceIcon from "src/components/Icons/RestoreInstance/RestoreInstanceIcon";
 import AccessSideRestoreInstance from "src/components/RestoreInstance/AccessSideRestoreInstance";
 import DataGridText from "src/components/DataGrid/DataGridText";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import CustomNetworks from "src/features/CustomNetworks/CustomNetworks";
-import AddCapacityIcon from "src/components/Icons/AddCapacity/AddCapacityIcon";
-import RemoveCapacityIcon from "src/components/Icons/RemoveCapacity/RemoveCapacityIcon";
 import CapacityDialog from "src/components/CapacityDialog/CapacityDialog";
-import { RESOURCE_TYPES } from "src/constants/resource";
-
-const instanceStatuses = {
-  FAILED: "FAILED",
-  CANCELLED: "CANCELLED",
-  PENDING_DEPENDENCY: "PENDING_DEPENDENCY",
-  PENDING: "PENDING",
-  RUNNING: "RUNNING",
-  DEPLOYING: "DEPLOYING",
-  READY: "READY",
-  SUCCESS: "SUCCESS",
-  COMPLETE: "COMPLETE",
-  STOPPED: "STOPPED",
-  DELETING: "DELETING",
-};
+import InstancesTableHeader from "src/features/ResourceInstance/components/InstancesTableHeader";
 
 export const getServerSideProps = async () => {
   return {
@@ -130,7 +97,7 @@ function MarketplaceService() {
   const [currentSource, setCurrentSource] = React.useState("");
   const [cloudProviderAccounts, setCloudProviderAccounts] = useState([]);
   const [cloudProviderResource, setCloudProviderResource] = useState(null);
-
+  const [searchText, setSearchText] = useState(""); // Data Grid Search Field Text
   const [isRestoreInstanceModalOpen, setIsResourceInstanceModalOpen] =
     useState(false);
 
@@ -166,7 +133,18 @@ function MarketplaceService() {
   const handleRestoreInstanceModalClose = () => {
     setIsResourceInstanceModalOpen(false);
   };
+  const filteredInstances = useMemo(() => {
+    if (!resourceInstanceList?.length) {
+      return [];
+    }
 
+    if (searchText) {
+      return resourceInstanceList.filter((instance) =>
+        instance?.id.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+    return resourceInstanceList;
+  }, [resourceInstanceList, searchText]);
   const resourceInstancesHashmap = useMemo(() => {
     const hashmap = {};
     resourceInstanceList.forEach((instance) => {
@@ -253,25 +231,6 @@ function MarketplaceService() {
     isLoading: isLoadingSubscription,
     isFetched: isSubscriptionDataFetched,
   } = subscriptionQuery;
-
-  const role = getEnumFromUserRoleString(subscriptionData?.roleType);
-  const view = viewEnum.Access_Resources;
-
-  const createAccessServiceAllowed = isOperationAllowedByRBAC(
-    operationEnum.Create,
-    role,
-    view
-  );
-  const modifyAccessServiceAllowed = isOperationAllowedByRBAC(
-    operationEnum.Update,
-    role,
-    view
-  );
-  const deleteAccessServiceAllowed = isOperationAllowedByRBAC(
-    operationEnum.Delete,
-    role,
-    view
-  );
 
   const isCustomNetworkEnabled = useMemo(() => {
     let enabled = false;
@@ -442,6 +401,9 @@ function MarketplaceService() {
         headerAlign: "center",
         renderCell: (params) => {
           const status = params?.row?.status;
+
+          if (status === "STOPPED")
+            return <StatusChip category="unknown" label="N/A" />;
 
           const healthPercentage = calculateInstanceHealthPercentage(
             params.row.detailedNetworkTopology,
@@ -957,21 +919,15 @@ function MarketplaceService() {
   };
 
   const handleStart = () => {
-    if (isStartActionEnabled) {
-      startResourceInstanceMutation.mutate(updateformik.values);
-    }
+    startResourceInstanceMutation.mutate(updateformik.values);
   };
 
   const handleStop = () => {
-    if (isStopActionEnabled) {
-      stopResourceInstanceMutation.mutate(updateformik.values);
-    }
+    stopResourceInstanceMutation.mutate(updateformik.values);
   };
 
   const handleReboot = () => {
-    if (isRebootActiondEnabled) {
-      restartResourceInstanceMutation.mutate(updateformik.values);
-    }
+    restartResourceInstanceMutation.mutate(updateformik.values);
   };
 
   const AccountConfigCell = ({ id, logo: Logo }) => {
@@ -1239,61 +1195,9 @@ function MarketplaceService() {
 
   const isSingleInstanceSelected = selectedResourceInstances.length === 1;
 
-  let isStartActionEnabled = false;
-  let isStopActionEnabled = false;
-  let isRebootActiondEnabled = false;
-  let isModifyActionEnabled = false;
-  let isRestoreActionEnabled = false;
-  let isDeleteActionEnabled = false;
-  let isAddCapacityActiondEnabled = false;
-  let isRemoveCapacityActionEnabled = false;
-
   let selectedResourceInstance = null;
   if (isSingleInstanceSelected) {
     selectedResourceInstance = selectedResourceInstances[0];
-    if (selectedResourceInstance) {
-      const instanceStatus = selectedResourceInstance.status;
-
-      const isOperatorResource =
-        selectedResource.resourceType === RESOURCE_TYPES.OperatorCRD;
-
-      //enable start action depending on selected Service Component status
-      if (instanceStatus === instanceStatuses.STOPPED && !isOperatorResource) {
-        isStartActionEnabled = true;
-      }
-      //enable stop action
-      if (instanceStatus === instanceStatuses.RUNNING && !isOperatorResource) {
-        isStopActionEnabled = true;
-        isRebootActiondEnabled = true;
-        isAddCapacityActiondEnabled = true;
-        isRemoveCapacityActionEnabled = true;
-      }
-
-      //enable modify action
-      if (
-        [
-          instanceStatuses.FAILED,
-          instanceStatuses.RUNNING,
-          instanceStatuses.READY,
-          instanceStatuses.STOPPED,
-        ].includes(instanceStatus) &&
-        !isOperatorResource
-      ) {
-        isModifyActionEnabled = true;
-      }
-
-      // enable restore if earliestRestoreTime is present in backupStatus
-      const earliestRestoreTime =
-        selectedResourceInstance?.backupStatus?.earliestRestoreTime;
-
-      if (earliestRestoreTime && !isOperatorResource) {
-        isRestoreActionEnabled = true;
-      }
-
-      if (instanceStatus !== instanceStatuses.DELETING) {
-        isDeleteActionEnabled = true;
-      }
-    }
   }
 
   //--------------------modify Service Component instance---------------------------
@@ -1313,7 +1217,7 @@ function MarketplaceService() {
       serviceModelKey: service?.serviceModelURLKey,
       productTierKey: service?.productTierURLKey,
       resourceKey: selectedResource.key,
-      requestParams: selectedResourceInstance?.result_params,
+      requestParams: selectedResourceInstance?.result_params || {},
       subscriptionId: subscriptionData?.id,
     },
     onSubmit: async (values) => {
@@ -1693,416 +1597,170 @@ function MarketplaceService() {
           />
         ) : (
           <>
-            <Card mt={3}>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                mb={2}
-              >
-                <Stack direction="row" alignItems="center" gap="20px">
-                  <HeaderTitle
-                    title={`List of ${selectedResource?.name} Resource Instances`}
-                    desc={`Details of selected ${selectedResource?.name} resource instances`}
+            <Box mt={3}>
+              <DataGrid
+                components={{
+                  Header: InstancesTableHeader,
+                }}
+                hideFooterSelectedRowCount
+                disableColumnMenu
+                columns={columns}
+                rows={isLoading ? [] : filteredInstances}
+                checkboxSelection
+                selectionModel={selectionModel}
+                disableSelectionOnClick
+                sx={{
+                  "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer":
+                    {
+                      display: "none",
+                    },
+                }}
+                onCellClick={(props) => {
+                  const { field } = props;
+                  if (field === "view") {
+                    setViewResourceInfo(props.row);
+                    openViewInfoDrawer();
+                  }
+                }}
+                componentsProps={{
+                  header: {
+                    count: filteredInstances?.length,
+                    selectedInstance: selectedResourceInstance,
+                    isFetchingInstances: isLoading,
+                    selectedResourceName: selectedResource?.name,
+                    handleRefresh,
+                    searchText,
+                    setSearchText,
+                    isCurrentResourceBYOA,
+                    handleRestart: handleReboot,
+                    handleStart,
+                    handleStop,
+                    handleRestore: handleRestoreInstanceModalOpen,
+                    handleAddCapacity: () => {
+                      setShowCapacityDialog(true);
+                      setCurrentCapacityAction("add");
+                    },
+                    handleRemoveCapacity: () => {
+                      setShowCapacityDialog(true);
+                      setCurrentCapacityAction("remove");
+                    },
+                    handleModify: openUpdateDrawer,
+                    handleCreate: openCreationDrawer,
+                    handleDelete: openClickDelete,
+                    maxNumberOfInstancesReached,
+                    roleType: subscriptionData?.roleType,
+                    isDeprecated: selectedResource?.isDeprecated,
+                    isResourceParameters: service?.resourceParameters,
+                    isVisibleRestore: selectedResource?.isBackupEnabled,
+                  },
+                }}
+                noRowsText={`No instance of ${selectedResource.name} found for ${service?.serviceName}`}
+                onSelectionModelChange={(newSelection) => {
+                  selectSingleItem(
+                    newSelection,
+                    selectionModel,
+                    setSelectionModel
+                  );
+                }}
+                loading={isLoading}
+              />
+              <SideDrawerRight
+                open={viewInfoDrawerOpen}
+                closeDrawer={closeViewInfoDrawer}
+                RenderUI={
+                  <ResourceInfoView
+                    isBYOA={isCurrentResourceBYOA}
+                    data={viewResourceInfo}
+                    serviceName={service?.serviceName}
                   />
-
-                  {loadingStatus === loadingStatuses.refetching && (
-                    <LoadingSpinnerSmall size={20} sx={{ color: "#7F56D9" }} />
-                  )}
-                </Stack>
-                <Box>
-                  <Box>
-                    <Box display="flex" justifyContent="right">
-                      <Button
-                        variant="contained"
-                        sx={{ ml: 1.5 }}
-                        disabled={
-                          isLoading ||
-                          !service.resourceParameters ||
-                          selectedResource.isDeprecated ||
-                          !createAccessServiceAllowed ||
-                          maxNumberOfInstancesReached
-                        }
-                        onClick={openCreationDrawer}
-                        startIcon={<AddIcon />}
-                        disabledMessage={
-                          maxNumberOfInstancesReached
-                            ? `You have reached the maximum number of instances allowed`
-                            : !createAccessServiceAllowed
-                              ? "You do not have permission to create instances"
-                              : selectedResource.isDeprecated
-                                ? "Resource deprecated, instance creation not allowed"
-                                : ""
-                        }
-                      >
-                        Create {selectedResource.name} Instance
-                      </Button>
-                    </Box>
-                    <Box>
-                      {selectedResource.isDeprecated && (
-                        <Box display="flex" sx={{ marginTop: "15px" }}>
-                          <Box>
-                            <DeprecateIcon />
-                          </Box>
-                          <Text
-                            size="small"
-                            weight="semibold"
-                            sx={{
-                              marginLeft: "10px",
-                              marginTop: "3px",
-                              color: "#B42318",
-                            }}
-                          >
-                            {
-                              "Resource deprecated, instance creation not allowed"
-                            }{" "}
-                          </Text>
-                        </Box>
-                      )}
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-              <Divider sx={{ marginBottom: 1.5 }} />
-
-              <Box
-                display="flex"
-                justifyContent="flex-end"
-                alignItems="center"
-                marginBottom={1.5}
-              >
-                <Button
-                  variant="outlined"
-                  disabled={resourceInstanceList.length == 0}
-                  startIcon={
-                    <RefreshIcon disabled={resourceInstanceList.length == 0} />
-                  }
-                  sx={{ marginRight: 2 }}
-                  onClick={handleRefresh}
-                >
-                  Refresh
-                </Button>
-
-                {!isCurrentResourceBYOA && (
-                  <Button
-                    variant="outlined"
-                    startIcon={
-                      <RebootIcon
-                        disabled={
-                          !isRebootActiondEnabled || !modifyAccessServiceAllowed
-                        }
-                      />
-                    }
-                    sx={{ marginRight: 2 }}
-                    disabled={
-                      !isRebootActiondEnabled || !modifyAccessServiceAllowed
-                    }
-                    onClick={handleReboot}
-                  >
-                    Reboot
-                  </Button>
-                )}
-                {!isCurrentResourceBYOA && (
-                  <Button
-                    variant="outlined"
-                    startIcon={
-                      <PlayIcon
-                        disabled={
-                          !isStartActionEnabled || !modifyAccessServiceAllowed
-                        }
-                      />
-                    }
-                    sx={{ marginRight: 2 }}
-                    disabled={
-                      !isStartActionEnabled || !modifyAccessServiceAllowed
-                    }
-                    onClick={handleStart}
-                  >
-                    Start
-                  </Button>
-                )}
-                {!isCurrentResourceBYOA && (
-                  <Button
-                    variant="outlined"
-                    startIcon={
-                      <StopIcon
-                        disabled={
-                          !isStopActionEnabled || !modifyAccessServiceAllowed
-                        }
-                      />
-                    }
-                    sx={{ marginRight: 2 }}
-                    disabled={
-                      !isStopActionEnabled || !modifyAccessServiceAllowed
-                    }
-                    onClick={handleStop}
-                  >
-                    Stop
-                  </Button>
-                )}
-
-                <Button
-                  variant="outlined"
-                  startIcon={
-                    <EditIcon
-                      disabled={
-                        isCurrentResourceBYOA ||
-                        !isModifyActionEnabled ||
-                        !modifyAccessServiceAllowed
-                      }
-                    />
-                  }
-                  sx={{ marginRight: 2 }}
-                  disabled={
-                    isCurrentResourceBYOA ||
-                    !isModifyActionEnabled ||
-                    !modifyAccessServiceAllowed
-                  }
-                  onClick={openUpdateDrawer}
-                >
-                  Modify
-                </Button>
-                <Button
-                  variant="outlined"
-                  startIcon={
-                    <AddCapacityIcon
-                      disabled={
-                        !isAddCapacityActiondEnabled ||
-                        !modifyAccessServiceAllowed
-                      }
-                    />
-                  }
-                  sx={{ marginRight: 2 }}
-                  disabled={
-                    !isAddCapacityActiondEnabled || !modifyAccessServiceAllowed
-                  }
-                  onClick={() => {
-                    setShowCapacityDialog(true);
-                    setCurrentCapacityAction("add");
-                  }}
-                >
-                  Add Capacity
-                </Button>
-                <Button
-                  variant="outlined"
-                  startIcon={
-                    <RemoveCapacityIcon
-                      disabled={
-                        !isRemoveCapacityActionEnabled ||
-                        !modifyAccessServiceAllowed
-                      }
-                    />
-                  }
-                  sx={{ marginRight: 2 }}
-                  disabled={
-                    !isRemoveCapacityActionEnabled ||
-                    !modifyAccessServiceAllowed
-                  }
-                  onClick={() => {
-                    setShowCapacityDialog(true);
-                    setCurrentCapacityAction("remove");
-                  }}
-                >
-                  Remove Capacity
-                </Button>
-
-                {selectedResource?.isBackupEnabled && (
-                  <Button
-                    variant="outlined"
-                    startIcon={
-                      <RestoreInstanceIcon
-                        disabled={
-                          isCurrentResourceBYOA ||
-                          !modifyAccessServiceAllowed ||
-                          !isRestoreActionEnabled
-                        }
-                      />
-                    }
-                    sx={{ marginRight: 2 }}
-                    onClick={handleRestoreInstanceModalOpen}
-                  >
-                    PiTR
-                  </Button>
-                )}
-
-                <Button
-                  variant="outlined"
-                  startIcon={
-                    <DeleteIcon
-                      disabled={
-                        !isDeleteActionEnabled || !deleteAccessServiceAllowed
-                      }
-                    />
-                  }
-                  disabled={
-                    !isDeleteActionEnabled || !deleteAccessServiceAllowed
-                  }
-                  onClick={() => {
-                    openClickDelete();
-                  }}
-                >
-                  Delete
-                </Button>
-              </Box>
-
-              <Divider sx={{ mb: 5 }} />
-
-              {isLoading ? (
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  mt="200px"
-                  marginBottom="300px"
-                >
-                  <CircularProgress />
-                </Box>
-              ) : (
-                <>
-                  <Box sx={{ height: 640 }}>
-                    <DataGrid
-                      hideFooterSelectedRowCount
-                      disableColumnMenu
-                      rowHeight={76}
-                      columns={columns}
-                      rows={resourceInstanceList}
-                      pageSize={10}
-                      rowsPerPageOptions={[10]}
-                      checkboxSelection
-                      selectionModel={selectionModel}
-                      disableSelectionOnClick
-                      sx={{
-                        "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer":
-                          {
-                            display: "none",
-                          },
-                      }}
-                      onCellClick={(props) => {
-                        const { field } = props;
-                        if (field === "view") {
-                          setViewResourceInfo(props.row);
-                          openViewInfoDrawer();
-                        }
-                      }}
-                      components={{
-                        NoRowsOverlay: () => (
-                          <Stack
-                            height="100%"
-                            alignItems="center"
-                            justifyContent="center"
-                          >
-                            No Instance of {selectedResource.name} found for{" "}
-                            {service?.serviceName}
-                          </Stack>
-                        ),
-                      }}
-                      onSelectionModelChange={(newSelection) => {
-                        selectSingleItem(
-                          newSelection,
-                          selectionModel,
-                          setSelectionModel
-                        );
-                      }}
-                    />
-                  </Box>
-                  <SideDrawerRight
-                    open={viewInfoDrawerOpen}
-                    closeDrawer={closeViewInfoDrawer}
-                    RenderUI={
-                      <ResourceInfoView
-                        isBYOA={isCurrentResourceBYOA}
-                        data={viewResourceInfo}
-                        serviceName={service?.serviceName}
-                      />
-                    }
-                  />
-                  <SideDrawerRight
-                    open={updateDrawerOpen}
-                    closeDrawer={closeUpdateDrawer}
-                    RenderUI={
-                      <ResourceUpdateView
-                        isCurrentResourceBYOA={isCurrentResourceBYOA}
-                        formData={updateformik}
-                        regions={{
-                          aws: service?.awsRegions || [],
-                          gcp: service?.gcpRegions || [],
-                        }}
-                        formCancelClick={closeUpdateDrawer}
-                        isLoading={updateResourceInstanceMutation.isLoading}
-                        serviceName={service?.serviceName}
-                        serviceId={serviceId}
-                        selectedResourceKey={selectedResource}
-                      />
-                    }
-                  />
-
-                  <CapacityDialog
-                    open={showCapacityDialog}
-                    handleClose={() => {
-                      setShowCapacityDialog(false);
+                }
+              />
+              <SideDrawerRight
+                open={updateDrawerOpen}
+                closeDrawer={closeUpdateDrawer}
+                RenderUI={
+                  <ResourceUpdateView
+                    isCurrentResourceBYOA={isCurrentResourceBYOA}
+                    formData={updateformik}
+                    regions={{
+                      aws: service?.awsRegions || [],
+                      gcp: service?.gcpRegions || [],
                     }}
-                    data={capacityData}
-                    currentCapacityAction={currentCapacityAction}
-                    contextType="access"
-                    refetch={fetchResourceInstancesOfSelectedResource}
+                    formCancelClick={closeUpdateDrawer}
+                    isLoading={updateResourceInstanceMutation.isLoading}
+                    serviceName={service?.serviceName}
+                    serviceId={serviceId}
+                    selectedResourceKey={selectedResource}
                   />
-                  {isCurrentResourceBYOA ? (
-                    <DeleteAccountConfigConfirmationDialog
-                      open={isConfirmationDialog}
-                      handleClose={handleConfirmationClose}
-                      formData={deleteformik}
-                      title="Delete Confirmation"
-                      isLoading={deleteResourceInstanceMutation.isLoading}
-                    />
-                  ) : (
-                    <ConfirmationDialog
-                      open={isConfirmationDialog}
-                      handleClose={handleConfirmationClose}
-                      formData={deleteformik}
-                      title={`Do you want to delete this ${selectedResource.name} instance?`}
-                      subtitle={`Are you sure you want to delete - ${selectedResourceInstances[0]?.id}?`}
-                      message={`To confirm deletion, please enter <b>deleteme</b>, in the field below:`}
-                      buttonLabel="Confirm"
-                      isLoading={deleteResourceInstanceMutation.isLoading}
-                      isDeleteEnable={true}
-                    />
-                  )}
-                </>
-              )}
-            </Card>
-            <SideDrawerRight
-              open={creationDrawerOpen}
-              closeDrawer={closeCreationDrawer}
-              RenderUI={
-                <CreateResourceInstanceForm
-                  downloadTerraformKitMutation={downloadTerraformKitMutation}
-                  isBYOA={isCurrentResourceBYOA}
-                  requestParams={requestParams}
-                  formCancelClick={closeCreationDrawer}
-                  formData={createformik}
-                  serviceName={service?.serviceName}
-                  serviceId={serviceId}
-                  selectedResourceKey={selectedResource}
-                  isLoading={
-                    createResourceInstanceMutation.isLoading ||
-                    isCreateInstanceSchemaFetching
-                  }
-                  setRequestParams={setRequestParams}
-                  cloudProviderAccounts={cloudProviderAccounts}
-                  service={service}
-                  subscriptionId={subscriptionData?.id}
-                  handleOrgIdModalOpen={handleOrgIdModalOpen}
-                  cloudProviders={service?.cloudProviders}
-                  regions={{
-                    aws: service?.awsRegions || [],
-                    gcp: service?.gcpRegions || [],
-                  }}
-                  isCustomNetworkEnabled={isCustomNetworkEnabled}
+                }
+              />
+
+              <CapacityDialog
+                open={showCapacityDialog}
+                handleClose={() => {
+                  setShowCapacityDialog(false);
+                }}
+                data={capacityData}
+                currentCapacityAction={currentCapacityAction}
+                contextType="access"
+                refetch={fetchResourceInstancesOfSelectedResource}
+              />
+              {isCurrentResourceBYOA ? (
+                <DeleteAccountConfigConfirmationDialog
+                  open={isConfirmationDialog}
+                  handleClose={handleConfirmationClose}
+                  formData={deleteformik}
+                  title="Delete Confirmation"
+                  isLoading={deleteResourceInstanceMutation.isLoading}
                 />
-              }
-            />
+              ) : (
+                <ConfirmationDialog
+                  open={isConfirmationDialog}
+                  handleClose={handleConfirmationClose}
+                  formData={deleteformik}
+                  title={`Do you want to delete this ${selectedResource.name} instance?`}
+                  subtitle={`Are you sure you want to delete - ${selectedResourceInstances[0]?.id}?`}
+                  message={`To confirm deletion, please enter <b>deleteme</b>, in the field below:`}
+                  buttonLabel="Confirm"
+                  isLoading={deleteResourceInstanceMutation.isLoading}
+                  isDeleteEnable={true}
+                />
+              )}
+
+              <SideDrawerRight
+                open={creationDrawerOpen}
+                closeDrawer={closeCreationDrawer}
+                RenderUI={
+                  <CreateResourceInstanceForm
+                    downloadTerraformKitMutation={downloadTerraformKitMutation}
+                    isBYOA={isCurrentResourceBYOA}
+                    requestParams={requestParams}
+                    formCancelClick={closeCreationDrawer}
+                    formData={createformik}
+                    serviceName={service?.serviceName}
+                    serviceId={serviceId}
+                    selectedResourceKey={selectedResource}
+                    isLoading={
+                      createResourceInstanceMutation.isLoading ||
+                      isCreateInstanceSchemaFetching
+                    }
+                    setRequestParams={setRequestParams}
+                    cloudProviderAccounts={cloudProviderAccounts}
+                    service={service}
+                    subscriptionId={subscriptionData?.id}
+                    handleOrgIdModalOpen={handleOrgIdModalOpen}
+                    cloudProviders={service?.cloudProviders}
+                    regions={{
+                      aws: service?.awsRegions || [],
+                      gcp: service?.gcpRegions || [],
+                    }}
+                    isCustomNetworkEnabled={isCustomNetworkEnabled}
+                  />
+                }
+              />
+            </Box>
           </>
         )}
-
         <SideDrawerRight
           size="xlarge"
           open={supportDrawerOpen}

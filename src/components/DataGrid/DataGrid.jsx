@@ -31,6 +31,9 @@ const DataGrid = styled(
   background: "white",
   boxShadow:
     "0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06)",
+  "& .MuiDataGrid-main": {
+    height: "491px", // height of rows container to have 10 rows(each of height 52px) without scroll inside table
+  },
   border: "1px solid #EAECF0",
   "& .MuiDataGrid-main": {
     height: "591px", // height of rows container to have 10 rows(each of height 52px) without scroll inside table
