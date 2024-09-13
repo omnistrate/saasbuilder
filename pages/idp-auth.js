@@ -15,7 +15,7 @@ function IDPAuth() {
   const snackbar = useSnackbar();
 
   const handleSignIn = useCallback(
-    async (payload) => {
+    async (payload, destination) => {
       try {
         const response = await customerSignInWithIdentityProvider(payload);
         const jwtToken = response.data.jwtToken;
@@ -23,7 +23,17 @@ function IDPAuth() {
         if (jwtToken) {
           Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
           axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
-          router.replace("/service-plans");
+
+          // Redirect to the Destination URL
+          if (
+            destination &&
+            (destination.startsWith("/service-plans") ||
+              destination.startsWith("%2Fservice-plans"))
+          ) {
+            router.replace(decodeURIComponent(destination));
+          } else {
+            router.replace("/service-plans");
+          }
         }
       } catch (error) {
         sessionStorage.removeItem("authState");
@@ -62,6 +72,7 @@ function IDPAuth() {
           if (localAuthState.nonce === authState.nonce) {
             const identityProvider = localAuthState.identityProvider;
             const invitationInfo = localAuthState.invitationInfo || {};
+            const destination = localAuthState.destination;
 
             const payload = {
               authorizationCode: code,
@@ -69,7 +80,7 @@ function IDPAuth() {
               ...invitationInfo,
             };
 
-            handleSignIn(payload);
+            handleSignIn(payload, destination);
           }
         } catch (error) {
           console.log(error);
@@ -83,7 +94,7 @@ function IDPAuth() {
         else router.replace("/signin");
       }
     }
-  }, [state, code, isRouterReady, router, handleSignIn]);
+  }, [state, code, isRouterReady, router, handleSignIn, destination]);
 
   return (
     <Stack

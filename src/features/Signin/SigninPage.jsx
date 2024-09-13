@@ -265,6 +265,7 @@ const SigninPage = (props) => {
                 <GoogleLogin
                   disabled={isGoogleLoginDisabled}
                   saasBuilderBaseURL={saasBuilderBaseURL}
+                  destination={destination}
                 />
               </GoogleOAuthProvider>
             )}
@@ -273,6 +274,7 @@ const SigninPage = (props) => {
                 githubClientID={githubIDPClientID}
                 disabled={isGithubLoginDisabled}
                 saasBuilderBaseURL={saasBuilderBaseURL}
+                destination={destination}
               />
             )}
           </Stack>
