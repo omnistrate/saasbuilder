@@ -26,7 +26,7 @@
     "@reduxjs/toolkit": "^1.9.1",
     "@tanstack/react-query": "^4.36.1",
     "@types/react-google-recaptcha": "^2.1.9",
-    "axios": "^1.2.2",
+    "axios": "^1.7.4",
     "buffer": "^6.0.3",
     "clipboardy": "^3.0.0",
     "crypto-js": "^4.2.0",
