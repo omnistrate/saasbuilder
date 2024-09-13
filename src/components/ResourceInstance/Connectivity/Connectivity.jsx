@@ -153,9 +153,10 @@ function Connectivity(props) {
                       resourceKey,
                       resourceHasCompute,
                     } = obj;
+
                     return (
                       <ResourceConnectivityEndpoint
-                        key={resourceId}
+                        key={`endpoint-${resourceId}`}
                         context={context}
                         isPrimaryResource={false}
                         resourceName={resourceName}

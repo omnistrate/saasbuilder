@@ -32,7 +32,7 @@ const CheckedIcon = styled(UnCheckedIcon)({
   },
 });
 
-function CustomCheckbox(props) {
+const CustomCheckbox = React.forwardRef(function CustomCheckbox(props, ref) {
   return (
     <Checkbox
       sx={{
@@ -43,9 +43,10 @@ function CustomCheckbox(props) {
       checkedIcon={<CheckedIcon />}
       icon={<UnCheckedIcon />}
       inputProps={{ "aria-label": "Checkbox demo" }}
+      ref={ref}
       {...props}
     />
   );
-}
+});
 
 export default CustomCheckbox;
