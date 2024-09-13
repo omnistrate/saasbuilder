@@ -12,16 +12,19 @@ import DOMPurify from "isomorphic-dompurify";
 export const getServerSideProps = async () => {
   let orgName = "";
   let orgLogoURL = "";
+  let orgPrivacyPolicy = "";
   try {
     const response = await getProviderOrgDetails();
     orgName = response.data.orgName;
     orgLogoURL = response.data.orgLogoURL;
+    orgPrivacyPolicy = response.data.orgPrivacyPolicy;
   } catch (err) {}
 
   return {
     props: {
       orgName: orgName,
       orgLogoURL: orgLogoURL,
+      orgPrivacyPolicy: orgPrivacyPolicy,
     },
   };
 };
