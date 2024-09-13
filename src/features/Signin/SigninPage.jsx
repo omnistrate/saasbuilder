@@ -71,9 +71,7 @@ const SigninPage = (props) => {
       if (
         destination &&
         (destination.startsWith("/service-plans") ||
-          destination.startsWith("%2Fservice-plans")) &&
-        !destination.includes("<") && // Check for potential script tags
-        !destination.includes(">") // Check for potential script tags
+          destination.startsWith("%2Fservice-plans"))
       ) {
         router.replace(decodeURIComponent(destination));
       } else {
