@@ -28,7 +28,9 @@ function IDPAuth() {
           if (
             destination &&
             (destination.startsWith("/service-plans") ||
-              destination.startsWith("%2Fservice-plans"))
+              destination.startsWith("%2Fservice-plans")) &&
+            !destination.includes("<") && // Check for potential script tags
+            !destination.includes(">") // Check for potential script tags
           ) {
             router.replace(decodeURIComponent(destination));
           } else {
