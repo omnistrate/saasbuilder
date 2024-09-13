@@ -3,13 +3,10 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { Stack, Typography } from "@mui/material";
 import styled from "@emotion/styled";
-
 import useSnackbar from "src/hooks/useSnackbar";
 import axios from "src/axios";
-
 import CenterContentLayout from "components/NonDashboardComponents/Layout/CenterContentLayout";
 import PageHeading from "components/NonDashboardComponents/PageHeading";
-
 import ValidateTokenImg from "public/assets/images/non-dashboard/validate-token-main.svg";
 
 const StyledImage = styled(Image)({
@@ -46,6 +43,7 @@ const ValidateTokenPage = (props) => {
           router.push("/signup");
         });
     }
+    /*eslint-disable-next-line react-hooks/exhaustive-deps*/
   }, [router]);
 
   return (

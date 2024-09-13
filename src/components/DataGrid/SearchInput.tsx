@@ -8,6 +8,7 @@ import Tooltip from "../Tooltip/Tooltip";
 type SearchInputProps = {
   placeholder?: string;
   searchText: string;
+  /* eslint-disable-next-line no-unused-vars*/
   setSearchText: (text: string) => void;
   width?: string;
 };
@@ -36,7 +37,7 @@ const SearchInput: FC<SearchInputProps> = ({
     if (searchText && !isExpanded) {
       setIsExpanded(true);
     }
-  }, [searchText]);
+  }, [searchText, isExpanded]);
 
   // Close on outside click if searchText is empty
   useEffect(() => {

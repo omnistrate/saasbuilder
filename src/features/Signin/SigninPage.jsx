@@ -59,6 +59,7 @@ const SigninPage = (props) => {
         );
       else router.replace("/signin");
     }
+    /*eslint-disable-next-line react-hooks/exhaustive-deps*/
   }, [redirect_reason]);
 
   function handleSignInSuccess(jwtToken) {
@@ -86,6 +87,7 @@ const SigninPage = (props) => {
     },
     {
       onSuccess: (data) => {
+        /*eslint-disable-next-line no-use-before-define*/
         formik.resetForm();
         const jwtToken = data.data.jwtToken;
         handleSignInSuccess(jwtToken);
@@ -104,7 +106,7 @@ const SigninPage = (props) => {
   );
 
   async function handleFormSubmit(values) {
-    let data = { ...values };
+    const data = { ...values };
 
     if (reCaptchaRef.current && !hasCaptchaErrored) {
       const token = await reCaptchaRef.current.executeAsync();

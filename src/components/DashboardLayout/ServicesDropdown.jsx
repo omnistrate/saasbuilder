@@ -1,14 +1,11 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { Box, Stack } from "@mui/material";
-
 import Menu from "../Menu/Menu";
 import useOrgServiceOfferings from "src/features/Marketplace/PublicServices/hooks/useOrgServiceOfferings";
-
 import NineDotMenu from "./Icons/NineDotMenu";
 import MenuItem from "../MenuItem/MenuItem";
 import { Text } from "../Typography/Typography";
-import { styleConfig } from "src/providerConfig";
 import CubeIcon from "./Icons/CubeIcon";
 import { getMarketplaceProductTierRoute } from "src/utils/route/access/accessRoute";
 import { marketplaceServicePageTypes } from "src/features/Marketplace/constants/marketplaceServicePageTypes";

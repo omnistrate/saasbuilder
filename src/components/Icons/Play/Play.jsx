@@ -1,6 +1,7 @@
 import * as React from "react";
 const PlayIcon = (props) => {
-  let { color, disabled } = props;
+  let { color } = props;
+  const { disabled } = props;
   if (!color) {
     color = "#039855";
   }

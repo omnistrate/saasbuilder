@@ -43,7 +43,7 @@ const DataGridText: FC<DataGridTextProps> = ({
       .then(() => setTooltipText("Copied"))
       .catch(() => setTooltipText("Unable to copy to clipboard"))
       .finally(() => setTimeout(() => setTooltipText("Click to copy"), 1500)); // Reset the tooltip text after copying
-  }, []);
+  }, [children]);
 
   const textStyles = {
     fontSize: "12px",

@@ -10,6 +10,7 @@ import { CustomNetwork } from "src/types/customNetwork";
 
 type CustomNetworkDataGridHeaderProps = {
   count: number;
+  /*eslint-disable-next-line no-unused-vars*/
   openSideDrawer: (drawerType: FormMode) => void;
   refetchCustomNetworks: () => Promise<
     QueryObserverResult<CustomNetwork[], unknown>

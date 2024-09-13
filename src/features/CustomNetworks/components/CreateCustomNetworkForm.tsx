@@ -161,7 +161,7 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
                 "Choose the cloud provider on which the instance will run",
               disabled: formMode === "view",
               menuItems: cloudProviderOptions,
-              onChange: (e) => {
+              onChange: () => {
                 formData.setFieldValue("cloudProviderRegion", "");
               },
             },

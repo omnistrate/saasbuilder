@@ -32,7 +32,7 @@ function SingleLineChart(props) {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="x" tickLine={false} tickFormatter={() => ""} />
             <YAxis
-              domain={([datamin, datamax]) => [
+              domain={([, datamax]) => [
                 0,
                 datamax > 0 ? Math.round(datamax + 1) : 1,
               ]}

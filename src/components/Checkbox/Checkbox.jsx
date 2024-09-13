@@ -2,7 +2,7 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Checkbox from "@mui/material/Checkbox";
 
-const UnCheckedIcon = styled("span")(({ theme }) => ({
+const UnCheckedIcon = styled("span")(() => ({
   borderRadius: 4,
   width: 16,
   height: 16,

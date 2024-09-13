@@ -25,6 +25,28 @@ import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import { AccessCapacityDataType, CapacityAction, ContextType } from "./enums";
 import CapacityIcon from "../Icons/Capacity/CapacityIcon";
 
+// Styled Components
+const Dialog = styled(MuiDialog)(() => ({
+  "& .MuiPaper-root": {
+    width: "100%",
+    maxWidth: "521px",
+    padding: "24px",
+  },
+}));
+
+const DialogTitle = styled(MuiDialogTitle)({
+  padding: 0,
+});
+
+const DialogContent = styled(MuiDialogContent)({
+  padding: 0,
+});
+
+const DialogActions = styled(MuiDialogActions)({
+  padding: 0,
+  paddingTop: 30,
+});
+
 type CapacityDialogProps = {
   open: boolean;
   handleClose: () => void;
@@ -43,7 +65,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
 }) => {
   const snackbar = useSnackbar();
 
-  let labelObj = {
+  const labelObj = {
     title: "Remove Capacity",
     subtitle: "Number of Replicas to Remove",
     message:
@@ -77,6 +99,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     {
       onSuccess: () => {
         snackbar.showSuccess(`Capacity ${labelObj.successLabel} successfully`);
+        /*eslint-disable-next-line no-use-before-define*/
         capacityFormik.resetForm();
         handleClose();
         refetch();
@@ -192,25 +215,3 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
 };
 
 export default CapacityDialog;
-
-// Styled Components
-const Dialog = styled(MuiDialog)(({ theme }) => ({
-  "& .MuiPaper-root": {
-    width: "100%",
-    maxWidth: "521px",
-    padding: "24px",
-  },
-}));
-
-const DialogTitle = styled(MuiDialogTitle)({
-  padding: 0,
-});
-
-const DialogContent = styled(MuiDialogContent)({
-  padding: 0,
-});
-
-const DialogActions = styled(MuiDialogActions)({
-  padding: 0,
-  paddingTop: 30,
-});

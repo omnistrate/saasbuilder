@@ -127,6 +127,7 @@ function AccessControl() {
         })
       );
       snackbar.showSuccess("Invites Sent");
+      /*eslint-disable-next-line no-use-before-define*/
       formik.resetForm();
       refetch();
     } catch (error) {
@@ -138,12 +139,13 @@ function AccessControl() {
     (payload) => revokeSubscriptionUser(subscriptionData?.id, payload),
     {
       onSuccess: async () => {
+        //eslint-disable-next-line no-use-before-define
         deleteformik.resetForm();
         setDialog(false);
         snackbar.showSuccess("User Deleted");
         refetch();
       },
-      onError: (error) => {
+      onError: () => {
         snackbar.showError("Failed to delete user");
       },
     }
@@ -498,7 +500,7 @@ function AccessControl() {
                   <FormikProvider value={formik}>
                     <FieldArray
                       name="userInvite"
-                      render={({ insert, remove, push }) => {
+                      render={({ remove, push }) => {
                         return (
                           <>
                             {formik.values.userInvite.map((invite, index) => {
@@ -787,8 +789,6 @@ function AccessControl() {
                       if (rowObj) {
                         if (rowObj["id"] == selection[index]) {
                           setModifyFormikValue(rowObj);
-                          const accName = rowObj["name"];
-                          //   setSelectedAccountConfigName(accName);
                         }
                       }
                     });

@@ -35,12 +35,12 @@ function DiskIOPSWriteChart(props) {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="time"
-              tickFormatter={(value) => ""}
+              tickFormatter={() => ""}
               tickLine={false}
             />
             <YAxis
               tickFormatter={(value) => `${value}`}
-              domain={([datamin, datamax]) => [
+              domain={([, datamax]) => [
                 0,
                 datamax > 0 ? Math.round(datamax + 1) : 1,
               ]}

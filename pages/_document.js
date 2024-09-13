@@ -52,6 +52,7 @@ export default class MyDocument extends Document {
         <body>
           {process.env.GOOGLE_ANALYTICS_TAG_ID && (
             <noscript>
+              {/* eslint-disable-next-line react/self-closing-comp */}
               <iframe
                 src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_ANALYTICS_TAG_ID}`}
                 height="0"
@@ -116,7 +117,7 @@ MyDocument.getInitialProps = async (ctx) => {
     <style
       data-emotion={`${style.key} ${style.ids.join(" ")}`}
       key={style.key}
-      // eslint-disable-next-line react/no-danger
+      /* eslint-disable-next-line react/no-danger */
       dangerouslySetInnerHTML={{ __html: style.css }}
     />
   ));

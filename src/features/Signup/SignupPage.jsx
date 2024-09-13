@@ -63,7 +63,8 @@ const SignupPage = (props) => {
       return customerUserSignup(payload);
     },
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
+        /* eslint-disable-next-line no-use-before-define*/
         formik.resetForm();
         setShowSuccess(true);
       },
@@ -141,7 +142,7 @@ const SignupPage = (props) => {
         }
       });
     }
-  }, [org, orgUrl, email]);
+  }, [org, orgUrl, email, userSource, formik]);
 
   const { values, touched, errors, handleChange, handleBlur } = formik;
 
@@ -182,7 +183,7 @@ const SignupPage = (props) => {
   } else if (showGithubLoginButton) {
     policyAgreementText = `By creating your account manually or using your Github account to sign up, you agree to our`;
   }
-  let invitationInfo = {};
+  const invitationInfo = {};
   if (email || org || orgUrl) {
     if (email) {
       invitationInfo.invitedEmail = decodeURIComponent(email);
@@ -424,7 +425,7 @@ const SignupPage = (props) => {
 
 export default SignupPage;
 
-const FormGrid = styled(Box)(({ theme }) => ({
+const FormGrid = styled(Box)(() => ({
   display: "grid",
   gridTemplateColumns: "1fr 1fr",
   columnGap: "22px",

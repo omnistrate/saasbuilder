@@ -142,6 +142,12 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
     isStopDisabled,
     isRestoreDisabled,
     isVisibleRestore,
+    handleAddCapacity,
+    handleRemoveCapacity,
+    isAddCapacity,
+    isRemoveCapacity,
+    isVisibleBYOA,
+    isVisibleCapacity,
   ]);
 
   return (

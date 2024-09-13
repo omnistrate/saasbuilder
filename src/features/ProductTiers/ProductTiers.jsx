@@ -4,7 +4,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import Card from "src/components/Card/Card";
 import marketplaceIcon from "public/assets/images/dashboard/marketplace.svg";
 import SingleProductTierPlanCard from "./components/SingleProductTierPlanCard";
-import MultiProductTierPlanCard from "./components/MultiProductTierPlanCard";
 import { useSelector } from "react-redux";
 import { selectUserrootData } from "src/slices/userDataSlice";
 import { useMutation } from "@tanstack/react-query";
@@ -55,6 +54,7 @@ function ProductTiers(props) {
     setIsDeleteDialogOpen(true);
   };
   const handleDeleteDialogClose = () => {
+    /*eslint-disable-next-line no-use-before-define*/
     deleteFormik.resetForm();
     setIsDeleteDialogOpen(false);
   };
@@ -71,7 +71,7 @@ function ProductTiers(props) {
       }
     },
     {
-      onSuccess: async (res) => {
+      onSuccess: async () => {
         await refetchSubscriptions();
         await refetchSubscriptionRequests();
         snackbar.showSuccess(

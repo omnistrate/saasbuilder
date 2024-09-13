@@ -1,8 +1,7 @@
 import { Box, styled } from "@mui/material";
-import MuiCard from "@mui/material/Card";
 import { Text } from "../Typography/Typography";
 
-const Card = styled(Box)(({ theme }) => ({
+const Card = styled(Box)(() => ({
   background: "#FFFFFF",
   border: " 1px solid #EAECF0",
   boxShadow:

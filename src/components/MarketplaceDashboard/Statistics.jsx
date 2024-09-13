@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import Card from "../Card/Card";
 import { PulsatingDot } from "../PulsatingDot/PulsatingDot";
 import { Text, DisplayText } from "../Typography/Typography";
-import { Box, Grid, Stack } from "@mui/material";
+import {  Grid, Stack } from "@mui/material";
 import {
   SERVICE_HEALTH_LABEL_MAP,
   SERVICE_HEALTH_LABEL_STYLES,

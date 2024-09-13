@@ -1,16 +1,10 @@
 import { Box } from "@mui/material";
-import Image from "next/image";
 import Card from "src/components/Card/Card";
 
 const ServiceOfferingUnavailableUI = () => {
   return (
     <Card mt={3} style={{ height: "700px", width: "100%" }}>
       <Box>
-        <Image
-          style={{ height: "500px", width: "100%", marginTop: "50px" }}
-          src={marketplaceIcon}
-          alt="image-icon"
-        />
         <Box mt="-300px">
           <div
             justifyContent="center"

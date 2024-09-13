@@ -2,7 +2,7 @@ import { styled } from "@mui/material";
 import MuiRadio from "@mui/material/Radio";
 import MuiRadioGroup from "@mui/material/RadioGroup";
 
-const RadioUncheckedIcon = styled("span")(({ theme }) => ({
+const RadioUncheckedIcon = styled("span")(() => ({
   borderRadius: 8,
   border: "1px solid #D0D5DD",
   height: 16,
@@ -34,6 +34,6 @@ export default function Radio(props) {
   );
 }
 
-export const RadioGroup = styled(MuiRadioGroup)(({ theme }) => ({
+export const RadioGroup = styled(MuiRadioGroup)(() => ({
   marginTop: 6,
 }));

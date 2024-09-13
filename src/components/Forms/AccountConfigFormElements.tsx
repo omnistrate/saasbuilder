@@ -35,7 +35,7 @@ const StyledBulletTextWithLink: FC<StyledBulletTextWithLinkProps> = (props) => {
 
 type DescriptionProps = {};
 
-export const AWSAccountIDDescription: FC<DescriptionProps> = (props) => {
+export const AWSAccountIDDescription: FC<DescriptionProps> = () => {
   return (
     <Box>
       <StyledBulletTextWithLink
@@ -53,7 +53,7 @@ export const AWSAccountIDDescription: FC<DescriptionProps> = (props) => {
   );
 };
 
-export const GCPProjectIDDescription: FC<DescriptionProps> = (props) => {
+export const GCPProjectIDDescription: FC<DescriptionProps> = () => {
   return (
     <Box>
       <StyledBulletTextWithLink
@@ -71,7 +71,7 @@ export const GCPProjectIDDescription: FC<DescriptionProps> = (props) => {
   );
 };
 
-export const GCPProjectNumberDescription: FC<DescriptionProps> = (props) => {
+export const GCPProjectNumberDescription: FC<DescriptionProps> = () => {
   return (
     <Box>
       <StyledBulletTextWithLink

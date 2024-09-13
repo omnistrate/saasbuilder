@@ -24,7 +24,8 @@ function ProfileForm(props) {
 
   const updateProfileMutation = useMutation((data) => {
     return updateProfile(selectUser?.id, data)
-      .then((res) => {
+      .then(() => {
+        /*eslint-disable-next-line no-use-before-define*/
         formik.resetForm();
         refetch();
         snackbar.showSuccess("Update Profile Successfully");

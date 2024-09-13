@@ -3,7 +3,6 @@ import { Text } from "../../Typography/Typography";
 import { Box } from "@mui/material";
 import {
   CartesianGrid,
-  Legend,
   Line,
   LineChart,
   ResponsiveContainer,

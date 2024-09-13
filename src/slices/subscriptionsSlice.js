@@ -58,14 +58,10 @@ export const selectProductTierIds = (state) => {
   return data;
 };
 
-const findKeys = (service) => {
-  service.map((obj) => {
-    Object.keys(obj).filter((key) => obj[key] === val);
-  });
-};
+
 
 const serviceByIds = (service) => {
-  let serviceData = {};
+  const serviceData = {};
   service.map((obj) => {
     serviceData[obj.serviceId] = obj;
   });
@@ -73,7 +69,7 @@ const serviceByIds = (service) => {
 };
 
 const productTierByIds = (productdata) => {
-  let productTierData = {};
+  const productTierData = {};
   productdata?.map((obj) => {
     productTierData[obj.productTierID] = obj;
   });
@@ -81,13 +77,13 @@ const productTierByIds = (productdata) => {
 };
 
 export const selectSubscriptions = (state) => {
-  let data = [];
+  const data = [];
   const subIds = state.subscriptions.subscriptionsIds;
   const services = Object.values(state.marketplaceServices.allService);
   const servicesData = serviceByIds(services);
 
   subIds.map((subId) => {
-    let subobj = {};
+    const subobj = {};
     const subData = state.subscriptions.subscriptions[subId];
     if (subData && servicesData) {
       const serviceData = servicesData[subData?.serviceId];

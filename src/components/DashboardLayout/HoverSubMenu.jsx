@@ -15,12 +15,11 @@ function HoverSubMenu(props) {
       <MenuHoverTooltipTitle>{parentName}</MenuHoverTooltipTitle>
       {subItems.length > 0 ? (
         <SubList>
-          {subItems.map((navItem, index) => {
+          {subItems.map((navItem) => {
             const {
               name,
               IconComponent,
               icon,
-              alt,
               isActive,
               activeRoutes,
               route,
@@ -77,7 +76,7 @@ export default HoverSubMenu;
 
 const SubList = styled(MuiList, {
   shouldForwardProp: (prop) => prop !== "isDrawerExpanded",
-})(({ theme, isDrawerExpanded }) => ({
+})(() => ({
   paddingTop: 0,
   paddingBottom: 0,
   marginTop: 6,

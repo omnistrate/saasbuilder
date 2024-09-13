@@ -3,7 +3,7 @@ import SSOLoginButton from "./SSOLoginButton";
 import { useGoogleLogin } from "@react-oauth/google";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { Box } from "@mui/material";
-import { useRef, useState } from "react";
+import {  useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { IDENTITY_PROVIDER_TYPES } from "../constants";
 import { Buffer } from "buffer";
@@ -14,9 +14,9 @@ function GoogleLogin(props) {
   const [authState, setAuthState] = useState("");
 
   const googleLogin = useGoogleLogin({
-    onSuccess: async (response) => {},
-    onError: (error) => {},
-    onNonOAuthError: (error) => {},
+    onSuccess: async () => {},
+    onError: () => {},
+    onNonOAuthError: () => {},
     redirect_uri: `${saasBuilderBaseURL}/idp-auth`,
     ux_mode: "redirect",
     flow: "auth-code",

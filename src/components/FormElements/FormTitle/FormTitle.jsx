@@ -1,7 +1,6 @@
 import { styled } from "@mui/material";
-import { H6 } from "../../Typography/Typography";
 
-const FormTitle = styled("h2")(({ theme }) => ({
+const FormTitle = styled("h2")(() => ({
   color: "#181C32",
   fontFamily: "Inter",
   fontSize: "22px",
