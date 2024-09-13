@@ -18,6 +18,7 @@ function Connectivity(props) {
     globalEndpoints,
     context,
     nodes,
+    queryData,
     refetchInstance,
   } = props;
 
@@ -113,6 +114,7 @@ function Connectivity(props) {
                 viewType="endpoint"
                 endpointURL={primaryResourceEndpoint}
                 customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
+                queryData={queryData}
                 resourceKey={globalEndpoints?.primary?.resourceKey}
                 resourceId={globalEndpoints?.primary?.resourceId}
                 refetchInstance={refetchInstance}
@@ -166,6 +168,7 @@ function Connectivity(props) {
                         refetchInstance={refetchInstance}
                         containerStyles={{ marginTop: "16px" }}
                         resourceHasCompute={resourceHasCompute}
+                        queryData={queryData}
                       />
                     );
                   })}
@@ -273,11 +276,12 @@ function Connectivity(props) {
     availabilityZones,
     publiclyAccessible,
     privateNetworkCIDR,
+    globalEndpoints,
     isEndpointsExpanded,
     isPortsExpanded,
     privateNetworkId,
-    globalEndpoints,
     refetchInstance,
+    queryData
   ]);
 
   if (noConnectivityData) {
