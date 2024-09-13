@@ -4,7 +4,6 @@ import useLogout from "../../hooks/useLogout";
 import useUserData from "../../hooks/usersData";
 import ProfileDropdown from "./ProfileDropdown";
 import { selectUserData } from "src/slices/userDataSlice";
-import { Text } from "../Typography/Typography";
 import { styleConfig } from "src/providerConfig";
 import ServicesDropdown from "./ServicesDropdown";
 import useBillingDetails from "src/hooks/query/useBillingDetails";
@@ -84,20 +83,24 @@ function DashboardHeader(props) {
               isVisible={shouldShowTooltipOnServiceName}
               title={serviceName}
             >
-              <Text
-                color={styleConfig.navbarTextColor}
+              <Box
+                component="p"
+                ref={serviceNameRef}
                 sx={{
+                  fontSize: "14px",
+                  lineHeight: "20px",
+                  fontWeight: 600,
                   width: "100%",
                   maxWidth: "260px",
                   textOverflow: "ellipsis",
                   overflow: "hidden",
                   whiteSpace: "nowrap",
                   display: "block",
+                  color: styleConfig.navbarTextColor,
                 }}
-                ref={serviceNameRef}
               >
                 {serviceName}
-              </Text>
+              </Box>
             </Tooltip>
           )}
           {environmentType !== ENVIRONMENT_TYPES.PROD &&

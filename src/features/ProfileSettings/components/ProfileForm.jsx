@@ -2,6 +2,7 @@ import {
   Box,
   CircularProgress,
   Table,
+  TableBody,
   TableCell,
   TableRow,
   styled,
@@ -85,76 +86,78 @@ function ProfileForm(props) {
       </Box>
       <Form onSubmit={formik.handleSubmit}>
         <Table>
-          <TableRow>
-            <TableCell sx={{ width: "280px !important" }}>
-              <FieldLabel required>Name</FieldLabel>
-            </TableCell>
-            <TableCell>
-              <TextField
-                name="name"
-                id="name"
-                placeholder="Name"
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                mt="12px"
-                sx={{ maxWidth: "800px !important" }}
-              />
-              <ErrorLabel>{touched.name && errors.name}</ErrorLabel>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell sx={{ width: "280px !important" }}>
-              <FieldLabel required>Organization ID</FieldLabel>
-            </TableCell>
-            <TableCell>
-              <TextField
-                readonly
-                disabled
-                value={values.orgId}
-                mt="12px"
-                sx={{ maxWidth: "800px !important" }}
-              />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell sx={{ width: "280px !important" }}>
-              <FieldLabel required>Organization Name</FieldLabel>
-            </TableCell>
-            <TableCell>
-              <TextField
-                name="orgName"
-                id="orgName"
-                placeholder="Organization Name"
-                value={values.orgName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                mt="12px"
-                sx={{ maxWidth: "800px !important" }}
-                disabled={selectUser.roleType !== "root"}
-              />
-              <ErrorLabel>{touched.orgName && errors.orgName}</ErrorLabel>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell sx={{ width: "280px !important" }}>
-              <FieldLabel>Organization Website URL</FieldLabel>
-            </TableCell>
-            <TableCell>
-              <TextField
-                name="orgURL"
-                id="orgURL"
-                placeholder="Organization Website URL"
-                value={values.orgURL}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                mt="12px"
-                sx={{ maxWidth: "800px !important" }}
-                disabled={selectUser.roleType !== "root"}
-              />
-              <ErrorLabel>{touched.orgURL && errors.orgURL}</ErrorLabel>
-            </TableCell>
-          </TableRow>
+          <TableBody>
+            <TableRow>
+              <TableCell sx={{ width: "280px !important" }}>
+                <FieldLabel required>Name</FieldLabel>
+              </TableCell>
+              <TableCell>
+                <TextField
+                  name="name"
+                  id="name"
+                  placeholder="Name"
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  mt="12px"
+                  sx={{ maxWidth: "800px !important" }}
+                />
+                <ErrorLabel>{touched.name && errors.name}</ErrorLabel>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={{ width: "280px !important" }}>
+                <FieldLabel required>Organization ID</FieldLabel>
+              </TableCell>
+              <TableCell>
+                <TextField
+                  readonly
+                  disabled
+                  value={values.orgId}
+                  mt="12px"
+                  sx={{ maxWidth: "800px !important" }}
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={{ width: "280px !important" }}>
+                <FieldLabel required>Organization Name</FieldLabel>
+              </TableCell>
+              <TableCell>
+                <TextField
+                  name="orgName"
+                  id="orgName"
+                  placeholder="Organization Name"
+                  value={values.orgName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  mt="12px"
+                  sx={{ maxWidth: "800px !important" }}
+                  disabled={selectUser.roleType !== "root"}
+                />
+                <ErrorLabel>{touched.orgName && errors.orgName}</ErrorLabel>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell sx={{ width: "280px !important" }}>
+                <FieldLabel>Organization Website URL</FieldLabel>
+              </TableCell>
+              <TableCell>
+                <TextField
+                  name="orgURL"
+                  id="orgURL"
+                  placeholder="Organization Website URL"
+                  value={values.orgURL}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  mt="12px"
+                  sx={{ maxWidth: "800px !important" }}
+                  disabled={selectUser.roleType !== "root"}
+                />
+                <ErrorLabel>{touched.orgURL && errors.orgURL}</ErrorLabel>
+              </TableCell>
+            </TableRow>
+          </TableBody>
         </Table>
 
         <Box display="flex" alignItems="center" mt="20px">
