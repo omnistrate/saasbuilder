@@ -30,7 +30,7 @@ export const getServerSideProps = async () => {
   };
 };
 
-function Dashboard(props) {
+function Dashboard() {
   const router = useRouter();
   const { serviceId, environmentId, source, productTierId, subscriptionId } =
     router.query;
@@ -68,9 +68,7 @@ function Dashboard(props) {
   };
   const {
     isLoading: isResourceInstancesLoading,
-    resourceInstances,
     numResourceInstances,
-    isRefetching: isResourceInstancesRefetching,
     isIdle: isResourceInstancesIdle,
   } = useServiceOfferingResourceInstances(
     serviceId,

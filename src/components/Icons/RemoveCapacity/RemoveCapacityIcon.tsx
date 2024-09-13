@@ -1,5 +1,7 @@
 const RemoveCapacityIcon = (props) => {
-  let { color = "#D92D20", disabled, ...restProps } = props;
+  let { color = "#D92D20" } = props;
+  const { disabled, ...restProps } = props;
+  
   if (disabled) {
     color = "#a3a6ac";
   }

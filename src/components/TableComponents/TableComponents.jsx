@@ -1,7 +1,7 @@
 import { Box, styled } from "@mui/material";
 import { DisplayText } from "../Typography/Typography";
 
-export const TableContainer = styled(Box)(({ theme }) => ({
+export const TableContainer = styled(Box)(() => ({
   border: "1px solid #EAECF0",
   backgroundColor: "white",
   boxShadow:
@@ -12,4 +12,4 @@ export const TableContainer = styled(Box)(({ theme }) => ({
 
 export const TableTitle = styled((props) => (
   <DisplayText {...props} size="xsmall" />
-))(({ theme }) => ({}));
+))(() => ({}));

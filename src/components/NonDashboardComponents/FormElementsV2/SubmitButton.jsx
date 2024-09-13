@@ -7,7 +7,7 @@ const SubmitButton = styled(({ children, loading, ...restProps }) => (
     {children}
     {loading && <LoadingSpinnerSmall sx={{ color: "#FFF" }} />}
   </Button>
-))(({ theme }) => ({
+))(() => ({
   backgroundColor: "#111827",
   color: "#FFFFFF",
   fontWeight: "700",

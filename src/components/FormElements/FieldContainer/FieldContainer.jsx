@@ -6,7 +6,7 @@ const FieldContainer = styled(Box, {
       prop !== "row"
     );
   },
-})(({ theme, row }) => ({
+})(({  row }) => ({
   marginTop: 18,
   display: row && "flex",
   justifyContent: row && "space-between",

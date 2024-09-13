@@ -1,7 +1,7 @@
 import { styled } from "@mui/material";
 import MuiMenu, { menuClasses } from "@mui/material/Menu";
 
-const Menu = styled(MuiMenu)(({ theme }) => ({
+const Menu = styled(MuiMenu)(() => ({
   [`& .${menuClasses.paper}`]: {
     background: "#FFFFFF",
     border: "1px solid #EAECF0",

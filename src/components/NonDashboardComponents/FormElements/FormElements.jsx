@@ -17,7 +17,7 @@ export const Heading = styled("h1")(({ theme }) => ({
   },
 }));
 
-export const Card = styled(Box)(({ theme }) => ({
+export const Card = styled(Box)(() => ({
   padding: 32,
   background: "white",
   border: "1px solid #D9E0E8",
@@ -72,7 +72,7 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const WrapperRoot = styled(Box)(({ theme }) => ({}));
+const WrapperRoot = styled(Box)(() => ({}));
 
 export const Input = (props) => {
   const { errorMsg, label, sx, mt, mb, pt, pb, className, ...restProps } =

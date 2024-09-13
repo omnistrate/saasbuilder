@@ -1,6 +1,5 @@
 import { FC, useMemo } from "react";
 import { Box, Stack } from "@mui/material";
-import _ from "lodash";
 
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 
@@ -173,7 +172,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     }
 
     return actionsObj;
-  }, [selectedInstance, role]);
+  }, [selectedInstance, role, isCurrentResourceBYOA, view]);
 
   return (
     <Box>

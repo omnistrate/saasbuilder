@@ -9,4 +9,4 @@ function AwsLogo(props) {
 
 export default AwsLogo;
 
-const Image = styled(NextImage)(({ theme }) => ({}));
+const Image = styled(NextImage)(() => ({}));

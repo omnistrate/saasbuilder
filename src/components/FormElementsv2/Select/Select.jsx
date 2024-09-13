@@ -82,7 +82,7 @@ export default Select;
 const LoadingUI = () => {
   return (
     <Stack alignItems="center" padding={1}>
-      <LoadingSpinnerSmall sx={{ color: (theme) => "black" }} />
+      <LoadingSpinnerSmall sx={{ color: () => "black" }} />
     </Stack>
   );
 };

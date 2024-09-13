@@ -279,7 +279,7 @@ function ResourceInstance() {
     );
   }
 
-  let servicePlanUrlLink = getMarketplaceRoute(
+  const servicePlanUrlLink = getMarketplaceRoute(
     serviceId,
     environmentId,
     productTierId,

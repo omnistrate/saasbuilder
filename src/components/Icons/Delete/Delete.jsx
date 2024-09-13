@@ -1,10 +1,12 @@
 import * as React from "react";
 
 const DeleteIcon = (props) => {
-  let { color = "", disabled = false } = props;
+  let { color = "" } = props;
   if (!color) {
     color = "#D92D20";
   }
+  const { disabled = false } = props;
+  
   if (disabled) {
     color = "#a3a6ac";
   }

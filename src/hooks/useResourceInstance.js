@@ -180,7 +180,7 @@ export default function useResourceInstance(
 
         const topologyDetailsOtherThanMain = Object.entries(
           data.detailedNetworkTopology ?? {}
-        )?.filter(([resourceId, topologyDetails]) => {
+        )?.filter(([, topologyDetails]) => {
           return topologyDetails.main === false;
         });
 
@@ -205,6 +205,9 @@ export default function useResourceInstance(
                 endpoint: topologyDetails.clusterEndpoint
                   ? topologyDetails.clusterEndpoint
                   : "",
+                customDNSEndpoint: topologyDetails.customDNSEndpoint,
+                resourceId: resourceId,
+                resourceKey: topologyDetails.resourceKey,
               });
             } else {
               if (topologyDetails?.hasCompute === true) {

@@ -301,6 +301,7 @@ const CreationTimeInstructions = (props) => {
       isMounted.current = false;
       clearInterval(pollTimerRef.current);
     };
+    /*eslint-disable-next-line react-hooks/exhaustive-deps  */
   }, []);
 
   if (accountConfigStatus === "FAILED") {
@@ -418,7 +419,6 @@ const CreationTimeInstructions = (props) => {
 const NonCreatationTimeInstructions = (props) => {
   const {
     accountConfigMethod,
-    cloudProvider,
     terraformlink,
     cloudformationlink,
     cloudFormationGuide,

@@ -9,11 +9,9 @@ import {
   MenuHoverTooltipTitle,
   StyledLinkContainer,
 } from "../DashboardLayout/NavItem";
-import Tooltip from "../Tooltip/Tooltip";
 import { List } from "../DashboardLayout/NavList";
 import MySubscriptionIcon from "../Icons/MySubscription/MySubscription";
 import PublicServiceIcon from "../Icons/PublicService/PublicService";
-import PrivateServiceIcon from "../Icons/PrivateService/PrivateService";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { marketplaceServicePageTypes } from "src/features/Marketplace/constants/marketplaceServicePageTypes";
@@ -34,9 +32,7 @@ function MarketplaceServiceSidebar(props) {
   const isDrawerExpanded = useSelector(selectDrawerExpandedState);
   const isAllServiceActive = active === serviceTypes.all;
   const isSubscriptionActive = active === serviceTypes.subscription;
-  const isMyServicesActive = active === serviceTypes.myServices;
   const [isPublicServiceActive, setIsPublicServiceActive] = useState(false);
-  const [isMyServiceActive, setIsMyServiceActive] = useState(false);
   useEffect(() => {
     //We use url to track whether the user reached the marketplace product tiers page from the public services page or my services page
 
@@ -46,9 +42,6 @@ function MarketplaceServiceSidebar(props) {
       if (serviceType) {
         if (serviceType === marketplaceServicePageTypes.public) {
           setIsPublicServiceActive(true);
-        }
-        if (serviceType === marketplaceServicePageTypes.myService) {
-          setIsMyServiceActive(true);
         }
       }
     }

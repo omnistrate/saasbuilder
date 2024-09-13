@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import MainImg from "public/assets/images/non-dashboard/signin-main.svg";
 import Footer from "../Footer";
 import Logo from "../Logo";

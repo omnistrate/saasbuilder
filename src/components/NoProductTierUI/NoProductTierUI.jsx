@@ -4,7 +4,7 @@ import noProductTierIcon from "../../../public/assets/images/dashboard/no-servic
 import Card from "../Card/Card";
 import { Text } from "../Typography/Typography";
 
-function NoProductTierUI(props) {
+function NoProductTierUI() {
 
   return (
     <Container
@@ -32,7 +32,7 @@ function NoProductTierUI(props) {
 
 export default NoProductTierUI;
 
-const Container = styled(Card)(({ theme }) => ({
+const Container = styled(Card)(() => ({
   padding: "20px",
   boxShadow:
     "0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10)",

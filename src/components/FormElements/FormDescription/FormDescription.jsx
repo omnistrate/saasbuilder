@@ -1,7 +1,6 @@
 import { styled } from "@mui/material";
-import { P } from "../../Typography/Typography";
 
-const FormDescription = styled("p")(({ theme }) => ({
+const FormDescription = styled("p")(() => ({
   marginTop: "8px",
   color: "#A1A5B7",
   fontFamily: "Inter",

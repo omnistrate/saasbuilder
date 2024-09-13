@@ -1,12 +1,11 @@
 import Ansi from "@curvenote/ansi-to-react";
 import { Box, Stack } from "@mui/material";
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useEffect } from "react";
 import { DisplayText, Text } from "../../Typography/Typography";
 import Select from "../../FormElements/Select/Select";
 import Card from "../../Card/Card";
 import Divider from "../../Divider/Divider";
 import MenuItem from "../../MenuItem/MenuItem";
-import { useEffect } from "react";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import styled from "@emotion/styled";
 import useSnackbar from "../../../hooks/useSnackbar";
@@ -40,7 +39,7 @@ function Logs(props) {
   // }
 
   const [isLogsSocketConnected, setIsLogsSocketConnected] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [hasMoreLogs, setHasMoreLogs] = useState(true);
   const [records, setRecords] = useState(logsPerPage);
 
@@ -63,7 +62,7 @@ function Logs(props) {
   }
 
   const { getWebSocket } = useWebSocket(logsSocketEndpoint, {
-    onOpen: (event) => {
+    onOpen: () => {
       // console.log("Socket Connection opened", event);
       setLogs([]);
       setIsLogsSocketConnected(true);
@@ -77,17 +76,17 @@ function Logs(props) {
         setLogs((prevData) => [...prevData, data]);
       });
     },
-    onClose: (event) => {
+    onClose: () => {
       // console.log("Socket Connection closed", event);
     },
-    shouldReconnect: (closeEvent) => true,
+    shouldReconnect: () => true,
     reconnectAttempts: 3,
     retryOnError: true,
     reconnectInterval: (attemptNumber) => {
       const interval = Math.pow(2, attemptNumber) * 1000;
       return interval;
     },
-    onReconnectStop: (numAttempts) => {
+    onReconnectStop: () => {
       if (isLogsSocketConnected) {
         snackbar.showError(
           "Unable to get the latest data. The displayed data might be outdated"
@@ -119,7 +118,7 @@ function Logs(props) {
         //console.log("Closing socket");
       }
     };
-  }, [logsSocketEndpoint]);
+  }, [logsSocketEndpoint, snackbar, getWebSocket]);
 
   if (!logsSocketEndpoint) {
     return (
@@ -191,7 +190,7 @@ function Logs(props) {
           {isLogsSocketConnected
             ? logs
                 .filter((log, index) => index < records)
-                .map((log, index) => {
+                .map((log) => {
                   return (
                     <Log key={log}>
                       <Ansi>{log}</Ansi>
@@ -218,7 +217,7 @@ const Log = styled("h3")({
   wordBreak: "break-word",
 });
 
-const LogsContainer = styled(Box)(({ theme }) => ({
+const LogsContainer = styled(Box)(() => ({
   height: 500,
   overflowY: "auto",
   marginTop: 24,

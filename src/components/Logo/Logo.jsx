@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import providerConfig from "src/providerConfig";
 
 export default function Logo(props) {
   const { href } = props;

@@ -1,6 +1,5 @@
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import useSnackbar from "../hooks/useSnackbar";
 import axios from "../axios";
 
 function useLogout() {
@@ -18,10 +17,10 @@ function useLogout() {
   function logout() {
     axios
       .post("/logout")
-      .then((response) => {
+      .then(() => {
         handleLogout();
       })
-      .catch((error) => {
+      .catch(() => {
         handleLogout();
       });
   }

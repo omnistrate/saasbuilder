@@ -9,4 +9,4 @@ function GcpLogo(props) {
 
 export default GcpLogo;
 
-const Image = styled(NextImage)(({ theme }) => ({}));
+const Image = styled(NextImage)(() => ({}));

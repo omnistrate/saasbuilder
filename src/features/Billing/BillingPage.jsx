@@ -15,7 +15,7 @@ function BillingPage() {
 
   const { isLoading, data: billingDetails } = billingDetailsQuery;
 
-  let paymentConfigured = billingDetails?.paymentConfigured;
+  const paymentConfigured = billingDetails?.paymentConfigured;
 
   if (isLoading) {
     return <LoadingSpinner />;

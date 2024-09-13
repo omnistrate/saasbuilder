@@ -15,7 +15,6 @@ const ResourceListItem = ({
   isActive,
   isHighlighted, // For highlighting the ResourceDropdownLine
   isLastItem,
-  isDisabled,
 }) => {
   return (
     <Box
@@ -87,7 +86,7 @@ const ResourcesDropdown = ({
         el.urlKey === selectedResource || el.resourceId === activeResourceId
     );
     return index;
-  }, [selectedResource, activeResourceId]);
+  }, [selectedResource, activeResourceId, resourceParameters]);
 
   let resourceParametersList = [...resourceParameters];
   if (isCustomNetworkEnabled) {
@@ -120,7 +119,7 @@ const ResourcesDropdown = ({
             fontSize="14px"
             lineHeight="22px"
             letterSpacing="0.2px"
-            color={isDisabled ? disabledColor : styleConfig.sidebarTextColor}
+            color={isDisabled ? "#A0AEC0" : styleConfig.sidebarTextColor}
           >
             Resources
           </Typography>
