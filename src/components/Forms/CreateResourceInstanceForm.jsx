@@ -16,7 +16,6 @@ import FieldLabel from "../FormElements/FieldLabel/FieldLabel";
 import Form from "../FormElements/Form/Form";
 import { FormControlLabel } from "../FormElements/Radio/Radio";
 import TextField from "../FormElements/TextField/TextField";
-import { H6, P } from "../Typography/Typography";
 import ErrorLabel from "../ErrorLabel/ErrorLabel";
 import { describeServiceOfferingResource } from "../../api/serviceOffering";
 import Select from "../FormElements/Select/Select";
@@ -34,6 +33,8 @@ import Autocomplete, {
   StyledTextField,
 } from "../FormElementsv2/AutoComplete/AutoComplete";
 import useCustomNetworks from "src/features/CustomNetworks/hooks/useCustomNetworks";
+import FormTitle from "../FormElements/FormTitle/FormTitle";
+import FormDescription from "../FormElements/FormDescription/FormDescription";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -237,15 +238,10 @@ function CreateResourceInstanceForm(props) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <H6 weight="extrabold" variant="mobile">
-        Create {selectedResourceKey.name} Instance
-      </H6>
-      <P
-        weight="semibold"
-        sx={{ color: (theme) => theme.palette.neutral[600], fontSize: "14px" }} //mt: "14px"
-      >
+      <FormTitle> Create {selectedResourceKey.name} Instance</FormTitle>
+      <FormDescription>
         Create new Instance of {selectedResourceKey.name}
-      </P>
+      </FormDescription>
 
       <Form onSubmit={formData.handleSubmit} sx={{ width: "100%" }}>
         {cloudProviderFieldExists && (
@@ -434,7 +430,7 @@ function CreateResourceInstanceForm(props) {
                     );
                     formData.handleChange(e);
                   }}
-                  value={formData.values.cloud_provider}
+                  value={formData.values.cloud_provider ?? ""}
                   required
                   input={<OutlinedInput />}
                 >
@@ -496,9 +492,9 @@ function CreateResourceInstanceForm(props) {
                       id={`requestParams.${param.key}`}
                       name={`requestParams.${param.key}`}
                       onChange={formData.handleChange}
-                      value={formData.values.requestParams[param.key]}
+                      value={formData.values.requestParams[param.key] ?? ""}
                       onBlur={formData.handleBlur}
-                      required={param.required == true ? "required" : ""}
+                      required={param.required == true ? true : false}
                       showPasswordGenerator
                     />
                   </FieldContainer>
@@ -577,9 +573,8 @@ function CreateResourceInstanceForm(props) {
                         }
                         displayEmpty
                         onChange={formData.handleChange}
-                        modifiable={param.modifiable}
                         sx={{ marginTop: "16px" }}
-                        required={param.required == true ? "required" : ""}
+                        required={param.required == true ? true : false}
                       >
                         <MenuItem value={""} disabled={param.required}>
                           None
@@ -614,8 +609,6 @@ function CreateResourceInstanceForm(props) {
                         }
                         onChange={formData.handleChange}
                         sx={{ marginTop: "16px" }}
-                        modifiable={param.modifiable}
-                        required={param.required == true ? "required" : ""}
                       >
                         <FormControlLabel
                           value={"true"}
@@ -666,9 +659,7 @@ function CreateResourceInstanceForm(props) {
                         renderInput={(params) => (
                           <StyledTextField
                             {...params}
-                            required={
-                              !formData.values.requestParams[param.key]?.length
-                            }
+                            required={param.required}
                           />
                         )}
                       />
@@ -709,7 +700,7 @@ function CreateResourceInstanceForm(props) {
                         renderInput={(params) => (
                           <StyledTextField
                             {...params}
-                            required={!formData.values.requestParams[param.key]}
+                            required={param.required}
                           />
                         )}
                       />
@@ -769,11 +760,10 @@ function CreateResourceInstanceForm(props) {
                       <TextField
                         id={`requestParams.${param.key}`}
                         name={`requestParams.${param.key}`}
-                        value={formData.values.requestParams[param.key]}
+                        value={formData.values.requestParams[param.key] ?? ""}
                         onChange={formData.handleChange}
                         sx={{ marginTop: "16px" }}
-                        modifiable={param.modifiable}
-                        required={param.required == true ? "required" : ""}
+                        required={param.required == true ? true : false}
                       />
                     </FieldContainer>
                   );

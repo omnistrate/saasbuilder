@@ -4,8 +4,9 @@ import FieldContainer from "../FormElements/FieldContainer/FieldContainer";
 import FieldDescription from "../FormElements/FieldDescription/FieldDescription";
 import FieldLabel from "../FormElements/FieldLabel/FieldLabel";
 import TextField from "../FormElements/TextField/TextField";
-import { H6, P } from "../Typography/Typography";
 import formatDateUTC from "../../utils/formatDateUTC";
+import FormTitle from "../FormElements/FormTitle/FormTitle";
+import FormDescription from "../FormElements/FormDescription/FormDescription";
 
 function ResourceInfoView(props) {
   const { data, serviceName } = props;
@@ -32,15 +33,8 @@ function ResourceInfoView(props) {
   });
   return (
     <>
-      <H6 weight="extrabold" variant="mobile">
-        Details
-      </H6>
-      <P
-        weight="semibold"
-        sx={{ color: (theme) => theme.palette.neutral[600], mt: "14px" }}
-      >
-        {serviceName} Instance Details
-      </P>
+      <FormTitle>Details</FormTitle>
+      <FormDescription>{serviceName} Instance Details</FormDescription>
       <>
         <FieldContainer>
           <FieldLabel>ID</FieldLabel>
