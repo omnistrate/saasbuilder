@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-const FieldLabel = ({ required, children, ...restProps }) => {
+const FieldLabel = ({ required, children}) => {
   return (
     <Box
       component="label"

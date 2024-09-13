@@ -1,5 +1,7 @@
 const AddCapacityIcon = (props) => {
-  let { color = "#004EEB", disabled, ...restProps } = props;
+  let color = props.color || "#004EEB";
+  const { disabled, ...restProps } = props;
+  
   if (disabled) {
     color = "#a3a6ac";
   }

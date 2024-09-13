@@ -158,6 +158,7 @@ function CreateResourceInstanceForm(props) {
       setIsSchemaLoading(false);
     }
     getSchema();
+    /*eslint-disable-next-line react-hooks/exhaustive-deps*/
   }, []);
 
   const cloudProviderFieldExists = createSchema.find(
@@ -212,10 +213,7 @@ function CreateResourceInstanceForm(props) {
     formData.values.cloud_provider
   );
 
-  const {
-    data: customAvailabilityZoneData,
-    isLoading: isLoadingCustomAvailabilityZone,
-  } = customAvailabilityZoneQuery;
+  const { data: customAvailabilityZoneData } = customAvailabilityZoneQuery;
 
   const customAvailabilityZone = useMemo(() => {
     const availabilityZones = customAvailabilityZoneData?.availabilityZones;
@@ -226,10 +224,7 @@ function CreateResourceInstanceForm(props) {
       }
       return -1;
     });
-  }, [
-    isLoadingCustomAvailabilityZone,
-    customAvailabilityZoneData?.availabilityZones,
-  ]);
+  }, [customAvailabilityZoneData?.availabilityZones]);
 
   const selectedCustomNetworkId = formData.values?.custom_network_id ?? "";
 
@@ -744,8 +739,8 @@ function CreateResourceInstanceForm(props) {
                         {param.key === "cloud_provider_native_network_id" && (
                           <>
                             {param?.description && <br />}
-                            If you'd like to deploy within your VPC, enter its
-                            ID. Please ensure your VPC meets the{" "}
+                            If you&apos;d like to deploy within your VPC, enter
+                            its ID. Please ensure your VPC meets the{" "}
                             <Link
                               style={{
                                 textDecoration: "underline",

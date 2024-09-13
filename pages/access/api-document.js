@@ -31,7 +31,7 @@ export const getServerSideProps = async () => {
   };
 };
 
-export default function ApiDocument(props) {
+export default function ApiDocument() {
   const router = useRouter();
   const { serviceId, environmentId, source, productTierId, subscriptionId } =
     router.query;
@@ -69,7 +69,7 @@ export default function ApiDocument(props) {
     subscriptionData?.id
   );
 
-  let isLoading = serviceApiSpecData.isLoading || serviceApiSpecData.isIdle;
+  const isLoading = serviceApiSpecData.isLoading || serviceApiSpecData.isIdle;
 
   const serviceAPIDocsLink = getAPIDocsRoute(
     serviceId,

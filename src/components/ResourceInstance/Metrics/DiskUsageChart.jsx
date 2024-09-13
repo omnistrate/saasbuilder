@@ -37,13 +37,13 @@ function DiskUsageChart(props) {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="time"
-              tickFormatter={(value) => ""}
+              tickFormatter={() => ""}
               tickLine={false}
             />
             <YAxis domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
             <Tooltip
               isAnimationActive={false}
-              formatter={(value, name, props) => {
+              formatter={(value) => {
                 return `${value}% `;
               }}
             />

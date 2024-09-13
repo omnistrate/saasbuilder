@@ -97,7 +97,7 @@ export const AccordionContainer = styled(MuiAccordion, {
   shouldForwardProp: (prop) => {
     return !["disableToggle"].includes(prop);
   },
-})(({ theme, disableToggle }) => ({
+})(() => ({
   boxShadow: "0px 4px 30px 0px rgba(46, 45, 116, 0.05)",
   border: "1px solid #EAECF0",
   background: "#FAFAFD",
@@ -111,7 +111,7 @@ export const AccordionContainer = styled(MuiAccordion, {
   //pointerEvents: disableToggle ? "none" : "auto",
 }));
 
-export const AccordionSummary = styled(MuiAccordionSummary)(({ theme }) => ({
+export const AccordionSummary = styled(MuiAccordionSummary)(() => ({
   borderBottom: "1px solid #EAECF0",
   padding: "10px 20px",
   userSelect: "text",
@@ -137,7 +137,6 @@ export const AccordionSummary = styled(MuiAccordionSummary)(({ theme }) => ({
     },
 }));
 
-export const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+export const AccordionDetails = styled(MuiAccordionDetails)(() => ({
   padding: "20px",
 }));
-

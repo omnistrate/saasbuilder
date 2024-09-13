@@ -44,9 +44,6 @@ export default function NodesTable(props) {
     resourceInstanceId,
     context,
     subscriptionId,
-    resourceId,
-    serviceId,
-    environmentId,
   } = props;
   let sectionLabel = "Resource";
 
@@ -336,7 +333,7 @@ export default function NodesTable(props) {
   );
 }
 
-const getRowBorderStyles = () => {
+function getRowBorderStyles() {
   const styles = {};
 
   for (const status in resourceInstanceStatusMap) {
@@ -357,4 +354,4 @@ const getRowBorderStyles = () => {
   }
 
   return styles;
-};
+}

@@ -1,10 +1,8 @@
-import { useTheme } from "@mui/material";
 import React from "react";
 import { Text } from "src/components/Typography/Typography";
 
 function FieldDescription(props) {
   const { marginTop = "6px", children, ...restProps } = props;
-  const theme = useTheme();
   return (
     <Text
       size="small"

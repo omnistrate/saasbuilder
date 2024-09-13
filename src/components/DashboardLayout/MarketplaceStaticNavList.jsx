@@ -1,18 +1,7 @@
 import { useSelector } from "react-redux";
-import { selectDrawerExpandedState } from "../../slices/dashboardSideDrawerSlice";
-import Tooltip from "../Tooltip/Tooltip";
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import { apiDocsUrl } from "../../utils/constants";
 import useDownloadCLI from "../../hooks/useDownloadCLI";
-import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-import NavItem, {
-  ListItem,
-  ListItemNonLink,
-  ListItemText,
-  MenuHoverTooltip,
-  MenuHoverTooltipTitle,
-} from "./NavItem";
-import { List } from "./NavList";
 import { tabs } from "../Tab/MarketplaceServiceDefinitionsTab";
 import { selectUserrootData } from "../../slices/userDataSlice";
 import {
@@ -22,7 +11,6 @@ import {
   viewEnum,
 } from "../../utils/isAllowedByRBAC";
 import SupportIcon from "../Icons/SideNavbar/Support/SupportIcon.jsx";
-
 import APIDocsIcon from "../Icons/SideNavbar/APIDocs/APIDocsIcon.jsx";
 import PricingIcon from "../Icons/SideNavbar/Pricing/PricingIcon.jsx";
 import DownloadCLIIcon from "../Icons/SideNavbar/DownloadCLI/DownloadCLIIcon.jsx";
@@ -43,7 +31,6 @@ const MarketplaceStaticNavList = (props) => {
   const router = useRouter();
 
   const {
-    servicePlanUrlLink,
     // serviceId,
     serviceApiId,
     apiDocs,

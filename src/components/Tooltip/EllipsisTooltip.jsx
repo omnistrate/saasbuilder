@@ -20,7 +20,7 @@ function EllipsisTooltipText({ text, sx, ...restProps }) {
     // remove resize listener again on "unmount"
 
     return () => window.removeEventListener("resize", compareSize);
-  }, [textElementRef.current]);
+  }, [textElementRef]);
 
   return (
     <Text

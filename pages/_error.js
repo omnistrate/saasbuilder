@@ -49,21 +49,21 @@ function Error(props) {
 
 export default Error;
 
-const ErrorImage = styled(Image)(({ theme }) => ({
+const ErrorImage = styled(Image)({
   width: "100%",
   maxWidth: "620px",
   height: "auto",
-}));
+});
 
-const Title = styled("h2")(({ theme }) => ({
+const Title = styled("h2")({
   fontSize: "36px",
   lineHeight: "44px",
   fontWeight: 700,
   marginTop: 36,
   textAlign: "center",
-}));
+});
 
-const Description = styled("p")(({ theme }) => ({
+const Description = styled("p")({
   margin: 0,
   fontSize: "20px",
   lineHeight: "30px",
@@ -71,4 +71,4 @@ const Description = styled("p")(({ theme }) => ({
   marginTop: 24,
   maxWidth: 600,
   textAlign: "center",
-}));
+});

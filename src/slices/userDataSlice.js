@@ -12,7 +12,7 @@ const userDataSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    initialiseUserData: (state, action) => {
+    initialiseUserData: (state) => {
       state.userData = initialState.userData;
       state.orgUsers = initialState.orgUsers;
       state.userDataLoadingStatus = initialState.userDataLoadingStatus;
@@ -76,17 +76,6 @@ export const selectOrgUsersLoadingStatus = (state) => {
   return data;
 };
 
-export const selectUsersAllData = (state) => {
-  const data = "";
-  let userData = [];
-  if (data) {
-    // console.log("User usersData ---,", data);
-    userData = data;
-  }
-  return userData;
-  // return user;
-  //   return state.provider.providers;
-};
 
 const serviceConsumptionUserRoles = [
   "editor",

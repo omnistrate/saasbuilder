@@ -8,7 +8,7 @@ const Select = styled(({ isLoading = false, children, ...props }) => (
   <MuiSelect fullWidth {...props} IconComponent={KeyboardArrowDownIcon}>
     {isLoading ? <LoadingUI /> : children}
   </MuiSelect>
-))(({ theme }) => ({
+))(() => ({
   minWidth: 240,
   boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
   borderRadius: 8,
@@ -34,7 +34,7 @@ export default Select;
 const LoadingUI = () => {
   return (
     <Stack alignItems="center" padding={1}>
-      <LoadingSpinnerSmall sx={{ color: (theme) => "black" }} />
+      <LoadingSpinnerSmall sx={{ color: () => "black" }} />
     </Stack>
   );
 };

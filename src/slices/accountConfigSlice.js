@@ -37,7 +37,7 @@ const accountConfigSlice = createSlice({
       state.idsLoadingStatus = status;
     },
     setAccount: (state, action) => {
-      let data = action.payload.data;
+      const data = action.payload.data;
       const accountId = data.id;
       const provider = action.payload.provider;
       data["cloudProvider"] = provider;
@@ -47,7 +47,7 @@ const accountConfigSlice = createSlice({
       };
     },
     setAccountData: (state, action) => {
-      let data = action.payload.data;
+      const data = action.payload.data;
       const accountId = data.id;
       state.accounts["AccountData"][accountId] = {
         ...data,
@@ -60,7 +60,7 @@ const accountConfigSlice = createSlice({
     },
     removeAccountConfig: (state, action) => {
       const { provider, id } = action.payload;
-      let providerAccounts = state.accounts[provider];
+      const providerAccounts = state.accounts[provider];
       delete providerAccounts[id];
     },
   },

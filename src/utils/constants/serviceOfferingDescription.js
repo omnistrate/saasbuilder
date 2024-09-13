@@ -7,36 +7,6 @@ export const getServiceOfferingDesciption = (value) => {
   return strippedString;
 };
 
-export const parseOfferingDescriptionDom = (value) => {
-  if (!value) return null;
-
-  const parser = new DOMParser();
-
-  // Parse the HTML string
-  const doc = parser.parseFromString(value, "text/html");
-
-  // Get the text content
-  const textContent = doc.body.textContent;
-
-  // get text content by adding punctuation
-  const textContentWithPunctuation = Array.from(doc.body.children)
-    .map((child) => child.textContent.trim())
-    .join(", ");
-
-  const textContentWithSpaces = Array.from(doc.body.children)
-    .map((child) => {
-      if (isBlockLevel(child)) {
-        return child.textContent.trim() + " ";
-      }
-      return child.textContent.trim();
-    })
-    .join("");
-  if (!textContentWithSpaces) {
-    return textContent;
-  }
-  return textContentWithSpaces;
-};
-
 const isBlockLevel = (element) => {
   const blockLevelElements = [
     "p",
@@ -53,4 +23,29 @@ const isBlockLevel = (element) => {
     "blockquote",
   ];
   return blockLevelElements.includes(element.tagName.toLowerCase());
+};
+
+export const parseOfferingDescriptionDom = (value) => {
+  if (!value) return null;
+
+  const parser = new DOMParser();
+
+  // Parse the HTML string
+  const doc = parser.parseFromString(value, "text/html");
+
+  // Get the text content
+  const textContent = doc.body.textContent;
+
+  const textContentWithSpaces = Array.from(doc.body.children)
+    .map((child) => {
+      if (isBlockLevel(child)) {
+        return child.textContent.trim() + " ";
+      }
+      return child.textContent.trim();
+    })
+    .join("");
+  if (!textContentWithSpaces) {
+    return textContent;
+  }
+  return textContentWithSpaces;
 };

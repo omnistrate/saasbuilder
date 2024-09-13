@@ -69,7 +69,8 @@ const useProductTierRedirect = () => {
     environmentId,
     areServiceOfferingsFetched,
     isClientRendered,
-    router.isReady,
+    router,
+    serviceOfferingsData
   ]);
 
   return {

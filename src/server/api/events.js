@@ -3,7 +3,7 @@ const ProviderAuthError = require("../utils/ProviderAuthError");
 const withProviderTokenExpirationHanding = require("../utils/withProviderTokenExpirationHandling");
 
 function getEventsList(environmentType) {
-  let queryParams = {};
+  const queryParams = {};
 
   if (environmentType) {
     queryParams["environmentType"] = environmentType;

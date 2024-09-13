@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { useQuery } from "@tanstack/react-query";
 import {
   setEventIds,
@@ -10,7 +9,7 @@ import {
 } from "../slices/eventsSlice";
 import { useDispatch } from "react-redux";
 import loadingStatuses from "../utils/constants/loadingStatuses";
-import { getEvent, getAllEvents } from "../api/event";
+import {  getAllEvents } from "../api/event";
 import { useEffect } from "react";
 
 function useServiceOfferingEvents(
@@ -43,7 +42,7 @@ function useServiceOfferingEvents(
     return () => {
       dispatch(initialiseEvents());
     };
-  }, []);
+  }, [dispatch]);
 
   const query = useQuery(
     [
@@ -128,7 +127,7 @@ function useServiceOfferingEvents(
       refetchOnMount: true,
       refetchInterval: 60000,
       refetchOnWindowFocus: false,
-      onError: (error) => {
+      onError: () => {
         dispatch(
           setEventsLoadingStatus({
             serviceId: serviceId,

@@ -2,29 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { listServiceOfferings } from "src/api/serviceOffering";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 
-const getAllCloudProvidersAcrossOfferings = (offerings) => {
-  let allProviders = [];
-  offerings?.forEach((offering) => {
-    offering?.cloudProviders?.forEach((provider) => {
-      if (!allProviders.includes(provider)) {
-        allProviders.push(provider);
-      }
-    });
-  });
-  return allProviders;
-};
-
-const getServiceLogoURL = (offerings) => {
-  return offerings?.find((offering) => offering?.serviceLogoURL)
-    ?.serviceLogoURL;
-};
-
-const getServicePublicEnvironmentID = (offerings) => {
-  return offerings?.find((offering) => offering?.serviceEnvironmentID)
-    ?.serviceEnvironmentID;
-};
-
-function useOrgServiceOfferings(queryOptions = {}, queryConfig = {}) {
+function useOrgServiceOfferings(queryOptions = {}) {
   const environmentType = useEnvironmentType();
   const query = useQuery(
     ["org-service-offerings"],
@@ -56,7 +34,7 @@ function useOrgServiceOfferings(queryOptions = {}, queryConfig = {}) {
         );
         return serviceOfferings;
       },
-      ...queryConfig,
+      ...queryOptions,
     }
   );
 

@@ -41,7 +41,7 @@ const DefaultPrivacyPolicy = ({ orgName, orgSupportEmail }) => {
         it can be. We respect your privacy and only share your information when
         the business requires it (e.g. payment processing). Your personal
         information is not a monetization channel for us. We may use it to learn
-        and share what we've learned about analytics, but all personally
+        and share what we&apos;ve learned about analytics, but all personally
         identifiable information will be stripped from that dataset. Cool?
         Again, this is just an abstract. The nitty gritty is listed below. If
         you think our abstract is inconsistent with our policy, let us know. We
@@ -49,9 +49,9 @@ const DefaultPrivacyPolicy = ({ orgName, orgSupportEmail }) => {
       </SectionDescription>
       <SectionHeading>{orgName} Privacy Policy</SectionHeading>
       <SectionDescription>
-        Last updated: July 28, 2023 This Privacy Policy explains our
-        practices regarding the information we collect through our website and
-        related services (collectively, the "Service"). By submitting
+        Last updated: July 28, 2023 This Privacy Policy explains our practices
+        regarding the information we collect through our website and related
+        services (collectively, the &quot;Service&quot;). By submitting
         information through our website or services, you agree to the terms of
         this Privacy Policy and you expressly consent to the processing of your
         information according to this Privacy Policy. Your Information may be
@@ -63,29 +63,30 @@ const DefaultPrivacyPolicy = ({ orgName, orgSupportEmail }) => {
       <SectionDescription>
         We collect Personal Data and Anonymous Data from you when you visit our
         site, when you send us information or communications, and/or when you
-        use our Service. "Personal Data" means data that allows someone to
-        identify or contact you, including, for example, your name, telephone
-        number, e-mail address, as well as any other non-public information
-        about you that is associated with or linked to any of the foregoing
-        data. "Anonymous Data" means data that is not associated with or linked
-        to your Personal Data; Anonymous Data does not permit the identification
-        of individual persons. When you register for an account, we collect
-        certain profile information such as your first and last name and e-mail
-        address. If you send us feedback, send us an email or contact us via the
-        Service, we will collect any Personal Data in that feedback, email or
-        contact. If you participate in one of our surveys or request a demo, we
-        may collect additional Personal Data from you. We may combine Personal
-        Data submitted by you with information obtained from other sources. Like
-        most websites,
+        use our Service. &quot;Personal Data&quot; means data that allows
+        someone to identify or contact you, including, for example, your name,
+        telephone number, e-mail address, as well as any other non-public
+        information about you that is associated with or linked to any of the
+        foregoing data. &quot;Anonymous Data&quot; means data that is not
+        associated with or linked to your Personal Data; Anonymous Data does not
+        permit the identification of individual persons. When you register for
+        an account, we collect certain profile information such as your first
+        and last name and e-mail address. If you send us feedback, send us an
+        email or contact us via the Service, we will collect any Personal Data
+        in that feedback, email or contact. If you participate in one of our
+        surveys or request a demo, we may collect additional Personal Data from
+        you. We may combine Personal Data submitted by you with information
+        obtained from other sources. Like most websites,
         {orgName} collects certain information from you automatically, such as
         your Internet protocol address, browser type, operating system, and
         access time. We also use cookies and navigational data like Uniform
         Resource Locators (URL) to gather information regarding your use of the
-        Service. A "cookie" is a small data file placed on your hard drive when
-        you visit certain websites. You may disable cookies by adjusting the
-        preferences settings of your browser. Consult the "Help" feature of your
-        browser for specific instructions. If you choose to disable cookies,
-        some areas of our website may not work properly.
+        Service. A &quot;cookie&quot; is a small data file placed on your hard
+        drive when you visit certain websites. You may disable cookies by
+        adjusting the preferences settings of your browser. Consult the
+        &quot;Help&quot; feature of your browser for specific instructions. If
+        you choose to disable cookies, some areas of our website may not work
+        properly.
       </SectionDescription>
       <SectionHeading>How {orgName} Uses Your Information</SectionHeading>
       <SectionDescription>
@@ -94,8 +95,8 @@ const DefaultPrivacyPolicy = ({ orgName, orgSupportEmail }) => {
         including information tracking your use of our Service, to improve our
         website and Service. We may use your Personal Data to periodically send
         you newsletters, administrative notices, updates regarding the Service
-        and communications promoting the use of our Service. You may "opt-out"
-        of such communications as set forth below.
+        and communications promoting the use of our Service. You may
+        &quot;opt-out&quot; of such communications as set forth below.
       </SectionDescription>
       <SectionHeading>How {orgName} Shares Your Information</SectionHeading>
       <SectionDescription>

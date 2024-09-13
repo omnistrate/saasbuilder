@@ -13,10 +13,10 @@ const CopyToClipbpoardButton = (props) => {
     if (text) {
       clipboard
         .write(text)
-        .then((response) => {
+        .then(() => {
           setTooltipText("Copied");
         })
-        .catch((err) => {
+        .catch(() => {
           setTooltipText("Unable to copy to clipboard");
         });
     } else {
@@ -43,7 +43,7 @@ export default CopyToClipbpoardButton;
 
 const CopyIcon = styled(Image, {
   shouldForwardProp: (prop) => prop !== "size",
-})(({ theme, size }) => ({
+})(({ size }) => ({
   height: size === "small" ? "18px" : "24px",
   width: size === "small" ? "18px" : "24px",
 }));

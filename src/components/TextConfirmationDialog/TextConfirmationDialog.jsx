@@ -6,7 +6,6 @@ import Button from "components/Button/Button";
 import TextField from "components/FormElements/TextField/TextField";
 import Form from "components/FormElements/Form/Form";
 import { IconButton, Stack, styled } from "@mui/material";
-import Image from "next/image";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import DeleteCirleIcon from "../Icons/DeleteCircle/DeleteCirleIcon";
 import { Text } from "../Typography/Typography";
@@ -95,7 +94,7 @@ export default function TextConfirmationDialog(props) {
   );
 }
 
-const Dialog = styled(MuiDialog)(({ theme }) => ({
+const Dialog = styled(MuiDialog)(() => ({
   [`& .MuiPaper-root `]: {
     width: "100%",
     maxWidth: "521px",
@@ -103,20 +102,15 @@ const Dialog = styled(MuiDialog)(({ theme }) => ({
   },
 }));
 
-const DialogTitle = styled(MuiDialogTitle)(({ theme }) => ({
+const DialogTitle = styled(MuiDialogTitle)(() => ({
   padding: 0,
 }));
 
-const DialogContent = styled(MuiDialogContent)(({ theme }) => ({
+const DialogContent = styled(MuiDialogContent)(() => ({
   padding: 0,
 }));
 
-const DialogActions = styled(MuiDialogActions)(({ theme }) => ({
+const DialogActions = styled(MuiDialogActions)(() => ({
   padding: 0,
   paddingTop: 30,
-}));
-
-const Icon = styled(Image)(({}) => ({
-  height: 48,
-  width: 48,
 }));

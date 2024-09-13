@@ -16,10 +16,7 @@ import Tooltip from "../Tooltip/Tooltip";
 
 function DashboardHeader(props) {
   const {
-    isOpen,
-    noSidebar,
     marketplacePage,
-    notificationBarHeight,
     accessPage,
     currentSubscription,
     serviceName,
@@ -71,6 +68,7 @@ function DashboardHeader(props) {
 
         <Stack direction="row" alignItems="center" gap="10px" pr="16px">
           {(serviceName || noServicesAvailable) && serviceLogoURL && (
+            /* eslint-disable-next-line @next/next/no-img-element */
             <img
               src={
                 serviceLogoURL ||
@@ -78,6 +76,7 @@ function DashboardHeader(props) {
               }
               height={28}
               style={{ maxHeight: "28px", width: "auto", maxWidth: "180px" }}
+              alt="service-logo"
             />
           )}
           {serviceName && (

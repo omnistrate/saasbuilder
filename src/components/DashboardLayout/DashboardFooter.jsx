@@ -39,20 +39,12 @@ const Footer = styled("footer", {
   }),
 }));
 
-const Copyright = styled("span")(({ theme }) => ({
-  fontWeight: 400,
-  color: "#9CA3AF",
-}));
-
 function DashboardFooter(props) {
   const { noSidebar, isNotShow } = props;
   return isNotShow ? (
     ""
   ) : (
     <Footer open={props.open} noSidebar={noSidebar}>
-      <div>
-      
-      </div>
       {/* <Copyright>
         © {new Date().getFullYear()} {providerConfig.providerOrgName} All rights
         reserved.

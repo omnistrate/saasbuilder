@@ -14,10 +14,6 @@ export const tabs = {
 export default function MarketplaceServiceDefinitionsTab(props) {
   const { currentTab, setCurrentTab } = props;
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   return (
     <Box
       sx={{

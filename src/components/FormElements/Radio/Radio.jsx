@@ -14,6 +14,6 @@ export const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   },
 }));
 
-export const Radio = styled(MuiRadio)(({ theme }) => ({}));
+export const Radio = styled(MuiRadio)(() => ({}));
 
-export const RadioGroup = styled(MuiRadioGroup)(({ theme }) => ({}));
+export const RadioGroup = styled(MuiRadioGroup)(() => ({}));

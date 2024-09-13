@@ -62,7 +62,6 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
   const filteredCustomNetworks = useMemo(() => {
     let filtered = customNetworks;
 
-
     filtered = customNetworks.filter((customNetwork) => {
       const cloudProvider = customNetwork.cloudProviderName;
       const region = customNetwork.cloudProviderRegion;
@@ -109,6 +108,7 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
         refetchCustomNetworks();
         closeSideDrawer();
         setShowDeleteConfirmationDialog(false);
+        /*eslint-disable-next-line no-use-before-define*/
         deleteformik.resetForm();
         snackbar.showSuccess("Custom Network deleted");
       },

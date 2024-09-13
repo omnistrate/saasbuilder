@@ -1,15 +1,15 @@
 import { Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 const GradientProgressBar = ({ percentage = 0, marginTop = "16px" }) => {
   const [triangleColor, setTriangleColor] = useState("#f00"); // Initial color
 
-  const updateTriangleColor = () => {
+  const updateTriangleColor = useCallback(() => {
     const gradient =
       "linear-gradient(270deg, #0c9622 7.76%, #eecb15 44.22%, #ee8b15 94.82%)";
     const color = calculateColor(gradient, 100 - percentage);
     setTriangleColor(color);
-  };
+  }, [percentage]);
 
   useEffect(() => {
     window.addEventListener("resize", updateTriangleColor);
@@ -18,7 +18,7 @@ const GradientProgressBar = ({ percentage = 0, marginTop = "16px" }) => {
     return () => {
       window.removeEventListener("resize", updateTriangleColor);
     };
-  }, [percentage]);
+  }, [percentage, updateTriangleColor]);
 
   return (
     <Box
