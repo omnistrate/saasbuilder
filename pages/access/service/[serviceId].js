@@ -593,15 +593,7 @@ function MarketplaceService() {
     }
   };
 
-  const closeUpdateDrawer = () => {
-    setUpdateDrawerOpen(false);
-    updateformik.resetForm();
-  };
 
-  const closeCreationDrawer = () => {
-    setCreationDrawerOpen(false);
-    createformik.resetForm();
-  };
 
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);
@@ -1309,6 +1301,17 @@ function MarketplaceService() {
     validateOnChange: false,
     enableReinitialize: true,
   });
+
+  const closeUpdateDrawer = () => {
+    setUpdateDrawerOpen(false);
+    
+    updateformik.resetForm();
+  };
+
+  const closeCreationDrawer = () => {
+    setCreationDrawerOpen(false);
+    createformik.resetForm();
+  };
 
   const handleStart = () => {
     startResourceInstanceMutation.mutate(updateformik.values);
