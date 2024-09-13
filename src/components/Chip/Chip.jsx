@@ -13,7 +13,7 @@ const Chip = styled(
       );
     },
   }
-)(({ theme, fontColor, bgColor, borderColor }) => ({
+)(({ fontColor, bgColor, borderColor }) => ({
   height: "auto",
   padding: "2px 8px",
   background: bgColor ? bgColor : "#F9F5FF",

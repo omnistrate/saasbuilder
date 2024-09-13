@@ -6,7 +6,7 @@ import clipboard from "clipboardy";
 import { Text } from "../../Typography/Typography";
 
 const TextCopy = (props) => {
-  const { copyButton, SelectProps, ...restProps } = props;
+  const { copyButton, ...restProps } = props;
   const textToCopy = props.value;
 
   let endAdornment = "";
@@ -38,10 +38,10 @@ const CopyButton = (props) => {
     if (textToCopy) {
       clipboard
         .write(textToCopy)
-        .then((response) => {
+        .then(() => {
           setText("Copied");
         })
-        .catch((err) => {
+        .catch(() => {
           setText("Unable to copy to clipboard");
         });
     } else {

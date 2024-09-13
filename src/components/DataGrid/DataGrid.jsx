@@ -26,7 +26,7 @@ const DataGrid = styled(
   {
     shouldForwardProp: (prop) => !["showSelectAllCheckbox"].includes(prop),
   }
-)(({ theme, enableSelectAll = false }) => ({
+)(({ enableSelectAll = false }) => ({
   borderRadius: "12px",
   background: "white",
   boxShadow:

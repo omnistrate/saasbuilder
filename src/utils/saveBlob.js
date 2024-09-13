@@ -1,12 +1,12 @@
 export function saveBlob(blob, fileName) {
   if (typeof window.navigator.msSaveBlob !== "undefined") {
     // IE workaround
-    window.navigator.msSaveBlob(blob, filename);
+    window.navigator.msSaveBlob(blob, fileName);
   } else {
-    let URL = window.URL;
-    let downloadUrl = URL.createObjectURL(blob);
+    const URL = window.URL;
+    const downloadUrl = URL.createObjectURL(blob);
     if (fileName) {
-      let a = document.createElement("a");
+      const a = document.createElement("a");
       if (typeof a.download === "undefined") {
         window.location.href = downloadUrl;
       } else {

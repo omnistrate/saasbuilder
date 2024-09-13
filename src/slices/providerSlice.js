@@ -12,7 +12,7 @@ const providerSlice = createSlice({
   name: "provider",
   initialState,
   reducers: {
-    initialiseClouseProviders: (state, action) => {
+    initialiseClouseProviders: (state) => {
       state.providerIds = [];
       state.providers = {};
     },

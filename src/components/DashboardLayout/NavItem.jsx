@@ -1,13 +1,11 @@
 import { Box, styled } from "@mui/material";
 import MuiList from "@mui/material/List";
-import MuiListItem from "@mui/material/ListItem";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectDrawerExpandedState } from "../../slices/dashboardSideDrawerSlice";
-import Tooltip from "../Tooltip/Tooltip";
 import HoverSubMenu from "./HoverSubMenu";
 import MuiTooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
@@ -87,12 +85,11 @@ const NavItem = (props) => {
       </MenuHoverTooltip>
       {subItems.length > 0 ? (
         <SubList isDrawerExpanded={isDrawerExpanded}>
-          {subItems.map((navItem, index) => {
+          {subItems.map((navItem) => {
             const {
               name,
               IconComponent,
               icon,
-              alt,
               isActive,
               activeRoutes,
               route,
@@ -243,7 +240,7 @@ export const ListItemIcon = styled(Image)({
 export const ListItemText = styled("span", {
   shouldForwardProp: (prop) =>
     !["active", "visible", "clickDisabled"].includes(prop),
-})(({ theme, visible = true, active, clickDisabled }) => ({
+})(({ visible = true, clickDisabled }) => ({
   display: visible ? "inline-block" : "none",
   color: clickDisabled ? "#716F6F" : "#FFFFFF",
   marginLeft: 12,
@@ -254,7 +251,7 @@ export const ListItemText = styled("span", {
 
 const SubList = styled(MuiList, {
   shouldForwardProp: (prop) => prop !== "isDrawerExpanded",
-})(({ theme, isDrawerExpanded }) => ({
+})(({ isDrawerExpanded }) => ({
   display: isDrawerExpanded ? "block" : "none",
   paddingTop: 0,
   paddingBottom: 0,
@@ -274,7 +271,7 @@ export const MenuHoverTooltip = styled(
   {
     shouldForwardProp: (prop) => prop !== "isVisible",
   }
-)(({ theme, isVisible = true }) => ({
+)(({ isVisible = true }) => ({
   display: isVisible ? "block" : "none",
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: "#040E25",

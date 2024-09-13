@@ -1,8 +1,5 @@
-import { Box, Stack, Tooltip, tooltipClasses } from "@mui/material";
-import { styled } from "@mui/material";
-
+import { Box, Stack, Tooltip, tooltipClasses, styled } from "@mui/material";
 import { Text } from "components/Typography/Typography";
-
 import CircleCheckIcon from "components/Icons/CircleCheck/CircleCheckIcon";
 import CircleCrossIcon from "components/Icons/CircleCross/CircleCrossIcon";
 

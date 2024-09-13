@@ -1,7 +1,4 @@
 import { Box } from "@mui/material";
-import { useSelector } from "react-redux";
-import { selectDrawerExpandedState } from "../../slices/dashboardSideDrawerSlice";
-
 import AccessControlNavIcon from "../Icons/SideNavbar/AccessControl/AccessControl";
 import DashboardNavIcon from "../Icons/SideNavbar/Dashboard/Dashboard";
 import EventsNavIcon from "../Icons/SideNavbar/Events/Events";
@@ -11,7 +8,6 @@ import {
   operationEnum,
   viewEnum,
 } from "../../utils/isAllowedByRBAC";
-import { selectUserrootData } from "../../slices/userDataSlice";
 import {
   getAccessContorlRoute,
   getDashboardRoute,

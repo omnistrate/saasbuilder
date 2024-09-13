@@ -3,7 +3,7 @@ import MuiFormControlLabel, {
   formControlLabelClasses,
 } from "@mui/material/FormControlLabel";
 
-const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
+const FormControlLabel = styled(MuiFormControlLabel)(() => ({
   [`& .${formControlLabelClasses.label}`]: {
     color: "#344054",
     fontSize: "14px",

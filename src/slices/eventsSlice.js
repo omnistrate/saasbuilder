@@ -26,7 +26,7 @@ const eventsSlice = createSlice({
         state.events = [];
       }
     },
-    initialiseEvents: (state, action) => {
+    initialiseEvents: (state) => {
       state.eventIds = initialState.eventIds;
       state.eventIdsLoadingStatus = initialState.eventIdsLoadingStatus;
       state.events = initialState.events;

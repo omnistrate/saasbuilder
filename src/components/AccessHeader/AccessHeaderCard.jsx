@@ -1,14 +1,8 @@
-import { useSelector } from "react-redux";
 import { Box, Stack } from "@mui/material";
-
-import { selectUserrootData } from "src/slices/userDataSlice";
 import { getEnumFromUserRoleString } from "src/utils/isAllowedByRBAC";
-
 import { Column, InfoCardContainer } from "../InfoCard/InfoCard";
 import AwsLogo from "../Logos/AwsLogo/AwsLogo";
 import GcpLogo from "../Logos/GcpLogo/GcpLogo";
-
-import formatDateUTC from "../../utils/formatDateUTC";
 import { Fragment } from "react";
 
 const CLOUD_PROVIDERS_MAP = {

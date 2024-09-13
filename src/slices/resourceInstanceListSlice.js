@@ -16,7 +16,7 @@ const resourceInstanceListSlice = createSlice({
     setResourceInstanceListLoadingStatus: (state, action) => {
       state.resourceInstanceListLoadingStatus = action.payload;
     },
-    setResourceInstanceListToEmpty: (state, action) => {
+    setResourceInstanceListToEmpty: (state) => {
       state.resourceInstanceList = [];
     },
   },

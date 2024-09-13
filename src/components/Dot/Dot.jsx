@@ -13,7 +13,7 @@ const Dot = (props) => {
         ...sx,
       }}
       {...restProps}
-    ></Box>
+    />
   );
 };
 

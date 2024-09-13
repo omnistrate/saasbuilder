@@ -1,7 +1,8 @@
 import * as React from "react";
 
 const PrivateServiceIcon = (props) => {
-  let { color = "", width = 20, height = 20 } = props;
+  let { color = "" } = props;
+  const { width = 26, height = 26 } = props;
   if (!color) {
     color = "#fff";
   }
@@ -9,8 +10,8 @@ const PrivateServiceIcon = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={26}
-      height={26}
+      width={width}
+      height={height}
       fill="none"
       {...props}
     >

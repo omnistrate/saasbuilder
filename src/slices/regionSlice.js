@@ -27,7 +27,7 @@ const regionsSlice = createSlice({
       state.idsLoadingStatus = status;
     },
     setRegion: (state, action) => {
-      let data = action.payload;
+      const data = action.payload;
       const regionId = data.id;
       state.regions[regionId] = {
         ...data,

@@ -7,7 +7,7 @@ import MuiTableCell from "@mui/material/TableCell";
 import { Text } from "../Typography/Typography";
 import CopyToClipbpoardButton from "../CopyClipboardButton/CopyClipboardButton";
 
-export const TableContainer = styled(MuiTableContainer)(({ theme }) => ({
+export const TableContainer = styled(MuiTableContainer)(() => ({
   background: "#FFFFFF",
   border: "1px solid #EAECF0",
   boxShadow:
@@ -16,18 +16,18 @@ export const TableContainer = styled(MuiTableContainer)(({ theme }) => ({
   padding: "10px 20px",
 }));
 
-export const Table = styled(MuiTable)(({ theme }) => ({}));
+export const Table = styled(MuiTable)(() => ({}));
 
-export const TableBody = styled(MuiTableBody)(({ theme }) => ({}));
+export const TableBody = styled(MuiTableBody)(() => ({}));
 
-export const TableRow = styled(MuiTableRow)(({ theme }) => ({
+export const TableRow = styled(MuiTableRow)(() => ({
   borderBottom: "1px solid #EAECF0",
   "&:last-child": {
     borderBottom: "none",
   },
 }));
 
-export const TableCell = styled(MuiTableCell)(({ theme }) => ({
+export const TableCell = styled(MuiTableCell)(() => ({
   padding: "16px 20px",
   borderBottom: "none",
 }));

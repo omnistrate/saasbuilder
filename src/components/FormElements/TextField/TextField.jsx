@@ -1,4 +1,4 @@
-import { Box, ButtonBase, IconButton, Tooltip, styled } from "@mui/material";
+import { Box, ButtonBase,Tooltip, styled } from "@mui/material";
 import MuiInputAdornment from "@mui/material/InputAdornment";
 import MuiTextField from "@mui/material/TextField";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -11,7 +11,7 @@ const StyledTextField = styled(MuiTextField, {
   shouldForwardProp: (prop) => {
     return prop !== "readonly";
   },
-})(({ theme, readonly }) => ({
+})(({  readonly }) => ({
   boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
   borderRadius: 8,
   flexGrow: 1,
@@ -93,10 +93,10 @@ const CopyButton = (props) => {
     if (textToCopy) {
       clipboard
         .write(textToCopy)
-        .then((response) => {
+        .then(() => {
           setText("Copied");
         })
-        .catch((err) => {
+        .catch(() => {
           setText("Unable to copy to clipboard");
         });
     } else {

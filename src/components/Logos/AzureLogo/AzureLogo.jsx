@@ -9,4 +9,4 @@ function AzureLogo(props) {
 
 export default AzureLogo;
 
-const Image = styled(NextImage)(({ theme }) => ({}));
+const Image = styled(NextImage)(() => ({}));

@@ -57,7 +57,7 @@ function startMailServiceCron() {
       const orgDetailsResponse = await getProviderOrgDetails();
       const orgLogoURL = orgDetailsResponse.data.orgLogoURL;
 
-      let mailPromises = [];
+      const mailPromises = [];
 
       for (const event of events) {
         try {
@@ -168,7 +168,7 @@ function startMailServiceCron() {
       }
 
       await Promise.all(mailPromises)
-        .then((responses) => {
+        .then(() => {
           if (mailPromises.length === events.length && events.length > 0)
             console.log("All mails sent and events acknowledged");
         })

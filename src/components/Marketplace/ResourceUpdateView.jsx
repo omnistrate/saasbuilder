@@ -1,6 +1,5 @@
 import {
   Box,
-  Chip,
   CircularProgress,
   MenuItem,
   OutlinedInput,
@@ -22,20 +21,8 @@ import Select from "../FormElements/Select/Select";
 import { cloudProviderLabels } from "src/constants/cloudProviders";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import { PasswordField } from "../FormElementsv2/PasswordField/PasswordField";
-import Autocomplete, {
-  StyledTextField,
-} from "../FormElementsv2/AutoComplete/AutoComplete";
+import Autocomplete from "../FormElementsv2/AutoComplete/AutoComplete";
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 function ResourceUpdateView(props) {
   const {
     serviceId,
@@ -77,7 +64,7 @@ function ResourceUpdateView(props) {
             );
           }
         } else if (api.verb === "CREATE") {
-          let filteredInputParams = api.inputParameters?.filter(
+          const filteredInputParams = api.inputParameters?.filter(
             (item) => item?.custom && !item?.modifiable
           );
           if (filteredInputParams?.length) {
@@ -87,6 +74,7 @@ function ResourceUpdateView(props) {
       });
     }
     getSchema();
+    /*eslint-disable-next-line react-hooks/exhaustive-deps*/
   }, []);
 
   const shouldShowParamField = useCallback(
@@ -116,10 +104,7 @@ function ResourceUpdateView(props) {
     formData.values.cloud_provider
   );
 
-  const {
-    data: customAvailabilityZoneData,
-    isLoading: isLoadingCustomAvailabilityZone,
-  } = customAvailabilityZoneQuery;
+  const { data: customAvailabilityZoneData } = customAvailabilityZoneQuery;
 
   const customAvailabilityZone = useMemo(() => {
     const availabilityZones = customAvailabilityZoneData?.availabilityZones;
@@ -130,10 +115,7 @@ function ResourceUpdateView(props) {
       }
       return -1;
     });
-  }, [
-    isLoadingCustomAvailabilityZone,
-    customAvailabilityZoneData?.availabilityZones,
-  ]);
+  }, [customAvailabilityZoneData?.availabilityZones]);
 
   return (
     <>

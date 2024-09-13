@@ -18,7 +18,7 @@ export default function SideDrawerRight(props) {
   );
 }
 
-const Drawer = styled(MuiDrawer)(({ theme }) => ({
+const Drawer = styled(MuiDrawer)(() => ({
   [`& .${drawerClasses.paper}`]: {
     // top: 64,
     overflow: "visible",
@@ -26,6 +26,13 @@ const Drawer = styled(MuiDrawer)(({ theme }) => ({
     maxWidth: "calc(100% - 180px)",
   },
 }));
+
+const drawerSizes = {
+  small: "511px",
+  medium: "761px",
+  large: "1092px",
+  xlarge: "1300px",
+};
 
 const ContentContainer = styled("div", {
   shouldForwardProp: (prop) => !["size"].includes(prop),
@@ -59,10 +66,3 @@ const CloseButton = styled(ButtonBase)(({ theme }) => ({
   transform: "translate(calc(-100% - 24px),-100%)",
   zIndex: theme.zIndex.drawer + 1,
 }));
-
-const drawerSizes = {
-  small: "511px",
-  medium: "761px",
-  large: "1092px",
-  xlarge: "1300px",
-};

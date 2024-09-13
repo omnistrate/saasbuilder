@@ -1,7 +1,4 @@
-import _ from "lodash";
 import { useQuery } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
-import loadingStatuses from "../utils/constants/loadingStatuses";
 import {
   getResourceInstanceIds,
   getResourceInstanceDetails,
@@ -32,7 +29,6 @@ function useServiceOfferingResourceInstances(
       subscriptionId
   );
 
-  const dispatch = useDispatch();
   const [resourceInstances, setResourceInstances] = useState([]);
 
   const query = useQuery(

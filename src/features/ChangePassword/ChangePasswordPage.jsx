@@ -37,7 +37,8 @@ const ChangePasswordPage = (props) => {
       return axios.post("/change-password", payload);
     },
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
+        /*eslint-disable-next-line no-use-before-define*/
         formik.resetForm();
         snackbar.showSuccess("Change password successful");
         router.push("/signin");
