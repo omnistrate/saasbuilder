@@ -10,7 +10,7 @@ import useSnackbar from "src/hooks/useSnackbar";
 
 function IDPAuth() {
   const router = useRouter();
-  const { state, code, destination } = router.query;
+  const { state, code } = router.query;
   const isRouterReady = router.isReady;
   const snackbar = useSnackbar();
 
@@ -87,14 +87,10 @@ function IDPAuth() {
           router.replace("/signin?redirect_reason=idp_auth_error");
         }
       } else {
-        if (destination)
-          router.replace(
-            `/signin?destination=${encodeURIComponent(destination)}`
-          );
-        else router.replace("/signin");
+        router.replace("/signin");
       }
     }
-  }, [state, code, isRouterReady, router, handleSignIn, destination]);
+  }, [state, code, isRouterReady, router, handleSignIn]);
 
   return (
     <Stack
