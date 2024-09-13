@@ -43,7 +43,7 @@ const SigninPage = (props) => {
   } = props;
   const router = useRouter();
   const environmentType = useEnvironmentType();
-  const { redirect_reason } = router.query;
+  const { redirect_reason, destination } = router.query;
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
   const reCaptchaRef = useRef(null);
@@ -52,7 +52,12 @@ const SigninPage = (props) => {
   useEffect(() => {
     if (redirect_reason === "idp_auth_error") {
       snackbar.showError("Something went wrong. Please retry");
-      router.replace("/signin");
+
+      if (destination)
+        router.replace(
+          `/signin?destination=${encodeURIComponent(destination)}`
+        );
+      else router.replace("/signin");
     }
     /*eslint-disable-next-line react-hooks/exhaustive-deps*/
   }, [redirect_reason]);
@@ -61,7 +66,17 @@ const SigninPage = (props) => {
     if (jwtToken) {
       Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
       axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
-      router.push("/service-plans");
+
+      // Redirect to the Destination URL
+      if (
+        destination &&
+        (destination.startsWith("/service-plans") ||
+          destination.startsWith("%2Fservice-plans"))
+      ) {
+        router.replace(decodeURIComponent(destination));
+      } else {
+        router.replace("/service-plans");
+      }
     }
   }
 
@@ -250,6 +265,7 @@ const SigninPage = (props) => {
                 <GoogleLogin
                   disabled={isGoogleLoginDisabled}
                   saasBuilderBaseURL={saasBuilderBaseURL}
+                  destination={destination}
                 />
               </GoogleOAuthProvider>
             )}
@@ -258,6 +274,7 @@ const SigninPage = (props) => {
                 githubClientID={githubIDPClientID}
                 disabled={isGithubLoginDisabled}
                 saasBuilderBaseURL={saasBuilderBaseURL}
+                destination={destination}
               />
             )}
           </Stack>
