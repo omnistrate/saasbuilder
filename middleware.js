@@ -45,16 +45,18 @@ export async function middleware(request) {
     if (userData?.status !== 200) {
       return redirectToSignIn();
     }
-    //subscriptions page should only be accessible in PROD
-    if (request.nextUrl.pathname.startsWith("/subscriptions")) {
-      if (environmentType !== "PROD") {
-        const response = NextResponse.redirect(
-          new URL("/service-plans", request.url)
-        );
-        response.headers.set(`x-middleware-cache`, `no-cache`);
-        return response;
-      }
-    }
+
+    // Subscriptions page should only be accessible in PROD
+    // Removing This for Now
+    // if (request.nextUrl.pathname.startsWith("/subscriptions")) {
+    //   if (environmentType !== "PROD") {
+    //     const response = NextResponse.redirect(
+    //       new URL("/service-plans", request.url)
+    //     );
+    //     response.headers.set(`x-middleware-cache`, `no-cache`);
+    //     return response;
+    //   }
+    // }
 
     if (request.nextUrl.pathname.startsWith("/signin")) {
       let destination = request.nextUrl.searchParams.get("destination");
