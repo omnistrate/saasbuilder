@@ -192,6 +192,9 @@ function CloudProviderAccountOrgIdModal(props) {
               accountConfigId={accountConfigId}
               cloudFormationTemplateUrl={cloudFormationTemplateUrl}
               setCloudFormationTemplateUrl={setCloudFormationTemplateUrl}
+              setCloudFormationTemplateUrlNoLB={
+                setCloudFormationTemplateUrlNoLB
+              }
               service={service}
               selectedResourceKey={selectedResourceKey}
               subscriptionId={subscriptionId}
