@@ -293,7 +293,6 @@ function TermsOfService(props) {
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={metaDescription} />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container
         maxWidth="858px"

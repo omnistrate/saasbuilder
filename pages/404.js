@@ -16,7 +16,6 @@ function FourHundredFourPage() {
       <Layout>
         <Heading>
           <title>Page not found </title>
-          <link rel="icon" href="/favicon.ico" />
         </Heading>
         <Container
           noBottomBorder
