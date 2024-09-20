@@ -338,6 +338,11 @@ function MarketplaceService() {
                       setCloudFormationTemplateUrl(
                         result_params?.cloudformation_url
                       );
+
+                      setCloudFormationTemplateUrlNoLB(
+                        result_params?.cloudformation_url_no_lb
+                      );
+
                       setAccountConfigMethod(
                         result_params?.account_configuration_method
                       );
@@ -849,6 +854,11 @@ function MarketplaceService() {
             setCloudFormationTemplateUrl(url);
           }
 
+          const urlNoLB =
+            resourceInstance?.result_params?.cloudformation_url_no_lb;
+          if (urlNoLB) {
+            setCloudFormationTemplateUrlNoLB(urlNoLB);
+          }
           snackbar.showSuccess("Cloud Provider Account Created");
           setAccountConfigStatus(resourceInstance?.status);
           setAccountConfigId(resourceInstance?.id);
@@ -874,6 +884,7 @@ function MarketplaceService() {
       setAccountConfigMethod(undefined);
       setCloudProvider("");
       setCloudFormationTemplateUrl("");
+      setCloudFormationTemplateUrlNoLB("");
       setAccountConfigStatus("");
       setAccountConfigId("");
     }
