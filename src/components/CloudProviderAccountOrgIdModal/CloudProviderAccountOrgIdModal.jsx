@@ -73,7 +73,9 @@ function CloudProviderAccountOrgIdModal(props) {
     selectedResourceKey,
     subscriptionId,
     setCloudFormationTemplateUrl,
+    setCloudFormationTemplateUrlNoLB,
     fetchResourceInstancesOfSelectedResource,
+    cloudFormationTemplateUrlNoLB,
   } = props;
 
   const terraformlink = isAccessPage ? (
@@ -187,9 +189,13 @@ function CloudProviderAccountOrgIdModal(props) {
                 fetchResourceInstancesOfSelectedResource
               }
               cloudformationNoLBlink={
-                <CloudFormationLink
-                  cloudFormationTemplateUrl={cloudFormationTemplateUrl}
-                />
+                cloudFormationTemplateUrlNoLB ? (
+                  cloudFormationTemplateUrlNoLB
+                ) : (
+                  <CloudFormationLink
+                    cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+                  />
+                )
               }
             />
           ) : (
@@ -203,9 +209,13 @@ function CloudProviderAccountOrgIdModal(props) {
               orgId={orgId}
               cloudFormationTemplateUrl={cloudFormationTemplateUrl}
               cloudformationNoLBlink={
-                <CloudFormationLink
-                  cloudFormationTemplateUrl={cloudFormationTemplateUrl}
-                />
+                cloudFormationTemplateUrlNoLB ? (
+                  cloudFormationTemplateUrlNoLB
+                ) : (
+                  <CloudFormationLink
+                    cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+                  />
+                )
               }
             />
           )}
@@ -233,6 +243,7 @@ const CreationTimeInstructions = (props) => {
     accountConfigStatus,
     accountConfigId,
     setCloudFormationTemplateUrl,
+    setCloudFormationTemplateUrlNoLB,
     cloudFormationTemplateUrl,
     service,
     selectedResourceKey,
@@ -269,6 +280,11 @@ const CreationTimeInstructions = (props) => {
       if (url) {
         fetchResourceInstancesOfSelectedResource?.();
         setCloudFormationTemplateUrl(url);
+        const urlNoLB =
+          resourceInstance?.result_params?.cloudformation_url_no_lb;
+        if (urlNoLB) {
+          setCloudFormationTemplateUrlNoLB(urlNoLB);
+        }
         setIsPolling(false);
       } else {
         if (pollCount.current < 10) {

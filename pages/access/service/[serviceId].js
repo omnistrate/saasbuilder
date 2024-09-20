@@ -108,6 +108,8 @@ function MarketplaceService() {
   const [cloudProvider, setCloudProvider] = useState("");
   const [cloudFormationTemplateUrl, setCloudFormationTemplateUrl] =
     useState("");
+  const [cloudFormationTemplateUrlNoLB, setCloudFormationTemplateUrlNoLB] =
+    useState("");
   const [accountConfigStatus, setAccountConfigStatus] = useState("");
   const [accountConfigId, setAccountConfigId] = useState("");
   //this is required to show some extra text on CloudProviderAccountModal on creation
@@ -592,8 +594,6 @@ function MarketplaceService() {
       setUpdateDrawerOpen(true);
     }
   };
-
-
 
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);
@@ -1304,7 +1304,7 @@ function MarketplaceService() {
 
   const closeUpdateDrawer = () => {
     setUpdateDrawerOpen(false);
-    
+
     updateformik.resetForm();
   };
 
@@ -1815,9 +1815,11 @@ function MarketplaceService() {
           selectedResourceKey={selectedResource.key}
           subscriptionId={subscriptionData?.id}
           setCloudFormationTemplateUrl={setCloudFormationTemplateUrl}
+          setCloudFormationTemplateUrlNoLB={setCloudFormationTemplateUrlNoLB}
           fetchResourceInstancesOfSelectedResource={
             fetchResourceInstancesOfSelectedResource
           }
+          cloudFormationTemplateUrlNoLB={cloudFormationTemplateUrlNoLB}
         />
 
         <AccessSideRestoreInstance
