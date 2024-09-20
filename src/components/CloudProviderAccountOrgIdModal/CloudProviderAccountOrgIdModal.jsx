@@ -119,6 +119,16 @@ function CloudProviderAccountOrgIdModal(props) {
     </StyledLink>
   );
 
+  const cloudFormationTemplateUrlNoLBLink = (
+    <StyledLink
+      href={cloudFormationTemplateUrlNoLB ?? ""}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      this
+    </StyledLink>
+  );
+
   const terraformGuide = isAccessPage ? (
     <StyledLink
       href="https://youtu.be/l6lMEZdMMxs"
@@ -190,7 +200,7 @@ function CloudProviderAccountOrgIdModal(props) {
               }
               cloudformationNoLBlink={
                 cloudFormationTemplateUrlNoLB ? (
-                  cloudFormationTemplateUrlNoLB
+                  cloudFormationTemplateUrlNoLBLink
                 ) : (
                   <CloudFormationLink
                     cloudFormationTemplateUrl={cloudFormationTemplateUrl}
@@ -210,7 +220,7 @@ function CloudProviderAccountOrgIdModal(props) {
               cloudFormationTemplateUrl={cloudFormationTemplateUrl}
               cloudformationNoLBlink={
                 cloudFormationTemplateUrlNoLB ? (
-                  cloudFormationTemplateUrlNoLB
+                  cloudFormationTemplateUrlNoLBLink
                 ) : (
                   <CloudFormationLink
                     cloudFormationTemplateUrl={cloudFormationTemplateUrl}
