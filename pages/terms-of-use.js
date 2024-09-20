@@ -6,6 +6,7 @@ import Container from "src/components/NonDashboardComponents/Container/Container
 import Link from "next/link";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
+import { styleConfig } from "src/providerConfig";
 
 export const getServerSideProps = async () => {
   let orgName = "";
@@ -292,7 +293,6 @@ function TermsOfService(props) {
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={metaDescription} />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container
         maxWidth="858px"
@@ -311,7 +311,14 @@ function TermsOfService(props) {
         <StyledImage src={termsImg} alt="privacy-policy" />
         {orgTermsOfUse && orgTermsOfUse !== "<p><br></p>" ? (
           <Box
-            sx={{ marginTop: "30px" }}
+            className="ql-editor"
+            sx={{
+              marginTop: "30px",
+              "& a": {
+                color: styleConfig.primaryColor,
+                textDecoration: "underline",
+              },
+            }}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(orgTermsOfUse),
             }}

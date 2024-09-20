@@ -8,6 +8,7 @@ import Link from "next/link";
 import Container from "src/components/NonDashboardComponents/Container/Container";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
+import { styleConfig } from "src/providerConfig";
 
 export const getServerSideProps = async () => {
   let orgName = "";
@@ -210,7 +211,6 @@ function PrivacyPolicy(props) {
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={metaDescription} />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container
         maxWidth="858px"
@@ -234,7 +234,14 @@ function PrivacyPolicy(props) {
         />
         {orgPrivacyPolicy && orgPrivacyPolicy !== "<p><br></p>" ? (
           <Box
-            sx={{ marginTop: "30px" }}
+            className="ql-editor"
+            sx={{
+              marginTop: "30px",
+              "& a": {
+                color: styleConfig.primaryColor,
+                textDecoration: "underline",
+              },
+            }}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(orgPrivacyPolicy),
             }}
