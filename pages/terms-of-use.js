@@ -6,6 +6,7 @@ import Container from "src/components/NonDashboardComponents/Container/Container
 import Link from "next/link";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
+import { quillEditorStyle } from "src/constants/quillEditorStyle";
 
 export const getServerSideProps = async () => {
   let orgName = "";
@@ -311,7 +312,10 @@ function TermsOfService(props) {
         <StyledImage src={termsImg} alt="privacy-policy" />
         {orgTermsOfUse && orgTermsOfUse !== "<p><br></p>" ? (
           <Box
-            sx={{ marginTop: "30px" }}
+            sx={{
+              marginTop: "30px",
+              ...quillEditorStyle,
+            }}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(orgTermsOfUse),
             }}

@@ -8,6 +8,7 @@ import Link from "next/link";
 import Container from "src/components/NonDashboardComponents/Container/Container";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
+import { quillEditorStyle } from "src/constants/quillEditorStyle";
 
 export const getServerSideProps = async () => {
   let orgName = "";
@@ -234,7 +235,10 @@ function PrivacyPolicy(props) {
         />
         {orgPrivacyPolicy && orgPrivacyPolicy !== "<p><br></p>" ? (
           <Box
-            sx={{ marginTop: "30px" }}
+            sx={{
+              marginTop: "30px",
+              ...quillEditorStyle,
+            }}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(orgPrivacyPolicy),
             }}
