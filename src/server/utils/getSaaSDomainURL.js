@@ -15,7 +15,7 @@ function getSaaSDomainURL() {
     saasURL = "https://" + saasURL;
   }
 
-  return saasURL.toLowerCase();
+  return saasURL?.toLowerCase();
 }
 
 module.exports = {
