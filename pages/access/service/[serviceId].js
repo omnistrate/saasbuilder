@@ -82,6 +82,7 @@ import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChi
 import CustomNetworks from "src/features/CustomNetworks/CustomNetworks";
 import CapacityDialog from "src/components/CapacityDialog/CapacityDialog";
 import InstancesTableHeader from "src/features/ResourceInstance/components/InstancesTableHeader";
+import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
 
 export const getServerSideProps = async () => {
   return {
@@ -637,7 +638,12 @@ function MarketplaceService() {
       resourceKey: selectedResource.key,
       subscriptionId: subscriptionData?.id,
       ...(isCurrentResourceBYOA
-        ? { configMethod: ACCOUNT_CREATION_METHODS.TERRAFORM }
+        ? {
+            configMethod:
+              defaultCloudProvider == CLOUD_PROVIDERS.aws
+                ? ACCOUNT_CREATION_METHODS.CLOUDFORMATION
+                : ACCOUNT_CREATION_METHODS.TERRAFORM,
+          }
         : {}),
     },
     enableReinitialize: true,
