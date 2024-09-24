@@ -25,7 +25,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
 # Install node modules
 COPY --link package.json yarn.lock ./
 RUN --mount=type=cache,target=/root/.cache/yarn \
-    yarn install --frozen-lockfile --production=false --network-timeout 1000000
+    yarn install --frozen-lockfile --production=true --network-timeout 1000000
 
 # Copy application code
 COPY --link . .
@@ -34,19 +34,14 @@ COPY --link . .
 RUN --mount=type=cache,target=/root/.cache/yarn \
     yarn run build
 
-RUN npm prune --production
-# Remove development dependencies
-RUN --mount=type=cache,target=/root/.cache/yarn \
-    yarn install --production=true --network-timeout 1000000
-
 # Final stage for app image
 FROM base
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs \
+    adduser --system --uid 1001 nextjs
 
 # Copy built application from the previous stage
 COPY --from=build /app /app
