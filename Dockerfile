@@ -7,7 +7,7 @@ FROM node:20.11.1-slim as base
 WORKDIR /app
 
 # Set production environment
-ENV NODE_ENV="production"
+ENV NODE_ENV=production
 ARG YARN_VERSION=1.22.21
 RUN npm install -g yarn@$YARN_VERSION --force
 
@@ -34,6 +34,7 @@ COPY --link . .
 RUN --mount=type=cache,target=/root/.cache/yarn \
     yarn run build
 
+RUN npm prune --production
 # Remove development dependencies
 RUN --mount=type=cache,target=/root/.cache/yarn \
     yarn install --production=true --network-timeout 1000000
@@ -41,8 +42,9 @@ RUN --mount=type=cache,target=/root/.cache/yarn \
 # Final stage for app image
 FROM base
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
