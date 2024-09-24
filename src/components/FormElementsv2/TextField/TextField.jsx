@@ -31,9 +31,9 @@ const StyledTextField = styled(MuiTextField, {
   },
   ".MuiOutlinedInput-root.Mui-focused": {
     [`& .MuiOutlinedInput-notchedOutline`]: {
-      border: `1px solid  ${theme.palette.primary["300"]}`,
-      boxShadow:
-        "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+      border: `2px solid  ${theme.palette.primary["main"]}`,
+      // boxShadow:
+      //   "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
     },
   },
   ".MuiOutlinedInput-root.Mui-error": {
@@ -77,7 +77,7 @@ const TextField = (props) => {
 
   if (copyButton) {
     InputProps.endAdornment = (
-      <InputAdornment position="start" sx={{padding : "0px 10px !important"}}>
+      <InputAdornment position="start" sx={{ padding: "0px 10px !important" }}>
         <CopyButton text={value} />
       </InputAdornment>
     );
