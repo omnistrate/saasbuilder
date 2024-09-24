@@ -11,7 +11,6 @@ ENV NODE_ENV=production
 ARG YARN_VERSION=1.22.21
 RUN npm install -g yarn@$YARN_VERSION --force
 
-
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
@@ -40,13 +39,12 @@ FROM base
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs \
-    adduser --system --uid 1001 nextjs
-
 # Copy built application from the previous stage
 COPY --from=build /app /app
 
-RUN chown -R nextjs:nodejs /app
+RUN addgroup --system --gid 1001 nodejs \
+    adduser --system --uid 1001 nextjs \
+    chown -R nextjs:nodejs /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
