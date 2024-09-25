@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Throw-away build stage to reduce size of final image
-FROM node:20.11.1-slim as build
+FROM node:20.11.1-slim AS build
 
 # Next.js app lives here
 WORKDIR /app
@@ -34,7 +34,7 @@ RUN --mount=type=cache,target=/root/.cache/yarn \
 RUN npm prune --production
 
 # Final stage for app image
-FROM node:20.11.1-slim as final
+FROM node:20.11.1-slim AS final
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
