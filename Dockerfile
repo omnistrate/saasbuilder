@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
-# Adjust NODE_VERSION as desired
-FROM node:20.11.1-slim as base
+# Throw-away build stage to reduce size of final image
+FROM node:20.11.1-slim as build
 
 # Next.js app lives here
 WORKDIR /app
@@ -10,9 +10,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 ARG YARN_VERSION=1.22.21
 RUN npm install -g yarn@$YARN_VERSION --force
-
-# Throw-away build stage to reduce size of final image
-FROM base as build
 
 # Install packages needed to build node modules
 RUN --mount=type=cache,target=/var/cache/apt \
@@ -34,7 +31,7 @@ RUN --mount=type=cache,target=/root/.cache/yarn \
     yarn run build
 
 # Final stage for app image
-FROM base
+FROM node:20.11.1-slim as final
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -42,8 +39,11 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Copy built application from the previous stage
 COPY --from=build /app /app
 
-RUN addgroup --system --gid 1001 nodejs \
-    adduser --system --uid 1001 nextjs \
+# Next.js app lives here
+WORKDIR /app
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs && \
     chown -R nextjs:nodejs /app
 
 # Start the server by default, this can be overwritten at runtime
