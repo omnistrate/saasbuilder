@@ -10,3 +10,5 @@ README.md
 .vscode
 fly.toml
 fly.*.toml
+*.log
+yarn.lock
