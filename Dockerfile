@@ -45,7 +45,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Copy built application from the previous stage
 COPY --from=build /app /app
 
-
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs && \
     chown -R nextjs:nodejs /app
