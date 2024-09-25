@@ -36,14 +36,15 @@ RUN npm prune --production
 # Final stage for app image
 FROM node:20.11.1-slim AS final
 
+# Next.js app lives here
+WORKDIR /app
+
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Copy built application from the previous stage
 COPY --from=build /app /app
 
-# Next.js app lives here
-WORKDIR /app
 
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs && \
