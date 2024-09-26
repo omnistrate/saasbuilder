@@ -318,6 +318,12 @@ function TermsOfService(props) {
                 color: styleConfig.primaryColor,
                 textDecoration: "underline",
               },
+
+              "& blockquote": {
+                borderLeft: "4px solid #ccc",
+                paddingLeft: "16px !important",
+                paddingY: "5px !important",
+              },
             }}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(orgTermsOfUse),
