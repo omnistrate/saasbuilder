@@ -16,13 +16,20 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
 
+# Copy package.json and yarn.lock (if it exists)
+COPY package.json ./
+COPY yarn.lock* ./
+
 # Install node modules
-COPY --link package.json yarn.lock ./
 RUN --mount=type=cache,target=/root/.yarn \
-    yarn install --frozen-lockfile --production=true --network-timeout 1000000
+    if [ -f yarn.lock ]; then \
+        yarn install --frozen-lockfile --production=true --network-timeout 1000000; \
+    else \
+        yarn install --production=true --network-timeout 1000000; \
+    fi
 
 # Copy application code
-COPY --link . .
+COPY . .
 
 # Build application
 RUN yarn run build
