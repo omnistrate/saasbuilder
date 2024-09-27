@@ -15,7 +15,7 @@ import FieldDescription from "../FormElementsv2/FieldDescription/FieldDescriptio
 import FieldLabel from "../FormElements/FieldLabel/FieldLabel";
 import Form from "../FormElements/Form/Form";
 import { FormControlLabel } from "../FormElements/Radio/Radio";
-import TextField from "../FormElements/TextField/TextField";
+import TextField from "../FormElementsv2/TextField/TextField";
 import ErrorLabel from "../ErrorLabel/ErrorLabel";
 import { describeServiceOfferingResource } from "../../api/serviceOffering";
 import Select from "../FormElements/Select/Select";
@@ -768,6 +768,9 @@ function CreateResourceInstanceForm(props) {
                         )}
                       </FieldDescription>
                       <TextField
+                        multiline={true}
+                        minRows={1}
+                        maxRows={3}
                         id={`requestParams.${param.key}`}
                         name={`requestParams.${param.key}`}
                         value={formData.values.requestParams[param.key] ?? ""}

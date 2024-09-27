@@ -76,10 +76,10 @@ const SearchInput: FC<SearchInputProps> = ({
           overflow: "hidden",
           borderRadius: "8px", // Add border-radius here
           boxShadow: "none",
-          "&:focus-within": {
-            boxShadow:
-              "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
-          },
+          // "&:focus-within": {
+          //   boxShadow:
+          //     "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+          // },
           mt: "0px",
           [`& .MuiOutlinedInput-input`]: {
             paddingLeft: "10px !important",

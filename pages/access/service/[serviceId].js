@@ -261,13 +261,13 @@ function MarketplaceService() {
           const instanceIdDisplay = isCurrentResourceBYOA
             ? "account-" + instanceId
             : instanceId;
+
           const resourceInstanceUrlLink = getResourceInstancesDetailsRoute(
             serviceId,
             environmentId,
             productTierId,
             selectedResource?.id,
             instanceId,
-            currentSource,
             subscriptionData?.id
           );
 
