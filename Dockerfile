@@ -12,23 +12,20 @@ ARG YARN_VERSION=1.22.21
 RUN npm install -g yarn@$YARN_VERSION --force
 
 # Install packages needed to build node modules
-RUN --mount=type=cache,target=/var/cache/apt \
-    apt-get update -qq
-
-RUN --mount=type=cache,target=/var/cache/apt \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
 
 # Install node modules
-COPY --link package.json ./
-RUN --mount=type=cache,target=/root/.cache/yarn \
+COPY --link package.json yarn.lock ./
+RUN --mount=type=cache,target=/root/.yarn \
     yarn install --frozen-lockfile --production=true --network-timeout 1000000
 
 # Copy application code
 COPY --link . .
 
 # Build application
-RUN --mount=type=cache,target=/root/.cache/yarn \
-    yarn run build
+RUN yarn run build
 
 # Final stage for app image
 FROM node:20.11.1-slim AS final
