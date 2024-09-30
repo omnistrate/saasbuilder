@@ -6,20 +6,24 @@ import Container from "src/components/NonDashboardComponents/Container/Container
 import Link from "next/link";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
+import { styleConfig } from "src/providerConfig";
 
 export const getServerSideProps = async () => {
   let orgName = "";
   let orgLogoURL = "";
+  let orgTermsOfUse = "";
   try {
     const response = await getProviderOrgDetails();
     orgName = response.data.orgName;
     orgLogoURL = response.data.orgLogoURL;
+    orgTermsOfUse = response.data.orgTermsOfUse;
   } catch (err) {}
 
   return {
     props: {
       orgName: orgName,
       orgLogoURL: orgLogoURL,
+      orgTermsOfUse: orgTermsOfUse,
     },
   };
 };
@@ -289,7 +293,6 @@ function TermsOfService(props) {
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={metaDescription} />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container
         maxWidth="858px"
@@ -308,7 +311,20 @@ function TermsOfService(props) {
         <StyledImage src={termsImg} alt="privacy-policy" />
         {orgTermsOfUse && orgTermsOfUse !== "<p><br></p>" ? (
           <Box
-            sx={{ marginTop: "30px" }}
+            className="ql-editor"
+            sx={{
+              marginTop: "30px",
+              "& a": {
+                color: styleConfig.primaryColor,
+                textDecoration: "underline",
+              },
+
+              "& blockquote": {
+                borderLeft: "4px solid #ccc",
+                paddingLeft: "16px !important",
+                paddingY: "5px !important",
+              },
+            }}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(orgTermsOfUse),
             }}

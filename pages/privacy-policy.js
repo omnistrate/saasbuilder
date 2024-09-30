@@ -8,20 +8,24 @@ import Link from "next/link";
 import Container from "src/components/NonDashboardComponents/Container/Container";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
+import { styleConfig } from "src/providerConfig";
 
 export const getServerSideProps = async () => {
   let orgName = "";
   let orgLogoURL = "";
+  let orgPrivacyPolicy = "";
   try {
     const response = await getProviderOrgDetails();
     orgName = response.data.orgName;
     orgLogoURL = response.data.orgLogoURL;
+    orgPrivacyPolicy = response.data.orgPrivacyPolicy;
   } catch (err) {}
 
   return {
     props: {
       orgName: orgName,
       orgLogoURL: orgLogoURL,
+      orgPrivacyPolicy: orgPrivacyPolicy,
     },
   };
 };
@@ -207,7 +211,6 @@ function PrivacyPolicy(props) {
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={metaDescription} />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container
         maxWidth="858px"
@@ -231,7 +234,20 @@ function PrivacyPolicy(props) {
         />
         {orgPrivacyPolicy && orgPrivacyPolicy !== "<p><br></p>" ? (
           <Box
-            sx={{ marginTop: "30px" }}
+            className="ql-editor"
+            sx={{
+              marginTop: "30px",
+              "& a": {
+                color: styleConfig.primaryColor,
+                textDecoration: "underline",
+              },
+
+              "& blockquote": {
+                borderLeft: "4px solid #ccc",
+                paddingLeft: "16px !important",
+                paddingY: "5px !important",
+              },
+            }}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(orgPrivacyPolicy),
             }}

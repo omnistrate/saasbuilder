@@ -15,7 +15,7 @@ import FieldDescription from "../FormElementsv2/FieldDescription/FieldDescriptio
 import FieldLabel from "../FormElements/FieldLabel/FieldLabel";
 import Form from "../FormElements/Form/Form";
 import { FormControlLabel } from "../FormElements/Radio/Radio";
-import TextField from "../FormElements/TextField/TextField";
+import TextField from "../FormElementsv2/TextField/TextField";
 import ErrorLabel from "../ErrorLabel/ErrorLabel";
 import { describeServiceOfferingResource } from "../../api/serviceOffering";
 import Select from "../FormElements/Select/Select";
@@ -23,7 +23,10 @@ import useResourcesInstanceIds from "../../hooks/useResourcesInstanceIds";
 import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import { PasswordField } from "../FormElementsv2/PasswordField/PasswordField";
-import { cloudProviderLabels } from "src/constants/cloudProviders";
+import {
+  CLOUD_PROVIDERS,
+  cloudProviderLabels,
+} from "src/constants/cloudProviders";
 import {
   AWSAccountIDDescription,
   GCPProjectIDDescription,
@@ -424,10 +427,17 @@ function CreateResourceInstanceForm(props) {
                   id="cloud_provider"
                   name="cloud_provider"
                   onChange={(e) => {
-                    formData.setFieldValue(
-                      "configMethod",
-                      ACCOUNT_CREATION_METHODS.TERRAFORM
-                    );
+                    if (e.target.value === CLOUD_PROVIDERS.aws) {
+                      formData.setFieldValue(
+                        "configMethod",
+                        ACCOUNT_CREATION_METHODS.CLOUDFORMATION
+                      );
+                    } else {
+                      formData.setFieldValue(
+                        "configMethod",
+                        ACCOUNT_CREATION_METHODS.TERRAFORM
+                      );
+                    }
                     formData.handleChange(e);
                   }}
                   value={formData.values.cloud_provider ?? ""}
@@ -758,6 +768,9 @@ function CreateResourceInstanceForm(props) {
                         )}
                       </FieldDescription>
                       <TextField
+                        multiline={true}
+                        minRows={1}
+                        maxRows={3}
                         id={`requestParams.${param.key}`}
                         name={`requestParams.${param.key}`}
                         value={formData.values.requestParams[param.key] ?? ""}

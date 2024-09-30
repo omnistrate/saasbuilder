@@ -82,6 +82,7 @@ import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChi
 import CustomNetworks from "src/features/CustomNetworks/CustomNetworks";
 import CapacityDialog from "src/components/CapacityDialog/CapacityDialog";
 import InstancesTableHeader from "src/features/ResourceInstance/components/InstancesTableHeader";
+import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
 
 export const getServerSideProps = async () => {
   return {
@@ -107,6 +108,8 @@ function MarketplaceService() {
   const [accountConfigMethod, setAccountConfigMethod] = useState(); // CloudFormation or Terraform
   const [cloudProvider, setCloudProvider] = useState("");
   const [cloudFormationTemplateUrl, setCloudFormationTemplateUrl] =
+    useState("");
+  const [cloudFormationTemplateUrlNoLB, setCloudFormationTemplateUrlNoLB] =
     useState("");
   const [accountConfigStatus, setAccountConfigStatus] = useState("");
   const [accountConfigId, setAccountConfigId] = useState("");
@@ -258,13 +261,13 @@ function MarketplaceService() {
           const instanceIdDisplay = isCurrentResourceBYOA
             ? "account-" + instanceId
             : instanceId;
+
           const resourceInstanceUrlLink = getResourceInstancesDetailsRoute(
             serviceId,
             environmentId,
             productTierId,
             selectedResource?.id,
             instanceId,
-            currentSource,
             subscriptionData?.id
           );
 
@@ -336,6 +339,11 @@ function MarketplaceService() {
                       setCloudFormationTemplateUrl(
                         result_params?.cloudformation_url
                       );
+
+                      setCloudFormationTemplateUrlNoLB(
+                        result_params?.cloudformation_url_no_lb
+                      );
+
                       setAccountConfigMethod(
                         result_params?.account_configuration_method
                       );
@@ -593,16 +601,6 @@ function MarketplaceService() {
     }
   };
 
-  const closeUpdateDrawer = () => {
-    setUpdateDrawerOpen(false);
-    updateformik.resetForm();
-  };
-
-  const closeCreationDrawer = () => {
-    setCreationDrawerOpen(false);
-    createformik.resetForm();
-  };
-
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);
   };
@@ -640,7 +638,12 @@ function MarketplaceService() {
       resourceKey: selectedResource.key,
       subscriptionId: subscriptionData?.id,
       ...(isCurrentResourceBYOA
-        ? { configMethod: ACCOUNT_CREATION_METHODS.TERRAFORM }
+        ? {
+            configMethod:
+              defaultCloudProvider == CLOUD_PROVIDERS.aws
+                ? ACCOUNT_CREATION_METHODS.CLOUDFORMATION
+                : ACCOUNT_CREATION_METHODS.TERRAFORM,
+          }
         : {}),
     },
     enableReinitialize: true,
@@ -857,6 +860,11 @@ function MarketplaceService() {
             setCloudFormationTemplateUrl(url);
           }
 
+          const urlNoLB =
+            resourceInstance?.result_params?.cloudformation_url_no_lb;
+          if (urlNoLB) {
+            setCloudFormationTemplateUrlNoLB(urlNoLB);
+          }
           snackbar.showSuccess("Cloud Provider Account Created");
           setAccountConfigStatus(resourceInstance?.status);
           setAccountConfigId(resourceInstance?.id);
@@ -882,6 +890,7 @@ function MarketplaceService() {
       setAccountConfigMethod(undefined);
       setCloudProvider("");
       setCloudFormationTemplateUrl("");
+      setCloudFormationTemplateUrlNoLB("");
       setAccountConfigStatus("");
       setAccountConfigId("");
     }
@@ -1309,6 +1318,17 @@ function MarketplaceService() {
     validateOnChange: false,
     enableReinitialize: true,
   });
+
+  const closeUpdateDrawer = () => {
+    setUpdateDrawerOpen(false);
+
+    updateformik.resetForm();
+  };
+
+  const closeCreationDrawer = () => {
+    setCreationDrawerOpen(false);
+    createformik.resetForm();
+  };
 
   const handleStart = () => {
     startResourceInstanceMutation.mutate(updateformik.values);
@@ -1812,9 +1832,11 @@ function MarketplaceService() {
           selectedResourceKey={selectedResource.key}
           subscriptionId={subscriptionData?.id}
           setCloudFormationTemplateUrl={setCloudFormationTemplateUrl}
+          setCloudFormationTemplateUrlNoLB={setCloudFormationTemplateUrlNoLB}
           fetchResourceInstancesOfSelectedResource={
             fetchResourceInstancesOfSelectedResource
           }
+          cloudFormationTemplateUrlNoLB={cloudFormationTemplateUrlNoLB}
         />
 
         <AccessSideRestoreInstance

@@ -17,10 +17,7 @@ import InstructionsModalIcon from "../Icons/AccountConfig/InstructionsModalIcon"
 import { getResourceInstanceDetails } from "src/api/resourceInstance";
 
 const CloudFormationLink = ({ cloudFormationTemplateUrl }) => {
-  const linkURL =
-    "https://s3.amazonaws.com/omnistrate-cloudformation/account-config-setup-template-no-lb-policy.yaml";
-
-  const updateTemplateURL = (url, newTemplateURL) => {
+  const updateTemplateURL = (url) => {
     // Parse the base URL and hash part
     const [baseURL, hashPart] = url.split("#");
     if (!hashPart) {
@@ -29,12 +26,14 @@ const CloudFormationLink = ({ cloudFormationTemplateUrl }) => {
 
     // Parse the hash part to get the path and query parameters
     const [basePath, queryParams] = hashPart.split("?");
-    const hashParams = new URLSearchParams(queryParams);
+    const basePaths = queryParams.replace(
+      "account-config-setup-template.yaml",
+      "account-config-setup-no-lb-policy.yaml"
+    );
 
-    // Update the templateURL parameter
-    hashParams.set("templateURL", newTemplateURL);
+    const hashParams = new URLSearchParams(basePaths);
 
-    // Manually construct the query string to avoid encoding issues
+    // // Manually construct the query string to avoid encoding issues
     const newQueryParams = Array.from(hashParams.entries())
       .map(([key, value]) => `${key}=${value}`)
       .join("&");
@@ -46,7 +45,7 @@ const CloudFormationLink = ({ cloudFormationTemplateUrl }) => {
   };
 
   const updatedUrl = cloudFormationTemplateUrl
-    ? updateTemplateURL(cloudFormationTemplateUrl, linkURL)
+    ? updateTemplateURL(cloudFormationTemplateUrl)
     : "";
 
   return (
@@ -73,7 +72,9 @@ function CloudProviderAccountOrgIdModal(props) {
     selectedResourceKey,
     subscriptionId,
     setCloudFormationTemplateUrl,
+    setCloudFormationTemplateUrlNoLB,
     fetchResourceInstancesOfSelectedResource,
+    cloudFormationTemplateUrlNoLB,
   } = props;
 
   const terraformlink = isAccessPage ? (
@@ -114,6 +115,16 @@ function CloudProviderAccountOrgIdModal(props) {
       rel="noopener noreferrer"
     >
       here
+    </StyledLink>
+  );
+
+  const cloudFormationTemplateUrlNoLBLink = (
+    <StyledLink
+      href={cloudFormationTemplateUrlNoLB ?? ""}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      this
     </StyledLink>
   );
 
@@ -180,6 +191,9 @@ function CloudProviderAccountOrgIdModal(props) {
               accountConfigId={accountConfigId}
               cloudFormationTemplateUrl={cloudFormationTemplateUrl}
               setCloudFormationTemplateUrl={setCloudFormationTemplateUrl}
+              setCloudFormationTemplateUrlNoLB={
+                setCloudFormationTemplateUrlNoLB
+              }
               service={service}
               selectedResourceKey={selectedResourceKey}
               subscriptionId={subscriptionId}
@@ -187,9 +201,13 @@ function CloudProviderAccountOrgIdModal(props) {
                 fetchResourceInstancesOfSelectedResource
               }
               cloudformationNoLBlink={
-                <CloudFormationLink
-                  cloudFormationTemplateUrl={cloudFormationTemplateUrl}
-                />
+                cloudFormationTemplateUrlNoLB ? (
+                  cloudFormationTemplateUrlNoLBLink
+                ) : (
+                  <CloudFormationLink
+                    cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+                  />
+                )
               }
             />
           ) : (
@@ -203,9 +221,13 @@ function CloudProviderAccountOrgIdModal(props) {
               orgId={orgId}
               cloudFormationTemplateUrl={cloudFormationTemplateUrl}
               cloudformationNoLBlink={
-                <CloudFormationLink
-                  cloudFormationTemplateUrl={cloudFormationTemplateUrl}
-                />
+                cloudFormationTemplateUrlNoLB ? (
+                  cloudFormationTemplateUrlNoLBLink
+                ) : (
+                  <CloudFormationLink
+                    cloudFormationTemplateUrl={cloudFormationTemplateUrl}
+                  />
+                )
               }
             />
           )}
@@ -233,6 +255,7 @@ const CreationTimeInstructions = (props) => {
     accountConfigStatus,
     accountConfigId,
     setCloudFormationTemplateUrl,
+    setCloudFormationTemplateUrlNoLB,
     cloudFormationTemplateUrl,
     service,
     selectedResourceKey,
@@ -269,6 +292,11 @@ const CreationTimeInstructions = (props) => {
       if (url) {
         fetchResourceInstancesOfSelectedResource?.();
         setCloudFormationTemplateUrl(url);
+        const urlNoLB =
+          resourceInstance?.result_params?.cloudformation_url_no_lb;
+        if (urlNoLB) {
+          setCloudFormationTemplateUrlNoLB(urlNoLB);
+        }
         setIsPolling(false);
       } else {
         if (pollCount.current < 10) {

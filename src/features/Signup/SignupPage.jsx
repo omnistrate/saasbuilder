@@ -142,7 +142,8 @@ const SignupPage = (props) => {
         }
       });
     }
-  }, [org, orgUrl, email, userSource, formik]);
+    /*eslint-disable-next-line react-hooks/exhaustive-deps*/
+  }, [org, orgUrl, email, userSource]);
 
   const { values, touched, errors, handleChange, handleBlur } = formik;
 
@@ -316,7 +317,9 @@ const SignupPage = (props) => {
             <SubmitButton
               type="submit"
               onClick={formik.handleSubmit}
-              disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
+              disabled={
+                !formik.isValid || (isReCaptchaSetup && !isScriptLoaded)
+              }
               loading={signupMutation.isLoading}
             >
               Create Account

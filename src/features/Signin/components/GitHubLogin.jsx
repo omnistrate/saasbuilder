@@ -12,6 +12,7 @@ function GithubLogin(props) {
     githubClientID,
     saasBuilderBaseURL,
     invitationInfo = {},
+    destination,
   } = props;
   const router = useRouter();
 
@@ -19,6 +20,7 @@ function GithubLogin(props) {
     const uuid = uuidv4();
     const githubAuthState = {
       nonce: uuid,
+      destination,
       identityProvider: IDENTITY_PROVIDER_TYPES.GitHub,
     };
     const encodedGithubAuthState = Buffer.from(

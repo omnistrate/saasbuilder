@@ -1,5 +1,6 @@
 const withYaml = require("next-plugin-yaml");
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   async redirects() {
     return [

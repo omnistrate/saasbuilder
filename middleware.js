@@ -23,7 +23,7 @@ export async function middleware(request) {
     // Prevent Redirecting to the Same Page
     if (path.startsWith("/signin")) return;
 
-    let redirectPath = "/signin";
+    const redirectPath = "/signin";
 
     const response = NextResponse.redirect(new URL(redirectPath, request.url));
     response.headers.set(`x-middleware-cache`, `no-cache`);
@@ -45,21 +45,30 @@ export async function middleware(request) {
     if (userData?.status !== 200) {
       return redirectToSignIn();
     }
-    //subscriptions page should only be accessible in PROD
-    if (request.nextUrl.pathname.startsWith("/subscriptions")) {
-      if (environmentType !== "PROD") {
-        const response = NextResponse.redirect(
-          new URL("/service-plans", request.url)
-        );
-        response.headers.set(`x-middleware-cache`, `no-cache`);
-        return response;
-      }
-    }
+
+    // Subscriptions page should only be accessible in PROD
+    // Removing This for Now
+    // if (request.nextUrl.pathname.startsWith("/subscriptions")) {
+    //   if (environmentType !== "PROD") {
+    //     const response = NextResponse.redirect(
+    //       new URL("/service-plans", request.url)
+    //     );
+    //     response.headers.set(`x-middleware-cache`, `no-cache`);
+    //     return response;
+    //   }
+    // }
 
     if (request.nextUrl.pathname.startsWith("/signin")) {
-      const response = NextResponse.redirect(
-        new URL("/service-plans", request.url)
-      );
+      let destination = request.nextUrl.searchParams.get("destination");
+
+      destination =
+        destination &&
+        (destination.startsWith("%2Fservice-plans") ||
+          destination.startsWith("/service-plans"))
+          ? decodeURIComponent(destination)
+          : "/service-plans";
+
+      const response = NextResponse.redirect(new URL(destination, request.url));
       response.headers.set(`x-middleware-cache`, `no-cache`);
       return response;
     }

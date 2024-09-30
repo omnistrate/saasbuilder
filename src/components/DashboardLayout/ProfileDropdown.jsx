@@ -161,16 +161,16 @@ function ProfileDropdown(props) {
               </DropdownMenuLink>
             </MenuItem>,
           ]}
-        {isProdEnvironment && (
-          <MenuItem key="Subscriptions">
-            <DropdownMenuLink href="/subscriptions">
-              <SubscriptionsIcon />
-              <Text weight="medium" size="small" color="#344054">
-                Subscriptions
-              </Text>
-            </DropdownMenuLink>
-          </MenuItem>
-        )}
+
+        <MenuItem key="Subscriptions">
+          <DropdownMenuLink href="/subscriptions">
+            <SubscriptionsIcon />
+            <Text weight="medium" size="small" color="#344054">
+              Subscriptions
+            </Text>
+          </DropdownMenuLink>
+        </MenuItem>
+
         {isProdEnvironment && accessPage && currentSubscription?.id && (
           <MenuItem
             sx={{
