@@ -1,58 +1,59 @@
 # syntax = docker/dockerfile:1
 
-# Throw-away build stage to reduce size of final image
-FROM node:20.11.1-slim AS build
+# Adjust NODE_VERSION as desired
+FROM node:20.11.1-slim as base
 
 # Next.js app lives here
 WORKDIR /app
 
 # Set production environment
-ENV NODE_ENV=production
+ENV NODE_ENV="production"
 ARG YARN_VERSION=1.22.21
 RUN npm install -g yarn@$YARN_VERSION --force
 
+
+# Throw-away build stage to reduce size of final image
+FROM base as build
+
 # Install packages needed to build node modules
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    apt-get update -qq && \
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update -qq
+
+RUN --mount=type=cache,target=/var/cache/apt \
     apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
 
-# Copy package.json and yarn.lock (if it exists)
-COPY package.json ./
-COPY yarn.lock* ./
-
 # Install node modules
-RUN --mount=type=cache,target=/root/.yarn \
-    if [ -f yarn.lock ]; then \
-        yarn install --frozen-lockfile --production=true --network-timeout 1000000; \
-    else \
-        yarn install --production=true --network-timeout 1000000; \
-    fi
+COPY --link package.json yarn.lock ./
+RUN --mount=type=cache,target=/root/.cache/yarn \
+    yarn install --frozen-lockfile --production=false --network-timeout 1000000
 
 # Copy application code
-COPY . .
+COPY --link . .
 
 # Build application
-RUN yarn run build
+RUN --mount=type=cache,target=/root/.cache/yarn \
+    yarn run build
+
+# Remove development dependencies
+RUN --mount=type=cache,target=/root/.cache/yarn \
+    yarn install --production=true --network-timeout 1000000
 
 # Final stage for app image
-FROM node:20.11.1-slim AS final
+FROM base
 
-# Next.js app lives here
-WORKDIR /app
-
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
 # Copy built application from the previous stage
 COPY --from=build /app /app
 
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs && \
-    chown -R nextjs:nodejs /app
+RUN chown -R nextjs:nodejs /app
 
 # Start the server by default, this can be overwritten at runtime
-USER nextjs
-
 EXPOSE 3000
+
+USER nextjs
 
 CMD [ "node", "server.js" ]
