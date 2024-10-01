@@ -11,4 +11,3 @@ README.md
 fly.toml
 fly.*.toml
 *.log
-yarn.lock

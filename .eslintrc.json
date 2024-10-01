@@ -20,7 +20,7 @@
         "functions": false
       }
     ],
-    "no-undef": "warn", // "error"
+    "no-undef": "error",
     "no-unused-vars": "error",
     "react/jsx-uses-vars": "warn",
     "no-duplicate-imports": "error",
