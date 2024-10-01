@@ -17,10 +17,11 @@ FROM base as build
 
 # Install packages needed to build node modules
 RUN --mount=type=cache,target=/var/cache/apt \
-    apt-get update -qq
-
-RUN --mount=type=cache,target=/var/cache/apt \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+    apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3 || \
+    (echo "Package installation failed. Contents of /var/log/apt/term.log:" && \
+     cat /var/log/apt/term.log && \
+     exit 1)
 
 # Install node modules
 COPY --link package.json yarn.lock ./
