@@ -234,6 +234,7 @@ export default function useResourceInstance(
                       resourceKey,
                       displayName: nodeId,
                       detailedHealth: detailedHealth,
+                      storageSize: node.storageSize,
                     });
                   });
                 } else {

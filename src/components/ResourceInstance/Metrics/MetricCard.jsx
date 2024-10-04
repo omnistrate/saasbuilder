@@ -6,7 +6,12 @@ function MetricCard(props) {
   const { title = "", value = "", unit = "" } = props;
 
   return (
-    <Card height="100%" flex="1">
+    <Card
+      flex="1"
+      sx={{
+        padding: "18px",
+      }}
+    >
       <Text
         size="small"
         color="#475467"
