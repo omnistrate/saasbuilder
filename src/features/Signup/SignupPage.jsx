@@ -13,7 +13,6 @@ import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLa
 import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
 import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
 import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
-import SignupNotification from "components/NonDashboardComponents/SignupNotification";
 import useSnackbar from "src/hooks/useSnackbar";
 import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
@@ -22,6 +21,7 @@ import GoogleLogin from "../Signin/components/GoogleLogin";
 import GithubLogin from "../Signin/components/GitHubLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "../Signin/constants";
 import ReCAPTCHA from "react-google-recaptcha";
+import SuccessBox from "src/components/SuccessBox/SuccessBox";
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -197,9 +197,19 @@ const SignupPage = (props) => {
     }
   }
 
+  if (showSuccess) {
+    return (
+      <MainImageLayout showArrow orgName={orgName} contentMaxWidth={650}>
+        <SuccessBox
+          title="Verify Your Email to Activate Your Account"
+          description="Thank you for signing up! We've sent a confirmation link to your email. Please check your inbox and click the link to verify your email address and complete the activation process."
+        />
+      </MainImageLayout>
+    );
+  }
+
   return (
     <>
-      <SignupNotification isVisible={showSuccess} />
       <MainImageLayout
         orgName={orgName}
         orgLogoURL={orgLogoURL}
