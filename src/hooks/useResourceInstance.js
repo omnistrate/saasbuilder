@@ -151,6 +151,7 @@ export default function useResourceInstance(
                 resourceKey: resourceKey,
                 displayName: nodeId,
                 detailedHealth: detailedHealth,
+                storageSize: node.storageSize,
               });
 
               nodeEndpointsList.push(node.endpoint);
@@ -221,6 +222,7 @@ export default function useResourceInstance(
                     const resourceName = topologyDetails.resourceName;
                     const resourceKey = topologyDetails.resourceKey;
                     const detailedHealth = node.detailedHealth;
+                    console.log("detailedHealth", node);
                     nodes.push({
                       id: nodeId,
                       nodeId: nodeId,

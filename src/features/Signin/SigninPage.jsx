@@ -7,7 +7,6 @@ import axios from "src/axios";
 import Cookies from "js-cookie";
 import * as Yup from "yup";
 import MainImageLayout from "components/NonDashboardComponents/Layout/MainImageLayout";
-import PageHeading from "components/NonDashboardComponents/PageHeading";
 import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
 import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
 import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
@@ -23,6 +22,7 @@ import { useEffect, useRef, useState } from "react";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import ReCAPTCHA from "react-google-recaptcha";
+import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -166,7 +166,7 @@ const SigninPage = (props) => {
       orgName={orgName}
       orgLogoURL={orgLogoURL}
     >
-      <PageHeading mt="24px">Login to your account</PageHeading>
+      <DisplayHeading mt="24px">Login to your account</DisplayHeading>
 
       <Stack component="form" gap="32px" mt="44px">
         {/* Signin Form */}
