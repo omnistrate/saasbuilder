@@ -222,7 +222,6 @@ export default function useResourceInstance(
                     const resourceName = topologyDetails.resourceName;
                     const resourceKey = topologyDetails.resourceKey;
                     const detailedHealth = node.detailedHealth;
-                    console.log("detailedHealth", node);
                     nodes.push({
                       id: nodeId,
                       nodeId: nodeId,
