@@ -100,7 +100,7 @@ const ResetPasswordPage = (props) => {
           </DisplayHeading>
           <PageDescription>
             If an account is associated with the provided email, a password
-            reset link has been sent. Please follow the instructions to reset
+            reset link will be sent. Please follow the instructions to reset
             your password.
           </PageDescription>
         </Stack>
