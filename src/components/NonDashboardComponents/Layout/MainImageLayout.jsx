@@ -56,7 +56,7 @@ const MainImageLayout = ({
             >
               {showArrow && (
                 <CurvedArrow
-                  style={{ position: "absolute", top: 0, left: "-60px" }}
+                  style={{ position: "absolute", top: "-80px", left: "0px" }}
                 />
               )}
               {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}

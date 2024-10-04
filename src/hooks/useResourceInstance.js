@@ -151,6 +151,7 @@ export default function useResourceInstance(
                 resourceKey: resourceKey,
                 displayName: nodeId,
                 detailedHealth: detailedHealth,
+                storageSize: node.storageSize,
               });
 
               nodeEndpointsList.push(node.endpoint);

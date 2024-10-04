@@ -3,9 +3,9 @@
 import { FC } from "react";
 import { Stack, Typography } from "@mui/material";
 
-import Button from "../Button/Button";
 import { Text } from "../Typography/Typography";
 import CheckboxIcon from "../Icons/Checkbox/CheckboxIcon";
+import SubmitButton from "../NonDashboardComponents/FormElementsV2/SubmitButton";
 
 type SuccessBoxProps = {
   title: string;
@@ -29,8 +29,8 @@ const SuccessBox: FC<SuccessBoxProps> = ({
       <Stack gap="8px">
         <Typography
           fontWeight="700"
-          fontSize="36px"
-          lineHeight="44px"
+          fontSize="28px"
+          lineHeight="40px"
           letterSpacing="-0.02em"
           color="#111827"
         >
@@ -42,17 +42,9 @@ const SuccessBox: FC<SuccessBoxProps> = ({
       </Stack>
 
       <Stack gap="20px">
-        <Button
-          href="/signin"
-          variant="contained"
-          style={{
-            fontSize: "16px",
-            lineHeight: "24px",
-            fontWeight: 600,
-          }}
-        >
-          Log In
-        </Button>
+        <SubmitButton href="/signin" loading={false}>
+          Go to Login
+        </SubmitButton>
         {footer}
       </Stack>
     </Stack>

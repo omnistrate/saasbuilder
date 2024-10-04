@@ -13,7 +13,6 @@ import CenterContentLayout from "components/NonDashboardComponents/Layout/Center
 import { customerUserResetPassword } from "src/api/customer-user";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRef, useState } from "react";
-import Button from "src/components/Button/Button";
 import { Text } from "src/components/Typography/Typography";
 import { styleConfig } from "src/providerConfig";
 
@@ -104,16 +103,7 @@ const ResetPasswordPage = (props) => {
             your password.
           </PageDescription>
         </Stack>
-        <Button
-          href="/signin"
-          variant="contained"
-          style={{
-            fontSize: "16px",
-            fontWeight: 600,
-          }}
-        >
-          Back to Login
-        </Button>
+        <SubmitButton href="/signin">Go to Login</SubmitButton>
 
         <Text
           size="small"
