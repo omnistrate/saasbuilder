@@ -42,11 +42,8 @@ function Connectivity(props) {
             (port) => port.resourceName === resourceName && port.ports
           );
           if (matchingResourcePort) {
-            //on access side filter out omnistrate observability
-            if (
-              context === "access" &&
-              resourceName === "Omnistrate Observability"
-            ) {
+            //filter out omnistrate observability
+            if (resourceName === "Omnistrate Observability") {
               return;
             }
             otherResourceFilteredPorts.push(matchingResourcePort);
@@ -55,7 +52,7 @@ function Connectivity(props) {
         }
       });
       return [otherResourceFilteredPorts, otherResourceFilteredEndpoints];
-    }, [context, ports, globalEndpoints]);
+    }, [ports, globalEndpoints]);
 
   const noConnectivityData =
     !globalEndpoints?.primary &&
@@ -281,7 +278,7 @@ function Connectivity(props) {
     isPortsExpanded,
     privateNetworkId,
     refetchInstance,
-    queryData
+    queryData,
   ]);
 
   if (noConnectivityData) {

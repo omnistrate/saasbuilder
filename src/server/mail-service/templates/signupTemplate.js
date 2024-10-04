@@ -31,6 +31,7 @@ async function getSignUpMailContent(signUpEventObj, orgLogoURL) {
     hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
     user_signup: `${baseURL}/mail/user-signup.png`,
     get_started: activationURL,
+    username: signUpEventObj.userName || signUpEventObj.eventPayload.user_name,
   });
 
   // const message = `

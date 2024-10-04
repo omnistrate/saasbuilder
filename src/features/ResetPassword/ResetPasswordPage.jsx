@@ -13,6 +13,12 @@ import CenterContentLayout from "components/NonDashboardComponents/Layout/Center
 import { customerUserResetPassword } from "src/api/customer-user";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRef, useState } from "react";
+import Button from "src/components/Button/Button";
+import { Text } from "src/components/Typography/Typography";
+import { styleConfig } from "src/providerConfig";
+
+import Confetti from "public/assets/images/non-dashboard/confetti.svg";
+import Image from "next/image";
 
 const resetPasswordValidationSchema = Yup.object({
   email: Yup.string()
@@ -27,18 +33,18 @@ const ResetPasswordPage = (props) => {
   const reCaptchaRef = useRef(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const resetPasswordMutation = useMutation(
     (payload) => {
+      setShowSuccess(false);
       return customerUserResetPassword(payload);
     },
     {
       onSuccess: () => {
         /*eslint-disable-next-line no-use-before-define*/
         formik.resetForm();
-        snackbar.showSuccess(
-          "If an account associated with this email exists, you will be sent a link to reset your password"
-        );
+        setShowSuccess(true);
       },
       onError: (error) => {
         if (error.response.data && error.response.data.message) {
@@ -76,6 +82,56 @@ const ResetPasswordPage = (props) => {
   });
 
   const { values, touched, errors, handleChange, handleBlur } = formik;
+
+  if (showSuccess) {
+    return (
+      <CenterContentLayout orgName={orgName} pageTitle="Reset Password">
+        <Image
+          src={Confetti}
+          alt="Confetti"
+          width={265}
+          height={140}
+          style={{ margin: "0 auto" }}
+        />
+
+        <Stack gap="16px">
+          <DisplayHeading>
+            Check Your Email for a Password Reset Link
+          </DisplayHeading>
+          <PageDescription>
+            If an account is associated with the provided email, a password
+            reset link has been sent. Please follow the instructions to reset
+            your password.
+          </PageDescription>
+        </Stack>
+        <Button
+          href="/signin"
+          variant="contained"
+          style={{
+            fontSize: "16px",
+            fontWeight: 600,
+          }}
+        >
+          Back to Login
+        </Button>
+
+        <Text
+          size="small"
+          weight="medium"
+          color="#4B5563"
+          style={{ textAlign: "center" }}
+        >
+          Didn&apos;t get a reset password link?{" "}
+          <span
+            onClick={() => setShowSuccess(false)}
+            style={{ color: styleConfig.primaryColor, cursor: "pointer" }}
+          >
+            Try again
+          </span>
+        </Text>
+      </CenterContentLayout>
+    );
+  }
 
   return (
     <CenterContentLayout
