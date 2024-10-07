@@ -9,7 +9,7 @@ import {
   viewEnum,
 } from "../../utils/isAllowedByRBAC";
 import {
-  getAccessContorlRoute,
+  getAccessControlRoute,
   getDashboardRoute,
   getEventRoute,
   getResourceRoute,
@@ -51,7 +51,7 @@ function MarketplaceServiceSidebar(props) {
     viewEnum.Access_AccessControl
   );
 
-  const accessUrlLink = getAccessContorlRoute(
+  const accessUrlLink = getAccessControlRoute(
     serviceId,
     environmentId,
     productTierId,

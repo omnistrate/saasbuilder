@@ -38,7 +38,7 @@ export function getEventRoute(
 ) {
   return `/access/${serviceId}/${environmentId}/events?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }
-export function getAccessContorlRoute(
+export function getAccessControlRoute(
   serviceId,
   environmentId,
   productTierId,

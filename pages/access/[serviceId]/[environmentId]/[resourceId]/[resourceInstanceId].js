@@ -31,6 +31,7 @@ import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI
 import { checkIfResouceIsBYOA } from "src/utils/access/byoaResource";
 import Link from "next/link";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
+import AuditLogs from "src/components/ResourceInstance/AuditLogs/AuditLogs";
 
 export const getServerSideProps = async () => {
   return {
@@ -359,6 +360,7 @@ function ResourceInstance() {
       />
       <Tabs value={currentTab} sx={{ marginTop: "28px" }}>
         {Object.entries(tabs).map(([key, value]) => {
+
           return (
             <Tab
               key={key}
@@ -373,7 +375,6 @@ function ResourceInstance() {
                     resourceId,
                     resourceInstanceId,
                     key,
-                    currentSource,
                     subscriptionData?.id
                   )
                 );
@@ -459,6 +460,16 @@ function ResourceInstance() {
           mainResourceHasCompute={resourceInstanceData?.mainResourceHasCompute}
         />
       )}
+
+      {currentTab === tabs.auditLogs && (
+        <AuditLogs
+          instanceId={resourceInstanceId}
+          subscriptionId={subscriptionId}
+          serviceId={serviceId}
+          environmentId={environmentId}
+          productTierId={productTierId}
+        />
+      )}
       <SideDrawerRight
         size="xlarge"
         open={supportDrawerOpen}
@@ -498,20 +509,14 @@ function getTabs(
     delete tabs.nodes;
   }
 
+  tabs["auditLogs"] = "Audit Logs";
+
   return tabs;
 }
-
-const TAB_LABEL_MAP = {
-  "Resource Instance Details": "Resource Instance Details",
-  Connectivity: "Connectivity",
-  Containers: "Containers",
-  Metrics: "Metrics",
-  Logs: "Logs",
-};
 
 function getTabLabel(value, isResourceBYOA) {
   if (value === "Resource Instance Details" && isResourceBYOA) {
     return "Account Instance Details";
   }
-  return TAB_LABEL_MAP[value];
+  return value;
 }
