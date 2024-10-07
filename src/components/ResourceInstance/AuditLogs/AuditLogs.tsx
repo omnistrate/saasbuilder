@@ -217,7 +217,8 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
               serviceId,
               environmentId,
               productTierId,
-              subscriptionId
+              subscriptionId,
+              userId
             );
           }
 
@@ -228,7 +229,11 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
           }
 
           return (
-            <GridCellExpand href={pageLink} value={userDisplayLabel || "-"} />
+            <GridCellExpand
+              href={pageLink}
+              target="_blank"
+              value={userDisplayLabel || "System"}
+            />
           );
         },
       }),

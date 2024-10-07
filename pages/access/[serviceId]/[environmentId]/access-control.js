@@ -47,6 +47,7 @@ import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscription
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import HeaderTitle from "src/components/Headers/Header";
 import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
+import SearchInput from "src/components/DataGrid/SearchInput";
 
 export const getServerSideProps = async () => {
   return {
@@ -56,8 +57,14 @@ export const getServerSideProps = async () => {
 
 function AccessControl() {
   const router = useRouter();
-  const { serviceId, environmentId, source, productTierId, subscriptionId } =
-    router.query;
+  const {
+    serviceId,
+    environmentId,
+    source,
+    productTierId,
+    subscriptionId,
+    searchUserId,
+  } = router.query;
 
   const snackbar = useSnackbar();
 
@@ -86,6 +93,7 @@ function AccessControl() {
   const [modifyFormikValue, setModifyFormikValue] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
   const [isDialog, setDialog] = React.useState(false);
+  const [searchText, setSearchText] = useState("");
 
   // const selectUser = useSelector(selectUserrootData);
   const role = getEnumFromUserRoleString(subscriptionData?.roleType);
@@ -113,6 +121,12 @@ function AccessControl() {
       setCurrentSource(source);
     }
   }, [source]);
+
+  useEffect(() => {
+    if (searchUserId) {
+      setSearchText(searchUserId);
+    }
+  }, [searchUserId]);
 
   const createUserInvitesMutation = useMutation(async (data) => {
     try {
@@ -260,6 +274,23 @@ function AccessControl() {
       resourceInstance: "All",
     };
   });
+
+  const filteredUsers = useMemo(() => {
+    let users = inputRows || [];
+
+    if (searchText) {
+      const searchTerm = searchText.toLowerCase();
+
+      users = users.filter((user) => {
+        return (
+          user.name.includes(searchTerm) ||
+          user.emailAddress.includes(searchTerm)
+        );
+      });
+    }
+
+    return users;
+  }, [inputRows, searchText]);
 
   const getNewEnvVariable = () => {
     return {
@@ -726,10 +757,10 @@ function AccessControl() {
                   <P size="large" sx={{ color: "#101828", marginRight: 1 }}>
                     {"Manage Access"}
                   </P>
-                  {inputRows.length > 0 && (
+                  {filteredUsers.length > 0 && (
                     <Chip
                       size="small"
-                      label={`${inputRows.length} Users`}
+                      label={`${filteredUsers.length} Users`}
                       sx={{
                         background: "#EFF2FF",
 
@@ -747,29 +778,18 @@ function AccessControl() {
                   {"Manage your Users and their account permissions here."}
                 </P>
               </Box>
-
-              {/* <Button
-              sx={{
-                marginRight: "10px",
-                background: "white",
-                color: "#344054",
-                boxShadow: "initial",
-                borderWidth: "2px",
-                borderStyle: "solid",
-                borderColor: "#EAECF0",
-                alignSelf: "center",
-              }}
-              startIcon={<CloudDownloadOutlinedIcon />}
-              onClick={() => {
-                openDrawer(drawerType.view);
-              }}
-            >
-              Download CSV
-            </Button> */}
+              <Stack direction="row" alignItems="center" gap="12px">
+                <SearchInput
+                  placeholder="Search by Name/Email"
+                  searchText={searchText}
+                  setSearchText={setSearchText}
+                  width="250px"
+                />
+              </Stack>
             </Stack>
             <div style={{ height: 400, width: "100%" }}>
               <DataGrid
-                rows={inputRows}
+                rows={filteredUsers}
                 columns={inputColumns}
                 pageSize={10}
                 rowsPerPageOptions={[10]}
@@ -785,7 +805,7 @@ function AccessControl() {
                     setSelectionModel(result);
                     const index = selection.length == 1 ? 0 : 1;
 
-                    inputRows?.map((rowObj) => {
+                    filteredUsers?.map((rowObj) => {
                       if (rowObj) {
                         if (rowObj["id"] == selection[index]) {
                           setModifyFormikValue(rowObj);
