@@ -232,7 +232,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
             <GridCellExpand
               href={pageLink}
               target="_blank"
-              value={userDisplayLabel || "System"}
+              value={userDisplayLabel || "-"}
             />
           );
         },
