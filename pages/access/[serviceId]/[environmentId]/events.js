@@ -36,8 +36,11 @@ function Events() {
 
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
   const [currentTabValue, setCurrentTabValue] = useState(false);
-  const { data: serviceOffering, isLoading: isServiceOfferingLoading } =
-    useServiceOffering(serviceId, productTierId);
+  const {
+    data: serviceOffering,
+    isLoading: isServiceOfferingLoading,
+    refetch,
+  } = useServiceOffering(serviceId, productTierId);
   const events = useSelector(selectEvents);
   const [currentSource, setCurrentSource] = React.useState("");
 
@@ -227,8 +230,12 @@ function Events() {
       <Divider sx={{ mt: 2.5, mb: 4 }} />
 
       <EventsTable
-        title="List of Events"
+        serviceId={serviceId}
+        environmentId={environmentId}
+        productTierId={productTierId}
+        subscriptionId={subscriptionData?.id}
         events={events}
+        refetchEvents={refetch}
         isRefetching={isEventsRefetching}
       />
       <SideDrawerRight

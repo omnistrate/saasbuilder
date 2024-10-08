@@ -4,6 +4,7 @@ export type AccessEvent = {
   environmentId?: string;
   id: string;
   instanceId: string;
+  resourceInstanceId?: string;
   message: string;
   orgId?: string;
   orgName?: string;

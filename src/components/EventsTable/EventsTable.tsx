@@ -1,40 +1,40 @@
-import { FC, useMemo, useState } from "react";
 import { Box, IconButton, Stack } from "@mui/material";
-import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
-import formatDateUTC from "src/utils/formatDateUTC";
-import { AccessEvent, EventType } from "src/types/event";
-import EventMessageChip from "src/components/EventsTable/EventMessageChip";
-import SearchInput from "src/components/DataGrid/SearchInput";
+import EventMessageChip from "./EventMessageChip";
 import { createColumnHelper } from "@tanstack/react-table";
+import { AccessEvent, EventType } from "src/types/event";
+import { FC, useMemo, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import DataTable from "src/components/DataTable/DataTable";
-import { Range } from "react-date-range";
+import EventTypeChip from "./EventTypeChip";
+import formatDateUTC from "src/utils/formatDateUTC";
+import useUserData from "src/hooks/usersData";
+import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
+import GridCellExpand from "../GridCellExpand/GridCellExpand";
 import DateRangePicker, {
   initialRangeState,
-} from "src/components/DateRangePicker/DateRangePicker";
-import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
-import AuditLogsEventFilterDropdown from "./components/AuditLogsEventFilterDropdown";
-import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
-import { SetState } from "src/types/common/reactGenerics";
+} from "../DateRangePicker/DateRangePicker";
+import { Range } from "react-date-range";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import useUserData from "src/hooks/usersData";
-import useAccessInstanceAuditLogs from "./hooks/useAccessInstanceAuditLogs";
-import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
-import EventTypeChip from "../../EventsTable/EventTypeChip";
+import DataTable from "src/components/DataTable/DataTable";
 import JSONView from "src/components/JSONView/JSONView";
 import { OnCopyProps } from "react-json-view";
+import { SetState } from "src/types/common/reactGenerics";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import SearchInput from "src/components/DataGrid/SearchInput";
+import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
+import AuditLogsEventFilterDropdown from "../ResourceInstance/AuditLogs/components/AuditLogsEventFilterDropdown";
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
+const columnHelper = createColumnHelper<AccessEvent>();
 
-type AuditLogsTableHeaderProps = {
+type EventsTableHeaderProps = {
   count: number;
   searchText: string;
   setSearchText: SetState<string>;
-  refetchLogs: () => void;
+  refetchEvents: () => void;
   isRefetching: boolean;
   selectedDateRange: Range;
   setSelectedDateRange: SetState<Range>;
@@ -42,14 +42,12 @@ type AuditLogsTableHeaderProps = {
   setSelectedEventTypes: SetState<EventType[]>;
 };
 
-const columnHelper = createColumnHelper<AccessEvent>();
-
-const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
+const EventsTableHeader: FC<EventsTableHeaderProps> = (props) => {
   const {
     count,
     searchText,
     setSearchText,
-    refetchLogs,
+    refetchEvents,
     isRefetching,
     selectedDateRange,
     setSelectedDateRange,
@@ -65,7 +63,7 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
       p="20px 24px 14px"
       borderBottom="1px solid #EAECF0"
     >
-      <DataGridHeaderTitle title="List of Audit Logs" count={count} />
+      <DataGridHeaderTitle title="List of Events" count={count} />
       <Stack direction="row" alignItems="center" gap="12px">
         <SearchInput
           searchText={searchText}
@@ -73,7 +71,7 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
           placeholder="Search by Message/User"
           width="250px"
         />
-        <RefreshWithToolTip refetch={refetchLogs} disabled={isRefetching} />
+        <RefreshWithToolTip refetch={refetchEvents} disabled={isRefetching} />
         <DateRangePicker
           dateRange={selectedDateRange}
           setDateRange={setSelectedDateRange}
@@ -85,14 +83,6 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
       </Stack>
     </Stack>
   );
-};
-
-type AuditLogsTabProps = {
-  instanceId: string;
-  subscriptionId: string;
-  serviceId: string;
-  environmentId: string;
-  productTierId: string;
 };
 
 function DetailTableRowView(props: { rowData: AccessEvent }) {
@@ -120,28 +110,34 @@ function DetailTableRowView(props: { rowData: AccessEvent }) {
   );
 }
 
-const AuditLogs: FC<AuditLogsTabProps> = ({
-  instanceId,
-  subscriptionId,
-  serviceId,
-  environmentId,
-  productTierId,
-}) => {
+type EventsTableProps = {
+  events: AccessEvent[];
+  serviceId: string;
+  environmentId: string;
+  productTierId: string;
+  subscriptionId: string;
+  refetchEvents: () => void;
+  isRefetching: boolean;
+};
+
+const EventsTable: FC<EventsTableProps> = (props) => {
+  const {
+    serviceId,
+    environmentId,
+    productTierId,
+    subscriptionId,
+    events,
+    isRefetching,
+    refetchEvents,
+  } = props;
+
   const [searchText, setSearchText] = useState("");
   const [selectedDateRange, setSelectedDateRange] =
     useState<Range>(initialRangeState);
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
-  const data = useUserData();
-  const currentUserOrgId = data.userData?.orgId;
 
-  const {
-    data: events = [],
-    isFetching: isFetchingEvents,
-    refetch: refetchLogs,
-  } = useAccessInstanceAuditLogs({
-    instanceId,
-    subscriptionId,
-  });
+  const userData = useUserData();
+  const currentUserOrgId = userData.userData?.orgId;
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -150,7 +146,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
         header: "",
         cell: (data) => {
           const isRowExpandible = data.row.getCanExpand();
-          return (
+          return isRowExpandible ? (
             <IconButton
               aria-label="expand row"
               size="small"
@@ -163,11 +159,24 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
                 <AddCircleOutlineIcon sx={{ fontSize: "20px" }} />
               )}
             </IconButton>
+          ) : (
+            ""
           );
         },
         meta: {
           width: 75,
         },
+      }),
+      columnHelper.accessor("resourceName", {
+        id: "resourceName",
+        header: "Resource Name",
+        meta: {
+          flex: 0.7,
+        },
+      }),
+      columnHelper.accessor("resourceInstanceId", {
+        id: "resourceInstanceId",
+        header: "Resource Instance ID",
       }),
       columnHelper.accessor("eventSource", {
         id: "type",
@@ -178,6 +187,9 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
           ) : (
             "-"
           );
+        },
+        meta: {
+          flex: 0.8,
         },
       }),
       columnHelper.accessor((row) => formatDateUTC(row.time), {
@@ -291,26 +303,27 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
         columns={dataTableColumns}
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}
-        noRowsText="No Audit Logs available"
+        noRowsText="No Events available"
         getRowCanExpand={(rowData) =>
           Boolean(rowData.original.workflowFailures?.length > 0)
         }
-        HeaderComponent={AuditLogsTableHeader}
+        HeaderComponent={EventsTableHeader}
         headerProps={{
           count: filteredEvents.length,
           searchText: searchText,
           setSearchText: setSearchText,
-          refetchLogs: refetchLogs,
+          refetchLogs: refetchEvents,
           selectedDateRange: selectedDateRange,
           setSelectedDateRange: setSelectedDateRange,
           selectedEventTypes: selectedEventTypes,
           setSelectedEventTypes: setSelectedEventTypes,
-          isRefetching: isFetchingEvents,
+          isRefetching: isRefetching,
+          refetchEvents: refetchEvents,
         }}
-        isLoading={isFetchingEvents}
+        isLoading={isRefetching}
       />
     </Box>
   );
 };
 
-export default AuditLogs;
+export default EventsTable;

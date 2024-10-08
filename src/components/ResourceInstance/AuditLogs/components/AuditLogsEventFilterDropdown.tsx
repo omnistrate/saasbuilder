@@ -7,7 +7,7 @@ import { SelectChangeEvent, Stack, styled } from "@mui/material";
 import { SetState } from "src/types/common/reactGenerics";
 import Chip from "src/components/Chip/Chip";
 import { Text } from "src/components/Typography/Typography";
-import EventTypeChip from "./components/EventTypeChip";
+import EventTypeChip from "../../../EventsTable/EventTypeChip";
 
 const MenuItem = styled(MuiMenuItem)({
   borderRadius: 6,

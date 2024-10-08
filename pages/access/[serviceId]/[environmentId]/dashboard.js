@@ -12,7 +12,6 @@ import useServiceOfferingEvents from "../../../../src/hooks/useServiceOfferingEv
 import { selectEvents } from "../../../../src/slices/eventsSlice";
 import { useSelector } from "react-redux";
 import useServiceOfferingResourceInstances from "../../../../src/hooks/useServiceOfferingResourceInstances";
-
 import SideDrawerRight from "../../../../src/components/SideDrawerRight/SideDrawerRight";
 import { AccessSupport } from "../../../../src/components/Access/AccessSupport";
 import {
@@ -51,18 +50,21 @@ function Dashboard() {
 
   const serviceHealthQuery = useServiceHealth();
 
-  const { isLoading: isEventsLoading, isRefetching: isEventsRefetching } =
-    useServiceOfferingEvents(
-      serviceId,
-      serviceOffering?.serviceProviderId,
-      serviceOffering?.serviceURLKey,
-      serviceOffering?.serviceAPIVersion,
-      serviceOffering?.serviceEnvironmentURLKey,
-      serviceOffering?.serviceModelURLKey,
-      serviceOffering?.productTierURLKey,
-      serviceOffering?.resourceParameters,
-      subscriptionData?.id
-    );
+  const {
+    isLoading: isEventsLoading,
+    isRefetching: isEventsRefetching,
+    refetch,
+  } = useServiceOfferingEvents(
+    serviceId,
+    serviceOffering?.serviceProviderId,
+    serviceOffering?.serviceURLKey,
+    serviceOffering?.serviceAPIVersion,
+    serviceOffering?.serviceEnvironmentURLKey,
+    serviceOffering?.serviceModelURLKey,
+    serviceOffering?.productTierURLKey,
+    serviceOffering?.resourceParameters,
+    subscriptionData?.id
+  );
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);
   };
@@ -245,8 +247,12 @@ function Dashboard() {
         numResources={serviceOffering?.resourceParameters.length}
       />
       <EventsTable
-        title="Top 10 Recent Events"
-        events={events.filter((e, i) => i < 10)}
+        serviceId={serviceId}
+        environmentId={environmentId}
+        productTierId={productTierId}
+        subscriptionId={subscriptionData?.id}
+        events={events}
+        refetchEvents={refetch}
         isRefetching={isEventsRefetching}
       />
       <SideDrawerRight
