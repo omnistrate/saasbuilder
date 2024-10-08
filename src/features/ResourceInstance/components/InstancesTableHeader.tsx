@@ -135,6 +135,14 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
       !isCurrentResourceBYOA
     ) {
       actionsObj.restart = true;
+    }
+
+    if (
+      (status === "RUNNING" || status === "FAILED") &&
+      isUpdateAllowedByRBAC &&
+      !isCurrentResourceBYOA
+    ) {
+      actionsObj.restart = true;
       actionsObj.modify = true;
     }
 
