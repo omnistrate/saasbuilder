@@ -1,6 +1,6 @@
 import axios from "../axios";
 
-export function getEventIDs(resourceInstanceId, subscriptionId) {
+export function getResourceInstanceEvents(resourceInstanceId, subscriptionId) {
   const queryParams = {};
 
   if (subscriptionId) {

@@ -15,6 +15,7 @@ import "../styles/globals.css";
 import { theme as nonDashboardTheme } from "../styles/non-dashboard-theme";
 import "../styles/quill-editor.css";
 import "../styles/nprogress.css";
+import "../src/components/DateRangePicker/date-range-picker-styles.css";
 import { theme as dashboardTheme } from "../styles/theme";
 import _ from "lodash";
 import ProviderFavicon from "src/components/ProviderFavicon/ProviderFavicon";
