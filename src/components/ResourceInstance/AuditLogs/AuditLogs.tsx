@@ -65,7 +65,7 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
       p="20px 24px 14px"
       borderBottom="1px solid #EAECF0"
     >
-      <DataGridHeaderTitle title="List of Audit Logs" count={count} />
+      <DataGridHeaderTitle title="List of Events" count={count} />
       <Stack direction="row" alignItems="center" gap="12px">
         <SearchInput
           searchText={searchText}
@@ -150,7 +150,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
         header: "",
         cell: (data) => {
           const isRowExpandible = data.row.getCanExpand();
-          return (
+          return isRowExpandible ? (
             <IconButton
               aria-label="expand row"
               size="small"
@@ -163,6 +163,8 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
                 <AddCircleOutlineIcon sx={{ fontSize: "20px" }} />
               )}
             </IconButton>
+          ) : (
+            ""
           );
         },
         meta: {
@@ -291,7 +293,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
         columns={dataTableColumns}
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}
-        noRowsText="No Audit Logs available"
+        noRowsText="No Events available"
         getRowCanExpand={(rowData) =>
           Boolean(rowData.original.workflowFailures?.length > 0)
         }
