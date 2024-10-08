@@ -509,7 +509,7 @@ function getTabs(
     delete tabs.nodes;
   }
 
-  tabs["auditLogs"] = "Audit Logs";
+  tabs["auditLogs"] = "Events";
 
   return tabs;
 }
