@@ -100,7 +100,7 @@ function CloudProviderAccountOrgIdModal(props) {
     </>
   ) : (
     <StyledLink
-      href="https://github.com/omnistrate/account-setup"
+      href="https://github.com/omnistrate-oss/account-setup"
       target="_blank"
       rel="noopener noreferrer"
     >
