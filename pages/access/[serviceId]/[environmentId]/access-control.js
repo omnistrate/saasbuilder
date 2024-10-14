@@ -264,7 +264,7 @@ function AccessControl() {
     },
   ];
 
-  const inputRows = users.map((data, i) => {
+  const inputRows = users.map((data) => {
     return {
       id: data.userId,
       name: data.name ? data.name : "Unregistered User",

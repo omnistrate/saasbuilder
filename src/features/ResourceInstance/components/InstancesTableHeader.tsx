@@ -161,7 +161,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     }
 
     return actionsObj;
-  }, [selectedInstance, role, isCurrentResourceBYOA, view]);
+  }, [selectedInstance, role, isCurrentResourceBYOA, view, selectedResourceId]);
 
   return (
     <Box>

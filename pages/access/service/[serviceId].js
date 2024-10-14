@@ -483,7 +483,6 @@ function MarketplaceService() {
     serviceId,
     selectedResource,
     resourceInstanceList,
-    currentSource,
     environmentId,
     isCurrentResourceBYOA,
     subscriptionData?.id,
