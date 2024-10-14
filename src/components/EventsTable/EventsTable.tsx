@@ -214,14 +214,16 @@ const EventsTable: FC<EventsTableProps> = (props) => {
         header: "User",
         cell: (data) => {
           const userId = data.row.original.userId;
-          const isUserOmnistrateSystem = userId === "user-99999999";
+          const userName = data.row.original.userName;
+          const orgName = data.row.original.orgName;
+
+          const isUserOmnistrateSystem =
+            userName === "System" && orgName === "System";
 
           const isUserServiceProvider =
             data.row.original.orgId &&
             currentUserOrgId !== data.row.original.orgId &&
             !isUserOmnistrateSystem;
-
-          const userName = data.row.original.userName;
 
           let pageLink = null;
           if (!isUserServiceProvider && !isUserOmnistrateSystem && userId) {
