@@ -45,6 +45,7 @@ type InstancesTableHeaderProps = {
   isResourceParameters?: boolean;
   isVisibleRestore?: boolean;
   isVisibleCapacity?: boolean;
+  selectedResourceId: string;
 };
 
 const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
@@ -71,6 +72,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
   isResourceParameters,
   isVisibleRestore,
   isVisibleCapacity = true,
+  selectedResourceId,
 }) => {
   const role = getEnumFromUserRoleString(roleType);
   const view = viewEnum.Access_Resources;
@@ -98,7 +100,8 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     }
 
     const cliManagedResource = CLI_MANAGED_RESOURCES.includes(
-      selectedInstance.resourceType
+      selectedInstance?.detailedNetworkTopology[selectedResourceId]
+        ?.resourceType
     );
 
     const isUpdateAllowedByRBAC = isOperationAllowedByRBAC(
@@ -142,7 +145,6 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
       isUpdateAllowedByRBAC &&
       !isCurrentResourceBYOA
     ) {
-      actionsObj.restart = true;
       actionsObj.modify = true;
     }
 
