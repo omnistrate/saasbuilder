@@ -53,7 +53,7 @@ function Dashboard() {
   const {
     isLoading: isEventsLoading,
     isRefetching: isEventsRefetching,
-    refetch,
+    refetch: refetchEvents,
   } = useServiceOfferingEvents(
     serviceId,
     serviceOffering?.serviceProviderId,
@@ -104,6 +104,8 @@ function Dashboard() {
 
     return enabled;
   }, [serviceOffering]);
+
+  const isRootSubscription = subscriptionData?.roleType === "root";
 
   const isLoading =
     isServiceOfferingLoading ||
@@ -252,8 +254,9 @@ function Dashboard() {
         productTierId={productTierId}
         subscriptionId={subscriptionData?.id}
         events={events}
-        refetchEvents={refetch}
+        refetchEvents={refetchEvents}
         isRefetching={isEventsRefetching}
+        isRootSubscription={isRootSubscription}
       />
       <SideDrawerRight
         size="xlarge"

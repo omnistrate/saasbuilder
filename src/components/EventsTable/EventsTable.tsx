@@ -7,7 +7,6 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import EventTypeChip from "./EventTypeChip";
 import formatDateUTC from "src/utils/formatDateUTC";
-import useUserData from "src/hooks/usersData";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 import GridCellExpand from "../GridCellExpand/GridCellExpand";
 import DateRangePicker, {
@@ -118,6 +117,7 @@ type EventsTableProps = {
   subscriptionId: string;
   refetchEvents: () => void;
   isRefetching: boolean;
+  isRootSubscription: boolean;
 };
 
 const EventsTable: FC<EventsTableProps> = (props) => {
@@ -129,15 +129,13 @@ const EventsTable: FC<EventsTableProps> = (props) => {
     events,
     isRefetching,
     refetchEvents,
+    isRootSubscription,
   } = props;
 
   const [searchText, setSearchText] = useState("");
   const [selectedDateRange, setSelectedDateRange] =
     useState<Range>(initialRangeState);
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
-
-  const userData = useUserData();
-  const currentUserOrgId = userData.userData?.orgId;
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -220,13 +218,8 @@ const EventsTable: FC<EventsTableProps> = (props) => {
           const isUserOmnistrateSystem =
             userName === "System" && orgName === "System";
 
-          const isUserServiceProvider =
-            data.row.original.orgId &&
-            currentUserOrgId !== data.row.original.orgId &&
-            !isUserOmnistrateSystem;
-
           let pageLink = null;
-          if (!isUserServiceProvider && !isUserOmnistrateSystem && userId) {
+          if (!isUserOmnistrateSystem && userId) {
             pageLink = getAccessControlRoute(
               serviceId,
               environmentId,
@@ -236,15 +229,11 @@ const EventsTable: FC<EventsTableProps> = (props) => {
             );
           }
 
-          let userDisplayLabel = userName;
-
-          if (isUserServiceProvider) {
-            userDisplayLabel = `Service Provider`;
-          }
+          const userDisplayLabel = userName;
 
           return (
             <GridCellExpand
-              href={pageLink}
+              href={isRootSubscription ? pageLink : ""}
               target="_blank"
               value={userDisplayLabel || "-"}
             />
@@ -253,11 +242,11 @@ const EventsTable: FC<EventsTableProps> = (props) => {
       }),
     ];
   }, [
-    currentUserOrgId,
     serviceId,
     environmentId,
     productTierId,
     subscriptionId,
+    isRootSubscription,
   ]);
 
   const filteredEvents = useMemo(() => {

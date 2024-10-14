@@ -266,7 +266,7 @@ function AccessControl() {
 
   const inputRows = users.map((data, i) => {
     return {
-      id: i,
+      id: data.userId,
       name: data.name ? data.name : "Unregistered User",
       role: data.roleType,
       emailAddress: data.email,
@@ -283,8 +283,9 @@ function AccessControl() {
 
       users = users.filter((user) => {
         return (
-          user.name.includes(searchTerm) ||
-          user.emailAddress.includes(searchTerm)
+          user.name.toLowerCase().includes(searchTerm) ||
+          user.emailAddress.toLowerCase().includes(searchTerm) ||
+          user.id.toLowerCase().includes(searchTerm)
         );
       });
     }
