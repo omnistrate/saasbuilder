@@ -1696,6 +1696,7 @@ function MarketplaceService() {
                     isDeprecated: selectedResource?.isDeprecated,
                     isResourceParameters: service?.resourceParameters,
                     isVisibleRestore: selectedResource?.isBackupEnabled,
+                    selectedResourceId: selectedResource?.id,
                   },
                 }}
                 noRowsText={`No instance of ${selectedResource.name} found for ${service?.serviceName}`}
