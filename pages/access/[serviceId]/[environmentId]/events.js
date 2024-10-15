@@ -36,11 +36,8 @@ function Events() {
 
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
   const [currentTabValue, setCurrentTabValue] = useState(false);
-  const {
-    data: serviceOffering,
-    isLoading: isServiceOfferingLoading,
-    refetch,
-  } = useServiceOffering(serviceId, productTierId);
+  const { data: serviceOffering, isLoading: isServiceOfferingLoading } =
+    useServiceOffering(serviceId, productTierId);
   const events = useSelector(selectEvents);
   const [currentSource, setCurrentSource] = React.useState("");
 
@@ -75,8 +72,11 @@ function Events() {
     }
   }, [source]);
 
-  const { isLoading: isEventsLoading, isRefetching: isEventsRefetching } =
-    eventsQuery;
+  const {
+    isLoading: isEventsLoading,
+    isRefetching: isEventsRefetching,
+    refetch : refetchEvents,
+  } = eventsQuery;
 
   const isCustomNetworkEnabled = useMemo(() => {
     let enabled = false;
@@ -90,6 +90,8 @@ function Events() {
 
     return enabled;
   }, [serviceOffering]);
+
+  const isRootSubscription = subscriptionData?.roleType === "root";
 
   const isLoading = isServiceOfferingLoading || isEventsLoading;
 
@@ -235,8 +237,9 @@ function Events() {
         productTierId={productTierId}
         subscriptionId={subscriptionData?.id}
         events={events}
-        refetchEvents={refetch}
+        refetchEvents={refetchEvents}
         isRefetching={isEventsRefetching}
+        isRootSubscription={isRootSubscription}
       />
       <SideDrawerRight
         size="xlarge"
