@@ -1056,23 +1056,29 @@ function MarketplaceService() {
         const cloudProviderResourceInstance =
           cloudProviderResourceInstanceResponse.data;
 
-        //aws
-        if (cloudProviderResourceInstance?.result_params?.aws_account_id) {
-          const cloudProviderAccount = {
-            id: instanceId,
-            type: "aws",
-          };
-          cloudProviderResInstances.push(cloudProviderAccount);
+        if (
+          ["READY", "RUNNING"].includes(cloudProviderResourceInstance?.status)
+        ) {
+          //aws
+          if (cloudProviderResourceInstance?.result_params?.aws_account_id) {
+            const cloudProviderAccount = {
+              id: instanceId,
+              type: "aws",
+              label: `${instanceId} (Account ID - ${cloudProviderResourceInstance?.result_params?.aws_account_id})`,
+            };
+            cloudProviderResInstances.push(cloudProviderAccount);
+          }
+          //gcp
+          if (cloudProviderResourceInstance?.result_params?.gcp_project_id) {
+            const cloudProviderAccount = {
+              id: instanceId,
+              type: "gcp",
+              label: `${instanceId} (Project ID - ${cloudProviderResourceInstance?.result_params?.gcp_project_id})`,
+            };
+            cloudProviderResInstances.push(cloudProviderAccount);
+          }
+          //later azure
         }
-        //gcp
-        if (cloudProviderResourceInstance?.result_params?.gcp_project_id) {
-          const cloudProviderAccount = {
-            id: instanceId,
-            type: "gcp",
-          };
-          cloudProviderResInstances.push(cloudProviderAccount);
-        }
-        //later azure
       })
     );
     setCloudProviderAccounts(cloudProviderResInstances);
