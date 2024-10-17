@@ -546,7 +546,7 @@ function CreateResourceInstanceForm(props) {
                           key={cloudProviderAccount.id}
                           value={cloudProviderAccount.id}
                         >
-                          {cloudProviderAccount.id}
+                          {cloudProviderAccount.label}
                         </MenuItem>
                       ))}
                     </Select>

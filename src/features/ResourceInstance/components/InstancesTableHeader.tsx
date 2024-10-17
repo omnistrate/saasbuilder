@@ -100,7 +100,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     }
 
     const cliManagedResource = CLI_MANAGED_RESOURCES.includes(
-      selectedInstance?.detailedNetworkTopology[selectedResourceId]
+      selectedInstance?.detailedNetworkTopology?.[selectedResourceId]
         ?.resourceType
     );
 

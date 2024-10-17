@@ -30,7 +30,7 @@ const useProductTierRedirect = () => {
       router.isReady &&
       (!serviceId || !environmentId)
     ) {
-      if (serviceOfferingsData.length > 0) {
+      if (serviceOfferingsData?.length > 0) {
         let selectedServiceOffering;
 
         if (!serviceId) {
