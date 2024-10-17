@@ -24,7 +24,7 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
       ),
     };
   }, [data]);
-  const subscriptionsQuery = useUserSubscriptions();
+  const subscriptionsQuery = useUserSubscriptions({ serviceId });
   const {
     data: subscriptionRequestsData,
     isLoading: isSubscriptionRequestLoading,
