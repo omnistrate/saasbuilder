@@ -1,13 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUserSubscriptions } from "src/api/subscriptions";
+import { listSubscriptions } from "src/api/subscriptions";
 
-const useUserSubscriptions = (queryOptions = {}) => {
+const useUserSubscriptions = (queryParams = {}, queryOptions = {}) => {
+  const { serviceId } = queryParams;
+
   const subscriptionData = useQuery({
     queryKey: ["user-subscriptions"],
-    queryFn: () => getUserSubscriptions(),
+    queryFn: () => listSubscriptions({ serviceId }),
     select: (response) => {
       const subscriptions = response.data.subscriptions || [];
-   
+
       return subscriptions;
     },
     ...queryOptions,

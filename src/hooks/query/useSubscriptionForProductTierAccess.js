@@ -5,11 +5,15 @@ import {
   findSubscriptionByPriority,
 } from "src/utils/access/findSubscription";
 
-function fetchSubscriptionDetails(subscriptionId) {
+function fetchSubscriptionDetails({ subscriptionId, serviceId }) {
   if (subscriptionId) {
     return getSubscriptions(subscriptionId);
   } else {
-    return listSubscriptions();
+    return serviceId
+      ? listSubscriptions({
+          serviceId: serviceId,
+        })
+      : listSubscriptions();
   }
 }
 
@@ -22,7 +26,10 @@ function useSubscriptionForProductTierAccess(
   const query = useQuery(
     ["user-subscription", productTierId, serviceId, subscriptionId],
     () => {
-      return fetchSubscriptionDetails(subscriptionId);
+      return fetchSubscriptionDetails({
+        subscriptionId,
+        serviceId,
+      });
     },
     {
       enabled: isQueryEnabled,
