@@ -251,7 +251,7 @@ function CreateResourceInstanceForm(props) {
           <FieldContainer>
             <FieldLabel required>Cloud Provider</FieldLabel>
             <FieldDescription sx={{ mt: "5px" }}>
-              Cloud Provider
+              Select the cloud provider
             </FieldDescription>
             <TextField
               select
