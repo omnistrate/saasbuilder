@@ -358,6 +358,7 @@ function ResourceInstance() {
         networkType={resourceInstanceData?.networkType}
         healthStatusPercent={resourceInstanceData?.healthStatusPercent}
         isResourceBYOA={isResourceBYOA}
+        isCliManagedResource={isCliManagedResource}
       />
       <Tabs value={currentTab} sx={{ marginTop: "28px" }}>
         {Object.entries(tabs).map(([key, value]) => {

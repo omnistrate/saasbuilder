@@ -23,6 +23,7 @@ function ResourceInstanceOverview(props) {
     context,
     healthStatusPercent,
     isResourceBYOA,
+    isCliManagedResource,
   } = props;
 
   let sectionLabel = "Resource";
@@ -172,9 +173,13 @@ function ResourceInstanceOverview(props) {
                   alignItems={"flex-end"}
                   justifyContent={"center"}
                 >
-                  <Box sx={{ width: "100px", maxWidth: "100%" }}>
+                  {isCliManagedResource ? (
+                    <StatusChip category="unknown" label="N/A" />
+                  ) : status === "STOPPED" ? (
+                    <StatusChip category="unknown" label="N/A" />
+                  ) : (
                     <GradientProgressBar percentage={healthStatusPercent} />
-                  </Box>
+                  )}
                 </Stack>
               </TableCell>
             </TableRow>

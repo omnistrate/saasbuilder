@@ -83,6 +83,7 @@ import CustomNetworks from "src/features/CustomNetworks/CustomNetworks";
 import CapacityDialog from "src/components/CapacityDialog/CapacityDialog";
 import InstancesTableHeader from "src/features/ResourceInstance/components/InstancesTableHeader";
 import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
+import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 
 export const getServerSideProps = async () => {
   return {
@@ -411,6 +412,22 @@ function MarketplaceService() {
         headerAlign: "center",
         renderCell: (params) => {
           const status = params?.row?.status;
+          let mainResource = [];
+          if (params.row?.detailedNetworkTopology) {
+            const detailedNetworkTopologyEntries = Object.entries(
+              params.row?.detailedNetworkTopology ?? {}
+            );
+
+            mainResource = detailedNetworkTopologyEntries?.find(
+              ([, details]) => {
+                return details.main === true;
+              }
+            );
+          }
+          const [, topologyDetails] = mainResource ?? [];
+
+          if (CLI_MANAGED_RESOURCES.includes(topologyDetails?.resourceType))
+            return <StatusChip category="unknown" label="N/A" />;
 
           if (status === "STOPPED")
             return <StatusChip category="unknown" label="N/A" />;
