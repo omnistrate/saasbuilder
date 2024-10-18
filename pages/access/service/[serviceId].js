@@ -223,6 +223,16 @@ function MarketplaceService() {
     }
   }, [source]);
 
+  //set Cloud Formation URLS from the service offering API response
+  useEffect(() => {
+    if (service?.assets?.cloudFormationURL) {
+      setCloudFormationTemplateUrl(service.assets.cloudFormationURL);
+    }
+    if (service?.assets?.cloudFormationURLNoLB) {
+      setCloudFormationTemplateUrlNoLB(service.assets.cloudFormationURLNoLB);
+    }
+  }, [service]);
+
   const subscriptionQuery = useSubscriptionForProductTierAccess(
     serviceId,
     productTierId,
@@ -335,13 +345,6 @@ function MarketplaceService() {
                           !!result_params?.aws_account_id
                           ? "aws"
                           : "gcp"
-                      );
-                      setCloudFormationTemplateUrl(
-                        result_params?.cloudformation_url
-                      );
-
-                      setCloudFormationTemplateUrlNoLB(
-                        result_params?.cloudformation_url_no_lb
                       );
 
                       setAccountConfigMethod(
@@ -857,17 +860,6 @@ function MarketplaceService() {
           );
 
           const resourceInstance = resourceInstanceResponse.data;
-
-          const url = resourceInstance?.result_params?.cloudformation_url;
-          if (url) {
-            setCloudFormationTemplateUrl(url);
-          }
-
-          const urlNoLB =
-            resourceInstance?.result_params?.cloudformation_url_no_lb;
-          if (urlNoLB) {
-            setCloudFormationTemplateUrlNoLB(urlNoLB);
-          }
           snackbar.showSuccess("Cloud Provider Account Created");
           setAccountConfigStatus(resourceInstance?.status);
           setAccountConfigId(resourceInstance?.id);
@@ -892,8 +884,6 @@ function MarketplaceService() {
       setIsAccountCreation(false);
       setAccountConfigMethod(undefined);
       setCloudProvider("");
-      setCloudFormationTemplateUrl("");
-      setCloudFormationTemplateUrlNoLB("");
       setAccountConfigStatus("");
       setAccountConfigId("");
     }
