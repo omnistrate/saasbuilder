@@ -280,6 +280,28 @@ function ResourceUpdateView(props) {
                   </FieldContainer>
                 );
               }
+              if (param.type === "Float64") {
+                return (
+                  <FieldContainer key={param.key}>
+                    <FieldLabel required={param.required === true}>
+                      {param.displayName}
+                    </FieldLabel>
+                    <FieldDescription sx={{ mt: "5px" }}>
+                      {param.description}
+                    </FieldDescription>
+                    <TextField
+                      id={`requestParams.${param.key}`}
+                      type="number"
+                      name={`requestParams.${param.key}`}
+                      value={formData.values.requestParams[param.key]}
+                      onChange={formData.handleChange}
+                      sx={{ marginTop: "16px" }}
+                      modifiable={param.modifiable}
+                      required={param.required == true ? "required" : ""}
+                    />
+                  </FieldContainer>
+                );
+              }
               if (param.custom == true && param.type == "Boolean") {
                 return (
                   <FieldContainer key={param.key}>
@@ -426,7 +448,29 @@ function ResourceUpdateView(props) {
                     </FieldContainer>
                   );
                 }
-
+                if (param.type === "Float64") {
+                  return (
+                    <FieldContainer key={param.key}>
+                      <FieldLabel required={param.required === true}>
+                        {param.displayName}
+                      </FieldLabel>
+                      <FieldDescription sx={{ mt: "5px" }}>
+                        {param.description}
+                      </FieldDescription>
+                      <TextField
+                        id={`requestParams.${param.key}`}
+                        type="number"
+                        disabled
+                        name={`requestParams.${param.key}`}
+                        value={formData.values.requestParams[param.key]}
+                        onChange={formData.handleChange}
+                        sx={{ marginTop: "16px" }}
+                        modifiable={param.modifiable}
+                        required={param.required == true ? "required" : ""}
+                      />
+                    </FieldContainer>
+                  );
+                }
                 if (param.custom == true && param.type == "Boolean") {
                   return (
                     <FieldContainer key={param.key}>

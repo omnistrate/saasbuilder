@@ -767,17 +767,30 @@ function CreateResourceInstanceForm(props) {
                           <GCPProjectNumberDescription context="access" />
                         )}
                       </FieldDescription>
-                      <TextField
-                        multiline={true}
-                        minRows={1}
-                        maxRows={3}
-                        id={`requestParams.${param.key}`}
-                        name={`requestParams.${param.key}`}
-                        value={formData.values.requestParams[param.key] ?? ""}
-                        onChange={formData.handleChange}
-                        sx={{ marginTop: "16px" }}
-                        required={param.required == true ? true : false}
-                      />
+                      {param.type === "Float64" ? (
+                        <TextField
+                          id={`requestParams.${param.key}`}
+                          type="number"
+                          name={`requestParams.${param.key}`}
+                          value={formData.values.requestParams[param.key]}
+                          onChange={formData.handleChange}
+                          sx={{ marginTop: "16px" }}
+                          modifiable={param.modifiable}
+                          required={param.required == true ? "required" : ""}
+                        />
+                      ) : (
+                        <TextField
+                          multiline={true}
+                          minRows={1}
+                          maxRows={3}
+                          id={`requestParams.${param.key}`}
+                          name={`requestParams.${param.key}`}
+                          value={formData.values.requestParams[param.key] ?? ""}
+                          onChange={formData.handleChange}
+                          sx={{ marginTop: "16px" }}
+                          required={param.required == true ? true : false}
+                        />
+                      )}
                     </FieldContainer>
                   );
                 }
