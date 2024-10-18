@@ -30,7 +30,7 @@ import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscription
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import { checkIfResouceIsBYOA } from "src/utils/access/byoaResource";
 import Link from "next/link";
-import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
+import { CLI_MANAGED_RESOURCES, RESOURCE_TYPES } from "src/constants/resource";
 import AuditLogs from "src/components/ResourceInstance/AuditLogs/AuditLogs";
 
 export const getServerSideProps = async () => {
@@ -140,7 +140,8 @@ function ResourceInstance() {
     resourceInstanceData?.isLogsEnabled,
     resourceInstanceData?.active,
     isResourceBYOA,
-    isCliManagedResource
+    isCliManagedResource,
+    resourceType
   );
 
   let pageTitle = "Resource";
@@ -360,7 +361,6 @@ function ResourceInstance() {
       />
       <Tabs value={currentTab} sx={{ marginTop: "28px" }}>
         {Object.entries(tabs).map(([key, value]) => {
-
           return (
             <Tab
               key={key}
@@ -492,7 +492,8 @@ function getTabs(
   isLogsEnabled,
   isActive,
   isResourceBYOA,
-  isCliManagedResource
+  isCliManagedResource,
+  resourceType
 ) {
   const tabs = {
     resourceInstanceDetails: "Resource Instance Details",
@@ -505,7 +506,9 @@ function getTabs(
     tabs["logs"] = "Logs";
 
   if (!isActive || isCliManagedResource) {
-    delete tabs.connectivity;
+    if (!isActive || resourceType === RESOURCE_TYPES.Terraform) {
+      delete tabs.connectivity;
+    }
     delete tabs.nodes;
   }
 
