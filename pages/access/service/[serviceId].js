@@ -346,13 +346,6 @@ function MarketplaceService() {
                           ? "aws"
                           : "gcp"
                       );
-                      setCloudFormationTemplateUrl(
-                        result_params?.cloudformation_url
-                      );
-
-                      setCloudFormationTemplateUrlNoLB(
-                        result_params?.cloudformation_url_no_lb
-                      );
 
                       setAccountConfigMethod(
                         result_params?.account_configuration_method
@@ -863,17 +856,6 @@ function MarketplaceService() {
           );
 
           const resourceInstance = resourceInstanceResponse.data;
-
-          const url = resourceInstance?.result_params?.cloudformation_url;
-          if (url) {
-            setCloudFormationTemplateUrl(url);
-          }
-
-          const urlNoLB =
-            resourceInstance?.result_params?.cloudformation_url_no_lb;
-          if (urlNoLB) {
-            setCloudFormationTemplateUrlNoLB(urlNoLB);
-          }
           snackbar.showSuccess("Cloud Provider Account Created");
           setAccountConfigStatus(resourceInstance?.status);
           setAccountConfigId(resourceInstance?.id);
@@ -898,8 +880,6 @@ function MarketplaceService() {
       setIsAccountCreation(false);
       setAccountConfigMethod(undefined);
       setCloudProvider("");
-      setCloudFormationTemplateUrl("");
-      setCloudFormationTemplateUrlNoLB("");
       setAccountConfigStatus("");
       setAccountConfigId("");
     }
