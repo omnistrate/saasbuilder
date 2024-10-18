@@ -225,10 +225,10 @@ function MarketplaceService() {
 
   //set Cloud Formation URLS from the service offering API response
   useEffect(() => {
-    if (service?.assets.cloudFormationURL) {
+    if (service?.assets?.cloudFormationURL) {
       setCloudFormationTemplateUrl(service.assets.cloudFormationURL);
     }
-    if (service?.assets.cloudFormationURLNoLB) {
+    if (service?.assets?.cloudFormationURLNoLB) {
       setCloudFormationTemplateUrlNoLB(service.assets.cloudFormationURLNoLB);
     }
   }, [service]);
