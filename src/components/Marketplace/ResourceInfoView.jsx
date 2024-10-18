@@ -59,7 +59,7 @@ function ResourceInfoView(props) {
         <FieldContainer>
           <FieldLabel>Cloud Provider</FieldLabel>
           <FieldDescription sx={{ mt: "5px" }}>
-            Cloud Provider of resource instance
+            Select the cloud provider
           </FieldDescription>
           <TextField
             id="cloud_provider"
@@ -72,7 +72,9 @@ function ResourceInfoView(props) {
         </FieldContainer>
         <FieldContainer>
           <FieldLabel>Region</FieldLabel>
-          <FieldDescription sx={{ mt: "5px" }}>Region</FieldDescription>
+          <FieldDescription>
+            Select the cloud provider region to host this instance
+          </FieldDescription>
           <TextField
             id="id"
             name="id"

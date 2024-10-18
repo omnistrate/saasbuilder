@@ -684,6 +684,7 @@ function MarketplaceService() {
               }
             });
 
+          let isTypeError = false;
           Object.keys(data.requestParams).forEach((key) => {
             const result = schemaArray.find((schemaParam) => {
               return schemaParam.key === key;
@@ -703,6 +704,7 @@ function MarketplaceService() {
                       data.requestParams[key] = Number(data.requestParams[key]);
                     } else {
                       snackbar.showError(`Invalid data in ${key}`);
+                      isTypeError = true;
                     }
                   }
                 }
@@ -803,11 +805,13 @@ function MarketplaceService() {
             }
           }
 
-          if (isError) {
-            snackbar.showError(`${requiredFieldName} is required`);
-          } else {
-            /* eslint-disable-next-line no-use-before-define */
-            createResourceInstanceMutation.mutate(data);
+          if (!isTypeError) {
+            if (isError) {
+              snackbar.showError(`${requiredFieldName} is required`);
+            } else {
+              /* eslint-disable-next-line no-use-before-define */
+              createResourceInstanceMutation.mutate(data);
+            }
           }
         } catch (err) {
           console.error("error", err);
@@ -1268,6 +1272,7 @@ function MarketplaceService() {
           );
         }
 
+        let isTypeError = false;
         Object.keys(data.requestParams).forEach((key) => {
           const result = schemaArray.find((schemaParam) => {
             return schemaParam.key === key;
@@ -1283,6 +1288,7 @@ function MarketplaceService() {
                 data.requestParams[key] = Number(data.requestParams[key]);
               } else {
                 snackbar.showError(`Invalid data in ${key}`);
+                isTypeError = true;
               }
               break;
             case "Boolean":
@@ -1304,8 +1310,9 @@ function MarketplaceService() {
             delete data.requestParams[key];
           }
         }
-
-        updateResourceInstanceMutation.mutate(data);
+        if (!isTypeError) {
+          updateResourceInstanceMutation.mutate(data);
+        }
       } catch (err) {
         console.error("error", err);
       }
