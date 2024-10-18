@@ -802,12 +802,13 @@ function MarketplaceService() {
             }
           }
 
-          if (isTypeError) {
-          } else if (isError) {
-            snackbar.showError(`${requiredFieldName} is required`);
-          } else {
-            /* eslint-disable-next-line no-use-before-define */
-            createResourceInstanceMutation.mutate(data);
+          if (!isTypeError) {
+            if (isError) {
+              snackbar.showError(`${requiredFieldName} is required`);
+            } else {
+              /* eslint-disable-next-line no-use-before-define */
+              createResourceInstanceMutation.mutate(data);
+            }
           }
         } catch (err) {
           console.error("error", err);
@@ -1319,8 +1320,7 @@ function MarketplaceService() {
             delete data.requestParams[key];
           }
         }
-        if (isTypeError) {
-        } else {
+        if (!isTypeError) {
           updateResourceInstanceMutation.mutate(data);
         }
       } catch (err) {
