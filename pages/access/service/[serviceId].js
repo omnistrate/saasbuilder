@@ -83,6 +83,7 @@ import CustomNetworks from "src/features/CustomNetworks/CustomNetworks";
 import CapacityDialog from "src/components/CapacityDialog/CapacityDialog";
 import InstancesTableHeader from "src/features/ResourceInstance/components/InstancesTableHeader";
 import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
+import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 
 export const getServerSideProps = async () => {
   return {
