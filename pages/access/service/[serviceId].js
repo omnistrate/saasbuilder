@@ -427,7 +427,7 @@ function MarketplaceService() {
           const [, topologyDetails] = mainResource ?? [];
 
           if (CLI_MANAGED_RESOURCES.includes(topologyDetails?.resourceType))
-            return <StatusChip category="unknown" label="N/A" />;
+            return <StatusChip category="unknown" label="Unknown" />;
 
           if (status === "STOPPED")
             return <StatusChip category="unknown" label="N/A" />;

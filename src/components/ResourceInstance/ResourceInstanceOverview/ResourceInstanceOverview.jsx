@@ -174,7 +174,7 @@ function ResourceInstanceOverview(props) {
                   justifyContent={"center"}
                 >
                   {isCliManagedResource ? (
-                    <StatusChip category="unknown" label="N/A" />
+                    <StatusChip category="unknown" label="Unknown" />
                   ) : status === "STOPPED" ? (
                     <StatusChip category="unknown" label="N/A" />
                   ) : (
