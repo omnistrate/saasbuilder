@@ -1,12 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Dialog,
-  IconButton,
-  Stack,
-  styled,
-} from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { Box, Dialog, IconButton, Stack, styled } from "@mui/material";
 import Button from "src/components/Button/Button";
 import { Text } from "src/components/Typography/Typography";
 import CloseIcon from "@mui/icons-material/Close";
@@ -14,7 +6,6 @@ import Link from "next/link";
 import TextCopy from "src/components/FormElements/TextCopy/TextCopy";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import InstructionsModalIcon from "../Icons/AccountConfig/InstructionsModalIcon";
-import { getResourceInstanceDetails } from "src/api/resourceInstance";
 
 const CloudFormationLink = ({ cloudFormationTemplateUrl }) => {
   const updateTemplateURL = (url) => {
@@ -211,7 +202,7 @@ function CloudProviderAccountOrgIdModal(props) {
               }
             />
           ) : (
-            <NonCreatationTimeInstructions
+            <NonCreationTimeInstructions
               accountConfigMethod={accountConfigMethod}
               cloudProvider={cloudProvider}
               cloudformationlink={cloudformationlink}
@@ -253,84 +244,9 @@ const CreationTimeInstructions = (props) => {
     terraformGuide,
     orgId,
     accountConfigStatus,
-    accountConfigId,
-    setCloudFormationTemplateUrl,
-    setCloudFormationTemplateUrlNoLB,
     cloudFormationTemplateUrl,
-    service,
-    selectedResourceKey,
-    subscriptionId,
-    fetchResourceInstancesOfSelectedResource,
     cloudformationNoLBlink,
   } = props;
-
-  const [isPolling, setIsPolling] = useState(true);
-  const [isTimeout, setIsTimeout] = useState(false);
-  const pollCount = useRef(0);
-  const pollTimerRef = useRef(null);
-  const isMounted = useRef(true); //to track the component mount state and stop polling if component is unmounted
-
-  const fetchAccountConfig = async () => {
-    if (!isMounted.current) return;
-
-    try {
-      const res = await getResourceInstanceDetails(
-        service.serviceProviderId,
-        service.serviceURLKey,
-        service.serviceAPIVersion,
-        service.serviceEnvironmentURLKey,
-        service.serviceModelURLKey,
-        service.productTierURLKey,
-        selectedResourceKey,
-        accountConfigId,
-        subscriptionId
-      );
-      if (!isMounted.current) return;
-
-      const resourceInstance = res.data;
-      const url = resourceInstance?.result_params?.cloudformation_url;
-      if (url) {
-        fetchResourceInstancesOfSelectedResource?.();
-        setCloudFormationTemplateUrl(url);
-        const urlNoLB =
-          resourceInstance?.result_params?.cloudformation_url_no_lb;
-        if (urlNoLB) {
-          setCloudFormationTemplateUrlNoLB(urlNoLB);
-        }
-        setIsPolling(false);
-      } else {
-        if (pollCount.current < 10) {
-          pollTimerRef.current = setTimeout(fetchAccountConfig, 3000); // check for every 3 sec
-          pollCount.current += 1;
-        } else {
-          setIsTimeout(true);
-          setIsPolling(false);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    //if method is cloud formation then clodformation url might not be returned immediately.If it
-    //doesn't exist poll the api to check cloudformation template url for 30 seconds
-    if (
-      accountConfigId &&
-      accountConfigMethod === "CloudFormation" &&
-      !cloudFormationTemplateUrl
-    ) {
-      fetchAccountConfig();
-    } else if (cloudFormationTemplateUrl) {
-      setIsPolling(false);
-    }
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-      clearInterval(pollTimerRef.current);
-    };
-    /*eslint-disable-next-line react-hooks/exhaustive-deps  */
-  }, []);
 
   if (accountConfigStatus === "FAILED") {
     return (
@@ -343,46 +259,6 @@ const CreationTimeInstructions = (props) => {
   }
 
   if (accountConfigMethod === "CloudFormation") {
-    if (isPolling) {
-      return (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "16px",
-          }}
-        >
-          <CircularProgress size={16} />
-          <Text size="medium" weight="regular" color="#344054">
-            Your CloudFormation stack is being configured. Please wait for the
-            detailed setup instructions.
-          </Text>
-        </Box>
-      );
-    }
-
-    if (isTimeout) {
-      return (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "16px",
-            margintTop: "20px",
-          }}
-        >
-          <Text size="medium" weight="regular" color="#344054">
-            The configuration process is running a bit longer than usual. Please
-            check back soon for detailed setup instructions.
-          </Text>
-        </Box>
-      );
-    }
-
     if (!cloudFormationTemplateUrl) {
       return (
         <Text size="medium" weight="regular" color="#344054">
@@ -444,7 +320,7 @@ const CreationTimeInstructions = (props) => {
   );
 };
 
-const NonCreatationTimeInstructions = (props) => {
+const NonCreationTimeInstructions = (props) => {
   const {
     accountConfigMethod,
     terraformlink,
