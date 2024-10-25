@@ -1,7 +1,7 @@
 import { FC, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 import { GridCellParams } from "@mui/x-data-grid";
-import DataGrid from "components/DataGrid/DataGrid";
+import DataGrid, { selectSingleItem } from "components/DataGrid/DataGrid";
 import SideDrawerRight from "components/SideDrawerRight/SideDrawerRight";
 import DataGridText from "components/DataGrid/DataGridText";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
@@ -19,6 +19,11 @@ import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import RegionIcon from "src/components/Region/RegionIcon";
 import { CloudProvider } from "src/types/common/enums";
+import PeeringInfoDialog, {
+  ListItemProps,
+} from "./components/PeeringInfoDialog";
+import GcpLogo from "src/components/Logos/GcpLogo/GcpLogo";
+import AwsLogo from "src/components/Logos/AwsLogo/AwsLogo";
 
 type CustomNetworkProps = {
   cloudProviders: CloudProvider[];
@@ -43,6 +48,11 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
     useState<CustomNetwork | null>(null);
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
+  const [showPeeringInfoDialoag, setShowPeeringInfoDialoag] = useState(false);
+  const [selectedCustomNetworkIds, setSelectedCustomNetworkIds] = useState<
+    string[]
+  >([]);
+  const [searchText, setSearchText] = useState("");
 
   const cloudProviderRegionsQuery = useCloudProviderRegions(
     serviceId,
@@ -129,8 +139,72 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
     validateOnChange: false,
   });
 
+  const peeringInfoList: ListItemProps[] = useMemo(() => {
+    if (!selectedCustomNetworkIds.length || !customNetworks) {
+      return [];
+    }
+
+    const selectedCustomNetwork = customNetworks.find(
+      (customNetwork) => customNetwork.id === selectedCustomNetworkIds[0]
+    );
+
+    const networkInstance = selectedCustomNetwork?.networkInstances?.[0] || {};
+    const res: ListItemProps[] = [];
+    if (networkInstance.awsAccountID) {
+      res.push({
+        title: "Account ID",
+        value: networkInstance.awsAccountID,
+        icon: <AwsLogo />,
+      });
+    } else if (networkInstance.gcpProjectID) {
+      res.push({
+        title: "Project ID",
+        value: networkInstance.gcpProjectID,
+        icon: <GcpLogo />,
+      });
+      res.push({
+        title: "Project Number",
+        value: networkInstance.gcpProjectNumber,
+      });
+    }
+
+    if (networkInstance.cloudProviderNativeNetworkId) {
+      res.push({
+        title: "VPC Info",
+        value: networkInstance.cloudProviderNativeNetworkId,
+      });
+    }
+    res.push({
+      title: "CIDR",
+      value: selectedCustomNetwork.cidr,
+    });
+
+    return res;
+  }, [selectedCustomNetworkIds, customNetworks]);
+
   const columns = useMemo(
     () => [
+      {
+        field: "id",
+        headerName: "Network ID",
+        flex: 1,
+        minWidth: 170,
+        headerAlign: "center",
+        align: "center",
+        valueGetter: (params: GridCellParams<any, CustomNetwork>) =>
+          params.row.id,
+        renderCell: (params: GridCellParams<any, CustomNetwork>) => (
+          <DataGridText
+            onClick={() => {
+              setSelectedCustomNetwork(params.row);
+              openSideDrawer();
+            }}
+            color="primary"
+          >
+            {params.row.id}
+          </DataGridText>
+        ),
+      },
       {
         field: "name",
         headerName: "Name",
@@ -140,17 +214,17 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
         align: "center",
         valueGetter: (params: GridCellParams<any, CustomNetwork>) =>
           params.row.name,
-        renderCell: (params: GridCellParams<any, CustomNetwork>) => (
-          <DataGridText
-            onClick={() => {
-              setSelectedCustomNetwork(params.row);
-              openSideDrawer();
-            }}
-            color="primary"
-          >
-            {params.row.name}
-          </DataGridText>
-        ),
+        // renderCell: (params: GridCellParams<any, CustomNetwork>) => (
+        //   <DataGridText
+        //     onClick={() => {
+        //       setSelectedCustomNetwork(params.row);
+        //       openSideDrawer();
+        //     }}
+        //     color="primary"
+        //   >
+        //     {params.row.name}
+        //   </DataGridText>
+        // ),
       },
       {
         field: "cloudProviderName",
@@ -208,18 +282,31 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
     <>
       <Box mt="20px">
         <DataGrid
+          checkboxSelection
           disableColumnMenu
           hideFooterSelectedRowCount
           disableSelectionOnClick
+          selectionModel={selectedCustomNetworkIds}
+          onSelectionModelChange={(newSelection) => {
+            selectSingleItem(
+              newSelection,
+              selectedCustomNetworkIds,
+              setSelectedCustomNetworkIds
+            );
+          }}
           components={{
             Header: CustomNetworkDataGridHeader,
           }}
           componentsProps={{
             header: {
               count: filteredCustomNetworks.length,
+              searchText,
+              setSearchText,
               openSideDrawer,
               refetchCustomNetworks,
               isFetchingCustomNetworks,
+              openDialog: () => setShowPeeringInfoDialoag(true),
+              isPeeringInfoEnabled: selectedCustomNetworkIds.length === 1,
             },
           }}
           columns={columns}
@@ -268,6 +355,12 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
         }
         isLoading={deleteCustomNetworkMutation.isLoading}
         isDeleteEnable={true}
+      />
+
+      <PeeringInfoDialog
+        open={showPeeringInfoDialoag}
+        onClose={() => setShowPeeringInfoDialoag(false)}
+        list={peeringInfoList}
       />
     </>
   );
