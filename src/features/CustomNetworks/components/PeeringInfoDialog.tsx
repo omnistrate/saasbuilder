@@ -82,6 +82,7 @@ const PeeringInfoDialog: FC<PeeringInfoDialogProps> = ({
         style: {
           borderRadius: "12px",
           minWidth: "480px",
+          maxWidth: "480px",
         },
       }}
     >
@@ -98,18 +99,29 @@ const PeeringInfoDialog: FC<PeeringInfoDialogProps> = ({
           </Text>
         </Stack>
         <Text size="small" weight="regular" color="#475467" sx={{ mt: "4px" }}>
-          Need some description
+          Basic information for setting up VPC peering
         </Text>
       </DialogTitle>
       <DialogContent sx={{ pb: "20px" }}>
-        {list.map((item, index) => (
-          <ListItem
-            key={index}
-            title={item.title}
-            value={item.value}
-            icon={item.icon}
-          />
-        ))}
+        {list?.length <= 1 ? (
+          <Text
+            size="small"
+            weight="semibold"
+            sx={{ textAlign: "center", my: "16px" }}
+          >
+            Peering information will be available once the setup is complete.
+            Please check back shortly.
+          </Text>
+        ) : (
+          list.map((item, index) => (
+            <ListItem
+              key={index}
+              title={item.title}
+              value={item.value}
+              icon={item.icon}
+            />
+          ))
+        )}
       </DialogContent>
       <DialogActions sx={{ pt: "0px", pr: "24px", pb: "24px" }}>
         <Button variant="outlined" onClick={onClose}>
