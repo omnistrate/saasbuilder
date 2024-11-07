@@ -135,7 +135,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push multi-arch
-        timeout-minutes: 30
+        timeout-minutes: 60
         if: ${{ github.event_name != 'pull_request' }}
         uses: docker/build-push-action@v6
         with:
