@@ -242,3 +242,4 @@ If you need help or want to report an issue, please follow these steps:
 - Contact Us: For more direct support, contact Omnistrate support
 
 We strive to create a welcoming and supportive community, so don't hesitate to reach out!
+
