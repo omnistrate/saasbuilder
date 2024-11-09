@@ -29,11 +29,11 @@ const Select = styled(({ isLoading = false, children, ...props }) => (
   </MuiSelect>
 ))(({ theme, marginTop = "6px" }) => ({
   marginTop: marginTop,
-  minWidth: 240,
+  minWidth: 140,
   boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
   borderRadius: 8,
   background: "white",
-  marginTop : 6,
+  marginTop: 6,
   [`& .MuiOutlinedInput-input`]: {
     padding: "10px 14px",
     borderRadius: 8,

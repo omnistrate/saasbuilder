@@ -164,6 +164,7 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
       disabled={isLoading}
       sx={{
         width: "auto",
+        margin: "0px",
         height: "40px !important",
         padding: "10px 14px !important",
         minHeight: "40px",
