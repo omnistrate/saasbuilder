@@ -25,7 +25,6 @@ export const NodeStatus = (props) => {
     ProcessHealth,
     ProcessLiveness,
   ];
-
   return (
     <NodeStatusTooltip detailedHealth={detailedHealth}>
       <>

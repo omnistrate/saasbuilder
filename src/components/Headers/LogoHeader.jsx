@@ -5,7 +5,7 @@ const Title = styled("h6")({
   fontWeight: 600,
   fontSize: "30px",
   lineHeight: "38px",
-  margin: 5,
+  margin: 0,
   marginLeft: 10,
 });
 
@@ -19,6 +19,7 @@ const Description = styled("p")(({ theme }) => ({
   fontSize: 16,
   lineHeight: "24px",
   marginLeft: 10,
+  marginTop: "4px",
 }));
 
 
@@ -32,7 +33,6 @@ function LogoHeader(props) {
         flexDirection="colunm"
         alignItems="center"
         margin={margin}
-        marginLeft="10px"
         justifyContent="flex-start"
       >
         {newicon && <Icon src={newicon} alt="image-icon" />}

@@ -1,4 +1,4 @@
-import { Box, styled, Stack } from "@mui/material";
+import { Box, SxProps, styled, Theme, Stack } from "@mui/material";
 import Image from "next/image";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,13 +7,19 @@ import MuiTableCell from "@mui/material/TableCell";
 import { Text } from "src/components/Typography/Typography";
 import resourcePortsIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/ports.svg";
 import resourceEndpointIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/resource-endpoint.svg";
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import AccordionEditIcon from "src/components/Icons/AccordionEdit/AccordionEdit";
 import Switch from "src/components/Switch/Switch";
 import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
 import TextField from "src/components/FormElementsv2/TextField/TextField";
 import Button from "src/components/Button/Button";
 import { useFormik } from "formik";
+import {
+  addCustomDNSToResourceInstance,
+  removeCustomDNSFromResourceInstance,
+  getResourceInstanceDetails,
+} from "src/api/resourceInstance";
+
 import * as Yup from "yup";
 import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
 import IconButtonSquare from "src/components/IconButtonSquare/IconButtonSquare";
@@ -23,21 +29,59 @@ import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextCo
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import CustomDNSDetailsModal from "./CustomDNSDetailsModal";
 import StatusChip from "src/components/StatusChip/StatusChip";
-import _ from "lodash";
-import {
-  addCustomDNSToResourceInstance,
-  getResourceInstanceDetails,
-  removeCustomDNSFromResourceInstance,
-} from "src/api/resourceInstance";
-import { useMutation } from "@tanstack/react-query";
-import ViewInstructionsIcon from "src/components/Icons/ViewInstructions/ViewInstructions";
+import { getCustomDNSStatusStylesAndLabel } from "src/constants/statusChipStyles/customDNS";
 import CopyButton from "src/components/Button/CopyButton";
+import { useMutation } from "@tanstack/react-query";
+import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
 
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
 });
 
-const ResourceConnectivityEndpoint = (props) => {
+export type AddCustomDNSToResourceInstancePayload = {
+  customDNS: string;
+  targetPort?: number;
+};
+
+type ResourceConnectivityEndpointProps = {
+  isPrimaryResource?: boolean;
+  resourceName: string;
+  endpointURL?: string;
+  viewType: "ports" | "endpoint";
+  ports?: string;
+  containerStyles: SxProps<Theme>;
+  context: "access" | "fleet";
+  resourceKey: string;
+  resourceId: string;
+  resourceHasCompute: boolean;
+  customDNSData?: {
+    enabled: boolean;
+    dnsName?: string;
+    status?: string;
+    cnameTarget?: string;
+    aRecordTarget?: string;
+  };
+  accessQueryParams?: {
+    serviceProviderId: string;
+    serviceKey: string;
+    serviceAPIVersion: string;
+    serviceEnvironmentKey: string;
+    serviceModelKey: string;
+    productTierKey: string;
+    subscriptionId: string;
+    resourceInstanceId: string;
+  };
+  fleetQueryParams?: {
+    serviceId: string;
+    environmentId: string;
+    resourceInstanceId: string;
+  };
+  refetchInstance: () => void;
+};
+
+const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
+  props
+) => {
   const {
     resourceName,
     endpointURL,
@@ -46,7 +90,9 @@ const ResourceConnectivityEndpoint = (props) => {
     viewType,
     isPrimaryResource = false,
     customDNSData = { enabled: false },
-    queryData,
+    context,
+    accessQueryParams,
+    fleetQueryParams,
     resourceKey,
     resourceId,
     refetchInstance,
@@ -56,12 +102,12 @@ const ResourceConnectivityEndpoint = (props) => {
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
   const [showConfigurationDialog, setShowConfigurationDialog] = useState(false);
+  const [deleteMessage, setDeleteMessage] = useState("");
   const [isTextfieldDisabled, setIsTextFieldDisabled] = useState(false);
   const [shouldShowConfigDialog, setShouldShowConfigDialog] = useState(false);
   const [isVerifyingDNSRemoval, setIsVerifyingDNSRemoval] = useState(false);
-  const [isVerifyingDNSSetup, setIsVerifyingDNSSetup] = useState(false);
-  const [deleteMessage, setDeleteMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const textfieldRef = useRef<HTMLInputElement>();
   const timeoutID = useRef(null);
   const pollCount = useRef(0);
 
@@ -71,6 +117,100 @@ const ResourceConnectivityEndpoint = (props) => {
     isCustomDNSSetup = true;
   }
   const [isToggleChecked, setIsToggleChecked] = useState(isCustomDNSSetup);
+
+  const addCustomDNSMutation = useMutation({
+    mutationFn: (payload: AddCustomDNSToResourceInstancePayload) => {
+      return addCustomDNSToResourceInstance(
+        accessQueryParams.serviceProviderId,
+        accessQueryParams.serviceKey,
+        accessQueryParams.serviceAPIVersion,
+        accessQueryParams.serviceEnvironmentKey,
+        accessQueryParams.serviceModelKey,
+        accessQueryParams.productTierKey,
+        resourceKey,
+        accessQueryParams.resourceInstanceId,
+        accessQueryParams.subscriptionId,
+        payload
+      );
+    },
+    onSuccess: () => {
+      refetchInstance();
+    },
+  });
+
+  const removeCustomDNSMutation = useMutation({
+    mutationFn: () => {
+      return removeCustomDNSFromResourceInstance(
+        accessQueryParams.serviceProviderId,
+        accessQueryParams.serviceKey,
+        accessQueryParams.serviceAPIVersion,
+        accessQueryParams.serviceEnvironmentKey,
+        accessQueryParams.serviceModelKey,
+        accessQueryParams.productTierKey,
+        resourceKey,
+        accessQueryParams.resourceInstanceId,
+        accessQueryParams.subscriptionId
+      );
+    },
+    onSuccess: () => {
+      pollInstanceQueryToVerifyDNSRemoval();
+    },
+  });
+
+  function clearExistingTimeout() {
+    if (timeoutID.current) {
+      clearTimeout(timeoutID.current);
+    }
+  }
+
+  function pollInstanceQueryToVerifyDNSRemoval() {
+    setIsVerifyingDNSRemoval(true);
+    clearExistingTimeout();
+    pollCount.current = 0;
+    verifyDNSRemoval();
+
+    function verifyDNSRemoval() {
+      if (pollCount.current < 5) {
+        pollCount.current++;
+        const id = setTimeout(() => {
+          getResourceInstanceDetails(
+            accessQueryParams.serviceProviderId,
+            accessQueryParams.serviceKey,
+            accessQueryParams.serviceAPIVersion,
+            accessQueryParams.serviceEnvironmentKey,
+            accessQueryParams.serviceModelKey,
+            accessQueryParams.productTierKey,
+            resourceKey,
+            accessQueryParams.resourceInstanceId,
+            accessQueryParams.subscriptionId
+          )
+            .then((response) => {
+              const topologyDetails =
+                response.data?.detailedNetworkTopology?.[resourceId];
+              //check for dnsName field in the response, absence means dns removal complete
+              if (!Boolean(topologyDetails?.customDNSEndpoint.dnsName)) {
+                setIsVerifyingDNSRemoval(false);
+                refetchInstance();
+              } else {
+                verifyDNSRemoval();
+              }
+            })
+            .catch(() => {
+              verifyDNSRemoval();
+            });
+        }, 1500);
+        timeoutID.current = id;
+      } else {
+        setIsVerifyingDNSRemoval(false);
+      }
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      clearExistingTimeout();
+    };
+  }, []);
 
   const customDNSFormik = useFormik({
     initialValues: {
@@ -96,14 +236,21 @@ const ResourceConnectivityEndpoint = (props) => {
     onSubmit: async (values) => {
       if (values.confirmationText === "deleteme") {
         try {
-          /*eslint-disable-next-line no-use-before-define */
           await removeCustomDNSMutation?.mutateAsync();
           setShowDeleteConfirmationDialog(false);
           removeCustomDNSFormik.resetForm();
-        } catch (err) {}
+        } catch {}
       }
     },
   });
+
+  async function handleAddDNS(payload: AddCustomDNSToResourceInstancePayload) {
+    try {
+      await addCustomDNSMutation?.mutateAsync(payload);
+      setShouldShowConfigDialog(true);
+      setIsTextFieldDisabled(true);
+    } catch {}
+  }
 
   useEffect(() => {
     if (customDNSData.enabled === true && customDNSData.dnsName) {
@@ -141,157 +288,6 @@ const ResourceConnectivityEndpoint = (props) => {
   const statusStylesAndLabel = getCustomDNSStatusStylesAndLabel(
     customDNSData?.status
   );
-
-  const addCustomDNSMutation = useMutation({
-    mutationFn: (payload) => {
-      return addCustomDNSToResourceInstance(
-        queryData?.serviceProviderId,
-        queryData?.serviceKey,
-        queryData?.serviceAPIVersion,
-        queryData?.serviceEnvironmentKey,
-        queryData?.serviceModelKey,
-        queryData?.productTierKey,
-        resourceKey,
-        queryData.resourceInstanceId,
-        queryData.subscriptionId,
-        payload
-      );
-    },
-    onSuccess: () => {
-      pollInstanceQueryToVerifyDNSSetupSuccess();
-    },
-  });
-
-  async function handleAddDNS(payload) {
-    try {
-      await addCustomDNSMutation?.mutateAsync(payload);
-      setShouldShowConfigDialog(true);
-      setIsTextFieldDisabled(true);
-    } catch {}
-  }
-
-  const removeCustomDNSMutation = useMutation({
-    mutationFn: () => {
-      return removeCustomDNSFromResourceInstance(
-        queryData?.serviceProviderId,
-        queryData?.serviceKey,
-        queryData?.serviceAPIVersion,
-        queryData?.serviceEnvironmentKey,
-        queryData?.serviceModelKey,
-        queryData?.productTierKey,
-        resourceKey,
-        queryData.resourceInstanceId,
-        queryData.subscriptionId
-      );
-    },
-    onSuccess: () => {
-      pollInstanceQueryToVerifyDNSRemoval();
-    },
-  });
-
-  function clearExistingTimeout() {
-    if (timeoutID.current) {
-      clearTimeout(timeoutID.current);
-    }
-  }
-
-  function pollInstanceQueryToVerifyDNSSetupSuccess() {
-    setIsVerifyingDNSSetup(true);
-    clearExistingTimeout();
-    pollCount.current = 0;
-    verifyDNSSetupSuccess();
-
-    function verifyDNSSetupSuccess() {
-      if (pollCount.current < 5) {
-        pollCount.current++;
-        const id = setTimeout(() => {
-          getResourceInstanceDetails(
-            queryData?.serviceProviderId,
-            queryData?.serviceKey,
-            queryData?.serviceAPIVersion,
-            queryData?.serviceEnvironmentKey,
-            queryData?.serviceModelKey,
-            queryData?.productTierKey,
-            resourceKey,
-            queryData.resourceInstanceId,
-            queryData.subscriptionId
-          )
-            .then((response) => {
-              const topologyDetails =
-                response.data?.detailedNetworkTopology?.[resourceId];
-              //check for dnsName field in the response, absence means dns removal complete
-              if (Boolean(topologyDetails?.customDNSEndpoint.dnsName)) {
-                setIsVerifyingDNSSetup(false);
-                refetchInstance();
-              } else {
-                setIsVerifyingDNSSetup();
-              }
-            })
-            .catch(() => {
-              setIsVerifyingDNSSetup();
-            });
-        }, 500);
-        timeoutID.current = id;
-      } else {
-        setIsVerifyingDNSRemoval(false);
-      }
-    }
-  }
-
-  function pollInstanceQueryToVerifyDNSRemoval() {
-    setIsVerifyingDNSRemoval(true);
-    clearExistingTimeout();
-    pollCount.current = 0;
-    verifyDNSRemoval();
-
-    function verifyDNSRemoval() {
-      if (pollCount.current < 5) {
-        pollCount.current++;
-        const id = setTimeout(() => {
-          getResourceInstanceDetails(
-            queryData?.serviceProviderId,
-            queryData?.serviceKey,
-            queryData?.serviceAPIVersion,
-            queryData?.serviceEnvironmentKey,
-            queryData?.serviceModelKey,
-            queryData?.productTierKey,
-            resourceKey,
-            queryData.resourceInstanceId,
-            queryData.subscriptionId
-          )
-            .then((response) => {
-              const topologyDetails =
-                response.data?.detailedNetworkTopology?.[resourceId];
-              //check for dnsName field in the response, absence means dns removal complete
-              if (!Boolean(topologyDetails?.customDNSEndpoint.dnsName)) {
-                setIsVerifyingDNSRemoval(false);
-                refetchInstance();
-              } else {
-                verifyDNSRemoval();
-              }
-            })
-            .catch(() => {
-              verifyDNSRemoval();
-            });
-        }, 1500);
-        timeoutID.current = id;
-      } else {
-        setIsVerifyingDNSRemoval(false);
-      }
-    }
-  }
-
-  useEffect(() => {
-    return () => {
-      clearExistingTimeout();
-    };
-  }, []);
-
-  const shouldDisableMutationButons =
-    isVerifyingDNSRemoval ||
-    removeCustomDNSMutation.isLoading ||
-    isVerifyingDNSSetup ||
-    addCustomDNSMutation.isLoading;
 
   return (
     <>
@@ -333,6 +329,7 @@ const ResourceConnectivityEndpoint = (props) => {
                   <Box alignSelf="start">
                     <CopyButton
                       text={viewType === "endpoint" ? endpointURL : ports}
+                      iconProps={{ color: "#6941C6", width: 20, height: 20 }}
                     />
                   </Box>
                 )}
@@ -361,9 +358,7 @@ const ResourceConnectivityEndpoint = (props) => {
                           )}
                         />
                       )}
-                      {(isVerifyingDNSRemoval || isVerifyingDNSSetup) && (
-                        <LoadingSpinnerSmall />
-                      )}
+                      {isVerifyingDNSRemoval && <LoadingSpinnerSmall />}
                     </Stack>
                   </TableCell>
                 </TableRow>
@@ -396,6 +391,7 @@ const ResourceConnectivityEndpoint = (props) => {
                             onBlur={customDNSFormik.handleBlur}
                             value={customDNSFormik.values.customDNSEndpoint}
                             disabled={isTextfieldDisabled}
+                            ref={textfieldRef}
                             copyButton={isTextfieldDisabled}
                           />
                           {isTextfieldDisabled ? (
@@ -410,6 +406,7 @@ const ResourceConnectivityEndpoint = (props) => {
                               <IconButtonSquare
                                 onClick={() => {
                                   setIsTextFieldDisabled(false);
+                                  //textfieldRef.current.focus();
                                   setIsEditing(true);
                                 }}
                               >
@@ -423,7 +420,6 @@ const ResourceConnectivityEndpoint = (props) => {
                                   );
                                   setShowDeleteConfirmationDialog(true);
                                 }}
-                                disabled={shouldDisableMutationButons}
                               >
                                 <DeleteIcon />
                               </IconButtonSquare>
@@ -438,7 +434,6 @@ const ResourceConnectivityEndpoint = (props) => {
                                 onClick={() => {
                                   customDNSFormik.submitForm();
                                 }}
-                                disabled={shouldDisableMutationButons}
                               >
                                 Verify{" "}
                                 {addCustomDNSMutation?.isLoading && (
@@ -506,30 +501,4 @@ const ResourceConnectivityEndpoint = (props) => {
   );
 };
 
-export default ResourceConnectivityEndpoint;
-
-function getCustomDNSStatusStylesAndLabel(status) {
-  const statusStylesMap = {
-    PENDING: {
-      label: "Pending",
-      bgColor: "#faf5e7",
-      color: "#f79009",
-    },
-    READY: {
-      label: "Ready",
-      bgColor: "#ecfdf3",
-      color: "#039855",
-    },
-  };
-
-  if (!(status in statusStylesMap)) {
-    return {
-      bgColor: "#e0eaff",
-      color: "#444ce7",
-      label: _.capitalize(status),
-    };
-  } else {
-    const styles = statusStylesMap[status];
-    return styles;
-  }
-}
+export default ResourceConnectivityCustomDNS;

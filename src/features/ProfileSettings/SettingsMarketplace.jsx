@@ -86,6 +86,7 @@ function SettingsMarketplace() {
     apiDocsurl: serviceAPIDocsLink,
     servicePlanUrlLink: servicePlanUrlLink,
     serviceId: serviceId,
+    environmentId : environmentId,
     serviceApiId: serviceOffering?.serviceAPIID,
     SidebarUI: (
       <MarketplaceServiceSidebar

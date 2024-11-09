@@ -80,6 +80,7 @@ export default function Billing({ orgLogoURL, orgName }) {
     apiDocsurl: serviceAPIDocsLink,
     servicePlanUrlLink: servicePlanUrlLink,
     serviceId: serviceId,
+    environmentId : environmentId,
     serviceApiId: serviceOffering?.serviceAPIID,
     SidebarUI: (
       <MarketplaceServiceSidebar

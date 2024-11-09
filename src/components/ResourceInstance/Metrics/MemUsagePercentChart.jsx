@@ -1,6 +1,5 @@
 import React from "react";
 import { Text } from "../../Typography/Typography";
-import { Box } from "@mui/material";
 import {
   CartesianGrid,
   Line,
@@ -11,13 +10,18 @@ import {
   YAxis,
 } from "recharts";
 import ReChartContainer from "../../ReChartContainer/ReChartContainer";
+import { Box } from "@mui/material";
 
 function MemUsagePercentChart(props) {
   const { data } = props;
 
   return (
-    <Box mt={8}>
-      <Text sx={{ marginLeft: 3 }}>Memory Usage </Text>
+    <Box>
+      <Box sx={{ padding: "10px 20px", borderBottom: "1px solid #EAECF0" }}>
+        <Text size="medium" color="#344054" weight="semibold">
+          Memory Usage
+        </Text>
+      </Box>
       <ReChartContainer mt={3}>
         <ResponsiveContainer debounce={100}>
           <LineChart

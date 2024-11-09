@@ -137,5 +137,3 @@ export function getAPIDocsRoute(
 ) {
   return `/access/api-document?serviceId=${serviceId}&environmentId=${environmentId}&productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }
-
-

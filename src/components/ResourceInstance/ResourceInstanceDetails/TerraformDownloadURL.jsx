@@ -1,27 +1,17 @@
 import { Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 
-import { getTerraformKit, getTerraformKitURL } from "src/api/resourceInstance";
+import { getTerraformKit } from "src/api/resourceInstance";
 
 import { Text } from "components/Typography/Typography";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
-import CopyButton from "src/components/Button/CopyButton";
+import ExportIcon from "src/components/Icons/Export/ExportIcon";
 
 const TerraformDownloadURL = ({
   serviceOffering,
   subscriptionId,
   cloud_provider,
 }) => {
-  const terraformURL = getTerraformKitURL(
-    serviceOffering?.serviceProviderId,
-    serviceOffering?.serviceURLKey,
-    serviceOffering?.serviceAPIVersion,
-    serviceOffering?.serviceEnvironmentURLKey,
-    serviceOffering?.serviceModelURLKey,
-    subscriptionId,
-    cloud_provider
-  );
-
   const downloadTerraformKitMutation = useMutation(
     () =>
       getTerraformKit(
@@ -48,22 +38,7 @@ const TerraformDownloadURL = ({
   );
 
   return (
-    <Stack
-      width="100%"
-      direction="row"
-      alignItems="center"
-      justifyContent="flex-end"
-      gap="4px"
-    >
-      <LoadingSpinnerSmall
-        sx={{
-          flexShrink: "0",
-          visibility: downloadTerraformKitMutation.isLoading
-            ? "visible"
-            : "hidden",
-          mr: "12px",
-        }}
-      />
+    <Stack width="100%" direction="row" justifyContent="flex-end" gap="4px">
       <Text
         size="small"
         color="#7F56D9"
@@ -72,12 +47,14 @@ const TerraformDownloadURL = ({
       >
         Download Terraform Kit
       </Text>
-
-      {/* Show Spinner when Loading */}
-      <CopyButton
-        text={terraformURL}
-        iconProps={{ color: "#6941C6", width: 20, height: 20 }}
-        iconStyle={{ flexShrink: 0 }}
+      <ExportIcon />
+      <LoadingSpinnerSmall
+        sx={{
+          flexShrink: "0",
+          visibility: downloadTerraformKitMutation.isLoading
+            ? "visible"
+            : "hidden",
+        }}
       />
     </Stack>
   );

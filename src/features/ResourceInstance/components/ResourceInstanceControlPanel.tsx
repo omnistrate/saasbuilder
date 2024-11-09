@@ -163,10 +163,10 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
       displayEmpty
       disabled={isLoading}
       sx={{
-        minWidth: "155px !important",
-        maxWidth: "155px !important",
-        marginTop: "0px",
-        height: "43px !important",
+        width: "auto",
+        height: "40px !important",
+        padding: "10px 14px !important",
+        minHeight: "40px",
       }}
     >
       {buttons.map(({ label, icon: Icon, onClick, isDisabled, isVisible }) => {

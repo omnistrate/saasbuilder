@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import DashboardLayout from "../../../../src/components/DashboardLayout/DashboardLayout";
 
 import EventsTable from "../../../../src/components/EventsTable/EventsTable";
@@ -27,7 +27,7 @@ import BellGreenIcon from "src/components/Icons/Bell/BellGreenIcon";
 
 function Events() {
   const router = useRouter();
-  const { serviceId, environmentId, source, productTierId, subscriptionId } =
+  const { serviceId, environmentId, productTierId, subscriptionId } =
     router.query;
 
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
@@ -35,7 +35,6 @@ function Events() {
   const { data: serviceOffering, isLoading: isServiceOfferingLoading } =
     useServiceOffering(serviceId, productTierId);
   const events: AccessEvent[] = useSelector(selectEvents);
-  const [currentSource, setCurrentSource] = React.useState("");
 
   const subscriptionQuery = useSubscriptionForProductTierAccess(
     serviceId,
@@ -61,12 +60,6 @@ function Events() {
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);
   };
-
-  useEffect(() => {
-    if (source) {
-      setCurrentSource(source as string);
-    }
-  }, [source]);
 
   const {
     isLoading: isEventsLoading,
@@ -107,8 +100,9 @@ function Events() {
         setCurrentTabValue={setCurrentTabValue}
         accessPage
         isNotShow
-        marketplacePage={currentSource === "access" ? false : true}
         customLogo
+        serviceId={serviceId}
+        environmentId={environmentId}
         SidebarUI={
           <MarketplaceServiceSidebar
             serviceId={serviceId}
@@ -118,7 +112,6 @@ function Events() {
             productTierId={productTierId}
             serviceName={serviceOffering?.serviceName}
             active={sidebarActiveOptions.notifications}
-            currentSource={currentSource}
             currentSubscription={subscriptionData}
             isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
@@ -138,8 +131,9 @@ function Events() {
         setCurrentTabValue={setCurrentTabValue}
         accessPage
         isNotShow
-        marketplacePage={currentSource === "access" ? false : true}
         customLogo
+        serviceId={serviceId}
+        environmentId={environmentId}
         SidebarUI={
           <MarketplaceServiceSidebar
             serviceId={serviceId}
@@ -149,7 +143,6 @@ function Events() {
             productTierId={productTierId}
             serviceName={serviceOffering?.serviceName}
             active={sidebarActiveOptions.notifications}
-            currentSource={currentSource}
             currentSubscription={subscriptionData}
             isCustomNetworkEnabled={isCustomNetworkEnabled}
           />
@@ -164,15 +157,13 @@ function Events() {
   const servicePlanUrlLink = getMarketplaceRoute(
     serviceId,
     environmentId,
-    productTierId,
-    currentSource
+    productTierId
   );
 
   const serviceAPIDocsLink = getAPIDocsRoute(
     serviceId,
     environmentId,
     productTierId,
-    currentSource,
     subscriptionData?.id
   );
 
@@ -187,6 +178,7 @@ function Events() {
         setCurrentTabValue={setCurrentTabValue}
         isNotShow
         serviceId={serviceId}
+        environmentId={environmentId}
         serviceApiId={serviceOffering?.serviceAPIID}
         marketplacePage
         customLogo
@@ -203,7 +195,6 @@ function Events() {
     <DashboardLayout
       setSupportDrawerOpen={setSupportDrawerOpen}
       setCurrentTabValue={setCurrentTabValue}
-      marketplacePage={currentSource === "access" ? false : true}
       accessPage
       currentSubscription={subscriptionData}
       isNotShow
@@ -211,6 +202,7 @@ function Events() {
       apiDocsurl={serviceAPIDocsLink}
       servicePlanUrlLink={servicePlanUrlLink}
       serviceId={serviceId}
+      environmentId={environmentId}
       serviceApiId={serviceOffering?.serviceAPIID}
       SidebarUI={
         <MarketplaceServiceSidebar
@@ -221,7 +213,6 @@ function Events() {
           serviceName={serviceOffering?.serviceName}
           productTierId={productTierId}
           active={sidebarActiveOptions.notifications}
-          currentSource={currentSource}
           currentSubscription={subscriptionData}
           isCustomNetworkEnabled={isCustomNetworkEnabled}
         />

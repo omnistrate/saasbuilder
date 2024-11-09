@@ -11,7 +11,7 @@ import { Text } from "src/components/Typography/Typography";
 
 const MenuItem = styled(MuiMenuItem)({
   borderRadius: 6,
-  padding: "12px 18px",
+  padding: "10px 14px",
   fontSize: "16px",
   fontWeight: 500,
   lineHeight: "24px",
@@ -68,7 +68,13 @@ const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
           </Stack>
         );
       }}
-      sx={{ width: "auto", marginTop: 0, minWidth: "169px", minHeight: "42px" }}
+      sx={{
+        width: "auto",
+        marginTop: 0,
+        minWidth: "169px",
+        minHeight: "40px",
+        height: "40px !important",
+      }}
       onChange={handleChange}
       displayEmpty
     >

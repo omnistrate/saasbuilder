@@ -133,7 +133,7 @@ function AccessControl() {
           return inviteSubscriptionUser(subscriptionData?.id, payload);
         })
       );
-      snackbar.showSuccess("Invites Sent");      
+      snackbar.showSuccess("Invites Sent");
       /*eslint-disable-next-line no-use-before-define*/
       formik.resetForm();
       refetch();
@@ -332,6 +332,7 @@ function AccessControl() {
         marketplacePage={currentSource === "access" ? false : true}
         apiDocsurl={serviceAPIDocsLink}
         serviceId={serviceId}
+        environmentId={environmentId}
         accessPage
         customLogo
         serviceApiId={service?.serviceAPIID}
@@ -374,6 +375,7 @@ function AccessControl() {
         serviceApiId={service?.serviceAPIID}
         enableConsumptionLinks
         servicePlanUrlLink={servicePlanUrlLink}
+        environmentId={environmentId}
         SidebarUI={
           <MarketplaceServiceSidebar
             serviceId={serviceId}
@@ -412,6 +414,7 @@ function AccessControl() {
         accessPage
         currentSubscription={subscriptionData}
         isCustomNetworkEnabled={isCustomNetworkEnabled}
+        environmentId={environmentId}
       >
         <ServiceOfferingUnavailableUI />
       </DashboardLayout>
@@ -430,6 +433,7 @@ function AccessControl() {
       serviceApiId={service?.serviceAPIID}
       enableConsumptionLinks
       servicePlanUrlLink={servicePlanUrlLink}
+      environmentId={environmentId}
       isNotShow
       SidebarUI={
         <MarketplaceServiceSidebar

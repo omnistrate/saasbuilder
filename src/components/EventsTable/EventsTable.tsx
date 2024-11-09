@@ -268,7 +268,6 @@ const EventsTable: FC<EventsTableProps> = (props) => {
               serviceId,
               environmentId,
               productTierId,
-              "",
               subscriptionId,
               userId
             );

@@ -25,6 +25,7 @@ export default function SideDrawer(props) {
     activePage,
   } = props;
 
+
   return (
     <Stack
       position="fixed"

@@ -99,7 +99,7 @@ export default function DashboardLayout(props) {
             marginLeft: noSidebar ? "0px" : "280px",
           }}
         >
-          <Box component="main" p={3} sx={{ background: "white" }}>
+          <Box component="main" p={"32px"} sx={{ background: "white" }}>
             {props.children}
           </Box>
           <DashboardFooter

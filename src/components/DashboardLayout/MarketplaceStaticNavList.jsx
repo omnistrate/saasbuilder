@@ -25,7 +25,7 @@ import PricingIcon from "../Icons/SideNavbar/Pricing/PricingIcon";
 import DownloadCLIIcon from "../Icons/SideNavbar/DownloadCLI/DownloadCLIIcon";
 import DeveloperDocsIcon from "../Icons/SideNavbar/DeveloperDocs/DeveloperDocsIcon";
 import BillingPlansIcon from "../Icons/SideNavbar/BillingPlans/BillingPlans";
-import { getAccessRoute } from "src/utils/route/access/accessRoute";
+import { getMarketplaceProductTierRoute } from "src/utils/route/access/accessRoute";
 import { sidebarActiveOptions } from "../MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import useServiceOffering from "src/hooks/useServiceOffering";
 import { useState } from "react";
@@ -63,7 +63,7 @@ const MarketplaceStaticNavList = (props) => {
     view
   );
   const isServicePlansActive = activePage === sidebarActiveOptions.servicePlans;
-  const servicePlansLink = getAccessRoute(serviceId, environmentId);
+  const servicePlansLink = getMarketplaceProductTierRoute(serviceId, environmentId);
 
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);

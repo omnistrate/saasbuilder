@@ -1,5 +1,7 @@
 import { Box, Stack, Tooltip, tooltipClasses, styled } from "@mui/material";
+
 import { Text } from "components/Typography/Typography";
+
 import CircleCheckIcon from "components/Icons/CircleCheck/CircleCheckIcon";
 import CircleCrossIcon from "components/Icons/CircleCross/CircleCrossIcon";
 
@@ -37,27 +39,32 @@ const NodeStatusTooltip = ({ detailedHealth, children }) => {
 
   return (
     <CustomTooltip
-      disableFocusListener
+      // disableFocusListener
       title={
         <>
           <Text
             size="xsmall"
-            weight="semibold"
-            color={"#32D583"}
+            weight="medium"
+            color={"#344054"}
             sx={{ mb: "8px" }}
           >
             Health Status
           </Text>
           {configurationList.map((item, index) => (
-            <Stack key={index} direction="row" gap="12px">
+            <Stack
+              key={index}
+              direction="row"
+              gap="12px"
+              sx={{ paddingTop: "6px" }}
+            >
               {item.status === "HEALTHY" ? (
                 <CircleCheckIcon />
               ) : (
                 <CircleCrossIcon
-                  color={item.status === "UNHEALTHY" ? "#B42318" : "#808080"}
+                  color={item.status === "UNHEALTHY" ? "" : "#808080"}
                 />
               )}
-              <Text size="small" weight="regular" color="#FFFFFF">
+              <Text size="xsmall" weight="regular" color="rgba(52, 64, 84, 1)">
                 {item.text}
               </Text>
             </Stack>
@@ -65,6 +72,23 @@ const NodeStatusTooltip = ({ detailedHealth, children }) => {
         </>
       }
       arrow
+      sx={{
+        "& .MuiTooltip-arrow": {
+          "&:before": {
+            backgroundColor: "#FFFFFF",
+            border: "1px solid var(--Colors-Border-border-primary, #D0D5DD)",
+            content: '""',
+            display: "block",
+            width: "100%",
+            height: "100%",
+            transform: "rotate(45deg)",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            zIndex: -1,
+          },
+        },
+      }}
     >
       <Box
         sx={{
@@ -81,10 +105,13 @@ const CustomTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "#101828",
+    backgroundColor: "#FFFFFF",
     padding: "12px",
     borderRadius: "8px",
-    minWidth: "280px",
+    minWidth: "180px",
+    boxShadow:
+      "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
+    border: "1px solid var(--Colors-Border-border-primary, #D0D5DD)",
   },
 });
 

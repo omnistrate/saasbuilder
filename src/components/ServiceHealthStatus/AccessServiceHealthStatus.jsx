@@ -35,24 +35,35 @@ function AccessServiceHealthStatus() {
   return (
     <Card
       sx={{
-        borderRadius: "88px",
-        padding: "2px 24px !important",
-        alignItems: "center",
+        borderRadius: "24px",
+        padding: "2px 10px !important",
         display: "flex",
+        gap: "18px",
+        border: "1px solid rgba(208, 213, 221, 1)",
+        boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+        height: "32px",
       }}
     >
       <Stack
         direction={"row"}
         justifyContent={"flex-start"}
         alignItems={"center"}
-        gap={"14px"}
-        paddingY={"10px"}
+        gap={"8px"}
+        paddingY={"6px"}
       >
         <PulsatingDot color={styles?.color} />
-        <Text size="medium" weight="medium">
+        <Text size="small" weight="medium" color="rgba(52, 64, 84, 1)">
           Service Health
         </Text>
-        <Text size="medium" weight="bold" sx={{ ...styles }}>
+      </Stack>
+      <Stack
+        direction={"row"}
+        justifyContent={"flex-start"}
+        alignItems={"center"}
+        gap={"8px"}
+        paddingY={"6px"}
+      >
+        <Text size="small" weight="bold" sx={{ ...styles }}>
           {label}
         </Text>
         <HealthIcon color={styles?.color} />
