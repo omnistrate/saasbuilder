@@ -3,23 +3,25 @@ import Box from "@mui/material/Box";
 import MuiTabs, { tabsClasses } from "@mui/material/Tabs";
 import MuiTab, { tabClasses } from "@mui/material/Tab";
 import styled from "@emotion/styled";
-import { tabs } from "../constants";
+import { tabLabel, tabs } from "../constants";
+import { useRouter } from "next/router";
+import { getSettingsRoute } from "src/utils/route/settings";
 
 export default function SettingsTab(props) {
-  const { currentTab, router } = props;
+  const { currentTab } = props;
+  const router = useRouter();
+  const { serviceId, environmentId, productTierId, subscriptionId } =
+    router.query;
 
   const handleChangeTab = (view) => {
     router.push(
-      {
-        pathname: router.pathname,
-        query: {
-          view: view,
-        },
-      },
-      undefined,
-      {
-        shallow: true,
-      }
+      getSettingsRoute(
+        serviceId,
+        environmentId,
+        productTierId,
+        subscriptionId,
+        view
+      )
     );
   };
 
@@ -38,21 +40,21 @@ export default function SettingsTab(props) {
         }}
       >
         <Tab
-          label={tabs.profile}
+          label={tabLabel[tabs.profile]}
           value={tabs.profile}
           onClick={() => {
             handleChangeTab(tabs.profile);
           }}
         />
         <Tab
-          label={tabs.billingAddress}
+          label={tabLabel[tabs.billingAddress]}
           value={tabs.billingAddress}
           onClick={() => {
             handleChangeTab(tabs.billingAddress);
           }}
         />
         <Tab
-          label={tabs.password}
+          label={tabLabel[tabs.password]}
           value={tabs.password}
           onClick={() => {
             handleChangeTab(tabs.password);

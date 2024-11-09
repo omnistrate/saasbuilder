@@ -1,28 +1,17 @@
 import profile_icon from "public/assets/images/dashboard/avatar.jpeg";
-import BillingIcon from "src/components/Icons/Billing/BillingIcon";
 import LogoutIcon from "src/components/Icons/Logout/LogoutIcon";
-import SettingsIcon from "src/components/Icons/Settings/SettingsIcon";
 import Menu from "src/components/Menu/Menu";
 import { Box, MenuItem as MuiMenuItem, Stack, styled } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 import {
   getEnumFromUserRoleString,
-  isOperationAllowedByRBAC,
-  operationEnum,
-  viewEnum,
 } from "src/utils/isAllowedByRBAC";
-import Link from "next/link";
-import { selectUserrootData } from "src/slices/userDataSlice";
-import { useSelector } from "react-redux";
 import { Text } from "../Typography/Typography";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
-import ProfileUser from "../Icons/ProfileDropDown/ProfileUser";
 import EllipsisTooltipText from "../Tooltip/EllipsisTooltip";
-import { getSettingsRoute } from "src/utils/route/settings/settings";
 import { styleConfig } from "src/providerConfig";
-import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 
@@ -31,23 +20,13 @@ function ProfileDropdown(props) {
     userAllData,
     logout,
     accessPage,
-    marketplacePage,
     currentSubscription,
   } = props;
 
-  const selectUser = useSelector(selectUserrootData);
-  const role = getEnumFromUserRoleString(selectUser.roleType);
-  const view = viewEnum.BillingPricing;
-  const isReadAllowed = isOperationAllowedByRBAC(
-    operationEnum.Read,
-    role,
-    view
-  );
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const environmentType = useEnvironmentType();
-  const settingsPath = getSettingsRoute(accessPage, marketplacePage);
 
   const handleMenuOpen = (e) => {
     e.stopPropagation();
@@ -130,46 +109,7 @@ function ProfileDropdown(props) {
             </Stack>
           </Stack>
         </MenuItem>
-        <MenuItem key="Profile">
-          <DropdownMenuLink href={`${settingsPath}?view=Profile`}>
-            <ProfileUser />
-            <Text weight="medium" size="small" color="#344054">
-              Profile
-            </Text>
-          </DropdownMenuLink>
-        </MenuItem>
-        <MenuItem key="Change Password">
-          <DropdownMenuLink
-            sx={{ display: "contents" }}
-            href={`${settingsPath}?view=Password`}
-          >
-            <SettingsIcon />
-
-            <Text weight="medium" size="small" color="#344054">
-              Change Password
-            </Text>
-          </DropdownMenuLink>
-        </MenuItem>
-        {!accessPage &&
-          !marketplacePage && [
-            <MenuItem key="Billing" disabled={!isReadAllowed}>
-              <DropdownMenuLink href="/billing">
-                <BillingIcon />
-                <Text weight="medium" size="small" color="#344054">
-                  Billing
-                </Text>
-              </DropdownMenuLink>
-            </MenuItem>,
-          ]}
-
-        <MenuItem key="Subscriptions">
-          <DropdownMenuLink href="/subscriptions">
-            <SubscriptionsIcon />
-            <Text weight="medium" size="small" color="#344054">
-              Subscriptions
-            </Text>
-          </DropdownMenuLink>
-        </MenuItem>
+     
 
         {isProdEnvironment && accessPage && currentSubscription?.id && (
           <MenuItem
@@ -205,18 +145,6 @@ function ProfileDropdown(props) {
             </Box>
           </MenuItem>
         )}
-        <MenuItem
-          key="Billing"
-          sx={{ borderBottom: "1px solid #EAECF0" }}
-          disabled={!isReadAllowed}
-        >
-          <DropdownMenuLink href="/billing">
-            <BillingIcon />
-            <Text weight="medium" size="small" color="#344054">
-              Billing
-            </Text>
-          </DropdownMenuLink>
-        </MenuItem>
         <MenuItem
           onClick={() => {
             logout();
@@ -262,10 +190,3 @@ const MenuItem = styled(MuiMenuItem)({
   padding: 0,
 });
 
-const DropdownMenuLink = styled(Link)(() => ({
-  display: "flex !important",
-  alignItems: "center",
-  gap: 8,
-  width: "100%",
-  padding: "12px 16px",
-}));

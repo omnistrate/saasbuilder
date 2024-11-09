@@ -1,33 +1,28 @@
 import React, { useEffect, useMemo, useState } from "react";
-import DashboardLayout from "../../../../src/components/DashboardLayout/DashboardLayout";
+import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
 import { useRouter } from "next/router";
-import useServiceOffering from "../../../../src/hooks/useServiceOffering";
-import LoadingSpinner from "../../../../src/components/LoadingSpinner/LoadingSpinner";
-import Statistics from "../../../../src/components/MarketplaceDashboard/Statistics";
-import EventsTable from "../../../../src/components/EventsTable/EventsTable";
+import useServiceOffering from "src/hooks/useServiceOffering";
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import Statistics from "src/components/MarketplaceDashboard/Statistics";
 import MarketplaceServiceSidebar, {
   sidebarActiveOptions,
-} from "../../../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
-import useServiceOfferingEvents from "../../../../src/hooks/useServiceOfferingEvents";
-import { selectEvents } from "../../../../src/slices/eventsSlice";
-import { useSelector } from "react-redux";
-import useServiceOfferingResourceInstances from "../../../../src/hooks/useServiceOfferingResourceInstances";
-import SideDrawerRight from "../../../../src/components/SideDrawerRight/SideDrawerRight";
-import { AccessSupport } from "../../../../src/components/Access/AccessSupport";
+} from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
+import useServiceOfferingResourceInstances from "src/hooks/useServiceOfferingResourceInstances";
+import SideDrawerRight from "src/components/SideDrawerRight/SideDrawerRight";
+import { AccessSupport } from "src/components/Access/AccessSupport";
 import {
   getAPIDocsRoute,
   getMarketplaceRoute,
-} from "../../../../src/utils/route/access/accessRoute";
+} from "src/utils/route/access/accessRoute";
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
-import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
+import { OfferingUnavailableUI } from "pages/access/service/[serviceId]";
 import useServiceHealth from "src/hooks/query/useServiceHealth";
-
-export const getServerSideProps = async () => {
-  return {
-    props: {},
-  };
-};
+import ClusterLocations from "src/features/Access/Dashboard/ClusterLocations";
+import LogoHeader from "src/components/Headers/LogoHeader";
+import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
+import { Box } from "@mui/material";
+import Divider from "src/components/Divider/Divider";
 
 function Dashboard() {
   const router = useRouter();
@@ -50,21 +45,6 @@ function Dashboard() {
 
   const serviceHealthQuery = useServiceHealth();
 
-  const {
-    isLoading: isEventsLoading,
-    isRefetching: isEventsRefetching,
-    refetch: refetchEvents,
-  } = useServiceOfferingEvents(
-    serviceId,
-    serviceOffering?.serviceProviderId,
-    serviceOffering?.serviceURLKey,
-    serviceOffering?.serviceAPIVersion,
-    serviceOffering?.serviceEnvironmentURLKey,
-    serviceOffering?.serviceModelURLKey,
-    serviceOffering?.productTierURLKey,
-    serviceOffering?.resourceParameters,
-    subscriptionData?.id
-  );
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);
   };
@@ -72,6 +52,7 @@ function Dashboard() {
     isLoading: isResourceInstancesLoading,
     numResourceInstances,
     isIdle: isResourceInstancesIdle,
+    resourceInstances = [],
   } = useServiceOfferingResourceInstances(
     serviceId,
     serviceOffering?.serviceProviderId,
@@ -90,8 +71,6 @@ function Dashboard() {
     }
   }, [source]);
 
-  const events = useSelector(selectEvents);
-
   const isCustomNetworkEnabled = useMemo(() => {
     let enabled = false;
 
@@ -105,11 +84,8 @@ function Dashboard() {
     return enabled;
   }, [serviceOffering]);
 
-  const isRootSubscription = subscriptionData?.roleType === "root";
-
   const isLoading =
     isServiceOfferingLoading ||
-    isEventsLoading ||
     isResourceInstancesLoading ||
     isResourceInstancesIdle;
 
@@ -186,6 +162,7 @@ function Dashboard() {
     serviceId,
     environmentId,
     productTierId,
+    currentSource,
     subscriptionData?.id
   );
 
@@ -207,7 +184,7 @@ function Dashboard() {
         accessPage
         currentSubscription={subscriptionData}
       >
-        <ServiceOfferingUnavailableUI />
+        <OfferingUnavailableUI />
       </DashboardLayout>
     );
   }
@@ -243,20 +220,28 @@ function Dashboard() {
       customLogo
       serviceLogoURL={serviceOffering?.serviceLogoURL}
     >
+      <Box
+        display="flex"
+        //@ts-ignore
+        flexDirection="colunm"
+        justifyContent="flex-start"
+        padding={"22px 0px"}
+      >
+        <Box paddingTop={1}>
+          <DashboardHeaderIcon />
+        </Box>
+        <LogoHeader margin={0} title={"Dashboard"} desc="" />
+      </Box>
+      <Divider />
+
       <Statistics
         serviceHealthQuery={serviceHealthQuery}
         numResourceInstances={numResourceInstances}
         numResources={serviceOffering?.resourceParameters.length}
       />
-      <EventsTable
-        serviceId={serviceId}
-        environmentId={environmentId}
-        productTierId={productTierId}
-        subscriptionId={subscriptionData?.id}
-        events={events}
-        refetchEvents={refetchEvents}
-        isRefetching={isEventsRefetching}
-        isRootSubscription={isRootSubscription}
+      <ClusterLocations
+        resourceInstances={resourceInstances}
+        isFetchingInstances={isResourceInstancesLoading}
       />
       <SideDrawerRight
         size="xlarge"

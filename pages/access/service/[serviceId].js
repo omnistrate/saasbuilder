@@ -1635,7 +1635,6 @@ function MarketplaceService() {
                 ? "Custom Networks"
                 : `${selectedResource?.name} Instances`
             }
-            desc="Some Description"
             newicon={resourceInstnaceIcon}
           />
           <AccessServiceHealthStatus />

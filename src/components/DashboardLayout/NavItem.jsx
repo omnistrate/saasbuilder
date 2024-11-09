@@ -1,13 +1,81 @@
-import { Box, styled } from "@mui/material";
+import { Box, Collapse, Stack, styled } from "@mui/material";
 import MuiList from "@mui/material/List";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { selectDrawerExpandedState } from "../../slices/dashboardSideDrawerSlice";
 import HoverSubMenu from "./HoverSubMenu";
 import MuiTooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { styleConfig } from "src/providerConfig";
+
+export const ListItem = styled(Link, {
+  shouldForwardProp: (prop) =>
+    ![
+      "active",
+      "clickDisabled",
+      "nestingLevel",
+      "disableHoverEffect",
+      "hoverMenuItem",
+      "isDrawerExpanded",
+    ].includes(prop),
+})(({  clickDisabled, nestingLevel }) => {
+  const itemLeftPadding = 12;
+
+  return {
+    marginTop: 12,
+    pointerEvents: clickDisabled ? "none" : "auto",
+    minHeight: 40,
+    color: "#FFFFFF",
+    padding: 0,
+    paddingRight: "12px",
+    display: "block",
+    cursor: "pointer",
+    "&:hover": {
+      color: `${styleConfig.sidebarTextActiveColor} !important`,
+      backgroundColor: "#F9FAFB",
+    },
+    paddingLeft: nestingLevel
+        ? `${(nestingLevel + 1) * itemLeftPadding}px`
+        : `${itemLeftPadding}px`,
+    display: " flex",
+    alignItems: "center",
+  };
+});
+
+export const NonLinkListItem = styled(Box, {
+  shouldForwardProp: (prop) =>
+    ![
+      "active",
+      "clickDisabled",
+      "nestingLevel",
+      "disableHoverEffect",
+      "hoverMenuItem",
+    ].includes(prop),
+})(({  clickDisabled, nestingLevel }) => {
+  const itemLeftPadding = 12;
+
+  return {
+    marginTop: 12,
+    pointerEvents: clickDisabled ? "none" : "auto",
+    minHeight: 40,
+    color: "#FFFFFF",
+    padding: 0,
+    paddingRight: "12px",
+    display: "block",
+    cursor: "pointer",
+    "&:hover": {
+      color: `${styleConfig.sidebarTextActiveColor} !important`,
+      backgroundColor: "#F9FAFB",
+    },
+    paddingLeft: nestingLevel
+        ? `${(nestingLevel + 1) * itemLeftPadding}px`
+        : `${itemLeftPadding}px`,
+    display: " flex",
+    alignItems: "center",
+  };
+});
 
 const NavItem = (props) => {
   const router = useRouter();
@@ -27,7 +95,17 @@ const NavItem = (props) => {
     IconComponentProps = {},
     openInNewTab,
     nestingLevel = 0,
+    isExpandible = false,
+    disableHoverEffect = false,
+    hoverMenuItem = false,
   } = props;
+  const [expanded, setExpanded] = useState(true);
+
+  function handleExpandToggle() {
+    if (isExpandible) {
+      setExpanded((prev) => !prev);
+    }
+  }
 
   useEffect(() => {
     if (window) {
@@ -35,7 +113,7 @@ const NavItem = (props) => {
     }
   }, []);
 
-  const isDrawerExpanded = useSelector(selectDrawerExpandedState);
+  const isDrawerExpanded = true;
 
   if (hidden) return "";
 
@@ -43,7 +121,22 @@ const NavItem = (props) => {
   if (!route) {
     route = currentURL;
   }
-  IconComponentProps.color = disabled ? "#716F6F" : "#FFFFFF";
+
+  let iconColor = styleConfig.sidebarIconColor;
+  if (disabled) {
+    iconColor = styleConfig.sidebarIconDisabledColor;
+  }
+  if (isActive) {
+    iconColor = styleConfig.sidebarIconActiveColor;
+  }
+
+  IconComponentProps.color = iconColor;
+
+  let ListItemComponent = ListItem;
+  if (!href) {
+    ListItemComponent = NonLinkListItem;
+  }
+
   return (
     <>
       <MenuHoverTooltip
@@ -59,176 +152,111 @@ const NavItem = (props) => {
         isVisible={!isDrawerExpanded && nestingLevel === 0}
         // open={name === "Build Services"}
       >
-        <ListItem
+        <ListItemComponent
           nestingLevel={nestingLevel}
           active={isActive}
           clickDisabled={disabled}
           href={route ?? ""}
           target={openInNewTab ? "_blank" : "_self"}
+          disableHoverEffect={disableHoverEffect}
+          onClick={handleExpandToggle}
+          hoverMenuItem={hoverMenuItem}
+          isDrawerExpanded={isDrawerExpanded}
         >
-          <StyledLinkContainer>
-            {IconComponent ? (
-              <IconComponent active={isActive} {...IconComponentProps} />
-            ) : (
-              <ListItemIcon src={iconSrc} alt={iconAlt} />
-            )}
+          <StyledLinkContainer flexGrow={1}>
+            <Stack direction="row" alignItems="center">
+              <Box flexShrink={0} display="flex" alignItems="center">
+                {IconComponent ? (
+                  <IconComponent active={isActive} {...IconComponentProps} />
+                ) : (
+                  <ListItemIcon src={iconSrc} alt={iconAlt} />
+                )}
+              </Box>
 
-            <ListItemText
-              clickDisabled={disabled}
-              active={isActive}
-              visible={isDrawerExpanded || nestingLevel === 1}
-            >
-              {name}
-            </ListItemText>
+              <ListItemText
+                clickDisabled={disabled}
+                active={isActive}
+                visible={isDrawerExpanded || nestingLevel === 1}
+              >
+                {name}
+              </ListItemText>
+            </Stack>
+            {isExpandible &&
+              subItems.length > 0 &&
+              isDrawerExpanded &&
+              (expanded ? (
+                <ExpandLessIcon sx={{ color: styleConfig.sidebarIconColor }} />
+              ) : (
+                <ExpandMoreIcon sx={{ color: styleConfig.sidebarIconColor }} />
+              ))}
           </StyledLinkContainer>
-        </ListItem>
+        </ListItemComponent>
       </MenuHoverTooltip>
-      {subItems.length > 0 ? (
-        <SubList isDrawerExpanded={isDrawerExpanded}>
-          {subItems.map((navItem) => {
-            const {
-              name,
-              IconComponent,
-              icon,
-              isActive,
-              activeRoutes,
-              route,
-              disabled,
-              hidden,
-              subItems = [],
-              openInNewTab,
-              IconComponentProps = {},
-            } = navItem;
+      <Collapse in={expanded}>
+        {subItems.length > 0 ? (
+          <SubList isDrawerExpanded={isDrawerExpanded}>
+            {subItems.map((navItem) => {
+              const {
+                name,
+                IconComponent,
+                icon,
+                // alt,
+                isActive,
+                activeRoutes = [],
+                href,
+                disabled,
+                hidden,
+                subItems = [],
+                openInNewTab,
+                IconComponentProps = {},
+              } = navItem;
 
-            let isNavItemActive = false;
+              let isNavItemActive = false;
 
-            if (isActive !== undefined) {
-              isNavItemActive = isActive;
-            } else {
-              isNavItemActive = activeRoutes.some(
-                (path) => currentPath === path
+              if (isActive !== undefined) {
+                isNavItemActive = isActive;
+              } else {
+                isNavItemActive = activeRoutes.some(
+                  (path) => currentPath === path
+                );
+              }
+
+              return (
+                <NavItem
+                  key={name}
+                  isActive={isNavItemActive}
+                  name={name}
+                  href={href}
+                  iconSrc={icon}
+                  subItems={subItems}
+                  nestingLevel={nestingLevel + 1}
+                  disabled={disabled}
+                  hidden={hidden}
+                  IconComponent={IconComponent}
+                  IconComponentProps={IconComponentProps}
+                  openInNewTab={openInNewTab}
+                />
               );
-            }
-
-            return (
-              <NavItem
-                key={name}
-                isActive={isNavItemActive}
-                name={name}
-                href={route}
-                iconSrc={icon}
-                subItems={subItems}
-                nestingLevel={nestingLevel + 1}
-                disabled={disabled}
-                hidden={hidden}
-                IconComponent={IconComponent}
-                IconComponentProps={IconComponentProps}
-                openInNewTab={openInNewTab}
-              />
-            );
-          })}
-        </SubList>
-      ) : (
-        ""
-      )}
+            })}
+          </SubList>
+        ) : (
+          ""
+        )}
+      </Collapse>
     </>
   );
 };
 
 export default NavItem;
 
-export const ListItem = styled(Link, {
-  shouldForwardProp: (prop) =>
-    !["active", "clickDisabled", "nestingLevel"].includes(prop),
-})(({ active, clickDisabled, nestingLevel }) => ({
-  pointerEvents: clickDisabled ? "none" : "auto",
-  minHeight: 46,
-  color: "#FFFFFF",
-  padding: 0,
-  paddingRight: "20px",
-  display: "block",
-  cursor: "pointer",
-  "&:hover": {
-    borderImage: "linear-gradient(to right,#00C853, rgba(0, 0, 0, 0) ) 1 100%",
-    borderImageSlice: 1,
-    borderWidth: "0.5px",
-    borderLeftWidth: "3px",
-    borderStyle: "solid",
-    borderRight: "0px",
-    paddingLeft: nestingLevel
-      ? `${(nestingLevel + 1) * 21 - 3}px`
-      : `${22 - 3}px`,
-    paddingTop: `${10 - 1}px`,
-    paddingBottom: `${10 - 1}px`,
-  },
-  background: active ? "rgba(255, 255, 255, 0.09)" : "",
-  borderImage: active
-    ? "linear-gradient(to right,#00C853, rgba(0, 0, 0, 0) ) 1 100%"
-    : "",
-  borderImageSlice: 1,
-  borderWidth: active ? "0.5px" : "",
-  borderLeftWidth: active ? "3px" : "",
-  borderStyle: active ? "solid" : "",
-  borderRight: "0px",
-  paddingLeft: active
-    ? nestingLevel
-      ? `${(nestingLevel + 1) * 21 - 3}px`
-      : `${22 - 3}px`
-    : nestingLevel
-      ? `${(nestingLevel + 1) * 21}px`
-      : "22px",
-  paddingTop: active ? `${10 - 1}px` : "10px",
-  paddingBottom: active ? `${10 - 1}px` : "10px",
-}));
 
-export const ListItemNonLink = styled(Box, {
-  shouldForwardProp: (prop) =>
-    !["active", "clickDisabled", "nestingLevel"].includes(prop),
-})(({ active, clickDisabled, nestingLevel }) => ({
-  pointerEvents: clickDisabled ? "none" : "auto",
-  minHeight: 46,
-  color: "#FFFFFF",
-  padding: 0,
-  paddingRight: "20px",
-  display: "block",
-  cursor: "pointer",
-  "&:hover": {
-    borderImage: "linear-gradient(to right,#00C853, rgba(0, 0, 0, 0) ) 1 100%",
-    borderImageSlice: 1,
-    borderWidth: "0.5px",
-    borderLeftWidth: "3px",
-    borderStyle: "solid",
-    borderRight: "0px",
-    paddingLeft: nestingLevel
-      ? `${(nestingLevel + 1) * 21 - 3}px`
-      : `${22 - 3}px`,
-    paddingTop: `${10 - 1}px`,
-    paddingBottom: `${10 - 1}px`,
-  },
-  background: active ? "rgba(255, 255, 255, 0.09)" : "",
-  borderImage: active
-    ? "linear-gradient(to right,#00C853, rgba(0, 0, 0, 0) ) 1 100%"
-    : "",
-  borderImageSlice: 1,
-  borderWidth: active ? "0.5px" : "",
-  borderLeftWidth: active ? "3px" : "",
-  borderStyle: active ? "solid" : "",
-  borderRight: "0px",
-  paddingLeft: active
-    ? nestingLevel
-      ? `${(nestingLevel + 1) * 21 - 3}px`
-      : `${22 - 3}px`
-    : nestingLevel
-      ? `${(nestingLevel + 1) * 21}px`
-      : "22px",
-  paddingTop: active ? `${10 - 1}px` : "10px",
-  paddingBottom: active ? `${10 - 1}px` : "10px",
-}));
 
 export const StyledLinkContainer = styled(Box)({
   display: "block",
   display: "flex",
   alignItems: "center",
+  justifyContent: "space-between",
+  gap: "6px",
 });
 
 export const ListItemIcon = styled(Image)({
@@ -240,13 +268,18 @@ export const ListItemIcon = styled(Image)({
 export const ListItemText = styled("span", {
   shouldForwardProp: (prop) =>
     !["active", "visible", "clickDisabled"].includes(prop),
-})(({ visible = true, clickDisabled }) => ({
+})(({ visible = true, active, clickDisabled }) => ({
   display: visible ? "inline-block" : "none",
-  color: clickDisabled ? "#716F6F" : "#FFFFFF",
+  color: clickDisabled
+    ? "#716F6F"
+    : active
+      ? styleConfig.sidebarTextActiveColor
+      : styleConfig.sidebarTextColor,
   marginLeft: 12,
-  fontWeight: 400,
+  fontWeight: 600,
   fontSize: 14,
-  lineHeight: "26px",
+  lineHeight: "20px",
+  whiteSpace: "nowrap",
 }));
 
 const SubList = styled(MuiList, {

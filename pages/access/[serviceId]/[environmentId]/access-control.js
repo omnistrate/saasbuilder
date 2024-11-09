@@ -45,15 +45,10 @@ import { inviteSubscriptionUser, revokeSubscriptionUser } from "src/api/users";
 import useSubscriptionUsers from "src/hooks/query/useSubscriptionUsers";
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
-import HeaderTitle from "src/components/Headers/Header";
 import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
 import SearchInput from "src/components/DataGrid/SearchInput";
-
-export const getServerSideProps = async () => {
-  return {
-    props: {},
-  };
-};
+import LogoHeader from "src/components/Headers/LogoHeader";
+import AccessControlIcon from "src/components/Icons/AccessControlIcon/AccessControlIcon";
 
 function AccessControl() {
   const router = useRouter();
@@ -87,15 +82,13 @@ function AccessControl() {
     subscriptionId: subscriptionData?.id,
   });
   const { subscriptionUsers: users = [] } = data || {};
-
+  const [searchText, setSearchText] = useState("");
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [modifyFormikValue, setModifyFormikValue] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
   const [isDialog, setDialog] = React.useState(false);
-  const [searchText, setSearchText] = useState("");
 
-  // const selectUser = useSelector(selectUserrootData);
   const role = getEnumFromUserRoleString(subscriptionData?.roleType);
   const view = viewEnum.Access_AccessControl;
   const unviteAllowed = isOperationAllowedByRBAC(
@@ -140,7 +133,7 @@ function AccessControl() {
           return inviteSubscriptionUser(subscriptionData?.id, payload);
         })
       );
-      snackbar.showSuccess("Invites Sent");
+      snackbar.showSuccess("Invites Sent");      
       /*eslint-disable-next-line no-use-before-define*/
       formik.resetForm();
       refetch();
@@ -159,7 +152,8 @@ function AccessControl() {
         snackbar.showSuccess("User Deleted");
         refetch();
       },
-      onError: () => {
+      onError: (error) => {
+        console.error(error);
         snackbar.showError("Failed to delete user");
       },
     }
@@ -275,6 +269,42 @@ function AccessControl() {
     };
   });
 
+  const getNewEnvVariable = () => {
+    return {
+      email: "",
+      roleType: "",
+      serviceId: "All",
+      serviceEnvironmentId: "All",
+    };
+  };
+  const servicePlanUrlLink = getMarketplaceRoute(
+    serviceId,
+    environmentId,
+    productTierId,
+    currentSource
+  );
+
+  const serviceAPIDocsLink = getAPIDocsRoute(
+    serviceId,
+    environmentId,
+    productTierId,
+    currentSource,
+    subscriptionData?.id
+  );
+
+  const isCustomNetworkEnabled = useMemo(() => {
+    let enabled = false;
+
+    if (
+      service?.serviceModelFeatures?.find((featureObj) => {
+        return featureObj.feature === "CUSTOM_NETWORKS";
+      })
+    )
+      enabled = true;
+
+    return enabled;
+  }, [service]);
+
   const filteredUsers = useMemo(() => {
     let users = inputRows || [];
 
@@ -293,41 +323,6 @@ function AccessControl() {
     return users;
   }, [inputRows, searchText]);
 
-  const getNewEnvVariable = () => {
-    return {
-      email: "",
-      roleType: "",
-      serviceId: "All",
-      serviceEnvironmentId: "All",
-    };
-  };
-
-  const isCustomNetworkEnabled = useMemo(() => {
-    let enabled = false;
-
-    if (
-      service?.serviceModelFeatures?.find((featureObj) => {
-        return featureObj.feature === "CUSTOM_NETWORKS";
-      })
-    )
-      enabled = true;
-
-    return enabled;
-  }, [service]);
-
-  const servicePlanUrlLink = getMarketplaceRoute(
-    serviceId,
-    environmentId,
-    productTierId,
-    currentSource
-  );
-
-  const serviceAPIDocsLink = getAPIDocsRoute(
-    serviceId,
-    environmentId,
-    productTierId,
-    subscriptionData?.id
-  );
   if (isServiceOfferingLoading || isLoadingSubscription || !service) {
     return (
       <DashboardLayout
@@ -416,6 +411,7 @@ function AccessControl() {
         servicePlanUrlLink={servicePlanUrlLink}
         accessPage
         currentSubscription={subscriptionData}
+        isCustomNetworkEnabled={isCustomNetworkEnabled}
       >
         <ServiceOfferingUnavailableUI />
       </DashboardLayout>
@@ -459,10 +455,23 @@ function AccessControl() {
         </Box>
       ) : (
         <>
-          <HeaderTitle
-            title="Access Control"
-            desc="Manage your Users and their account permissions here."
-          />
+          <Box
+            display="flex"
+            //@ts-ignore
+            flexDirection="colunm"
+            marginLeft="10px"
+            justifyContent="flex-start"
+            padding={"22px 0px"}
+          >
+            <Box paddingTop={1}>
+              <AccessControlIcon />
+            </Box>
+            <LogoHeader
+              margin={0}
+              title={"Access Control"}
+              desc="Manage your Users and their account permissions here."
+            />
+          </Box>
 
           <Box
             mt="20px"
@@ -602,49 +611,6 @@ function AccessControl() {
                                         </MenuItem>
                                       ))}
                                     </TextField>
-
-                                    {/* <Select
-                                      // isLoading
-                                      required
-                                      name={`userInvite[${index}].serviceId`}
-                                      value={invite.serviceId}
-                                      onChange={formik.handleChange}
-                                      sx={{
-                                        flex: 1,
-                                        minWidth: "200px",
-                                        maxWidth: "200px",
-                                      }}
-                                      displayEmpty
-                                      renderValue={(value) => {
-                                        if (value) return value;
-                                        return "Resource";
-                                      }}
-                                    >
-                                      <MenuItem key="all" value="All">
-                                        All
-                                      </MenuItem>
-                                    </Select>
-                                    <Select
-                                      required
-                                      select
-                                      name={`userInvite[${index}].serviceEnvironmentId`}
-                                      value={invite.serviceEnvironmentId}
-                                      onChange={formik.handleChange}
-                                      displayEmpty
-                                      renderValue={function (value) {
-                                        if (value) return value;
-                                        return "Resource Instance";
-                                      }}
-                                      sx={{
-                                        flex: 1,
-                                        minWidth: "200px",
-                                        maxWidth: "200px",
-                                      }}
-                                    >
-                                      <MenuItem key="all" value="All">
-                                        All
-                                      </MenuItem>
-                                    </Select> */}
                                   </Box>
                                   {index !== 0 && (
                                     <Box>
@@ -708,25 +674,6 @@ function AccessControl() {
                                   >
                                     Add Another
                                   </Button>
-                                  {/* <Button
-                                    variant="contained"
-                                    sx={{
-                                      marginLeft: "30px",
-                                      marginTop: "16px",
-                                    }}
-                                    startIcon={<EmailOutlinedIcon />}
-                                    type="submit"
-                                    disabled={
-                                      createUserInvitesMutation.isLoading
-                                        ? true
-                                        : !inviteAllowed
-                                    }
-                                  >
-                                    Send Invites{" "}
-                                    {createUserInvitesMutation.isLoading && (
-                                      <LoadingSpinnerSmall />
-                                    )}
-                                  </Button> */}
                                 </>
                               )}
                             </Stack>
@@ -815,7 +762,6 @@ function AccessControl() {
                     });
                   } else {
                     setSelectionModel(selection);
-                    // setSelectedAccountConfigName("");
                   }
                 }}
                 getRowId={(row) => row.id}

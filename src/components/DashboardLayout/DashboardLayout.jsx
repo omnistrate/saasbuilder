@@ -29,7 +29,9 @@ export default function DashboardLayout(props) {
     isNotShow,
     currentSubscription,
     isServiceLength,
-    noServicesAvailable
+    noServicesAvailable,
+    environmentId,
+    activePage,
   } = props;
   const open = useSelector(selectDrawerExpandedState);
   const notificationBar = useNotificationBar();
@@ -38,6 +40,7 @@ export default function DashboardLayout(props) {
   const toggleDrawerOpen = () => {
     dispatch(toggleDrawer());
   };
+
 
   return (
     <Box>
@@ -78,6 +81,8 @@ export default function DashboardLayout(props) {
           apiDocsurl={apiDocsurl}
           isActive={isActive}
           subscriptionId={currentSubscription?.id}
+          environmentId={environmentId}
+          activePage={activePage}
         />
       )}
       <Box

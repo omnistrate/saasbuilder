@@ -21,8 +21,8 @@ function HoverSubMenu(props) {
               IconComponent,
               icon,
               isActive,
-              activeRoutes,
-              route,
+              activeRoutes=[],
+              href,
               disabled,
               hidden,
               subItems = [],
@@ -52,7 +52,7 @@ function HoverSubMenu(props) {
                 key={name}
                 isActive={isNavItemActive}
                 name={name}
-                href={route}
+                href={href}
                 iconSrc={icon}
                 subItems={subItems}
                 nestingLevel={nestingLevel + 1}

@@ -1,5 +1,5 @@
 import AWSIcon from "src/components/Icons/CloudProviders/AWSLogo";
-import GCPIcon from "src/components/Icons/CloudProviders/GCPLogo";
+import GCPLogo from "src/components/Icons/CloudProviders/GCPLogo";
 
 export const cloudProviderLabels = {
   gcp: "Google Cloud Platform",
@@ -8,7 +8,7 @@ export const cloudProviderLabels = {
 
 export const cloudProviderLogoMap = {
   aws: <AWSIcon />,
-  gcp: <GCPIcon />,
+  gcp: <GCPLogo />,
 };
 
 export const cloudProviderLabelsShort = {

@@ -19,26 +19,50 @@ import { deleteSubscription } from "src/api/subscriptions";
 import useSnackbar from "src/hooks/useSnackbar";
 // import CloudProviderCell from "./components/CloudProviderCell"; - Removed for Now
 import useUserSubscriptions from "src/hooks/query/useUserSubscriptions";
-import { getResourceRouteWithoutEnv } from "src/utils/route/access/accessRoute";
+import {
+  getResourceRouteWithoutEnv,
+  getAPIDocsRoute,
+  getMarketplaceRoute,
+} from "src/utils/route/access/accessRoute";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
+import MarketplaceServiceSidebar, {
+  sidebarActiveOptions,
+} from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
+import useServiceOffering from "src/hooks/useServiceOffering";
+import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 
 const ITEM_HEIGHT = 45;
 
-const MySubscriptions = ({ orgName, orgLogoURL }) => {
+const MySubscriptions = () => {
   const {
     data: subscriptions = [],
     isFetching,
     refetch: refetchSubscriptions,
   } = useUserSubscriptions();
 
+  const router = useRouter();
+
+  const { serviceId, environmentId, productTierId, subscriptionId } =
+    router.query;
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [showUnsubscribeDialog, setShowUnsubscribeDialog] = useState(false);
   const [selectedSubscription, setSelectedSubscription] = useState({});
-
   const [searchText, setSearchText] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
+
+  const { data: serviceOffering, isLoading: isServiceOfferingLoading } =
+    useServiceOffering(serviceId, productTierId);
+
+  const subscriptionQuery = useSubscriptionForProductTierAccess(
+    serviceId,
+    productTierId,
+    subscriptionId
+  );
+
+  const { data: subscriptionData = {} } = subscriptionQuery;
 
   const filteredSubscriptions = useMemo(() => {
     let list = subscriptions;
@@ -54,7 +78,6 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
   }, [searchText, typeFilter, subscriptions]);
 
   const snackbar = useSnackbar();
-  const router = useRouter();
 
   const onActionMenuClick = (event, subscription) => {
     setSelectedSubscription(subscription);
@@ -196,21 +219,6 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
       align: "center",
       headerAlign: "center",
     },
-    // {
-    //   field: "cloudProviderNames",
-    //   headerName: "Availability",
-    //   flex: 1,
-    //   minWidth: 200,
-    //   align: "center",
-    //   headerAlign: "center",
-    //   renderCell: (params) => {
-    //     return (
-    //       <CloudProviderCell
-    //         cloudProviders={params.row.cloudProviderNames || []}
-    //       />
-    //     );
-    //   },
-    // },
     {
       field: "defaultSubscription",
       headerName: "Action",
@@ -282,6 +290,60 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
     },
   ];
 
+  const isCustomNetworkEnabled = useMemo(() => {
+    let enabled = false;
+
+    if (
+      serviceOffering?.serviceModelFeatures?.find((featureObj) => {
+        return featureObj.feature === "CUSTOM_NETWORKS";
+      })
+    )
+      enabled = true;
+
+    return enabled;
+  }, [serviceOffering]);
+
+  const servicePlanUrlLink = getMarketplaceRoute(
+    serviceId,
+    environmentId,
+    productTierId
+  );
+
+  const serviceAPIDocsLink = getAPIDocsRoute(
+    serviceId,
+    environmentId,
+    productTierId,
+    subscriptionData?.id
+  );
+
+  const dashboardLayoutProps = {
+    accessPage: true,
+    currentSubscription: subscriptionData,
+    isNotShow: true,
+    enableConsumptionLinks: true,
+    apiDocsurl: serviceAPIDocsLink,
+    servicePlanUrlLink: servicePlanUrlLink,
+    serviceId: serviceId,
+    serviceApiId: serviceOffering?.serviceAPIID,
+    SidebarUI: (
+      <MarketplaceServiceSidebar
+        serviceId={serviceId}
+        environmentId={environmentId}
+        resourceParameters={serviceOffering?.resourceParameters}
+        isLoading={isServiceOfferingLoading}
+        serviceName={serviceOffering?.serviceName}
+        productTierId={productTierId}
+        active={sidebarActiveOptions.subscriptions}
+        currentSubscription={subscriptionData}
+        isCustomNetworkEnabled={isCustomNetworkEnabled}
+      />
+    ),
+
+    serviceName: serviceOffering?.serviceName,
+    customLogo: true,
+    serviceLogoURL: serviceOffering?.serviceLogoURL,
+  };
+
   const unsubsscribeFormik = useFormik({
     initialValues: {
       confirmationText: "",
@@ -306,13 +368,7 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
 
   return (
     <>
-      <DashboardLayout
-        noSidebar
-        // SidebarUI={<MarketplaceServiceSidebar active={"subscription"} />}
-        marketplacePage
-        serviceLogoURL={orgLogoURL}
-        serviceName={orgName}
-      >
+      <DashboardLayout {...dashboardLayoutProps}>
         <Stack sx={{ minHeight: "calc(100vh - 180px)" }}>
           <MarketplaceHeader
             title="My Subscriptions"

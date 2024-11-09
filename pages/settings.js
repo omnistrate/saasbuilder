@@ -19,4 +19,5 @@ export const getServerSideProps = async () => {
   };
 };
 
+
 export default SettingsMarketplace;

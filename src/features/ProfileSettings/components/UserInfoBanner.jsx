@@ -27,7 +27,7 @@ function UserInfoBanner(props) {
           }}
         >
           <DisplayText size="xlarge" weight="medium">
-            {selectUser.name.toUpperCase().charAt(0)}
+            {selectUser.name?.toUpperCase().charAt(0)}
           </DisplayText>
         </Box>
 
