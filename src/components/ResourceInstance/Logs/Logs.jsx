@@ -7,10 +7,8 @@ import {
 } from "@mui/material";
 import { useRef, useState, useEffect } from "react";
 import { Text } from "../../Typography/Typography";
-import Select from "../../FormElements/Select/Select";
 import Card from "../../Card/Card";
 import Divider from "../../Divider/Divider";
-import MenuItem from "../../MenuItem/MenuItem";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import styled from "@emotion/styled";
 import useSnackbar from "../../../hooks/useSnackbar";
@@ -20,6 +18,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Tooltip from "../../Tooltip/Tooltip";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import Select from "src/components/FormElementsv2/Select/Select";
+import MenuItem from "src/components/MenuItem/MenuItem";
 
 const logsPerPage = 50;
 
@@ -209,13 +209,18 @@ function Logs(props) {
           desc="Detailed logs for monitoring and troubleshooting"
         />
         {nodes?.length > 0 && (
-          <Box sx={{ minWidth: "320px" }}>
+          <Box sx={{ minWidth: "220px" }}>
             <Text size="small" weight="medium" color="#344054">
               Node ID
             </Text>
             <Select
               value={selectedNodeId}
-              sx={{ marginTop: "2px" }}
+              sx={{
+                width: "auto",
+                height: "40px !important",
+                padding: "10px 14px !important",
+                minHeight: "40px",
+              }}
               onChange={handleNodeChange}
             >
               {nodes.map((node) => (

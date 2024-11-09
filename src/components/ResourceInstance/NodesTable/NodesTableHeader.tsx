@@ -42,6 +42,10 @@ const NodesTableHeader = ({
           {(isAccessSide || isInventoryManageInstance) && (
             <Button
               variant="outlined"
+              sx={{
+                height: "40px !important",
+                padding: "10px 14px !important",
+              }}
               startIcon={<FailoverIcon disabled={isFailoverDisabled} />}
               disabled={isFailoverDisabled}
               onClick={() => {

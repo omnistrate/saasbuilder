@@ -151,7 +151,12 @@ const DateRangePicker: FC<DateRangePickerProps> = (props) => {
         variant="outlined"
         startIcon={<CalendarIcon color="#344054" />}
         onClick={handleButtonClick}
-        sx={{ fontWeight: "500 !important", color: "#344054 !important" }}
+        sx={{
+          fontWeight: "500 !important",
+          color: "#344054 !important",
+          height: "40px !important",
+          padding: "10px 14px !important",
+        }}
       >
         {buttonText}
       </Button>

@@ -196,7 +196,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
           />
 
           <Button
-            sx={{ height: "43px" }}
+            sx={{ height: "40px", padding: "10px 14px !important" }}
             variant="contained"
             startIcon={<AddIcon />}
             disabled={

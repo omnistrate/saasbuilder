@@ -1,9 +1,8 @@
 import { Box, CircularProgress, Stack, styled } from "@mui/material";
 import { Text } from "../../Typography/Typography";
-import Select from "../../FormElements/Select/Select";
+
 import Divider from "../../Divider/Divider";
 import Card from "../../Card/Card";
-import MenuItem from "../../MenuItem/MenuItem";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import MetricCard from "./MetricCard";
@@ -21,6 +20,8 @@ import formatDateUTC from "../../../utils/formatDateUTC";
 import MultiLineChart from "./MultiLineChart";
 import SingleLineChart from "./SingleLineChart";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import Select from "src/components/FormElementsv2/Select/Select";
+import MenuItem from "src/components/MenuItem/MenuItem";
 
 const initialCpuUsage = {
   current: "",
@@ -780,13 +781,18 @@ function Metrics(props) {
           }}
         />
         {nodes?.length > 0 && (
-          <Box sx={{ minWidth: "320px" }}>
+          <Box sx={{ minWidth: "220px" }}>
             <Text size="small" weight="medium" color="#344054">
               Node ID
             </Text>
             <Select
               value={selectedNode}
-              sx={{ marginTop: "2px" }}
+              sx={{
+                width: "auto",
+                height: "40px !important",
+                padding: "10px 14px !important",
+                minHeight: "40px",
+              }}
               onChange={handleNodeChange}
               MenuProps={{ disableScrollLock: true }}
             >
