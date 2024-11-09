@@ -65,7 +65,15 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
       p="20px 24px 14px"
       borderBottom="1px solid #EAECF0"
     >
-      <DataGridHeaderTitle title="List of Events" count={count} />
+      <DataGridHeaderTitle
+        title="List of Events"
+        desc="Detailed audit trail of user actions performed on resource instances"
+        count={count}
+        units={{
+          singular: "Event",
+          plural: "Events",
+        }}
+      />
       <Stack direction="row" alignItems="center" gap="12px">
         <SearchInput
           searchText={searchText}
@@ -290,7 +298,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
   }, [events, searchText, selectedEventTypes, selectedDateRange]);
 
   return (
-    <Box mt="24px">
+    <Box mt="32px">
       <DataTable
         columns={dataTableColumns}
         rows={filteredEvents}

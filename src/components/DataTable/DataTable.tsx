@@ -172,7 +172,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
   };
 
   return (
-    <TableContainer>
+    <TableContainer sx={{ borderRadius: "8px" }}>
       <HeaderComponent {...headerProps} />
       <Stack minHeight="656px" justifyContent="space-between">
         <Box sx={{ overflowX: "auto" }}>

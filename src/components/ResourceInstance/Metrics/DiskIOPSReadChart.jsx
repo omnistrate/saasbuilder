@@ -1,6 +1,5 @@
 import React from "react";
 import { Text } from "../../Typography/Typography";
-import { Box } from "@mui/material";
 import {
   CartesianGrid,
   Legend,
@@ -13,13 +12,18 @@ import {
 } from "recharts";
 import ReChartContainer from "../../ReChartContainer/ReChartContainer";
 import lineChartColorPalette from "../../../utils/constants/lineChartColorPalette";
+import { Box } from "@mui/material";
 
 function DiskIOPSReadChart(props) {
   const { data, labels } = props;
 
   return (
-    <Box mt={8}>
-      <Text sx={{ marginLeft: 3 }}>Disk IOPS (Read)</Text>
+    <Box>
+      <Box sx={{ padding: "10px 20px", borderBottom: "1px solid #EAECF0" }}>
+        <Text size="medium" color="#344054" weight="semibold">
+          Disk IOPS (Read)
+        </Text>
+      </Box>
       <ReChartContainer mt={3} debounce={100}>
         <ResponsiveContainer>
           <LineChart
@@ -33,11 +37,7 @@ function DiskIOPSReadChart(props) {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="time"
-              tickFormatter={() => ""}
-              tickLine={false}
-            />
+            <XAxis dataKey="time" tickFormatter={() => ""} tickLine={false} />
             <YAxis
               tickFormatter={(value) => `${value}`}
               domain={([, datamax]) => [

@@ -1,6 +1,4 @@
-import React from "react";
-import { Text } from "../../Typography/Typography";
-import { Box } from "@mui/material";
+import { Text } from "src/components/Typography/Typography";
 import {
   CartesianGrid,
   Line,
@@ -10,13 +8,18 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import ReChartContainer from "../../ReChartContainer/ReChartContainer";
+import ReChartContainer from "src/components/ReChartContainer/ReChartContainer";
+import { Box } from "@mui/material";
 
 function SingleLineChart(props) {
   const { data, chartName } = props;
   return (
-    <Box mt={8}>
-      <Text sx={{ marginLeft: 3 }}>{chartName}</Text>
+    <Box>
+      <Box sx={{ padding: "10px 20px", borderBottom: "1px solid #EAECF0" }}>
+        <Text size="medium" color="#344054" weight="semibold">
+          {chartName}
+        </Text>
+      </Box>
       <ReChartContainer mt={3} debounce={100}>
         <ResponsiveContainer height={300} width="100%">
           <LineChart

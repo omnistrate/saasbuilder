@@ -69,6 +69,7 @@ export default function useResourceInstance(
         let metricsSocketURL = "";
         let logsSocketURL = "";
         let customNetworkDetails = null;
+
         if (data.customNetworkDetail) {
           customNetworkDetails = data.customNetworkDetail;
         }
@@ -306,6 +307,22 @@ export default function useResourceInstance(
           createdAt: createdAt,
           modifiedAt: modifiedAt,
           networkType: data.network_type,
+          autoscalingEnabled: data?.autoscalingEnabled
+            ? data?.autoscalingEnabled
+            : false,
+          backupStatus: data?.backupStatus ? data?.backupStatus : {},
+          highAvailability: data?.highAvailability
+            ? data?.highAvailability
+            : false,
+          serverlessEnabled: data?.serverlessEnabled
+            ? data?.serverlessEnabled
+            : false,
+          autoscaling: {
+            currentReplicas: data?.currentReplicas,
+            maxReplicas: data?.maxReplicas,
+            minReplicas: data?.minReplicas,
+          },
+          instanceLoadStatus: data?.instanceLoadStatus,
           connectivity: {
             networkType: _.capitalize(data.network_type),
             clusterEndpoint: topologyDetails?.clusterEndpoint,
