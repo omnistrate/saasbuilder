@@ -473,7 +473,7 @@ function AccessControl() {
             justifyContent="flex-start"
             padding={"22px 0px"}
           >
-            <Box paddingTop={1}>
+            <Box paddingTop={"5px"}>
               <AccessControlIcon />
             </Box>
             <LogoHeader

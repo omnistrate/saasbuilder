@@ -305,12 +305,7 @@ function MarketplaceService() {
         minWidth: 235,
         align: "center",
         headerAlign: "center",
-        renderCell: (params) => {
-          if (params.row?.detailedNetworkTopology) {
-            const resourceData = params.row.detailedNetworkTopology[resourceId];
-            return resourceData?.resourceName;
-          } else "-";
-        },
+        renderCell: () => selectedResource?.name,
       },
       {
         field: "status",
@@ -1670,7 +1665,7 @@ function MarketplaceService() {
             justifyContent="flex-start"
             paddingBottom={"32px"}
           >
-            <Box paddingTop={1}>
+            <Box paddingTop={"5px"}>
               <DashboardHeaderIcon />
             </Box>
             <LogoHeader

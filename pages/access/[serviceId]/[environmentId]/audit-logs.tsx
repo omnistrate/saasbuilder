@@ -237,7 +237,7 @@ function Events() {
         justifyContent="flex-start"
         paddingBottom={"32px"}
       >
-        <Box paddingTop={1}>
+        <Box paddingTop={"5px"}>
           <AuditLogsIcon />
         </Box>
         <LogoHeader margin={0} title={"Audit Logs"} desc="" />
