@@ -75,9 +75,11 @@ function Connectivity(props) {
     const nodeAvailabilityZone = [];
     nodes.map((node) => {
       if (!nodeAvailabilityZone.includes(node.availabilityZone)) {
-        if (availabilityZone)
-          availabilityZone = availabilityZone + "," + node.availabilityZone;
-        else availabilityZone = node.availabilityZone;
+        if (availabilityZone) {
+          if (node?.availabilityZone) {
+            availabilityZone = availabilityZone + "," + node.availabilityZone;
+          }
+        } else availabilityZone = node.availabilityZone;
         nodeAvailabilityZone.push(node.availabilityZone);
       }
     });
@@ -117,51 +119,80 @@ function Connectivity(props) {
                   }
                 />
               )}
-            {otherResourceFilteredEndpoints?.length > 0 &&
-              otherResourceFilteredPorts?.length > 0 && (
-                <>
-                  {primaryResourceName && primaryResourceEndpoint && (
-                    <Stack direction="row" justifyContent="center">
-                      <Button
-                        sx={{ color: "#6941C6", marginTop: "16px" }}
-                        endIcon={
-                          isEndpointsExpanded ? (
-                            <RemoveCircleOutlineIcon />
-                          ) : (
-                            <AddCircleOutlineIcon />
-                          )
-                        }
-                        onClick={toggleExpanded}
-                      >
-                        {isEndpointsExpanded ? "View Less" : "View More"}
-                      </Button>
-                    </Stack>
-                  )}
-                  {(isEndpointsExpanded ||
-                    !(primaryResourceName && primaryResourceEndpoint)) &&
-                    otherResourceFilteredEndpoints.map(
-                      ({ resourceName, endpoint, resourceId }) =>
-                        ports
-                          .filter((port) => port?.ports)
-                          .map((port) => (
-                            <ResourceConnectivityEndpoint
-                              key={resourceId}
-                              isPrimaryResource={false}
-                              resourceName={resourceName}
-                              ports={port.ports}
-                              viewType="endpoint"
-                              endpointURL={endpoint}
-                              containerStyles={{ marginTop: "16px" }}
-                            />
-                          ))
-                    )}
-                </>
-              )}
           </>
         ),
       });
     }
-    if (globalEndpoints?.primary?.customDNSEndpoint) {
+
+    if (otherResourceFilteredEndpoints?.length > 0) {
+      res.push({
+        label: "Global endpoint",
+        description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
+        valueType: "custom",
+        value: (
+          <>
+            {otherResourceFilteredEndpoints?.length > 0 && (
+              <>
+                {otherResourceFilteredEndpoints.map(
+                  ({ resourceName, endpoint, resourceId }, i) => {
+                    if (i === 0 && !isEndpointsExpanded) {
+                      // Render only the first endpoint if not expanded
+                      return (
+                        <ResourceConnectivityEndpoint
+                          key={resourceId}
+                          isPrimaryResource={false}
+                          resourceName={resourceName}
+                          ports={otherResourceFilteredPorts}
+                          viewType="endpoint"
+                          endpointURL={endpoint}
+                          containerStyles={{ marginTop: "16px" }}
+                        />
+                      );
+                    }
+
+                    if (isEndpointsExpanded) {
+                      // Render additional endpoints if expanded
+                      return (
+                        <ResourceConnectivityEndpoint
+                          key={resourceId}
+                          isPrimaryResource={false}
+                          resourceName={resourceName}
+                          ports={otherResourceFilteredPorts}
+                          viewType="endpoint"
+                          endpointURL={endpoint}
+                          containerStyles={{ marginTop: "16px" }}
+                        />
+                      );
+                    }
+
+                    return null;
+                  }
+                )}
+
+                {otherResourceFilteredEndpoints.length > 1 && (
+                  <Stack direction="row" justifyContent="center">
+                    <Button
+                      sx={{ color: "#6941C6", marginTop: "16px" }}
+                      endIcon={
+                        isEndpointsExpanded ? (
+                          <RemoveCircleOutlineIcon />
+                        ) : (
+                          <AddCircleOutlineIcon />
+                        )
+                      }
+                      onClick={toggleExpanded}
+                    >
+                      {isEndpointsExpanded ? "View Less" : "View More"}
+                    </Button>
+                  </Stack>
+                )}
+              </>
+            )}
+          </>
+        ),
+      });
+    }
+    if (globalEndpoints?.primary?.customDNSEndpoint?.enabled) {
       res.push({
         label: "gateway",
         description: `The gateway of the ${sectionLabel.toLowerCase()}`,
@@ -338,7 +369,7 @@ function Connectivity(props) {
             )}
           </Box>
           {rows.length > 0 && (
-            <Box paddingTop={"12px"}>
+            <Box>
               <PropertyTable data-testid="connectivity-table" rows={rows} />
             </Box>
           )}

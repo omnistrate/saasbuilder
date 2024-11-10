@@ -314,23 +314,35 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                 <Text size="small" weight="medium" color="#53389E">
                   {resourceName}
                 </Text>
-                <Text
-                  size="small"
-                  weight="regular"
-                  color={isPrimaryResource ? "#6941C6" : ""}
+                <Box
+                  alignSelf="start"
+                  marginBottom="8px"
+                  display="flex"
+                  gap="12px"
                 >
-                  {viewType === "endpoint" ? endpointURL : ports}
-                </Text>
-              </TableCell>
-              <TableCell sx={{ paddingLeft: "8px" }}>
-                {Boolean(endpointURL || ports) && (
-                  <Box alignSelf="start">
-                    <CopyButton
-                      text={viewType === "endpoint" ? endpointURL : ports}
-                      iconProps={{ color: "#6941C6", width: 20, height: 20 }}
-                    />
-                  </Box>
-                )}
+                  <Text
+                    size="small"
+                    weight="regular"
+                    color={isPrimaryResource ? "#6941C6" : ""}
+                  >
+                    {viewType === "endpoint" ? endpointURL : ports}
+                  </Text>
+
+                  {Boolean(endpointURL || ports) && (
+                    <Box alignSelf="start">
+                      <CopyButton
+                        text={viewType === "endpoint" ? endpointURL : ports}
+                        iconProps={{
+                          color: "#6941C6",
+                          width: 20,
+                          height: 20,
+                          marginTop: 0,
+                        }}
+                        iconButtonProps={{ padding: "0px" }}
+                      />
+                    </Box>
+                  )}
+                </Box>
               </TableCell>
             </TableRow>
             {resourceHasCompute && customDNSData?.enabled && (
