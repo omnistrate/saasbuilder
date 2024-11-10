@@ -1,4 +1,4 @@
-import React, {  useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import DashboardLayout from "../../../../src/components/DashboardLayout/DashboardLayout";
 
 import EventsTable from "../../../../src/components/EventsTable/EventsTable";
@@ -61,7 +61,6 @@ function Events() {
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);
   };
-
 
   const {
     isLoading: isEventsLoading,
@@ -228,7 +227,7 @@ function Events() {
         //@ts-ignore
         flexDirection="colunm"
         justifyContent="flex-start"
-        padding={"22px 0px"}
+        paddingBottom={"32px"}
       >
         <Box paddingTop={1}>
           <AuditLogsIcon />

@@ -225,7 +225,7 @@ function Dashboard() {
         //@ts-ignore
         flexDirection="colunm"
         justifyContent="flex-start"
-        padding={"22px 0px"}
+        paddingBottom={"32px"}
       >
         <Box paddingTop={1}>
           <DashboardHeaderIcon />
