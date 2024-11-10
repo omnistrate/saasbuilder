@@ -63,7 +63,7 @@ const CustomNetworkDataGridHeader: FC<CustomNetworkDataGridHeaderProps> = (
       display="flex"
       alignItems="center"
       gap="12px"
-      p="20px 24px"
+      p="20px"
       borderBottom="1px solid #EAECF0"
       justifyContent="space-between"
     >

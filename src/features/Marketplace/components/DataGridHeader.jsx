@@ -1,12 +1,13 @@
 import { Box, Stack, InputAdornment, MenuItem } from "@mui/material";
-import Chip from "components/Chip/Chip";
-import { Text } from "components/Typography/Typography";
 
-import TextField from "components/FormElementsv2/TextField/TextField";
 import Select from "src/components/FormElementsv2/Select/Select";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
-import SearchLens from "src/components/Icons/SearchLens/SearchLens";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import SearchInput from "src/components/DataGrid/SearchInput";
+import Button from "src/components/Button/Button";
+import SpeedometerIcon from "src/components/Icons/Speedometer/SpeedometerIcon";
+import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 
 const SUBSCRIPTION_TYPES = {
   all: {
@@ -29,9 +30,13 @@ const DataGridHeader = ({
   setSearchText,
   typeFilter,
   setTypeFilter,
+  viewResourceInstance,
+  setAnchorEl,
+  isFetching,
+  handleRefresh,
 }) => {
   return (
-    <Box borderBottom="1px solid #EAECF0" p="20px 24px" pt="28px">
+    <Box borderBottom="1px solid #EAECF0" p="20px">
       <Stack
         width="100%"
         direction={"row"}
@@ -39,17 +44,25 @@ const DataGridHeader = ({
         alignItems={"center"}
         gap="20px"
       >
-        <Stack direction="row" gap="8px">
-          <Text size="large" weight="semibold">
-            Detailed list of your service subscriptions
-          </Text>
-          {numSubscriptions > 0 && <Chip label={numSubscriptions} />}
-        </Stack>
+        <DataGridHeaderTitle
+          title={`Detailed list of your service subscriptions`}
+          desc="View and manage your Nodes"
+          count={numSubscriptions}
+          units={{
+            singular: "Subscription",
+            plural: "Subscriptions",
+          }}
+        />
+
         <Actions
           searchText={searchText}
           setSearchText={setSearchText}
           typeFilter={typeFilter}
           setTypeFilter={setTypeFilter}
+          setAnchorEl={setAnchorEl}
+          viewResourceInstance={viewResourceInstance}
+          isFetching={isFetching}
+          handleRefresh={handleRefresh}
         />
       </Stack>
     </Box>
@@ -59,7 +72,16 @@ const DataGridHeader = ({
 export default DataGridHeader;
 
 export const Actions = (props) => {
-  const { searchText, setSearchText, typeFilter, setTypeFilter } = props;
+  const {
+    searchText,
+    setSearchText,
+    typeFilter,
+    setTypeFilter,
+    viewResourceInstance,
+    setAnchorEl,
+    isFetching,
+    handleRefresh,
+  } = props;
   return (
     <Stack
       direction={"row"}
@@ -67,25 +89,45 @@ export const Actions = (props) => {
       alignItems={"center"}
       gap={"16px"}
     >
-      <TextField
+      <SearchInput
         placeholder="Search by Name"
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        sx={{
-          [`& .MuiOutlinedInput-input`]: {
-            paddingLeft: "0px !important",
-          },
-        }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start" sx={{ marginLeft: "12px" }}>
-              <SearchLens />
-            </InputAdornment>
-          ),
-        }}
+        searchText={searchText}
+        setSearchText={setSearchText}
+        width="250px"
       />
+      <RefreshWithToolTip refetch={handleRefresh} disabled={isFetching} />
+      <Button
+        sx={{
+          minWidth: "170px",
+          height: "40px",
+          border: "8px",
+          padding: "10px 14px !important",
+          boxShadow:
+            "0px 1px 2px 0px rgba(16, 24, 40, 0.05), 0px -2px 0px 0px rgba(16, 24, 40, 0.05), 0px 0px 0px 1px rgba(16, 24, 40, 0.18)",
+        }}
+        variant="contained"
+        startIcon={<SpeedometerIcon />}
+        // disabled={
+        //   isFetchingInstances ||
+        //   !isResourceParameters ||
+        //   isDeprecated ||
+        //   !isCreateAllowedByRBAC ||
+        //   maxNumberOfInstancesReached
+        // }
+
+        onClick={() => {
+          setAnchorEl(null);
+          viewResourceInstance();
+        }}
+      >
+        Go To Dashboard
+      </Button>
       <Select
-        sx={{ marginTop: "6px" }}
+        sx={{
+          height: "40px !important",
+          padding: "10px 14px !important",
+          margin: "0px",
+        }}
         id="type"
         name="type"
         value={typeFilter}

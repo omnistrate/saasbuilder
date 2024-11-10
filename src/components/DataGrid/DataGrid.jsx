@@ -37,20 +37,17 @@ const DataGrid = styled(
     "0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06)",
   border: "1px solid #EAECF0",
   "& .MuiDataGrid-main": {
-    height: "591px", // height of rows container to have 10 rows(each of height 52px) without scroll inside table
+    height: "591px",
   },
-  // "& .MuiDataGrid-row:nth-of-type(2n+1)": {
-  //   background: "#E4E7EC",
-  // },
-  "& .MuiDataGrid-columnHeader ": {
-    padding: "0px 24px",
+  "& .MuiDataGrid-columnHeader": {
+    // padding: "0px 24px",
     color: "#475467",
     fontSize: "12px",
     fontWeight: 500,
     lineHeight: "18px",
     background: "#F9FAFB",
+    justifyContent: "flex-start", // Left-align header content
   },
-  //set padding left of first header cell and padding right of last header cell to 24
   "& .MuiDataGrid-columnHeaders .MuiDataGrid-columnHeader:first-child": {
     paddingLeft: "24px !important",
   },
@@ -75,10 +72,7 @@ const DataGrid = styled(
   "& .MuiDataGrid-columnHeader:focus": {
     borderRadius: "4px",
   },
-  "& .MuiDataGrid-cell:focus": {
-    outline: "none",
-  },
-  "& .MuiDataGrid-cell:focus-within": {
+  "& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within": {
     outline: "none",
   },
   "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer":
@@ -90,7 +84,7 @@ const DataGrid = styled(
   },
 }));
 
-//utility method to select one particular row in the data grid
+// Utility method to select one particular row in the data grid
 export function selectSingleItem(
   newSelection,
   selectionModel,

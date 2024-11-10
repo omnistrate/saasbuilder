@@ -1,15 +1,14 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
-import { Box, CircularProgress, IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack } from "@mui/material";
 import DashboardLayout from "components/DashboardLayout/DashboardLayout";
-import DataGrid from "components/DataGrid/DataGrid";
+import DataGrid, { selectSingleItem } from "components/DataGrid/DataGrid";
 import { Text } from "components/Typography/Typography";
 import Menu from "components/Menu/Menu";
 import MenuItem from "components/MenuItem/MenuItem";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
-import MarketplaceHeader from "components/Headers/MarketplaceHeader";
 import formatDateUTC from "src/utils/formatDateUTC";
 import DataGridHeader from "./components/DataGridHeader";
 import BellRingingIcon from "src/components/Icons/BellRinging/BellRingingIcon";
@@ -32,6 +31,8 @@ import MarketplaceServiceSidebar, {
 } from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import useServiceOffering from "src/hooks/useServiceOffering";
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
+import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
+import LogoHeader from "src/components/Headers/LogoHeader";
 
 const ITEM_HEIGHT = 45;
 
@@ -52,7 +53,7 @@ const MySubscriptions = () => {
   const [selectedSubscription, setSelectedSubscription] = useState({});
   const [searchText, setSearchText] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
-
+  const [selectionModel, setSelectionModel] = useState([]);
   const { data: serviceOffering, isLoading: isServiceOfferingLoading } =
     useServiceOffering(serviceId, productTierId);
 
@@ -84,6 +85,15 @@ const MySubscriptions = () => {
     setAnchorEl(event.currentTarget);
   };
 
+  useEffect(() => {
+    if (selectionModel) {
+      const subscription = filteredSubscriptions?.find(
+        (item) => item.id === selectionModel[0]
+      );
+      setSelectedSubscription(subscription);
+    }
+  }, [filteredSubscriptions, selectionModel]);
+
   const viewResourceInstance = () => {
     if (selectedSubscription) {
       router.push(
@@ -95,26 +105,26 @@ const MySubscriptions = () => {
       );
     }
   };
+  console.log("check selected ==", selectionModel, selectedSubscription);
 
   const columns = [
     {
       field: "serviceName",
       headerName: "Name",
       flex: 1,
-      headerAlign: "center",
       minWidth: 230,
       renderCell: (params) => {
         const { serviceLogoURL, serviceName, serviceId, productTierId, id } =
           params.row;
         return (
           <GridCellExpand
+            justifyContent="left"
             value={serviceName || ""}
-            justifyContent="flex-start"
             textStyles={{
               color: "#6941C6",
               fontSize: "14px",
               lineHeight: "20px",
-              fontWeight: 700,
+              fontWeight: 500,
               cursor: "pointer",
             }}
             onClick={() => {
@@ -125,17 +135,17 @@ const MySubscriptions = () => {
             startIcon={
               <Box
                 boxShadow="0px 1px 2px 0px #1018280D"
-                borderRadius="6px"
-                border="1px solid #EAECF0"
+                borderRadius="50%"
+                border="1px solid rgba(0, 0, 0, 0.08)"
                 overflow="hidden"
-                width="52px"
-                height="52px"
+                width="40px"
+                height="40px"
                 flexShrink={0}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  width="50"
-                  height="50"
+                  width="38"
+                  height="38"
                   style={{ objectFit: "cover" }}
                   src={
                     serviceLogoURL ||
@@ -154,24 +164,18 @@ const MySubscriptions = () => {
       headerName: "ID",
       flex: 1,
       minWidth: 150,
-      align: "center",
-      headerAlign: "center",
     },
     {
       field: "productTierName",
       headerName: "Service Plan",
       flex: 1,
       minWidth: 150,
-      align: "center",
-      headerAlign: "center",
     },
     {
       field: "roleType",
       headerName: "Role",
       flex: 1,
       minWidth: 70,
-      align: "center",
-      headerAlign: "center",
       valueGetter: (params) => {
         const role = params.row.roleType;
         if (!role?.length) {
@@ -184,21 +188,18 @@ const MySubscriptions = () => {
       field: "createdAt",
       headerName: "Subscription Date",
       flex: 1,
-      align: "center",
       minWidth: 200,
-      headerAlign: "center",
       valueGetter: (params) => formatDateUTC(params.row.createdAt),
     },
     {
       fieldName: "defaultSubscription",
       headerName: "Subscription Type",
       flex: 1,
-      align: "center",
       minWidth: 150,
-      headerAlign: "center",
       renderCell: (params) => {
         return (
           <GridCellExpand
+            justifyContent="left"
             value={params.row.roleType === "root" ? "Direct" : "Invited"}
             startIcon={
               params.row.roleType === "root" ? (
@@ -216,15 +217,11 @@ const MySubscriptions = () => {
       headerName: "Subscription Owner",
       flex: 1,
       minWidth: 120,
-      align: "center",
-      headerAlign: "center",
     },
     {
       field: "defaultSubscription",
       headerName: "Action",
       width: 100,
-      align: "center",
-      headerAlign: "center",
       renderCell: (params) => {
         return (
           <>
@@ -371,41 +368,59 @@ const MySubscriptions = () => {
     <>
       <DashboardLayout {...dashboardLayoutProps}>
         <Stack sx={{ minHeight: "calc(100vh - 180px)" }}>
-          <MarketplaceHeader
-            title="My Subscriptions"
-            desc="Explore your current service subscriptions here"
-          />
-
-          {isFetching ? (
-            <Box display="flex" justifyContent="center" mt="200px">
-              <CircularProgress />
+          <Box
+            display="flex"
+            //@ts-ignore
+            flexDirection="colunm"
+            justifyContent="flex-start"
+            paddingBottom={"32px"}
+          >
+            <Box paddingTop={1}>
+              <DashboardHeaderIcon />
             </Box>
-          ) : (
-            <DataGrid
-              components={{
-                Header: DataGridHeader,
-              }}
-              componentsProps={{
-                header: {
-                  numSubscriptions: subscriptions?.length,
-                  searchText,
-                  setSearchText,
-                  typeFilter,
-                  setTypeFilter,
-                },
-              }}
-              disableColumnMenu
-              disableSelectionOnClick
-              columns={columns}
-              rows={filteredSubscriptions}
-              rowHeight={70}
-              rowsPerPageOptions={[10]}
-              pageSize={10}
-              getRowId={(row) => row.id}
-              sx={{ maxHeight: "925px", flex: 1 }} // Fill The Rest of the Screen Height
-              hideFooterSelectedRowCount
+            <LogoHeader
+              margin={0}
+              title="My Subscriptions"
+              desc="Explore your current service subscriptions here"
             />
-          )}
+          </Box>
+          <DataGrid
+            components={{
+              Header: DataGridHeader,
+            }}
+            componentsProps={{
+              header: {
+                numSubscriptions: subscriptions?.length,
+                searchText,
+                setSearchText,
+                typeFilter,
+                setTypeFilter,
+                viewResourceInstance,
+                setAnchorEl,
+                isFetching,
+                handleRefresh: refetchSubscriptions,
+              },
+            }}
+            onSelectionModelChange={(newSelection) => {
+              selectSingleItem(newSelection, selectionModel, setSelectionModel);
+            }}
+            loading={isFetching}
+            checkboxSelection
+            disableColumnMenu
+            selectionModel={selectionModel}
+            disableSelectionOnClick
+            columns={columns}
+            rows={isFetching ? [] : filteredSubscriptions}
+            rowsPerPageOptions={[10]}
+            pageSize={10}
+            getRowId={(row) => row.id}
+            sx={{
+              flex: 1,
+              boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+              border: "1px solid  rgba(228, 231, 236, 1)",
+            }}
+            hideFooterSelectedRowCount
+          />
         </Stack>
 
         <TextConfirmationDialog
@@ -419,7 +434,7 @@ const MySubscriptions = () => {
           buttonLabel={"Unsubscribe"}
           buttonColour={"red"}
           isLoading={unsubscribeMutation.isLoading}
-          subtitle={`Are you sure you want to unsubscribe from ${selectedSubscription.serviceName}?`}
+          subtitle={`Are you sure you want to unsubscribe from ${selectedSubscription?.serviceName}?`}
           message={
             "To confirm, please enter <b>unsubscribe</b>, in the field below:"
           }

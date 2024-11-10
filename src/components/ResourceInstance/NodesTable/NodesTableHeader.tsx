@@ -24,7 +24,7 @@ const NodesTableHeader = ({
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        p="20px 24px 14px"
+        p="20px"
         borderBottom="1px solid #EAECF0"
       >
         <DataGridHeaderTitle
