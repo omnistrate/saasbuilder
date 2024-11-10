@@ -1,4 +1,4 @@
-import { Box, Stack, InputAdornment, MenuItem } from "@mui/material";
+import { Box, Stack, MenuItem } from "@mui/material";
 
 import Select from "src/components/FormElementsv2/Select/Select";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";

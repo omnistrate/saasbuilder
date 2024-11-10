@@ -27,7 +27,6 @@ import {
   chipCategoryColors,
   defaultChipStyles,
 } from "src/constants/statusChipStyles";
-import { borderRadius } from "@mui/system";
 
 const getRowBorderStyles = () => {
   const styles = {};

@@ -2,13 +2,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-
 import { Box, Stack } from "@mui/material";
 import AccordionEditIcon from "src/components/Icons/AccordionEdit/AccordionEdit";
 import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
 import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
-import FieldDescription from "src/components/FormElementsv2/FieldDescription/FieldDescription";
-import TextField from "src/components/FormElementsv2/TextField/TextField";
 import CopyButton from "src/components/Button/CopyButton";
 import Button from "src/components/Button/Button";
 import { Text } from "src/components/Typography/Typography";
@@ -79,18 +76,6 @@ export default function ResourceInstanceDialog(props) {
             <FieldLabel sx={{ mt: "5px", fontSize: "16px" }}>
               {subtitle}
             </FieldLabel>
-            <FieldDescription
-              dangerouslySetInnerHTML={{ __html: message }}
-              sx={{ mt: "5px", fontSize: "16px" }}
-            />
-            <TextField
-              id="deleteme"
-              name="deleteme"
-              value={formData.values.deleteme}
-              onChange={formData.handleChange}
-              onBlur={formData.handleBlur}
-              sx={{ marginTop: "16px" }}
-            />
           </FieldContainer>
         ) : (
           <Box width="600px">

@@ -897,7 +897,7 @@ function Metrics(props) {
           const { metricName, labels } = metricInfo;
           if (labels.length > 0)
             return (
-              <MetricsContainerCard>
+              <MetricsContainerCard key={metricName}>
                 <MultiLineChart
                   chartName={metricName}
                   data={customMetricsChartData[metricName]}
@@ -908,7 +908,7 @@ function Metrics(props) {
             );
           else
             return (
-              <MetricsContainerCard>
+              <MetricsContainerCard key={metricName}>
                 <SingleLineChart
                   chartName={metricName}
                   data={customMetricsChartData[metricName]}
