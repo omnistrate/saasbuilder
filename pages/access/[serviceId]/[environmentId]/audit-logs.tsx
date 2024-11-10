@@ -26,6 +26,14 @@ import { Box } from "@mui/material";
 import LogoHeader from "src/components/Headers/LogoHeader";
 import AuditLogsIcon from "src/components/Icons/AuditLogsIcon/AuditLogsIcon";
 
+
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
+
 function Events() {
   const router = useRouter();
   const { serviceId, environmentId, productTierId, subscriptionId } =

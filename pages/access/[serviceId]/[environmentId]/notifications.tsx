@@ -25,6 +25,13 @@ import LogoHeader from "src/components/Headers/LogoHeader";
 import { Box } from "@mui/material";
 import BellGreenIcon from "src/components/Icons/Bell/BellGreenIcon";
 
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
+
 function Events() {
   const router = useRouter();
   const { serviceId, environmentId, productTierId, subscriptionId } =

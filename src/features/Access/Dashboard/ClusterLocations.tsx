@@ -22,41 +22,69 @@ type ClusterLocationsProps = {
   isFetchingInstances: boolean;
 };
 
+
 const ClusterLocations: FC<ClusterLocationsProps> = (props) => {
   const { resourceInstances = [] } = props;
 
-  const regionsWithInstanceCount = Object.entries(
-    resourceInstances.reduce(
-      (
-        acc: Record<
-          string,
-          {
-            instanceCount: number;
-            cloudProvider: CloudProvider;
-            region: string;
-          }
-        >,
-        curr
-      ) => {
-        const { region, cloud_provider } = curr;
-        const key = `${cloud_provider}-${region}`;
-        if (acc[key]) {
-          acc[key] = {
-            cloudProvider: cloud_provider,
-            instanceCount: acc[key].instanceCount + 1,
-            region: region,
-          };
-        } else {
-          acc[key] = {
-            cloudProvider: cloud_provider,
-            instanceCount: 1,
-            region: region,
-          };
+  const regionProviderInstancesHash: Record<
+    string,
+    {
+      instanceCount: number;
+      cloudProvider: CloudProvider;
+      region: string;
+    }
+  > = resourceInstances.reduce(
+    (
+      acc: Record<
+        string,
+        {
+          instanceCount: number;
+          cloudProvider: CloudProvider;
+          region: string;
         }
-        return acc;
-      },
-      {}
-    )
+      >,
+      curr
+    ) => {
+      const region = curr.region;
+      let cloudProvider = curr.cloud_provider;
+
+      const resultParams = curr.result_params;
+
+      //check if instance of type cloud provider account and set cloud provider
+      if (
+        resultParams &&
+        ((resultParams.gcp_project_id && resultParams.gcp_project_number) ||
+          resultParams.aws_account_id)
+      ) {
+        if (resultParams.gcp_project_id) {
+          cloudProvider = "gcp";
+        } else {
+          cloudProvider = "aws";
+        }
+      }
+
+      const key = `${cloudProvider}-${region}`;
+
+      if (acc[key]) {
+        acc[key] = {
+          cloudProvider: cloudProvider,
+          instanceCount: acc[key].instanceCount + 1,
+          region: region,
+        };
+      } else {
+        acc[key] = {
+          cloudProvider: cloudProvider,
+          instanceCount: 1,
+          region: region,
+        };
+      }
+      return acc;
+    },
+    {}
+  );
+
+  const regionsWithInstanceCount = Object.entries(
+    regionProviderInstancesHash
   ).map(([, { instanceCount, cloudProvider, region }]) => ({
     region,
     instanceCount,

@@ -50,6 +50,12 @@ import SearchInput from "src/components/DataGrid/SearchInput";
 import LogoHeader from "src/components/Headers/LogoHeader";
 import AccessControlIcon from "src/components/Icons/AccessControlIcon/AccessControlIcon";
 
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
 function AccessControl() {
   const router = useRouter();
   const {
