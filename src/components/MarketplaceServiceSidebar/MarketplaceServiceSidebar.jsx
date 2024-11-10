@@ -20,6 +20,7 @@ import NavItem from "../DashboardLayout/NavItem";
 import { getSettingsRoute } from "src/utils/route/settings";
 import { getSubscriptionsRoute } from "src/utils/route/subscriptions";
 import { getBillingRoute } from "src/utils/route/billing";
+import AccountManagementIcon from "../Icons/SideNavbar/AccountManagement/AccountManagement";
 
 export const sidebarActiveOptions = {
   accessControl: "accessControl",
@@ -195,7 +196,7 @@ function MarketplaceServiceSidebar(props) {
     },
     {
       name: "Account Management",
-      IconComponent: ShieldIcon,
+      IconComponent: AccountManagementIcon,
       isActive: false,
       isExpandible: true,
       subItems: [

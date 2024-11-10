@@ -180,7 +180,6 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
             singular: "Instance",
             plural: "Instances",
           }}
-          sx={{ marginBottom: "14px" }}
         />
 
         <Stack direction="row" alignItems="center" gap="12px">
@@ -261,8 +260,39 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
           />
         </Stack>
       </Stack>
+      <Stack
+        direction="row"
+        justifyContent="right"
+        alignItems="center"
+        p="12px 16px"
+        borderBottom="1px solid #EAECF0"
+        gap="12px"
+      >
+        <SpeedoMeterLegend />
+        <SpeedoMeterLegend color="rgba(247, 144, 9, 1)" label="Medium" />
+        <SpeedoMeterLegend color="rgba(240, 68, 56, 1)" label="High" />
+      </Stack>
     </Box>
   );
 };
 
 export default InstancesTableHeader;
+
+const SpeedoMeterLegend = ({
+  label = "Low",
+  color = "rgba(23, 178, 106, 1)",
+}) => (
+  <Box gap="6px" display="flex" alignItems="center">
+    <Box
+      sx={{
+        width: "8px",
+        height: "8px",
+        borderRadius: "100%",
+        background: color,
+      }}
+    />
+    <Text size="small" weight="regular" color="rgba(71, 84, 103, 1)">
+      {label}
+    </Text>
+  </Box>
+);

@@ -299,6 +299,20 @@ function MarketplaceService() {
         },
       },
       {
+        field: "resourceName",
+        headerName: "Resource Name",
+        flex: 1,
+        minWidth: 235,
+        align: "center",
+        headerAlign: "center",
+        renderCell: (params) => {
+          if (params.row?.detailedNetworkTopology) {
+            const resourceData = params.row.detailedNetworkTopology[resourceId];
+            return resourceData?.resourceName;
+          } else "-";
+        },
+      },
+      {
         field: "status",
         headerName: "Lifecycle Status",
         flex: 0.9,

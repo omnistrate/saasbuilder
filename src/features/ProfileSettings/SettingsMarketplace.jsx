@@ -19,6 +19,7 @@ import {
   getMarketplaceRoute,
 } from "src/utils/route/access/accessRoute";
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
+import { Box } from "@mui/material";
 
 function SettingsMarketplace() {
   const router = useRouter();
@@ -86,7 +87,7 @@ function SettingsMarketplace() {
     apiDocsurl: serviceAPIDocsLink,
     servicePlanUrlLink: servicePlanUrlLink,
     serviceId: serviceId,
-    environmentId : environmentId,
+    environmentId: environmentId,
     serviceApiId: serviceOffering?.serviceAPIID,
     SidebarUI: (
       <MarketplaceServiceSidebar
@@ -108,7 +109,7 @@ function SettingsMarketplace() {
   };
 
   return (
-    <DashboardLayout {...dashboardLayoutProps}>
+    <DashboardLayout {...dashboardLayoutProps} p="0px">
       {isLoading ? (
         <LoadingSpinner />
       ) : (
@@ -118,13 +119,15 @@ function SettingsMarketplace() {
             currentTab={currentTab}
             router={router}
           />
-          {currentTab === tabs.profile && (
-            <ProfileForm refetch={refetch} selectUser={selectUser} />
-          )}
-          {currentTab === tabs.password && <PasswordForm />}
-          {currentTab === tabs.billingAddress && (
-            <BillingAddress refetch={refetch} selectUser={selectUser} />
-          )}
+          <Box p="0px 32px">
+            {currentTab === tabs.profile && (
+              <ProfileForm refetch={refetch} selectUser={selectUser} />
+            )}
+            {currentTab === tabs.password && <PasswordForm />}
+            {currentTab === tabs.billingAddress && (
+              <BillingAddress refetch={refetch} selectUser={selectUser} />
+            )}
+          </Box>
         </>
       )}
     </DashboardLayout>

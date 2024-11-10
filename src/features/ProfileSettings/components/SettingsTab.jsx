@@ -1,11 +1,10 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import MuiTabs, { tabsClasses } from "@mui/material/Tabs";
-import MuiTab, { tabClasses } from "@mui/material/Tab";
-import styled from "@emotion/styled";
+
 import { tabLabel, tabs } from "../constants";
 import { useRouter } from "next/router";
 import { getSettingsRoute } from "src/utils/route/settings";
+import { Tab, Tabs } from "src/components/Tab/Tab";
 
 export default function SettingsTab(props) {
   const { currentTab } = props;
@@ -30,21 +29,14 @@ export default function SettingsTab(props) {
       display="flex"
       sx={{ width: "100%", borderBottom: "2px solid #EAECF0" }}
     >
-      <Tabs
-        value={currentTab}
-        centered
-        sx={{
-          [`& .${tabsClasses.indicator}`]: {
-            backgroundColor: "transparent",
-          },
-        }}
-      >
+      <Tabs value={currentTab} centered>
         <Tab
           label={tabLabel[tabs.profile]}
           value={tabs.profile}
           onClick={() => {
             handleChangeTab(tabs.profile);
           }}
+          sx={{ padding: "4px !important", marginRight: "16px !important" }}
         />
         <Tab
           label={tabLabel[tabs.billingAddress]}
@@ -52,6 +44,7 @@ export default function SettingsTab(props) {
           onClick={() => {
             handleChangeTab(tabs.billingAddress);
           }}
+          sx={{ padding: "4px !important", marginRight: "16px !important" }}
         />
         <Tab
           label={tabLabel[tabs.password]}
@@ -59,30 +52,9 @@ export default function SettingsTab(props) {
           onClick={() => {
             handleChangeTab(tabs.password);
           }}
+          sx={{ padding: "4px !important", marginRight: "16px !important" }}
         />
       </Tabs>
     </Box>
   );
 }
-
-const Tabs = styled(MuiTabs)({
-  [`& .${tabsClasses.indicator}`]: {
-    backgroundColor: "transparent",
-  },
-});
-
-const Tab = styled(MuiTab)({
-  paddingTop: 20,
-  paddingBottom: 20,
-  fontSize: 16,
-  fontWeight: 500,
-  textTransform: "none",
-  [`&.${tabClasses.selected}`]: {
-    backgroundColor: "#F4EBFF",
-    fontSize: 16,
-    fontWeight: 600,
-    lineHeight: "20px",
-    borderBottom: "2px solid #6941C6",
-    color: "#6941C6",
-  },
-});

@@ -5,6 +5,7 @@ import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
 import Image from "next/image";
 import newserviceImg from "public/assets/images/dashboard/settings.jpg";
 import SettingsTab from "./SettingsTab";
+import LogoHeader from "src/components/Headers/LogoHeader";
 
 function UserInfoBanner(props) {
   const { selectUser, currentTab, router } = props;
@@ -20,15 +21,31 @@ function UserInfoBanner(props) {
       >
         <Box
           sx={{
-            border: "4px solid  #FFFFFF",
-            padding: "43px 58px",
-            borderRadius: "50%",
+            border: "4px solid rgba(255, 255, 255, 1)",
+            borderRadius: "100%",
             background: "#F2F4F7",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow:
+              "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
           }}
         >
-          <DisplayText size="xlarge" weight="medium">
-            {selectUser.name?.toUpperCase().charAt(0)}
-          </DisplayText>
+          <Box
+            sx={{
+              border: "1px solid rgba(0, 0, 0, 0.08)",
+              padding: "43px 52px",
+              borderRadius: "100%",
+              background: "#F2F4F7",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <DisplayText size="xlarge" weight="medium">
+              {selectUser.name?.toUpperCase().charAt(0)}
+            </DisplayText>
+          </Box>
         </Box>
 
         <Box sx={{ marginLeft: "20px" }}>
@@ -46,8 +63,19 @@ function UserInfoBanner(props) {
           <FieldLabel>{selectUser.email}</FieldLabel>
         </Box>
       </Box>
+      <Box
+        display="flex"
+        //@ts-ignore
+        flexDirection="colunm"
+        justifyContent="flex-start"
+        paddingBottom={"24px"}
+        marginLeft="22px"
+        marginTop="48px"
+      >
+        <LogoHeader margin={0} title={"Settings"} desc="" />
+      </Box>
 
-      <Box sx={{ marginBottom: "24px", marginTop: "48px" }}>
+      <Box sx={{ marginBottom: "24px", padding: "0px 32px" }}>
         <SettingsTab currentTab={currentTab} router={router} />
       </Box>
     </>
@@ -58,8 +86,6 @@ export default UserInfoBanner;
 
 const ServiceImageContainer = styled(Box)(() => ({
   background: "#F9F9F9",
-  border: "1px solid #EFF0F0",
-  borderRadius: "6px",
 }));
 
 const ServiceImage = styled(Image)(() => ({

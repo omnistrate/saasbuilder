@@ -32,6 +32,7 @@ export default function DashboardLayout(props) {
     noServicesAvailable,
     environmentId,
     activePage,
+    p = "32px",
   } = props;
   const open = useSelector(selectDrawerExpandedState);
   const notificationBar = useNotificationBar();
@@ -40,7 +41,6 @@ export default function DashboardLayout(props) {
   const toggleDrawerOpen = () => {
     dispatch(toggleDrawer());
   };
-
 
   return (
     <Box>
@@ -99,7 +99,7 @@ export default function DashboardLayout(props) {
             marginLeft: noSidebar ? "0px" : "280px",
           }}
         >
-          <Box component="main" p={"32px"} sx={{ background: "white" }}>
+          <Box component="main" p={p} sx={{ background: "white" }}>
             {props.children}
           </Box>
           <DashboardFooter
