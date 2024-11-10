@@ -116,23 +116,36 @@ const DottedWorldMap: FC<DottedWorldMapProps> = (props) => {
         marginTop="48px"
         flexWrap="wrap"
       >
-        {regionsWithInstanceCount.map((regionWithInstanceCount) => (
-          <LegendListItem
-            key={`${regionWithInstanceCount.cloudProvider}-${regionWithInstanceCount.region}`}
-            cloudProvider={regionWithInstanceCount.cloudProvider}
-            region={regionWithInstanceCount.region}
-            color={getRegionHexColor(
+        {regionsWithInstanceCount.map((regionWithInstanceCount) => {
+          let color;
+
+          if (
+            regionWithInstanceCount.cloudProvider &&
+            regionWithInstanceCount.region
+          ) {
+            color = getRegionHexColor(
               regionWithInstanceCount.cloudProvider,
               regionWithInstanceCount.region,
               inUseProviderRegions
-            )}
-            numInstances={regionWithInstanceCount.instanceCount}
-            percent={getPercent(
-              regionWithInstanceCount.instanceCount,
-              totalInstanceCount
-            )}
-          />
-        ))}
+            );
+          } else {
+            color = "#8a8d91";
+          }
+
+          return (
+            <LegendListItem
+              key={`${regionWithInstanceCount.cloudProvider}-${regionWithInstanceCount.region}`}
+              cloudProvider={regionWithInstanceCount.cloudProvider}
+              region={regionWithInstanceCount.region}
+              color={color}
+              numInstances={regionWithInstanceCount.instanceCount}
+              percent={getPercent(
+                regionWithInstanceCount.instanceCount,
+                totalInstanceCount
+              )}
+            />
+          );
+        })}
       </Stack>
     </>
   );

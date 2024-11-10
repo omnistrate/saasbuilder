@@ -24,6 +24,12 @@ import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderI
 import { Box } from "@mui/material";
 import Divider from "src/components/Divider/Divider";
 
+export const getServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
+
 function Dashboard() {
   const router = useRouter();
   const { serviceId, environmentId, source, productTierId, subscriptionId } =
