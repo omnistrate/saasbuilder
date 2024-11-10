@@ -375,7 +375,7 @@ const MySubscriptions = () => {
             justifyContent="flex-start"
             paddingBottom={"32px"}
           >
-            <Box paddingTop={1}>
+            <Box paddingTop={"5px"}>
               <DashboardHeaderIcon />
             </Box>
             <LogoHeader
