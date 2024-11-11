@@ -26,7 +26,7 @@ const EndpointLine = ({ isPrimary, openPort, endpointURL }) => {
         color={isPrimary ? "#6941C6" : "#475467"}
       >
         <span>{endpointURL}</span>
-        {openPort && <span> : {openPort}</span>}
+        {openPort && <span>:{openPort}</span>}
       </Text>
 
       <CopyButton
