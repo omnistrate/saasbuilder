@@ -71,7 +71,7 @@ export const NonLinkListItem = styled(Box, {
       backgroundColor: "#F2F4F7",
     },
     paddingLeft: nestingLevel
-      ? `${(nestingLevel + 1) * (itemLeftPadding + 12)}px`
+      ? `${(nestingLevel + 1) * (itemLeftPadding + 11)}px`
       : `${itemLeftPadding}px`,
     display: " flex",
     alignItems: "center",
