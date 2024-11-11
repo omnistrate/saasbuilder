@@ -6,6 +6,7 @@ import ResourceConnectivityEndpoint from "./ConnectivityEndpoint";
 
 import PropertyTable from "./PropertyTable";
 import ResourceConnectivityCustomDNS from "./ConnectivityCustomDNS";
+import CLIManagedConnectivityDetails from "./CLIManagedConnectivityDetails";
 
 function Connectivity(props) {
   const {
@@ -22,6 +23,8 @@ function Connectivity(props) {
     accessQueryParams,
     fleetQueryParams,
     refetchInstance,
+    additionalEndpoints,
+    resourceName,
   } = props;
 
   const [availabilityZones, setAvailabilityZones] = useState("");
@@ -165,6 +168,23 @@ function Connectivity(props) {
     addCustomDNSMutation,
     removeCustomDNSMutation,
   ]);
+
+  if (additionalEndpoints) {
+    return (
+      <Card
+        sx={{
+          marginTop: "32px",
+          padding: "12px",
+          borderRadius: "8px",
+        }}
+      >
+        <CLIManagedConnectivityDetails
+          additionalEndpoints={additionalEndpoints}
+          resourceName={resourceName}
+        />
+      </Card>
+    );
+  }
 
   return (
     <Card
