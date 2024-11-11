@@ -101,7 +101,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
           <Table>
             <TableBody>
               <TableRow>
-                <TableCell sx={{ paddingRight: "8px" }}>
+                <TableCell sx={{ paddingRight: "8px", paddingTop: "0px" }}>
                   {viewType === "endpoint" ? (
                     <Image src={resourceEndpointIcon} alt="resource-endpoint" />
                   ) : (
@@ -114,6 +114,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                     paddingLeft: "8px",
                     paddingRight: "8px",
                     marginBottom: "10px",
+                    paddingTop: "18px",
                   }}
                 >
                   <Text size="small" weight="medium" color="#53389E">
