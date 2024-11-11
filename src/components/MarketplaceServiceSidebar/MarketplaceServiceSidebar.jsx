@@ -120,16 +120,25 @@ function MarketplaceServiceSidebar(props) {
     currentSubscription?.id
   );
 
-  const resourceParametersList = resourceParameters?.map(
-    (resourceParameter) => ({
-      name: resourceParameter.name,
-      IconComponent: SidebarDotIcon,
-      href: `${resourceUrlLink}&resourceId=${resourceParameter.resourceId}`,
-      isActive:
-        (!isCustomNetworkActive &&
-          resourceParameter.urlKey === selectedResource) ||
-        resourceParameter.resourceId === activeResourceId,
-    })
+  const resourceParametersList =
+    resourceParameters
+      ?.map((resourceParameter) => ({
+        name: resourceParameter.name,
+        IconComponent: SidebarDotIcon,
+        href: `${resourceUrlLink}&resourceId=${resourceParameter.resourceId}`,
+        isActive:
+          (!isCustomNetworkActive &&
+            resourceParameter.urlKey === selectedResource) ||
+          resourceParameter.resourceId === activeResourceId,
+        type: resourceParameter.resourceId?.includes("r-injectedaccountconfig")
+          ? "cloudProviderAccount"
+          : "generic",
+      }))
+      .filter((resource) => resource.type !== "cloudProviderAccount")
+      .sort((a, b) => (a.name < b.name ? -1 : 1)) || [];
+
+  const cloudProviderAccountResource = resourceParameters.find((resource) =>
+    resource.resourceId.includes("r-injectedaccountconfig")
   );
 
   //Add 'Custom Networks' as a resource if custom networks feature is enabled
@@ -139,6 +148,19 @@ function MarketplaceServiceSidebar(props) {
       IconComponent: SidebarDotIcon,
       href: `${resourceUrlLink}&viewType=custom-networks`,
       isActive: isCustomNetworkActive,
+      type: "customNetwork",
+    });
+  }
+
+  if (cloudProviderAccountResource) {
+    resourceParametersList.push({
+      name: cloudProviderAccountResource.name,
+      IconComponent: SidebarDotIcon,
+      href: `${resourceUrlLink}&resourceId=${cloudProviderAccountResource.resourceId}`,
+      isActive:
+        (!isCustomNetworkActive &&
+          cloudProviderAccountResource.urlKey === selectedResource) ||
+        cloudProviderAccountResource.resourceId === activeResourceId,
     });
   }
 
