@@ -7,7 +7,6 @@ import {
   InputAdornment,
   MenuItem,
   Stack,
-  chipClasses,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useMutation } from "@tanstack/react-query";
@@ -23,7 +22,6 @@ import LoadingSpinnerSmall from "../../../../src/components/CircularProgress/Cir
 import { useRouter } from "next/router";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { AccessSupport } from "../../../../src/components/Access/AccessSupport";
-import Chip from "../../../../src/components/Chip/Chip";
 import MarketplaceServiceSidebar, {
   sidebarActiveOptions,
 } from "../../../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";

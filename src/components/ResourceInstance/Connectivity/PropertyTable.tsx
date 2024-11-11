@@ -1,4 +1,4 @@
-import { Box, BoxProps, Stack, Tooltip } from "@mui/material";
+import { Box, BoxProps, Tooltip } from "@mui/material";
 import { FC, Fragment } from "react";
 
 import Link from "next/link";
@@ -20,30 +20,10 @@ type PropertyTableProps = {
   rows: Row[];
 } & BoxProps;
 
-const PropertyTable: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
+const PropertyTable: FC<PropertyTableProps> = ({ rows }) => {
   return (
     <>
-      <Box
-        borderRadius="8px"
-        border="1px solid #EAECF0"
-        display="grid"
-        gridTemplateColumns="2fr"
-        padding={"12px"}
-        {...otherProps}
-      >
-        <Stack
-          sx={{
-            flexDirection: "column",
-            justifyContent: "space-between",
-            borderBottom: "1px solid #E4E7EC",
-            paddingBottom: "12px",
-          }}
-          alignItems="left"
-        >
-          <Text size="small" weight="semibold" color="#101828">
-            {"Global endpoint"}
-          </Text>
-        </Stack>
+      <Box sx={{ margin: 0 }}>
         {rows.map((row, index) => {
           const valueType = row.valueType || "text";
           let value;
