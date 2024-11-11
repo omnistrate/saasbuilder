@@ -29,7 +29,10 @@ export default function DashboardLayout(props) {
     isNotShow,
     currentSubscription,
     isServiceLength,
-    noServicesAvailable
+    noServicesAvailable,
+    environmentId,
+    activePage,
+    p = "32px",
   } = props;
   const open = useSelector(selectDrawerExpandedState);
   const notificationBar = useNotificationBar();
@@ -78,6 +81,8 @@ export default function DashboardLayout(props) {
           apiDocsurl={apiDocsurl}
           isActive={isActive}
           subscriptionId={currentSubscription?.id}
+          environmentId={environmentId}
+          activePage={activePage}
         />
       )}
       <Box
@@ -94,7 +99,7 @@ export default function DashboardLayout(props) {
             marginLeft: noSidebar ? "0px" : "280px",
           }}
         >
-          <Box component="main" p={3} sx={{ background: "white" }}>
+          <Box component="main" p={p} sx={{ background: "white" }}>
             {props.children}
           </Box>
           <DashboardFooter

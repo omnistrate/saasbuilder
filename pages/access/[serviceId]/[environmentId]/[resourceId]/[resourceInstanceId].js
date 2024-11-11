@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
 import MarketplaceServiceSidebar from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import useServiceOffering from "src/hooks/useServiceOffering";
-import ResourceInstanceOverview from "src/components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import { Tabs, Tab } from "src/components/Tab/Tab";
 import { useEffect, useMemo, useState } from "react";
@@ -32,6 +31,7 @@ import { checkIfResouceIsBYOA } from "src/utils/access/byoaResource";
 import Link from "next/link";
 import { CLI_MANAGED_RESOURCES, RESOURCE_TYPES } from "src/constants/resource";
 import AuditLogs from "src/components/ResourceInstance/AuditLogs/AuditLogs";
+import ResourceInstanceOverview from "src/components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
 
 export const getServerSideProps = async () => {
   return {
@@ -360,7 +360,7 @@ function ResourceInstance() {
         isResourceBYOA={isResourceBYOA}
         isCliManagedResource={isCliManagedResource}
       />
-      <Tabs value={currentTab} sx={{ marginTop: "28px" }}>
+      <Tabs value={currentTab} sx={{ marginTop: "32px" }}>
         {Object.entries(tabs).map(([key, value]) => {
           return (
             <Tab
@@ -380,7 +380,7 @@ function ResourceInstance() {
                   )
                 );
               }}
-              sx={{ padding: "12px !important" }}
+              sx={{ padding: "4px !important", marginRight: "16px" }}
             />
           );
         })}
@@ -398,9 +398,15 @@ function ResourceInstance() {
             resourceSchemaQuery?.data?.DESCRIBE?.outputParameters
           }
           serviceOffering={serviceOffering}
-          subscriptionId={subscriptionData?.id}
-          cloudProviderAccountInstanceURL={cloudProviderAccountInstanceURL}
+          subscriptionId={subscriptionId}
           customNetworkDetails={resourceInstanceData.customNetworkDetails}
+          cloudProviderAccountInstanceURL={cloudProviderAccountInstanceURL}
+          resourceInstanceData={resourceInstanceData}
+          autoscalingEnabled={resourceInstanceData?.autoscalingEnabled}
+          highAvailability={resourceInstanceData?.highAvailability}
+          backupStatus={resourceInstanceData?.backupStatus}
+          autoscaling={resourceInstanceData?.autoscaling}
+          serverlessEnabled={resourceInstanceData?.serverlessEnabled}
         />
       )}
       {currentTab === tabs.connectivity && (
@@ -499,7 +505,7 @@ function getTabs(
   const tabs = {
     resourceInstanceDetails: "Resource Instance Details",
     connectivity: "Connectivity",
-    nodes: "Containers",
+    nodes: "Nodes",
   };
   if (isMetricsEnabled && !isResourceBYOA && !isCliManagedResource)
     tabs["metrics"] = "Metrics";

@@ -6,14 +6,23 @@ import {
   DialogTitle,
   Stack,
 } from "@mui/material";
-import Accordion from "src/components/Accordion/Accordion";
+import { FC } from "react";
+import Accordian from "src/components/Accordian/Accordian";
+import AccordionKeyValueCopyTable from "src/components/AccordionKeyValueCopyTable/AccordionKeyValueCopyTable";
 import Button from "src/components/Button/Button";
 import Divider from "src/components/Divider/Divider";
 import InfoIcon from "src/components/Icons/Info/Info";
-import KeyValueCopyTable from "src/components/KeyValueCopyTable/KeyValueCopyTable";
 import { Text } from "src/components/Typography/Typography";
 
-const CustomDNSDetailsModal = (props) => {
+type CustomDNSDetailsModalProps = {
+  open: boolean;
+  handleClose: () => void;
+  aRecordTarget?: string;
+  cnameTarget?: string;
+  domainName: string;
+};
+
+const CustomDNSDetailsModal: FC<CustomDNSDetailsModalProps> = (props) => {
   const { open, handleClose, aRecordTarget, cnameTarget, domainName } = props;
 
   const rows = [
@@ -68,13 +77,13 @@ const CustomDNSDetailsModal = (props) => {
         </Stack>
       </DialogTitle>
       <DialogContent>
-        <Accordion
+        <Accordian
           disableToggle
           title={title}
           description="Apply these settings in your DNS provider’s system"
         >
-          <KeyValueCopyTable rows={rows} />
-        </Accordion>
+          <AccordionKeyValueCopyTable rows={rows} />
+        </Accordian>
       </DialogContent>
       <Divider sx={{ marginTop: "12px" }} />
       <DialogActions sx={{ padding: "16px 24px" }}>

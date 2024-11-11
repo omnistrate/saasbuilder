@@ -1,17 +1,34 @@
-import Ansi from "@curvenote/ansi-to-react";
-import { Box, Stack } from "@mui/material";
-import React, { useState, useTransition, useEffect } from "react";
-import { DisplayText, Text } from "../../Typography/Typography";
-import Select from "../../FormElements/Select/Select";
+import Ansi from "ansi-to-react";
+import {
+  Box,
+  CircularProgress,
+  IconButton as MuiIconButton,
+  Stack,
+} from "@mui/material";
+import { useRef, useState, useEffect } from "react";
+import { Text } from "../../Typography/Typography";
 import Card from "../../Card/Card";
 import Divider from "../../Divider/Divider";
-import MenuItem from "../../MenuItem/MenuItem";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import styled from "@emotion/styled";
 import useSnackbar from "../../../hooks/useSnackbar";
 import InfiniteScroll from "react-infinite-scroller";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import Tooltip from "../../Tooltip/Tooltip";
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import Select from "src/components/FormElementsv2/Select/Select";
+import MenuItem from "src/components/MenuItem/MenuItem";
 
 const logsPerPage = 50;
+
+const connectionStatuses = {
+  idle: "idle",
+  connected: "connected",
+  failed: "error",
+  disconnected: "disconnected",
+};
 
 function Logs(props) {
   const {
@@ -34,14 +51,18 @@ function Logs(props) {
   if (socketBaseURL && selectedNodeId) {
     logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
   }
-  // else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
+  //  else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
   //   logsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
   // }
 
-  const [isLogsSocketConnected, setIsLogsSocketConnected] = useState(false);
-  const [, startTransition] = useTransition();
+  const [isLogsDataLoaded, setIsLogsDataLoaded] = useState(false);
+  const [socketConnectionStatus, setConnectionStatus] = useState(
+    connectionStatuses.idle
+  );
   const [hasMoreLogs, setHasMoreLogs] = useState(true);
   const [records, setRecords] = useState(logsPerPage);
+  const startDivRef = useRef();
+  const endDivRef = useRef();
 
   const loadMoreLogs = () => {
     if (records === logs.length) {
@@ -64,17 +85,19 @@ function Logs(props) {
   const { getWebSocket } = useWebSocket(logsSocketEndpoint, {
     onOpen: () => {
       // console.log("Socket Connection opened", event);
+      setConnectionStatus(connectionStatuses.connected);
       setLogs([]);
-      setIsLogsSocketConnected(true);
+      // setIsLogsDataLoaded(true);
     },
     onError: (event) => {
       console.log("Socket connection error", event);
     },
     onMessage: (event) => {
+      if (!isLogsDataLoaded) {
+        setIsLogsDataLoaded(true);
+      }
       const data = event.data;
-      startTransition(() => {
-        setLogs((prevData) => [...prevData, data]);
-      });
+      setLogs((prevData) => [...prevData, data]);
     },
     onClose: () => {
       // console.log("Socket Connection closed", event);
@@ -87,7 +110,7 @@ function Logs(props) {
       return interval;
     },
     onReconnectStop: () => {
-      if (isLogsSocketConnected) {
+      if (isLogsDataLoaded) {
         snackbar.showError(
           "Unable to get the latest data. The displayed data might be outdated"
         );
@@ -115,12 +138,12 @@ function Logs(props) {
       if (socket) {
         //console.log("Socket", socket);
         socket.close();
-        //console.log("Closing socket");
+        //console.log("Closing logs socket");
       }
     };
-  }, [logsSocketEndpoint, snackbar, getWebSocket]);
+  }, [logsSocketEndpoint]);
 
-  if (!logsSocketEndpoint) {
+  if (!logsSocketEndpoint || errorMessage) {
     return (
       <Card
         mt={3}
@@ -133,22 +156,45 @@ function Logs(props) {
       >
         <Stack direction="row" justifyContent="center" marginTop="200px">
           <Text size="xlarge">
-            Logs are not available{" "}
-            {instanceStatus !== "RUNNING" && "as the instance is not running"}
+            {errorMessage ||
+              `Logs are not available ${instanceStatus !== "RUNNING" ? "as the instance is not running" : ""}`}
           </Text>
         </Stack>
       </Card>
     );
   }
 
+  if (
+    !isLogsDataLoaded &&
+    socketConnectionStatus === connectionStatuses.connected
+  ) {
+    return (
+      <Stack
+        flexDirection={"column"}
+        gap="30px"
+        alignItems="center"
+        sx={{ marginTop: "200px", marginBottom: "200px" }}
+      >
+        <CircularProgress />
+        <Text size="large" weight="medium">
+          Connected to the server, logs will be available shortly
+        </Text>
+      </Stack>
+    );
+  }
+  if (!isLogsDataLoaded) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <Card
-      mt={3}
+      mt={"32px"}
       sx={{
         paddingTop: "12.5px",
         paddingLeft: "20px",
         paddingRight: "20px",
         minHeight: "500px",
+        borderRadius: "8px",
       }}
     >
       <Stack
@@ -156,18 +202,25 @@ function Logs(props) {
           flexDirection: "row",
           justifyContent: "space-between",
         }}
+        alignItems="center"
       >
-        <DisplayText size="xsmall" sx={{ marginTop: "12px" }}>
-          Logs
-        </DisplayText>
+        <DataGridHeaderTitle
+          title={`Logs`}
+          desc="Detailed logs for monitoring and troubleshooting"
+        />
         {nodes?.length > 0 && (
-          <Box sx={{ minWidth: "320px" }}>
+          <Box sx={{ minWidth: "220px" }}>
             <Text size="small" weight="medium" color="#344054">
-              Container ID
+              Node ID
             </Text>
             <Select
               value={selectedNodeId}
-              sx={{ marginTop: "2px" }}
+              sx={{
+                width: "auto",
+                height: "40px !important",
+                padding: "10px 14px !important",
+                minHeight: "40px",
+              }}
               onChange={handleNodeChange}
             >
               {nodes.map((node) => (
@@ -180,50 +233,106 @@ function Logs(props) {
         )}
       </Stack>
       <Divider sx={{ marginTop: "12px" }} />
-      <LogsContainer>
-        <InfiniteScroll
-          pageStart={0}
-          hasMore={hasMoreLogs}
-          loadMore={loadMoreLogs}
-          useWindow={false}
-        >
-          {isLogsSocketConnected
-            ? logs
-                .filter((log, index) => index < records)
-                .map((log) => {
-                  return (
+
+      <Box position="relative">
+        <LogsContainer className="sleek-scroll">
+          <div
+            ref={startDivRef}
+            style={{ visibility: "hidden", height: "24px" }}
+          />
+          <InfiniteScroll
+            pageStart={0}
+            hasMore={hasMoreLogs}
+            loadMore={loadMoreLogs}
+            useWindow={false}
+          >
+            {logs
+              ?.filter((log, index) => index < records)
+              .map((log) => {
+                return (
+                  <>
                     <Log key={log}>
                       <Ansi>{log}</Ansi>
                     </Log>
-                  );
-                })
-            : errorMessage || "Connecting..."}
-        </InfiniteScroll>
-      </LogsContainer>
+                  </>
+                );
+              })}
+          </InfiniteScroll>
+          <div ref={endDivRef} style={{ visibility: "hidden" }} />
+        </LogsContainer>
+        {isLogsDataLoaded && (
+          <>
+            <IconButton
+              titleText={"Navigate to top"}
+              direction="up"
+              divRef={startDivRef}
+            />
+            <IconButton
+              titleText={"Navigate to bottom"}
+              direction="down"
+              divRef={endDivRef}
+            />
+          </>
+        )}
+      </Box>
     </Card>
   );
 }
 
 export default Logs;
 
-const Log = styled("h3")({
+const Log = styled("pre")({
   fontWeight: 500,
-  fontSize: "14px",
-  lineHeight: "20px",
-  color: "white",
+  fontSize: "12px",
+  lineHeight: "16px",
+  color: "#FFFFFF",
   "&+&": {
     marginTop: 30,
   },
   wordBreak: "break-word",
+  whiteSpace: "pre-wrap",
 });
 
 const LogsContainer = styled(Box)(() => ({
   height: 500,
   overflowY: "auto",
   marginTop: 24,
-  borderRadius: "4px",
-  backgroundColor: "#282a36",
-  padding: 24,
+  borderRadius: "8px",
+  backgroundColor: "#101828",
+  padding: "0px 60px 24px 24px",
   fontFamily: "Monaco, monospace",
-  color: "white",
+  color: "#FFFFFF",
 }));
+
+const IconButton = ({ direction, divRef, titleText }) => {
+  const position = direction === "up" ? { top: "20px" } : { bottom: "20px" };
+
+  return (
+    <MuiIconButton
+      onClick={() => divRef.current.scrollIntoView({ behavior: "smooth" })}
+      sx={{
+        position: "absolute",
+        border: "1px solid #2B3E6B",
+        right: "28px",
+        backgroundColor: "#1D273F",
+        boxShadow: "0px 1px 2px 0px #1018280D",
+
+        "&:hover": {
+          backgroundColor: "#1D273F",
+        },
+        ...position,
+      }}
+    >
+      <Tooltip
+        title={<Text sx={{ padding: "4px", color: "white" }}>{titleText}</Text>}
+        placement={direction === "up" ? "bottom-start" : "top-start"}
+      >
+        {direction === "up" ? (
+          <KeyboardArrowUpIcon sx={{ color: "#DCE1E8" }} />
+        ) : (
+          <KeyboardArrowDownIcon sx={{ color: "#DCE1E8" }} />
+        )}
+      </Tooltip>
+    </MuiIconButton>
+  );
+};

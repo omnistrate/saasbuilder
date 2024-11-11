@@ -1,9 +1,8 @@
-import { Box, Stack, styled } from "@mui/material";
-import { DisplayText, Text } from "../../Typography/Typography";
-import Select from "../../FormElements/Select/Select";
+import { Box, CircularProgress, Stack, styled } from "@mui/material";
+import { Text } from "../../Typography/Typography";
+
 import Divider from "../../Divider/Divider";
 import Card from "../../Card/Card";
-import MenuItem from "../../MenuItem/MenuItem";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import MetricCard from "./MetricCard";
@@ -20,6 +19,9 @@ import useSnackbar from "../../../hooks/useSnackbar";
 import formatDateUTC from "../../../utils/formatDateUTC";
 import MultiLineChart from "./MultiLineChart";
 import SingleLineChart from "./SingleLineChart";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import Select from "src/components/FormElementsv2/Select/Select";
+import MenuItem from "src/components/MenuItem/MenuItem";
 
 const initialCpuUsage = {
   current: "",
@@ -33,6 +35,13 @@ const initialLoadAverage = {
 const initialMemUsagePercentData = {
   current: "",
   data: [],
+};
+
+const connectionStatuses = {
+  idle: "idle",
+  connected: "connected",
+  failed: "error",
+  disconnected: "disconnected",
 };
 
 //store 4 hr data
@@ -51,6 +60,7 @@ function Metrics(props) {
     resourceInstanceId,
     customMetrics = [],
     productTierType,
+    //mainResourceHasCompute,
   } = props;
   let firstNode = null;
   if (nodes.length > 0) {
@@ -69,6 +79,9 @@ function Metrics(props) {
 
   const socketOpenTime = useRef(null);
   const [isMetricsDataLoaded, setIsMetricsDataLoaded] = useState(false);
+  const [socketConnectionStatus, setConnectionStatus] = useState(
+    connectionStatuses.idle
+  );
   const numConnectError = useRef(0);
   const [cpuUsageData, setCpuUsageData] = useState({
     current: "",
@@ -109,153 +122,7 @@ function Metrics(props) {
   const [diskUsage, setDiskUsage] = useState([]);
   const [customMetricsChartData, setCustomMetricsChartData] = useState({});
 
-  const { getWebSocket } = useWebSocket(metricsSocketEndpoint, {
-    onOpen: () => {
-      setIsMetricsDataLoaded(false);
-      socketOpenTime.current = Date.now() / 1000;
-      numConnectError.current = 0;
-    },
-    onError: () => {
-      // console.log("Error socket", event);
-      numConnectError.current = numConnectError.current + 1;
-    },
-    onMessage: () => {
-      const data = JSON.parse(event.data);
-      handleIncomingMetricEvent(data);
-    },
-    onClose: () => {
-      //console.log("Socket connection closed");
-    },
-    shouldReconnect: () => true,
-    reconnectAttempts: 3,
-    retryOnError: true,
-    reconnectInterval: (attemptNumber) => {
-      const interval = Math.pow(2, attemptNumber) * 1000;
-      return interval;
-    },
-    onReconnectStop: () => {
-      // console.log("Stopping", numAttempts);
-      if (isMetricsDataLoaded) {
-        snackbar.showError(
-          "Unable to get the latest data. The displayed data might be outdated"
-        );
-      } else {
-        // snackbar.showError("Unable to get the latest data...");
-        setErrorMessage(
-          "Can't access metrics data. Please check if the instance is available and metrics are enabled."
-        );
-      }
-    },
-  });
-
-  useEffect(() => {
-    function handleNetorkDisconnect() {
-      snackbar.showError(
-        "Network disconnected. The displayed data might be outdated"
-      );
-    }
-    window.addEventListener("offline", handleNetorkDisconnect);
-    //close the socket on unmount
-    return () => {
-      window.removeEventListener("offline", handleNetorkDisconnect);
-      //console.log("Running cleanup");
-      const socket = getWebSocket();
-      if (socket) {
-        //console.log("Socket", socket);
-        socket.close();
-        //console.log("Closing socket");
-      }
-    };
-  }, [metricsSocketEndpoint, getWebSocket, snackbar]);
-
-  const initialiseCustomMetricsData = useCallback(() => {
-    const initialCustomMetricData = customMetrics.reduce((acc, curr) => {
-      const { metricName } = curr;
-      acc[metricName] = [];
-      return acc;
-    }, {});
-    setCustomMetricsChartData(initialCustomMetricData);
-  }, [customMetrics]);
-
-  //initialise custom metrics data
-  useEffect(() => {
-    initialiseCustomMetricsData();
-  }, [initialiseCustomMetricsData]);
-
-  if (!metricsSocketEndpoint || errorMessage) {
-    return (
-      <ContainerCard>
-        <Stack direction="row" justifyContent="center" marginTop="200px">
-          <Text size="xlarge">
-            {errorMessage ||
-              `Metrics are not available ${
-                instanceStatus !== "RUNNING"
-                  ? "as the instance is not running"
-                  : ""
-              }`}
-          </Text>
-        </Stack>
-      </ContainerCard>
-    );
-  }
-
-  //console.log("connectionStatus", connectionStatus);
-  function initialiseMetricsData() {
-    setCpuUsageData(initialCpuUsage);
-    setLoadAverage(initialLoadAverage);
-    setMemUsagePercentData(initialMemUsagePercentData);
-    setTotalMemoryGiB(null);
-    setMemoryUsageGiB(null);
-    setMemoryUsagePercent(null);
-    setSystemUptimeHours(null);
-    setDiskIOPSReadLabels([]);
-    setDiskIOPSWriteLabels([]);
-    setDiskThroughputReadLabels([]);
-    setDiskThroughputWriteLabels([]);
-    setNetThroughputReceiveLabels([]);
-    setNetThroughputSendLabels([]);
-    setDiskIOPSRead([]);
-    setDiskIOPSWrite([]);
-    setDiskThroughputRead([]);
-    setDiskThroughputWrite([]);
-    setNetThroughputReceive([]);
-    setNetThroughputSend([]);
-    setDiskPathLabels([]);
-    setDiskUsage([]);
-  }
-
-  function metricMemUsagePercentData(memoryUsagePercent, formattedDate) {
-    if (memoryUsagePercent && formattedDate) {
-      const value = Math.round(memoryUsagePercent.Value);
-      setMemUsagePercentData((prev) => {
-        if (prev.data.length === maxDataPoints) {
-          return {
-            current: value,
-            data: [
-              ...prev.data.slice(1, maxDataPoints),
-              {
-                x: formattedDate,
-                y: value,
-              },
-            ],
-          };
-        } else {
-          return {
-            current: value,
-            data: [
-              ...prev.data,
-              {
-                x: formattedDate,
-                y: value,
-              },
-            ],
-          };
-        }
-      });
-    }
-  }
-
-  function handleIncomingMetricEvent(data) {
+  const handleIncomingMetricEvent = (data) => {
     const messageTime = data.UnixEpochTimestamp;
 
     const metrics = data.Metrics;
@@ -551,7 +418,7 @@ function Metrics(props) {
         setCpuUsageData((prev) => {
           if (prev.data.length === maxDataPoints) {
             return {
-              current: value !== undefined ? value : prev.current,
+              current: !isNaN(value) && value !== null ? value : prev.current,
               data: [
                 ...prev.data.slice(1, maxDataPoints),
                 {
@@ -562,7 +429,7 @@ function Metrics(props) {
             };
           } else {
             return {
-              current: value !== undefined ? value : prev.current,
+              current: !isNaN(value) && value !== null ? value : prev.current,
               data: [
                 ...prev.data,
                 {
@@ -583,7 +450,7 @@ function Metrics(props) {
           if (prev.data.length === maxDataPoints) {
             return {
               current:
-                loadAverageValue !== undefined
+                !isNaN(loadAverageValue) && loadAverageValue !== null
                   ? loadAverageValue
                   : prev.current,
               data: [
@@ -597,7 +464,7 @@ function Metrics(props) {
           } else {
             return {
               current:
-                loadAverageValue !== undefined
+                !isNaN(loadAverageValue) && loadAverageValue !== null
                   ? loadAverageValue
                   : prev.current,
               data: [
@@ -707,6 +574,153 @@ function Metrics(props) {
         }
       }
     }
+  };
+
+  const { getWebSocket } = useWebSocket(metricsSocketEndpoint, {
+    onOpen: () => {
+      setIsMetricsDataLoaded(false);
+      socketOpenTime.current = Date.now() / 1000;
+      setConnectionStatus(connectionStatuses.connected);
+      numConnectError.current = 0;
+    },
+    onError: () => {
+      // console.log("Error socket", event);
+      numConnectError.current = numConnectError.current + 1;
+    },
+    onMessage: (event) => {
+      const data = JSON.parse(event.data);
+      handleIncomingMetricEvent(data);
+    },
+    onClose: () => {
+      //console.log("Socket connection closed");
+    },
+    shouldReconnect: () => true,
+    reconnectAttempts: 3,
+    retryOnError: true,
+    reconnectInterval: (attemptNumber) => {
+      const interval = Math.pow(2, attemptNumber) * 1000;
+      return interval;
+    },
+    onReconnectStop: () => {
+      // console.log("Stopping", numAttempts);
+      if (isMetricsDataLoaded) {
+        snackbar.showError(
+          "Unable to get the latest data. The displayed data might be outdated"
+        );
+      } else {
+        // snackbar.showError("Unable to get the latest data...");
+        setErrorMessage(
+          "Can't access metrics data. Please check if the instance is available and metrics are enabled."
+        );
+      }
+    },
+  });
+
+  useEffect(() => {
+    function handleNetorkDisconnect() {
+      snackbar.showError(
+        "Network disconnected. The displayed data might be outdated"
+      );
+    }
+    window.addEventListener("offline", handleNetorkDisconnect);
+    //close the socket on unmount
+    return () => {
+      window.removeEventListener("offline", handleNetorkDisconnect);
+      //console.log("Running cleanup");
+      const socket = getWebSocket();
+      if (socket) {
+        //console.log("Socket", socket);
+        socket.close();
+        //console.log("Closing metrics socket");
+      }
+    };
+  }, [metricsSocketEndpoint]);
+
+  const initialiseCustomMetricsData = useCallback(() => {
+    const initialCustomMetricData = customMetrics.reduce((acc, curr) => {
+      const { metricName } = curr;
+      acc[metricName] = [];
+      return acc;
+    }, {});
+    setCustomMetricsChartData(initialCustomMetricData);
+  }, [customMetrics]);
+
+  //initialise custom metrics data
+  useEffect(() => {
+    initialiseCustomMetricsData();
+  }, [initialiseCustomMetricsData]);
+
+  if (!metricsSocketEndpoint || errorMessage) {
+    return (
+      <ContainerCard>
+        <Stack direction="row" justifyContent="center" marginTop="200px">
+          <Text size="xlarge">
+            {errorMessage ||
+              `Metrics are not available ${
+                instanceStatus !== "RUNNING"
+                  ? "as the instance is not running"
+                  : ""
+              }`}
+          </Text>
+        </Stack>
+      </ContainerCard>
+    );
+  }
+
+  //console.log("connectionStatus", connectionStatus);
+  function initialiseMetricsData() {
+    setCpuUsageData(initialCpuUsage);
+    setLoadAverage(initialLoadAverage);
+    setMemUsagePercentData(initialMemUsagePercentData);
+    setTotalMemoryGiB(null);
+    setMemoryUsageGiB(null);
+    setMemoryUsagePercent(null);
+    setSystemUptimeHours(null);
+    setDiskIOPSReadLabels([]);
+    setDiskIOPSWriteLabels([]);
+    setDiskThroughputReadLabels([]);
+    setDiskThroughputWriteLabels([]);
+    setNetThroughputReceiveLabels([]);
+    setNetThroughputSendLabels([]);
+    setDiskIOPSRead([]);
+    setDiskIOPSWrite([]);
+    setDiskThroughputRead([]);
+    setDiskThroughputWrite([]);
+    setNetThroughputReceive([]);
+    setNetThroughputSend([]);
+    setDiskPathLabels([]);
+    setDiskUsage([]);
+  }
+
+  function metricMemUsagePercentData(memoryUsagePercent, formattedDate) {
+    if (memoryUsagePercent && formattedDate) {
+      const value = Math.round(memoryUsagePercent.Value);
+      setMemUsagePercentData((prev) => {
+        if (prev.data.length === maxDataPoints) {
+          return {
+            current: value,
+            data: [
+              ...prev.data.slice(1, maxDataPoints),
+              {
+                x: formattedDate,
+                y: value,
+              },
+            ],
+          };
+        } else {
+          return {
+            current: value,
+            data: [
+              ...prev.data,
+              {
+                x: formattedDate,
+                y: value,
+              },
+            ],
+          };
+        }
+      });
+    }
   }
 
   function handleNodeChange(event) {
@@ -723,6 +737,24 @@ function Metrics(props) {
   //   return <ConnectionFailureUI />;
   // }
 
+  if (
+    !isMetricsDataLoaded &&
+    socketConnectionStatus === connectionStatuses.connected
+  ) {
+    return (
+      <Stack
+        flexDirection={"column"}
+        gap="30px"
+        alignItems="center"
+        sx={{ marginTop: "200px", marginBottom: "200px" }}
+      >
+        <CircularProgress />
+        <Text size="large" weight="medium">
+          Connected to the server, metrics will be available shortly
+        </Text>
+      </Stack>
+    );
+  }
   if (!isMetricsDataLoaded) {
     return <LoadingSpinner />;
   }
@@ -737,18 +769,30 @@ function Metrics(props) {
           flexDirection: "row",
           justifyContent: "space-between",
         }}
+        alignItems="center"
       >
-        <DisplayText size="xsmall" sx={{ marginTop: "12px" }}>
-          Metrics
-        </DisplayText>
+        <DataGridHeaderTitle
+          title={`Metrics`}
+          desc="Metrics for monitoring and performance insights"
+          count={10 + customMetrics?.length}
+          units={{
+            singular: "Metric",
+            plural: "Metrics",
+          }}
+        />
         {nodes?.length > 0 && (
-          <Box sx={{ minWidth: "320px" }}>
+          <Box sx={{ minWidth: "220px" }}>
             <Text size="small" weight="medium" color="#344054">
-              Container ID
+              Node ID
             </Text>
             <Select
               value={selectedNode}
-              sx={{ marginTop: "2px" }}
+              sx={{
+                width: "auto",
+                height: "40px !important",
+                padding: "10px 14px !important",
+                minHeight: "40px",
+              }}
               onChange={handleNodeChange}
               MenuProps={{ disableScrollLock: true }}
             >
@@ -763,7 +807,7 @@ function Metrics(props) {
       </Stack>
       <Divider sx={{ marginTop: "12px" }} />
 
-      <Box display="flex" alignItems="stretch" gap={3} mt={3}>
+      <Box display="flex" alignItems="stretch" gap={"12px"} mt={3}>
         <MetricCard title="CPU Usage" value={cpuUsageData.current} unit="%" />
         {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
           <MetricCard title="Load average" value={loadAverage.current} />
@@ -784,62 +828,62 @@ function Metrics(props) {
           unit="hrs"
         />
       </Box>
-
-      <CpuUsageChart data={cpuUsageData.data} />
-
-      <Box mt={8}>
+      <MetricsContainerCard>
+        <CpuUsageChart data={cpuUsageData.data} />
+      </MetricsContainerCard>
+      <MetricsContainerCard>
         <MemUsagePercentChart data={memUsagePercentData.data} />
-      </Box>
+      </MetricsContainerCard>
 
       {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
-        <Box mt={8}>
+        <MetricsContainerCard>
           <LoadAverageChart data={loadAverage.data} />
-        </Box>
+        </MetricsContainerCard>
       )}
 
-      <Box mt={8}>
+      <MetricsContainerCard>
         <DiskUsageChart data={diskUsage} labels={diskPathLabels} />
-      </Box>
+      </MetricsContainerCard>
 
-      <Box mt={8}>
+      <MetricsContainerCard>
         <DiskIOPSReadChart data={diskIOPSRead} labels={diskIOPSReadLabels} />
-      </Box>
+      </MetricsContainerCard>
 
-      <Box mt={8}>
+      <MetricsContainerCard>
         <DiskIOPSWriteChart data={diskIOPSWrite} labels={diskIOPSWriteLabels} />
-      </Box>
+      </MetricsContainerCard>
 
-      <Box mt={8}>
+      <MetricsContainerCard>
         <DiskThroughputChart
           chartName="Disk Throughput (Read)"
           data={diskThroughputRead}
           labels={diskThroughputReadLabels}
         />
-      </Box>
+      </MetricsContainerCard>
 
-      <Box mt={8}>
+      <MetricsContainerCard>
         <DiskThroughputChart
           chartName="Disk Throughput (Write)"
           data={diskThroughputWrite}
           labels={diskThroughputWriteLabels}
         />
-      </Box>
+      </MetricsContainerCard>
       {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
         <>
-          <Box mt={8}>
+          <MetricsContainerCard>
             <NetworkThroughputChart
               chartName="Network Throughput (Receive)"
               data={netThroughputReceive}
               labels={netThroughputReceiveLabels}
             />
-          </Box>
-          <Box mt={8}>
+          </MetricsContainerCard>
+          <MetricsContainerCard>
             <NetworkThroughputChart
               chartName="Network Throughput (Send)"
               data={netThroughputSend}
               labels={netThroughputSendLabels}
             />
-          </Box>
+          </MetricsContainerCard>
         </>
       )}
       {customMetrics //show metrics for selected node resource type
@@ -853,20 +897,24 @@ function Metrics(props) {
           const { metricName, labels } = metricInfo;
           if (labels.length > 0)
             return (
-              <MultiLineChart
-                chartName={metricName}
-                data={customMetricsChartData[metricName]}
-                labels={labels}
-                key={metricName}
-              />
+              <MetricsContainerCard key={metricName}>
+                <MultiLineChart
+                  chartName={metricName}
+                  data={customMetricsChartData[metricName]}
+                  labels={labels}
+                  key={metricName}
+                />
+              </MetricsContainerCard>
             );
           else
             return (
-              <SingleLineChart
-                chartName={metricName}
-                data={customMetricsChartData[metricName]}
-                key={metricName}
-              />
+              <MetricsContainerCard key={metricName}>
+                <SingleLineChart
+                  chartName={metricName}
+                  data={customMetricsChartData[metricName]}
+                  key={metricName}
+                />
+              </MetricsContainerCard>
             );
         })}
     </ContainerCard>
@@ -884,21 +932,57 @@ function isOlderThanFourHours(unixTimestampSeconds) {
   return false;
 }
 
-export const MetricsCardsContainer = styled(Box)(() => ({
+export const MetricsCardsContainer = styled(Box)({
   display: "grid",
   gridTemplateColumns: "repeat(5, 1fr)",
   columnGap: "24px",
-}));
+});
+
+// const ConnectionFailureUI = () => {
+//   return (
+//     <Card
+//       mt={3}
+//       sx={{
+//         paddingTop: "12.5px",
+//         paddingLeft: "20px",
+//         paddingRight: "20px",
+//         minHeight: "500px",
+//       }}
+//     >
+//       <Stack direction="row" justifyContent="center" marginTop="200px">
+//         <Text size="xlarge">Failed to get metrics data</Text>
+//       </Stack>
+//     </Card>
+//   );
+// };
 
 const ContainerCard = ({ children }) => {
   return (
     <Card
-      mt={3}
+      mt={"32px"}
       sx={{
         paddingTop: "12.5px",
         paddingLeft: "20px",
         paddingRight: "20px",
         minHeight: "500px",
+        borderRadius: "8px",
+      }}
+    >
+      {children}
+    </Card>
+  );
+};
+
+const MetricsContainerCard = ({ children }) => {
+  return (
+    <Card
+      mt={8}
+      sx={{
+        boxShadow: "0px 4px 30px 0px #2E2D740D",
+        borderRadius: "0px",
+        padding: "0px",
+        marginTop: "12px",
+        background: "#F9FAFB",
       }}
     >
       {children}

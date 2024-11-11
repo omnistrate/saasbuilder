@@ -104,11 +104,12 @@ export default function ConfirmationDialog(props) {
           <Button
             sx={{
               minWidth: "100px",
-              padding: "10px",
-              fontSize: "16px",
+
               border: "1px solid #D0D5DD",
               borderRadius: "8px",
               borderShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+              height: "40px !important",
+              padding: "10px 14px !important",
             }}
             style={{ color: "black" }}
             onClick={handleClose}
@@ -118,16 +119,15 @@ export default function ConfirmationDialog(props) {
           <Button
             sx={{
               minWidth: "100px",
-              padding: "10px",
-              fontSize: "16px",
               border: "1px solid #D0D5DD",
               borderRadius: "8px",
               backgroundColor: isTypeDelete ? "#cf4027" : "",
               borderShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+              height: "40px !important",
+              padding: "10px 14px !important",
             }}
             type="submit"
             variant="contained"
-            size="xsmall"
             style={{ backgroundColor: buttonColour }}
             // disabled={isDeleteEnable}
             disabled={isLoading}

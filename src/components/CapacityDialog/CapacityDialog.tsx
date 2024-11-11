@@ -193,16 +193,16 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
         <DialogActions>
           <Button
             variant="outlined"
-            size="large"
+            sx={{ height: "40px !important", padding: "10px 14px !important" }}
             disabled={capacityMutation.isLoading}
             onClick={handleClose}
           >
             Cancel
           </Button>
           <Button
-            size="large"
             type="submit"
             variant="contained"
+            sx={{ height: "40px !important", padding: "10px 14px !important" }}
             disabled={capacityMutation.isLoading}
           >
             {labelObj.buttonLabel}

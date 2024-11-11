@@ -1,14 +1,16 @@
 // Light Mode - Sidebar and Navbar
 export const styleConfig = {
   navbarBg: "#FFFFFF",
-  navbarTextColor: "#181C32",
+  navbarTextColor: "#101828",
   navbarBorderColor: "#E4E4E5",
   nineDotMenuTextColor: "#6E717F",
   sidebarBg: "#FFFFFF",
   sidebarBorderColor: "#E4E4E5", // Same as navbarBorderColor
-  sidebarTextColor: "#9A9CAE",
-  sidebarIconColor: "#A0AEC0",
-  sidebarIconActiveColor: "#0CAF60",
+  //sidebarTextColor: "#182230",
+  sidebarTextColor: "#344054",
+  sidebarTextActiveColor: "#079455",
+  sidebarIconColor: "#667085",
+  sidebarIconActiveColor: "#079455",
   sidebarIconDisabledColor: "#A0AEC0",
   primaryColor: "#039855", // Filled Button Background
   primaryTextColor: "#FFFFFF", // Filled Button Text

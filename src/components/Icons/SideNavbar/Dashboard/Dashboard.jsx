@@ -1,23 +1,15 @@
 import { styleConfig } from "src/providerConfig";
 
 const DashboardNavIcon = (props) => {
-  const { active, disabled, ...restProps } = props;
-  let color = props.color || styleConfig.sidebarIconColor;
-
-  if (active) {
-    color = styleConfig.sidebarIconActiveColor;
-  }
-  if (disabled) {
-    color = styleConfig.sidebarIconDisabledColor;
-  }
+  const { color = styleConfig.sidebarIconColor, ...restProps } = props;
 
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={20}
-      height={20}
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
       fill="none"
+      xmlns="http://www.w3.org/2000/svg"
       {...restProps}
     >
       <path

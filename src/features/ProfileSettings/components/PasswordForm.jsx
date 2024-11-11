@@ -101,7 +101,7 @@ function ChangePassword() {
               }
               sx={{ marginTop: "12px", width: "600px" }}
             />
-            <FieldError>
+            <FieldError marginTop="4px">
               {formik.touched.currentPassword && formik.errors.currentPassword}
             </FieldError>
           </Box>
@@ -121,7 +121,7 @@ function ChangePassword() {
               error={formik.touched.password && formik.errors.password}
               sx={{ marginTop: "12px", width: "600px" }}
             />
-            <FieldError>
+            <FieldError marginTop="4px">
               {formik.touched.password && formik.errors.password}
             </FieldError>
           </Box>
@@ -143,7 +143,7 @@ function ChangePassword() {
               }
               sx={{ marginTop: "12px", width: "600px" }}
             />
-            <FieldError>
+            <FieldError marginTop="4px">
               {formik.touched.confirmPassword && formik.errors.confirmPassword}
             </FieldError>
           </Box>

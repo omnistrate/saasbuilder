@@ -4,8 +4,12 @@ import styled from "@emotion/styled";
 
 export const Tabs = styled(MuiTabs)({
   borderBottom: "1px solid #E1E3EA",
+
   [`& .${tabsClasses.indicator}`]: {
     backgroundColor: "transparent",
+  },
+  [`& .${tabsClasses.scrollButtons}`]: {
+    paddingBottom: 14,
   },
 });
 
@@ -13,15 +17,20 @@ export const Tab = styled(MuiTab)({
   padding: 0,
   paddingBottom: 14,
   textTransform: "none",
-  borderBottom: "1px solid #EAECF0",
-  fontSize: 16,
+  borderBottom: "0px solid #EAECF0",
+  fontSize: 14,
+  padding: "12px 0px",
   fontWeight: 600,
-  color: "#A1A5B7",
-  lineHeight: "24px",
-  marginRight: "30px",
+  color: "#667085",
+  lineHeight: "20px",
+  // marginRight: "16px",
   minWidth: "auto",
   [`&.${tabClasses.selected}`]: {
     borderBottom: "2px solid #6941C6",
-    color: "#3F4254",
+    color: "#6941C6",
+  },
+  "&:hover": {
+    borderBottom: "2px solid #6941C6",
+    color: "#6941C6",
   },
 });

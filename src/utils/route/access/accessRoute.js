@@ -52,6 +52,25 @@ export function getAccessControlRoute(
   }
   return route;
 }
+
+export function getAuditLogsRoute(
+  serviceId,
+  environmentId,
+  productTierId,
+  subscriptionId = ""
+) {
+  return `/access/${serviceId}/${environmentId}/audit-logs?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
+}
+
+export function getNotificationsRoute(
+  serviceId,
+  environmentId,
+  productTierId,
+  subscriptionId = ""
+) {
+  return `/access/${serviceId}/${environmentId}/notifications?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
+}
+
 export function getResourceRoute(
   serviceId,
   environmentId,
