@@ -87,6 +87,11 @@ import SpeedoMeterLow from "src/components/Icons/RestoreInstance/SpeedoMeter/Spe
 import SpeedoMeterMedium from "src/components/Icons/RestoreInstance/SpeedoMeter/SpeedoMeterMedium";
 import SpeedoMeterHigh from "src/components/Icons/RestoreInstance/SpeedoMeter/SpeedoMeterHigh";
 import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
+import { productTierTypes } from "src/constants/servicePlan";
+import {
+  CLOUD_ACCOUNT_ID_FIELD_MAP,
+  hideDashboardEndpoint,
+} from "src/utils/deploymentCells";
 
 export const getServerSideProps = async () => {
   return {
@@ -260,6 +265,10 @@ function MarketplaceService() {
 
     return enabled;
   }, [service]);
+
+  const shouldShowKubernetesDashboardColumn = resourceInstanceList?.some(
+    (instance) => instance.kubernetesDashboardEndpoint
+  );
 
   const columns = useMemo(() => {
     const columnDefinition = [
@@ -530,6 +539,43 @@ function MarketplaceService() {
       });
     }
 
+    if (shouldShowKubernetesDashboardColumn) {
+      columnDefinition.push({
+        field: "kubernetesDashboardEndpoint",
+        headerName: "Dashboard Endpoint",
+        flex: 1,
+        headerAlign: "center",
+        align: "center",
+        minWidth: 150,
+        renderCell: (params) => {
+          const { row } = params;
+          const { cloudProvider } = row;
+          const dashboardEndpoint =
+            row.kubernetesDashboardEndpoint?.dashboardEndpoint;
+
+          const accountID = row[CLOUD_ACCOUNT_ID_FIELD_MAP[cloudProvider]];
+
+          const hideDahboardEndpoint = hideDashboardEndpoint(
+            accountID,
+            selectedUser?.email
+          );
+
+          if (!dashboardEndpoint || hideDahboardEndpoint) {
+            return "-";
+          }
+
+          return (
+            <GridCellExpand
+              value={dashboardEndpoint}
+              href={"https://" + dashboardEndpoint}
+              target="_blank"
+              externalLinkArrow
+            />
+          );
+        },
+      });
+    }
+
     return columnDefinition;
   }, [
     serviceId,
@@ -539,6 +585,8 @@ function MarketplaceService() {
     isCurrentResourceBYOA,
     subscriptionData?.id,
     productTierId,
+    shouldShowKubernetesDashboardColumn,
+    selectedUser?.email,
   ]);
 
   const snackbar = useSnackbar();
@@ -1620,7 +1668,9 @@ function MarketplaceService() {
   }
 
   if (service) {
-    const modelType = service?.serviceModelType;
+    const modelType = service.serviceModelType;
+    const isCustomTenancy =
+      service.productTierType === productTierTypes.CUSTOM_TENANCY;
     const deploymentHeader = getTheHostingModel(modelType);
 
     return (
@@ -1678,7 +1728,7 @@ function MarketplaceService() {
               desc=""
             />
           </Box>
-          <AccessServiceHealthStatus />
+          {!isCustomTenancy && <AccessServiceHealthStatus />}
         </Stack>
 
         <AccessHeaderCard

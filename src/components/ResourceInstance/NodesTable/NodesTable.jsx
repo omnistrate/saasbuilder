@@ -27,6 +27,12 @@ import {
   chipCategoryColors,
   defaultChipStyles,
 } from "src/constants/statusChipStyles";
+import { productTierTypes } from "src/constants/servicePlan";
+import {
+  CLOUD_ACCOUNT_ID_FIELD_MAP,
+  hideDashboardEndpoint,
+} from "src/utils/deploymentCells";
+import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 
 const getRowBorderStyles = () => {
   const styles = {};
@@ -66,14 +72,19 @@ export default function NodesTable(props) {
     subscriptionId,
   } = props;
   let sectionLabel = "Resource";
+  const isCustomTenancy =
+    serviceOffering?.productTierType === productTierTypes.CUSTOM_TENANCY;
 
   if (context === "inventory") {
     sectionLabel = "Service Component";
   }
   const [selectionModel, setSelectionModel] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
+  const [isGenerateTokenDialogOpen, setIsGenerateTokenDialogOpen] =
+    useState(false);
 
   const selectUser = useSelector(selectUserrootData);
+  const userEmail = selectUser.email;
   const role = getEnumFromUserRoleString(
     isAccessSide ? subscriptionData?.roleType : selectUser.roleType
   );
@@ -88,6 +99,87 @@ export default function NodesTable(props) {
   const filteredNodes = useMemo(() => {
     return nodes.filter((node) => !node.isServerless);
   }, [nodes]);
+
+  const customTenancyColumns = useMemo(
+    () => [
+      {
+        field: "nodeId",
+        headerName: "Node ID",
+        flex: 1,
+        minWidth: 190,
+        renderCell: (params) => {
+          const nodeId = params.row.nodeId;
+          return (
+            <GridCellExpand
+              startIcon={
+                <Image
+                  src={nodeIcon}
+                  alt="node"
+                  style={{ width: "24px", height: "24px" }}
+                />
+              }
+              justifyContent="left"
+              value={nodeId}
+              textStyles={{
+                color: "#475467",
+                marginLeft: "4px",
+                fontSize: "14px",
+                lineHeight: "20px",
+                fontWeight: 400,
+              }}
+            />
+          );
+        },
+      },
+      {
+        field: "kubernetesDashboardEndpoint",
+        headerName: "Dashboard Endpoint",
+        flex: 1,
+        headerAlign: "center",
+        align: "center",
+        minWidth: 150,
+        renderCell: (params) => {
+          const { row } = params;
+          const { cloudProvider } = row;
+          const dashboardEndpoint =
+            row.kubernetesDashboardEndpoint?.dashboardEndpoint;
+
+          const accountID = row[CLOUD_ACCOUNT_ID_FIELD_MAP[cloudProvider]];
+
+          const hideDahboardEndpoint = hideDashboardEndpoint(
+            accountID,
+            userEmail
+          );
+
+          if (!dashboardEndpoint || hideDahboardEndpoint) {
+            return "-";
+          }
+
+          return (
+            <GridCellExpand
+              value={dashboardEndpoint}
+              href={"https://" + dashboardEndpoint}
+              target="_blank"
+              externalLinkArrow
+            />
+          );
+        },
+      },
+      {
+        field: "status",
+        headerName: "Lifecycle Status",
+        flex: 1,
+        renderCell: (params) => {
+          const status = params.row.status;
+          const statusStylesAndMap =
+            getResourceInstanceStatusStylesAndLabel(status);
+          return <StatusChip status={status} {...statusStylesAndMap} />;
+        },
+        minWidth: 200,
+      },
+    ],
+    [userEmail]
+  );
 
   const columns = useMemo(
     () => [
@@ -276,11 +368,11 @@ export default function NodesTable(props) {
   return (
     <Box mt={"32px"}>
       <DataGrid
-        checkboxSelection
+        checkboxSelection={!isCustomTenancy}
         disableColumnMenu
         disableSelectionOnClick
         hideFooterSelectedRowCount
-        columns={columns}
+        columns={isCustomTenancy ? customTenancyColumns : columns}
         rows={isRefetching ? [] : filteredNodes}
         components={{
           Header: NodesTableHeader,
@@ -297,8 +389,10 @@ export default function NodesTable(props) {
               !modifyAccessServiceAllowed ||
               (isInventoryManageInstance && isManagedProxy), //can't failover fleet instances of type serverless proxy and managedProxyType==="PortsbasedProxy"
             selectedNode,
-            isAccessSide,
-            isInventoryManageInstance,
+            showFailoverButton:
+              !isCustomTenancy && (isAccessSide || isInventoryManageInstance),
+            showGenerateTokenButton: isCustomTenancy,
+            onGenerateTokenClick: () => setIsGenerateTokenDialogOpen(true),
             handleFailover,
             failoverMutation,
           },
@@ -327,6 +421,12 @@ export default function NodesTable(props) {
         }}
         loading={isRefetching}
         noRowsText="No containers"
+      />
+      <GenerateTokenDialog
+        open={isGenerateTokenDialogOpen}
+        onClose={() => setIsGenerateTokenDialogOpen(false)}
+        selectedInstanceId={resourceInstanceId}
+        subscriptionId={subscriptionId}
       />
     </Box>
   );
