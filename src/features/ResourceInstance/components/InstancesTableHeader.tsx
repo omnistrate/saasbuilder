@@ -73,7 +73,6 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
   isVisibleRestore,
   selectedResourceId,
 }) => {
-  let isVisibleCapacity = false;
   const role = getEnumFromUserRoleString(roleType);
   const view = viewEnum.Access_Resources;
   const [isGenerateTokenDialogOpen, setIsGenerateTokenDialogOpen] =
@@ -95,6 +94,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
       modify: false,
       addCapacity: false,
       removeCapacity: false,
+      isVisibleCapacity: false,
       generateToken: false,
     };
 
@@ -137,7 +137,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     ) {
       actionsObj.addCapacity = true;
       actionsObj.removeCapacity = true;
-      isVisibleCapacity = true;
+      actionsObj.isVisibleCapacity = true;
     }
 
     if (
@@ -264,7 +264,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
             isLoading={isFetchingInstances || !selectedInstance}
             isModifyDisabled={!actions.modify}
             isVisibleRestore={isVisibleRestore}
-            isVisibleCapacity={isVisibleCapacity}
+            isVisibleCapacity={actions.isVisibleCapacity}
             isVisibleBYOA={isCurrentResourceBYOA}
             isVisibleGenerateToken={
               // @ts-ignore
