@@ -1,6 +1,6 @@
 import { styleConfig } from "src/providerConfig";
 
-const GenerateTokenIcon = ({ disabled }) => {
+const GenerateTokenIcon = ({ disabled }: any) => {
   return (
     <svg
       width="20"
