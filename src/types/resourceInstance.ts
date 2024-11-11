@@ -35,6 +35,7 @@ export type AccessResourceInstance = {
   backupStatus?: {
     earliestRestoreTime: string;
   };
+  autoscalingEnabled?: boolean;
   active: boolean;
   awsAccountID?: string;
   cloud_provider?: CloudProvider;
