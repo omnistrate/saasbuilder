@@ -167,7 +167,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
     isRootSubscription,
     disableTypeFilter = false,
     hideTypeColumn = false,
-    entityName,
+    entityName = "Event",
     filterEventTypes,
     desc,
   } = props;
@@ -334,12 +334,12 @@ const EventsTable: FC<EventsTableProps> = (props) => {
   }, [events, searchText, selectedEventTypes, selectedDateRange]);
 
   return (
-    <Box mt="24px">
+    <Box>
       <DataTable
         columns={dataTableColumns}
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}
-        noRowsText="No Events available"
+        noRowsText={`No ${entityName}s available`}
         getRowCanExpand={(rowData) =>
           Boolean(rowData.original.workflowFailures?.length > 0)
         }

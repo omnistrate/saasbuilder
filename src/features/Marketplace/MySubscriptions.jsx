@@ -28,7 +28,6 @@ import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscription
 import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
 import LogoHeader from "src/components/Headers/LogoHeader";
 
-
 const MySubscriptions = () => {
   const {
     data: subscriptions = [],
@@ -71,7 +70,6 @@ const MySubscriptions = () => {
   }, [searchText, typeFilter, subscriptions]);
 
   const snackbar = useSnackbar();
-
 
   useEffect(() => {
     if (selectionModel) {
@@ -381,7 +379,7 @@ const MySubscriptions = () => {
             }}
             componentsProps={{
               header: {
-                numSubscriptions: subscriptions?.length,
+                numSubscriptions: filteredSubscriptions?.length,
                 searchText,
                 setSearchText,
                 typeFilter,
@@ -391,7 +389,7 @@ const MySubscriptions = () => {
                 handleRefresh: refetchSubscriptions,
                 selectedSubscription: selectedSubscription,
                 handleUnsubscribeClick: handleUnsubscribeClick,
-                isUnsubscribing : unsubscribeMutation.isLoading
+                isUnsubscribing: unsubscribeMutation.isLoading,
               },
             }}
             onSelectionModelChange={(newSelection) => {
