@@ -1,0 +1,7 @@
+.overlayWidgets {
+  z-index: 1202;
+}
+
+.highlighted-monaco-editor-line {
+  background-color: #b65d34;
+}
