@@ -9,6 +9,7 @@ import AddCapacityIcon from "src/components/Icons/AddCapacity/AddCapacityIcon";
 import RemoveCapacityIcon from "src/components/Icons/RemoveCapacity/RemoveCapacityIcon";
 import DeleteIcon from "src/components/Icons/Delete/Delete";
 import MenuItem from "src/components/MenuItem/MenuItem";
+import GenerateTokenIcon from "src/components/Icons/GenerateToken/GenerateTokenIcon";
 
 type ResourceInstanceControlPanelProps = {
   isCurrentResourceBYOA?: boolean;
@@ -32,6 +33,8 @@ type ResourceInstanceControlPanelProps = {
   isVisibleRestore?: boolean;
   isVisibleCapacity?: boolean;
   isVisibleBYOA?: boolean;
+  isVisibleGenerateToken?: boolean;
+  handleGenerateToken?: () => void;
 };
 
 const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
@@ -44,6 +47,7 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
   handleRemoveCapacity = () => {},
   handleModify,
   handleDelete,
+  handleGenerateToken = () => {},
   isRestartDisabled,
   isStartDisabled,
   isStopDisabled,
@@ -56,9 +60,17 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
   isVisibleRestore,
   isVisibleCapacity,
   isVisibleBYOA,
+  isVisibleGenerateToken,
 }) => {
   const buttons = useMemo(() => {
     const buttonsAction = [
+      {
+        isVisible: isVisibleGenerateToken,
+        label: "Generate token",
+        dataTestId: "generate-token",
+        onClick: handleGenerateToken,
+        icon: GenerateTokenIcon,
+      },
       {
         isVisible: !isCurrentResourceBYOA,
         label: "Reboot",
@@ -148,6 +160,7 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
     isRemoveCapacity,
     isVisibleBYOA,
     isVisibleCapacity,
+    isVisibleGenerateToken,
   ]);
 
   return (
