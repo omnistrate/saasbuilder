@@ -1,23 +1,30 @@
-<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g filter="url(#filter0_d_3173_90696)">
-<rect x="2" y="1" width="40" height="40" rx="8" fill="white"/>
-<g clip-path="url(#clip0_3173_90696)">
-<path d="M16.1667 22.9053C14.6239 23.5859 13.6667 24.5343 13.6667 25.5833C13.6667 27.6544 17.3976 29.3333 22 29.3333C26.6024 29.3333 30.3333 27.6544 30.3333 25.5833C30.3333 24.5343 29.3761 23.5859 27.8333 22.9053M27 17.6667C27 21.0531 23.25 22.6667 22 25.1667C20.75 22.6667 17 21.0531 17 17.6667C17 14.9052 19.2386 12.6667 22 12.6667C24.7614 12.6667 27 14.9052 27 17.6667ZM22.8333 17.6667C22.8333 18.1269 22.4602 18.5 22 18.5C21.5398 18.5 21.1667 18.1269 21.1667 17.6667C21.1667 17.2064 21.5398 16.8333 22 16.8333C22.4602 16.8333 22.8333 17.2064 22.8333 17.6667Z" stroke="#7F56D9" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-<rect x="2.5" y="1.5" width="39" height="39" rx="7.5" stroke="#EAECF0"/>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_dii_522_1492)">
+<path d="M2 5C2 2.79086 3.79086 1 6 1H26C28.2091 1 30 2.79086 30 5V25C30 27.2091 28.2091 29 26 29H6C3.79086 29 2 27.2091 2 25V5Z" fill="white"/>
+<path d="M2.5 5C2.5 3.067 4.067 1.5 6 1.5H26C27.933 1.5 29.5 3.067 29.5 5V25C29.5 26.933 27.933 28.5 26 28.5H6C4.067 28.5 2.5 26.933 2.5 25V5Z" stroke="#D0D5DD"/>
+<path d="M10.1667 16.9053C8.62389 17.5859 7.66669 18.5343 7.66669 19.5833C7.66669 21.6544 11.3976 23.3333 16 23.3333C20.6024 23.3333 24.3334 21.6544 24.3334 19.5833C24.3334 18.5343 23.3762 17.5859 21.8334 16.9053M21 11.6667C21 15.0531 17.25 16.6667 16 19.1667C14.75 16.6667 11 15.0531 11 11.6667C11 8.90523 13.2386 6.66666 16 6.66666C18.7614 6.66666 21 8.90523 21 11.6667ZM16.8334 11.6667C16.8334 12.1269 16.4603 12.5 16 12.5C15.5398 12.5 15.1667 12.1269 15.1667 11.6667C15.1667 11.2064 15.5398 10.8333 16 10.8333C16.4603 10.8333 16.8334 11.2064 16.8334 11.6667Z" stroke="#7F56D9" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 <defs>
-<filter id="filter0_d_3173_90696" x="0" y="0" width="44" height="44" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter0_dii_522_1492" x="0" y="0" width="32" height="32" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="1"/>
 <feGaussianBlur stdDeviation="1"/>
+<feComposite in2="hardAlpha" operator="out"/>
 <feColorMatrix type="matrix" values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.05 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3173_90696"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3173_90696" result="shape"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_522_1492"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_522_1492" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="-2"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.05 0"/>
+<feBlend mode="normal" in2="shape" result="effect2_innerShadow_522_1492"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="1" operator="erode" in="SourceAlpha" result="effect3_innerShadow_522_1492"/>
+<feOffset/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.18 0"/>
+<feBlend mode="normal" in2="effect2_innerShadow_522_1492" result="effect3_innerShadow_522_1492"/>
 </filter>
-<clipPath id="clip0_3173_90696">
-<rect width="20" height="20" fill="white" transform="translate(12 11)"/>
-</clipPath>
 </defs>
 </svg>

@@ -1,44 +1,61 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
-import { Box, CircularProgress, IconButton, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import DashboardLayout from "components/DashboardLayout/DashboardLayout";
-import DataGrid from "components/DataGrid/DataGrid";
-import { Text } from "components/Typography/Typography";
-import Menu from "components/Menu/Menu";
-import MenuItem from "components/MenuItem/MenuItem";
+import DataGrid, { selectSingleItem } from "components/DataGrid/DataGrid";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
-import MarketplaceHeader from "components/Headers/MarketplaceHeader";
 import formatDateUTC from "src/utils/formatDateUTC";
 import DataGridHeader from "./components/DataGridHeader";
-import BellRingingIcon from "src/components/Icons/BellRinging/BellRingingIcon";
-import SpeedometerIcon from "src/components/Icons/Speedometer/SpeedometerIcon";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteSubscription } from "src/api/subscriptions";
 import useSnackbar from "src/hooks/useSnackbar";
 // import CloudProviderCell from "./components/CloudProviderCell"; - Removed for Now
 import useUserSubscriptions from "src/hooks/query/useUserSubscriptions";
-import { getResourceRouteWithoutEnv } from "src/utils/route/access/accessRoute";
+import {
+  getResourceRouteWithoutEnv,
+  getAPIDocsRoute,
+  getMarketplaceRoute,
+} from "src/utils/route/access/accessRoute";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
+import MarketplaceServiceSidebar, {
+  sidebarActiveOptions,
+} from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
+import useServiceOffering from "src/hooks/useServiceOffering";
+import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
+import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
+import LogoHeader from "src/components/Headers/LogoHeader";
 
-const ITEM_HEIGHT = 45;
 
-const MySubscriptions = ({ orgName, orgLogoURL }) => {
+const MySubscriptions = () => {
   const {
     data: subscriptions = [],
     isFetching,
     refetch: refetchSubscriptions,
   } = useUserSubscriptions();
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const router = useRouter();
+
+  const { serviceId, environmentId, productTierId, subscriptionId } =
+    router.query;
+
   const [showUnsubscribeDialog, setShowUnsubscribeDialog] = useState(false);
   const [selectedSubscription, setSelectedSubscription] = useState({});
-
   const [searchText, setSearchText] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
+  const [selectionModel, setSelectionModel] = useState([]);
+  const { data: serviceOffering, isLoading: isServiceOfferingLoading } =
+    useServiceOffering(serviceId, productTierId);
+
+  const subscriptionQuery = useSubscriptionForProductTierAccess(
+    serviceId,
+    productTierId,
+    subscriptionId
+  );
+
+  const { data: subscriptionData = {} } = subscriptionQuery;
 
   const filteredSubscriptions = useMemo(() => {
     let list = subscriptions;
@@ -54,12 +71,16 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
   }, [searchText, typeFilter, subscriptions]);
 
   const snackbar = useSnackbar();
-  const router = useRouter();
 
-  const onActionMenuClick = (event, subscription) => {
-    setSelectedSubscription(subscription);
-    setAnchorEl(event.currentTarget);
-  };
+
+  useEffect(() => {
+    if (selectionModel) {
+      const subscription = filteredSubscriptions?.find(
+        (item) => item.id === selectionModel[0]
+      );
+      setSelectedSubscription(subscription);
+    }
+  }, [filteredSubscriptions, selectionModel]);
 
   const viewResourceInstance = () => {
     if (selectedSubscription) {
@@ -78,20 +99,19 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
       field: "serviceName",
       headerName: "Name",
       flex: 1,
-      headerAlign: "center",
       minWidth: 230,
       renderCell: (params) => {
         const { serviceLogoURL, serviceName, serviceId, productTierId, id } =
           params.row;
         return (
           <GridCellExpand
+            justifyContent="left"
             value={serviceName || ""}
-            justifyContent="flex-start"
             textStyles={{
               color: "#6941C6",
               fontSize: "14px",
               lineHeight: "20px",
-              fontWeight: 700,
+              fontWeight: 500,
               cursor: "pointer",
             }}
             onClick={() => {
@@ -102,17 +122,17 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
             startIcon={
               <Box
                 boxShadow="0px 1px 2px 0px #1018280D"
-                borderRadius="6px"
-                border="1px solid #EAECF0"
+                borderRadius="50%"
+                border="1px solid rgba(0, 0, 0, 0.08)"
                 overflow="hidden"
-                width="52px"
-                height="52px"
+                width="40px"
+                height="40px"
                 flexShrink={0}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  width="50"
-                  height="50"
+                  width="38"
+                  height="38"
                   style={{ objectFit: "cover" }}
                   src={
                     serviceLogoURL ||
@@ -131,24 +151,18 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
       headerName: "ID",
       flex: 1,
       minWidth: 150,
-      align: "center",
-      headerAlign: "center",
     },
     {
       field: "productTierName",
       headerName: "Service Plan",
       flex: 1,
       minWidth: 150,
-      align: "center",
-      headerAlign: "center",
     },
     {
       field: "roleType",
       headerName: "Role",
       flex: 1,
       minWidth: 70,
-      align: "center",
-      headerAlign: "center",
       valueGetter: (params) => {
         const role = params.row.roleType;
         if (!role?.length) {
@@ -161,21 +175,18 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
       field: "createdAt",
       headerName: "Subscription Date",
       flex: 1,
-      align: "center",
       minWidth: 200,
-      headerAlign: "center",
       valueGetter: (params) => formatDateUTC(params.row.createdAt),
     },
     {
       fieldName: "defaultSubscription",
       headerName: "Subscription Type",
       flex: 1,
-      align: "center",
       minWidth: 150,
-      headerAlign: "center",
       renderCell: (params) => {
         return (
           <GridCellExpand
+            justifyContent="left"
             value={params.row.roleType === "root" ? "Direct" : "Invited"}
             startIcon={
               params.row.roleType === "root" ? (
@@ -193,94 +204,134 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
       headerName: "Subscription Owner",
       flex: 1,
       minWidth: 120,
-      align: "center",
-      headerAlign: "center",
     },
     // {
-    //   field: "cloudProviderNames",
-    //   headerName: "Availability",
-    //   flex: 1,
-    //   minWidth: 200,
-    //   align: "center",
-    //   headerAlign: "center",
+    //   field: "defaultSubscription",
+    //   headerName: "Action",
+    //   width: 100,
     //   renderCell: (params) => {
     //     return (
-    //       <CloudProviderCell
-    //         cloudProviders={params.row.cloudProviderNames || []}
-    //       />
+    //       <>
+    //         <IconButton
+    //           onClick={(event) => onActionMenuClick(event, params.row)}
+    //         >
+    //           <MoreVertIcon />
+    //         </IconButton>
+    //         <Menu
+    //           anchorOrigin={{
+    //             vertical: "bottom",
+    //             horizontal: "center",
+    //           }}
+    //           transformOrigin={{
+    //             vertical: "top",
+    //             horizontal: "right",
+    //           }}
+    //           anchorEl={anchorEl}
+    //           open={
+    //             Boolean(anchorEl) && params.row.id === selectedSubscription.id
+    //           }
+    //           onClose={() => setAnchorEl(null)}
+    //           PaperProps={{
+    //             style: {
+    //               maxHeight: ITEM_HEIGHT * 4.5,
+    //               width: "22ch",
+    //             },
+    //           }}
+    //         >
+    //           <MenuItem
+    //             sx={{ gap: "8px" }}
+    //             onClick={() => {
+    //               setAnchorEl(null);
+    //               viewResourceInstance();
+    //             }}
+    //           >
+    //             <SpeedometerIcon />
+    //             <Text size="small" weight="medium">
+    //               Go To Dashboard
+    //             </Text>
+    //           </MenuItem>
+
+    //           {/* Show Unsubscribe Only When It's Not a Default Subscription */}
+    //           <MenuItem
+    //             sx={{
+    //               gap: "8px",
+    //               display: params.row.defaultSubscription ? "none" : "flex",
+    //             }}
+    //             onClick={() => {
+    //               setAnchorEl(null);
+    //               setShowUnsubscribeDialog(true);
+    //             }}
+    //           >
+    //             <BellRingingIcon />
+    //             <Text size="small" weight="medium">
+    //               Unsubscribe
+    //             </Text>
+    //           </MenuItem>
+    //         </Menu>
+    //       </>
     //     );
     //   },
     // },
-    {
-      field: "defaultSubscription",
-      headerName: "Action",
-      width: 100,
-      align: "center",
-      headerAlign: "center",
-      renderCell: (params) => {
-        return (
-          <>
-            <IconButton
-              onClick={(event) => onActionMenuClick(event, params.row)}
-            >
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              anchorEl={anchorEl}
-              open={
-                Boolean(anchorEl) && params.row.id === selectedSubscription.id
-              }
-              onClose={() => setAnchorEl(null)}
-              PaperProps={{
-                style: {
-                  maxHeight: ITEM_HEIGHT * 4.5,
-                  width: "22ch",
-                },
-              }}
-            >
-              <MenuItem
-                sx={{ gap: "8px" }}
-                onClick={() => {
-                  setAnchorEl(null);
-                  viewResourceInstance();
-                }}
-              >
-                <SpeedometerIcon />
-                <Text size="small" weight="medium">
-                  Go To Dashboard
-                </Text>
-              </MenuItem>
-
-              {/* Show Unsubscribe Only When It's Not a Default Subscription */}
-              <MenuItem
-                sx={{
-                  gap: "8px",
-                  display: params.row.defaultSubscription ? "none" : "flex",
-                }}
-                onClick={() => {
-                  setAnchorEl(null);
-                  setShowUnsubscribeDialog(true);
-                }}
-              >
-                <BellRingingIcon />
-                <Text size="small" weight="medium">
-                  Unsubscribe
-                </Text>
-              </MenuItem>
-            </Menu>
-          </>
-        );
-      },
-    },
   ];
+
+  function handleUnsubscribeClick() {
+    setShowUnsubscribeDialog(true);
+  }
+
+  const isCustomNetworkEnabled = useMemo(() => {
+    let enabled = false;
+
+    if (
+      serviceOffering?.serviceModelFeatures?.find((featureObj) => {
+        return featureObj.feature === "CUSTOM_NETWORKS";
+      })
+    )
+      enabled = true;
+
+    return enabled;
+  }, [serviceOffering]);
+
+  const servicePlanUrlLink = getMarketplaceRoute(
+    serviceId,
+    environmentId,
+    productTierId
+  );
+
+  const serviceAPIDocsLink = getAPIDocsRoute(
+    serviceId,
+    environmentId,
+    productTierId,
+    subscriptionData?.id
+  );
+
+  const dashboardLayoutProps = {
+    accessPage: true,
+    currentSubscription: subscriptionData,
+    isNotShow: true,
+    enableConsumptionLinks: true,
+    apiDocsurl: serviceAPIDocsLink,
+    servicePlanUrlLink: servicePlanUrlLink,
+    serviceId: serviceId,
+    environmentId: environmentId,
+    serviceApiId: serviceOffering?.serviceAPIID,
+    SidebarUI: (
+      <MarketplaceServiceSidebar
+        serviceId={serviceId}
+        environmentId={environmentId}
+        resourceParameters={serviceOffering?.resourceParameters}
+        isLoading={isServiceOfferingLoading}
+        serviceName={serviceOffering?.serviceName}
+        productTierId={productTierId}
+        active={sidebarActiveOptions.subscriptions}
+        currentSubscription={subscriptionData}
+        isCustomNetworkEnabled={isCustomNetworkEnabled}
+      />
+    ),
+
+    serviceName: serviceOffering?.serviceName,
+    customLogo: true,
+    serviceLogoURL: serviceOffering?.serviceLogoURL,
+  };
 
   const unsubsscribeFormik = useFormik({
     initialValues: {
@@ -306,49 +357,63 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
 
   return (
     <>
-      <DashboardLayout
-        noSidebar
-        // SidebarUI={<MarketplaceServiceSidebar active={"subscription"} />}
-        marketplacePage
-        serviceLogoURL={orgLogoURL}
-        serviceName={orgName}
-      >
+      <DashboardLayout {...dashboardLayoutProps}>
         <Stack sx={{ minHeight: "calc(100vh - 180px)" }}>
-          <MarketplaceHeader
-            title="My Subscriptions"
-            desc="Explore your current service subscriptions here"
-          />
-
-          {isFetching ? (
-            <Box display="flex" justifyContent="center" mt="200px">
-              <CircularProgress />
+          <Box
+            display="flex"
+            //@ts-ignore
+            flexDirection="colunm"
+            justifyContent="flex-start"
+            paddingBottom={"32px"}
+          >
+            <Box paddingTop={"5px"}>
+              <DashboardHeaderIcon />
             </Box>
-          ) : (
-            <DataGrid
-              components={{
-                Header: DataGridHeader,
-              }}
-              componentsProps={{
-                header: {
-                  numSubscriptions: subscriptions?.length,
-                  searchText,
-                  setSearchText,
-                  typeFilter,
-                  setTypeFilter,
-                },
-              }}
-              disableColumnMenu
-              disableSelectionOnClick
-              columns={columns}
-              rows={filteredSubscriptions}
-              rowHeight={70}
-              rowsPerPageOptions={[10]}
-              pageSize={10}
-              getRowId={(row) => row.id}
-              sx={{ maxHeight: "925px", flex: 1 }} // Fill The Rest of the Screen Height
-              hideFooterSelectedRowCount
+            <LogoHeader
+              margin={0}
+              title="My Subscriptions"
+              desc="Explore your current service subscriptions here"
             />
-          )}
+          </Box>
+          <DataGrid
+            components={{
+              Header: DataGridHeader,
+            }}
+            componentsProps={{
+              header: {
+                numSubscriptions: subscriptions?.length,
+                searchText,
+                setSearchText,
+                typeFilter,
+                setTypeFilter,
+                viewResourceInstance,
+                isFetching,
+                handleRefresh: refetchSubscriptions,
+                selectedSubscription: selectedSubscription,
+                handleUnsubscribeClick: handleUnsubscribeClick,
+                isUnsubscribing : unsubscribeMutation.isLoading
+              },
+            }}
+            onSelectionModelChange={(newSelection) => {
+              selectSingleItem(newSelection, selectionModel, setSelectionModel);
+            }}
+            loading={isFetching}
+            checkboxSelection
+            disableColumnMenu
+            selectionModel={selectionModel}
+            disableSelectionOnClick
+            columns={columns}
+            rows={isFetching ? [] : filteredSubscriptions}
+            rowsPerPageOptions={[10]}
+            pageSize={10}
+            getRowId={(row) => row.id}
+            sx={{
+              flex: 1,
+              boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+              border: "1px solid  rgba(228, 231, 236, 1)",
+            }}
+            hideFooterSelectedRowCount
+          />
         </Stack>
 
         <TextConfirmationDialog
@@ -362,7 +427,7 @@ const MySubscriptions = ({ orgName, orgLogoURL }) => {
           buttonLabel={"Unsubscribe"}
           buttonColour={"red"}
           isLoading={unsubscribeMutation.isLoading}
-          subtitle={`Are you sure you want to unsubscribe from ${selectedSubscription.serviceName}?`}
+          subtitle={`Are you sure you want to unsubscribe from ${selectedSubscription?.serviceName}?`}
           message={
             "To confirm, please enter <b>unsubscribe</b>, in the field below:"
           }

@@ -21,7 +21,10 @@ export default function SideDrawer(props) {
     setSupportDrawerOpen,
     setCurrentTabValue,
     subscriptionId,
+    environmentId,
+    activePage,
   } = props;
+
 
   return (
     <Stack
@@ -32,7 +35,6 @@ export default function SideDrawer(props) {
       justifyContent="space-between"
       borderRight={`1px solid ${styleConfig.sidebarBorderColor}`}
       width="280px"
-      p="24px 32px"
       zIndex="100"
       sx={{
         backgroundColor: styleConfig.sidebarBg,
@@ -43,6 +45,7 @@ export default function SideDrawer(props) {
         },
         msOverflowStyle: "none" /* IE and Edge */,
         scrollbarWidth: "none" /* Firefox */,
+        padding: "0px 16px",
       }}
     >
       <Box>{SidebarUI ? SidebarUI : ""}</Box>
@@ -56,6 +59,8 @@ export default function SideDrawer(props) {
           setSupportDrawerOpen={setSupportDrawerOpen}
           setCurrentTabValue={setCurrentTabValue}
           subscriptionId={subscriptionId}
+          environmentId={environmentId}
+          activePage={activePage}
         />
       )}
     </Stack>

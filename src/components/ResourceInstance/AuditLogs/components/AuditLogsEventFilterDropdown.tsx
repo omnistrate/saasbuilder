@@ -3,15 +3,15 @@ import MuiMenuItem, { menuItemClasses } from "@mui/material/MenuItem";
 import Select from "src/components/FormElementsv2/Select/Select";
 import { EventType } from "src/types/event";
 import Checkbox from "src/components/Checkbox/Checkbox";
+import EventTypeChip from "src/components/EventsTable/EventTypeChip";
 import { SelectChangeEvent, Stack, styled } from "@mui/material";
 import { SetState } from "src/types/common/reactGenerics";
 import Chip from "src/components/Chip/Chip";
 import { Text } from "src/components/Typography/Typography";
-import EventTypeChip from "../../../EventsTable/EventTypeChip";
 
 const MenuItem = styled(MuiMenuItem)({
   borderRadius: 6,
-  padding: "12px 18px",
+  padding: "10px 14px",
   fontSize: "16px",
   fontWeight: 500,
   lineHeight: "24px",
@@ -31,11 +31,15 @@ const MenuItem = styled(MuiMenuItem)({
 type DropdownProps = {
   selectedEventTypes: string[];
   setSelectedEventTypes: SetState<string[]>;
+  filterEventTypes?: EventType[];
 };
-const eventTypes: EventType[] = ["Customer", "Infra", "Maintenance"];
 
 const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
-  const { selectedEventTypes, setSelectedEventTypes } = props;
+  const {
+    selectedEventTypes,
+    setSelectedEventTypes,
+    filterEventTypes = ["Customer", "Infra", "Maintenance"],
+  } = props;
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const {
@@ -46,6 +50,7 @@ const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
       typeof value === "string" ? value.split(",") : value
     );
   };
+
 
   return (
     <Select
@@ -63,11 +68,17 @@ const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
           </Stack>
         );
       }}
-      sx={{ width: "auto", marginTop: 0, minWidth: "169px", minHeight: "42px" }}
+      sx={{
+        width: "auto",
+        marginTop: 0,
+        minWidth: "169px",
+        minHeight: "40px",
+        height: "40px !important",
+      }}
       onChange={handleChange}
       displayEmpty
     >
-      {eventTypes.map((eventType) => {
+      {filterEventTypes.map((eventType) => {
         return (
           <MenuItem key={eventType} value={eventType}>
             <Checkbox

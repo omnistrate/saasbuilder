@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import resourceInstnaceIcon from "../../../public/assets/images/dashboard/logo.svg";
 import marketplaceIcon from "../../../public/assets/images/dashboard/marketplace.svg";
 import marketplaceReturnIcon from "../../../public/assets/images/dashboard/marketplaceIcon.svg";
 import {
@@ -84,6 +83,10 @@ import CapacityDialog from "src/components/CapacityDialog/CapacityDialog";
 import InstancesTableHeader from "src/features/ResourceInstance/components/InstancesTableHeader";
 import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
+import SpeedoMeterLow from "src/components/Icons/RestoreInstance/SpeedoMeter/SpeedoMeterLow";
+import SpeedoMeterMedium from "src/components/Icons/RestoreInstance/SpeedoMeter/SpeedoMeterMedium";
+import SpeedoMeterHigh from "src/components/Icons/RestoreInstance/SpeedoMeter/SpeedoMeterHigh";
+import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
 
 export const getServerSideProps = async () => {
   return {
@@ -296,6 +299,15 @@ function MarketplaceService() {
         },
       },
       {
+        field: "resourceName",
+        headerName: "Resource Name",
+        flex: 1,
+        minWidth: 235,
+        align: "center",
+        headerAlign: "center",
+        renderCell: () => selectedResource?.name,
+      },
+      {
         field: "status",
         headerName: "Lifecycle Status",
         flex: 0.9,
@@ -358,6 +370,31 @@ function MarketplaceService() {
                   </Box>
                 </Tooltip>
               )}
+            </Stack>
+          );
+        },
+      },
+      {
+        field: "instanceLoadStatus",
+        headerName: "Load",
+        flex: 0.9,
+        minWidth: 100,
+        align: "center",
+        headerAlign: "center",
+        renderCell: (params) => {
+          const instanceLoadStatus = params.row.instanceLoadStatus;
+
+          return (
+            <Stack
+              direction={"row"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              gap="4px"
+            >
+              {instanceLoadStatus === "UNKNOWN" && "-"}
+              {instanceLoadStatus === "POD_IDLE" && <SpeedoMeterLow />}
+              {instanceLoadStatus === "POD_NORMAL" && <SpeedoMeterMedium />}
+              {instanceLoadStatus === "POD_OVERLOAD" && <SpeedoMeterHigh />}
             </Stack>
           );
         },
@@ -437,12 +474,7 @@ function MarketplaceService() {
             status
           );
 
-          return (
-            <GradientProgressBar
-              percentage={healthPercentage}
-              marginTop="10px"
-            />
-          );
+          return <GradientProgressBar percentage={healthPercentage} />;
         },
       },
     ];
@@ -1607,6 +1639,7 @@ function MarketplaceService() {
         servicePlanUrlLink={servicePlanUrlLink}
         apiDocsurl={serviceAPIDocsLink}
         serviceLogoURL={service?.serviceLogoURL}
+        environmentId={environmentId}
         SidebarUI={
           <MarketplaceServiceSidebar
             serviceId={serviceId}
@@ -1624,20 +1657,27 @@ function MarketplaceService() {
           />
         }
       >
-        <Stack
-          direction="row"
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <LogoHeader
-            title={
-              isCustomNetworksView
-                ? "Custom Networks"
-                : `${selectedResource?.name} Instances`
-            }
-            desc="Some Description"
-            newicon={resourceInstnaceIcon}
-          />
+        <Stack direction="row" justifyContent={"space-between"}>
+          <Box
+            display="flex"
+            //@ts-ignore
+            flexDirection="colunm"
+            justifyContent="flex-start"
+            paddingBottom={"32px"}
+          >
+            <Box paddingTop={"5px"}>
+              <DashboardHeaderIcon />
+            </Box>
+            <LogoHeader
+              margin={0}
+              title={
+                isCustomNetworksView
+                  ? "Custom Networks"
+                  : `${selectedResource?.name} Instances`
+              }
+              desc=""
+            />
+          </Box>
           <AccessServiceHealthStatus />
         </Stack>
 
@@ -1660,7 +1700,7 @@ function MarketplaceService() {
           />
         ) : (
           <>
-            <Box mt={3}>
+            <Box mt={"32px"}>
               <DataGrid
                 components={{
                   Header: InstancesTableHeader,
@@ -1677,6 +1717,8 @@ function MarketplaceService() {
                     {
                       display: "none",
                     },
+                  boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+                  border: "1px solid rgba(228, 231, 236, 1)",
                 }}
                 onCellClick={(props) => {
                   const { field } = props;

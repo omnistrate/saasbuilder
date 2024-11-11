@@ -20,7 +20,7 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Manrope, Helvetica, sans-serif",
+    fontFamily: "Inter, Arial, sans-serif",
   },
   breakpoints: {
     values: {

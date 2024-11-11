@@ -1,4 +1,4 @@
-import { ElementType, FC } from "react";
+import { ElementType, FC, ReactNode } from "react";
 import { Box, Stack, SxProps, Theme } from "@mui/material";
 import styled from "@emotion/styled";
 
@@ -6,8 +6,8 @@ import Chip from "components/Chip/Chip";
 
 type DataGridHeaderTitleProps = {
   icon?: ElementType;
-  title: string;
-  desc?: string;
+  title: string | ReactNode;
+  desc?: string | ReactNode;
   count?: number | string;
   sx?: SxProps<Theme>;
   units?: {
@@ -17,10 +17,10 @@ type DataGridHeaderTitleProps = {
 };
 
 const Title = styled("p")({
-  color: "#101828",
+  color: "#6941C6",
   fontWeight: 600,
-  fontSize: "18px",
-  lineHeight: "28px",
+  fontSize: "16px",
+  lineHeight: "24px",
 });
 
 const Description = styled("p")({
@@ -28,6 +28,7 @@ const Description = styled("p")({
   fontSize: "14px",
   lineHeight: "20px",
   marginTop: "4px",
+  fontWeight: 400,
 });
 
 const getLabel = (
@@ -63,7 +64,15 @@ const DataGridHeaderTitle: FC<DataGridHeaderTitleProps> = ({
       <Box sx={sx}>
         <Stack direction="row" gap="8px">
           <Title>{title}</Title>
-          {label && <Chip size="small" label={label} />}
+          {label && (
+            <Chip
+              size="small"
+              label={label}
+              fontColor="#067647"
+              bgColor="#ECFDF3"
+              borderColor="#ABEFC6"
+            />
+          )}
         </Stack>
         {desc && <Description>{desc}</Description>}
       </Box>

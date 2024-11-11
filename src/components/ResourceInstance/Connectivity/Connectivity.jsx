@@ -1,12 +1,11 @@
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import Card from "components/Card/Card";
-import Button from "components/Button/Button";
 import { Text } from "components/Typography/Typography";
 import ResourceConnectivityEndpoint from "./ConnectivityEndpoint";
-import PropertyTable from "components/PropertyTable/PropertyTable";
+
+import PropertyTable from "./PropertyTable";
+import ResourceConnectivityCustomDNS from "./ConnectivityCustomDNS";
 
 function Connectivity(props) {
   const {
@@ -18,7 +17,10 @@ function Connectivity(props) {
     globalEndpoints,
     context,
     nodes,
-    queryData,
+    addCustomDNSMutation,
+    removeCustomDNSMutation,
+    accessQueryParams,
+    fleetQueryParams,
     refetchInstance,
   } = props;
 
@@ -42,7 +44,7 @@ function Connectivity(props) {
             (port) => port.resourceName === resourceName && port.ports
           );
           if (matchingResourcePort) {
-            //filter out omnistrate observability
+            // filter out omnistrate observability
             if (resourceName === "Omnistrate Observability") {
               return;
             }
@@ -54,24 +56,16 @@ function Connectivity(props) {
       return [otherResourceFilteredPorts, otherResourceFilteredEndpoints];
     }, [ports, globalEndpoints]);
 
-  const noConnectivityData =
-    !globalEndpoints?.primary &&
-    !otherResourceFilteredEndpoints?.length &&
-    !ports?.length;
-
-  const [isEndpointsExpanded, setIsEndpointsExpanded] = useState(false);
-  const [isPortsExpanded, setIsPortsExpanded] = useState(false);
-
-  const toggleExpanded = () => setIsEndpointsExpanded((prev) => !prev);
-
   useEffect(() => {
     let availabilityZone = "";
     const nodeAvailabilityZone = [];
     nodes.map((node) => {
       if (!nodeAvailabilityZone.includes(node.availabilityZone)) {
-        if (availabilityZone)
-          availabilityZone = availabilityZone + "," + node.availabilityZone;
-        else availabilityZone = node.availabilityZone;
+        if (availabilityZone) {
+          if (node?.availabilityZone) {
+            availabilityZone = availabilityZone + "," + node.availabilityZone;
+          }
+        } else availabilityZone = node.availabilityZone;
         nodeAvailabilityZone.push(node.availabilityZone);
       }
     });
@@ -85,213 +79,220 @@ function Connectivity(props) {
       sectionLabel = "Service Component";
     }
 
-    const res = [
-      {
-        label: "Network type",
-        description: "Type of network",
-        value: networkType,
-      },
-    ];
+    const res = [];
 
     if (
       (primaryResourceName && primaryResourceEndpoint) ||
       otherResourceFilteredEndpoints?.length > 0
     ) {
       res.push({
-        label: "Global endpoint",
+        label: primaryResourceName,
         description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
         valueType: "custom",
         value: (
           <>
-            {primaryResourceName && primaryResourceEndpoint && (
-              <ResourceConnectivityEndpoint
-                context={context}
-                isPrimaryResource={true}
-                resourceName={primaryResourceName}
-                viewType="endpoint"
-                endpointURL={primaryResourceEndpoint}
-                customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
-                queryData={queryData}
-                resourceKey={globalEndpoints?.primary?.resourceKey}
-                resourceId={globalEndpoints?.primary?.resourceId}
-                refetchInstance={refetchInstance}
-                resourceHasCompute={
-                  globalEndpoints?.primary?.resourceHasCompute
-                }
-              />
-            )}
-            {otherResourceFilteredEndpoints?.length > 0 && (
-              <>
-                {primaryResourceName && primaryResourceEndpoint && (
-                  <Stack direction="row" justifyContent="center">
-                    <Button
-                      sx={{ color: "#6941C6", marginTop: "16px" }}
-                      endIcon={
-                        isEndpointsExpanded ? (
-                          <RemoveCircleOutlineIcon />
-                        ) : (
-                          <AddCircleOutlineIcon />
-                        )
+            {primaryResourceName &&
+              primaryResourceEndpoint &&
+              primaryResourcePorts && (
+                <ResourceConnectivityEndpoint
+                  isPrimaryResource={true}
+                  endpointURL={primaryResourceEndpoint}
+                  resourceName={primaryResourceName}
+                  viewType="endpoint"
+                  ports={primaryResourcePorts?.ports}
+                  resourceHasCompute={
+                    globalEndpoints?.primary?.resourceHasCompute
+                  }
+                  ResourceConnectivityCustomDNS={
+                    <ResourceConnectivityCustomDNS
+                      context={context}
+                      endpointURL={primaryResourceEndpoint}
+                      customDNSData={
+                        globalEndpoints?.primary?.customDNSEndpoint
                       }
-                      onClick={toggleExpanded}
-                    >
-                      {isEndpointsExpanded ? "View Less" : "View More"}
-                    </Button>
-                  </Stack>
-                )}
-                {(isEndpointsExpanded ||
-                  !(primaryResourceName && primaryResourceEndpoint)) &&
-                  otherResourceFilteredEndpoints.map((obj) => {
-                    const {
-                      resourceName,
-                      endpoint,
-                      resourceId,
-                      customDNSEndpoint,
-                      resourceKey,
-                      resourceHasCompute,
-                    } = obj;
-
-                    return (
-                      <ResourceConnectivityEndpoint
-                        key={`endpoint-${resourceId}`}
-                        context={context}
-                        isPrimaryResource={false}
-                        resourceName={resourceName}
-                        viewType="endpoint"
-                        endpointURL={endpoint}
-                        customDNSData={customDNSEndpoint}
-                        resourceKey={resourceKey}
-                        resourceId={resourceId}
-                        refetchInstance={refetchInstance}
-                        containerStyles={{ marginTop: "16px" }}
-                        resourceHasCompute={resourceHasCompute}
-                        queryData={queryData}
-                      />
-                    );
-                  })}
-              </>
-            )}
+                      fleetQueryParams={fleetQueryParams}
+                      accessQueryParams={accessQueryParams}
+                      resourceKey={globalEndpoints?.primary?.resourceKey}
+                      resourceId={globalEndpoints?.primary?.resourceId}
+                      refetchInstance={refetchInstance}
+                      resourceHasCompute={
+                        globalEndpoints?.primary?.resourceHasCompute
+                      }
+                    />
+                  }
+                />
+              )}
           </>
         ),
       });
     }
 
-    if (
-      (primaryResourcePorts?.resourceName && primaryResourcePorts?.ports) ||
-      otherResourceFilteredPorts?.length > 0
-    ) {
-      const { resourceName, ports } = primaryResourcePorts;
-
-      res.push({
-        label: "Port(s)",
-        valueType: "custom",
-        value: (
-          <>
-            {resourceName && ports && (
-              <ResourceConnectivityEndpoint
-                isPrimaryResource={true}
-                resourceName={primaryResourcePorts?.resourceName}
-                viewType="ports"
-                ports={primaryResourcePorts?.ports}
-              />
-            )}
-            {otherResourceFilteredPorts?.length > 0 && (
-              <>
-                {resourceName && ports && (
-                  <Stack direction="row" justifyContent="center">
-                    <Button
-                      sx={{ color: "#6941C6", marginTop: "16px" }}
-                      endIcon={
-                        isPortsExpanded ? (
-                          <RemoveCircleOutlineIcon />
-                        ) : (
-                          <AddCircleOutlineIcon />
-                        )
-                      }
-                      onClick={() => setIsPortsExpanded(!isPortsExpanded)}
-                    >
-                      {isPortsExpanded ? "View Less" : "View More"}
-                    </Button>
-                  </Stack>
-                )}
-                {(isPortsExpanded || !(resourceName && ports)) &&
-                  otherResourceFilteredPorts.map((obj) => {
-                    const { resourceName, ports } = obj;
-                    return (
-                      <ResourceConnectivityEndpoint
-                        resourceName={resourceName}
-                        ports={ports}
-                        viewType="ports"
-                        key={obj.resourceName}
-                        containerStyles={{ marginTop: "16px" }}
-                      />
-                    );
-                  })}
-              </>
-            )}
-          </>
-        ),
-      });
-    }
-
-    res.push({
-      label: "Availability zones",
-      description: `The availability zone of the ${sectionLabel.toLowerCase()}`,
-      value: availabilityZones,
-    });
-
-    res.push({
-      label: "Publicly accessible",
-      value: publiclyAccessible ? "Yes" : "No",
-    });
-
-    if (privateNetworkCIDR) {
-      res.push({
-        label: "Private network CIDR",
-        description: `The private network CIDR of the ${sectionLabel.toLowerCase()}`,
-        value: privateNetworkCIDR,
-      });
-    }
-
-    if (privateNetworkId) {
-      res.push({
-        label: "Private network ID",
-        description: `The private network ID of the ${sectionLabel.toLowerCase()}`,
-        value: privateNetworkId,
-      });
+    if (otherResourceFilteredEndpoints?.length > 0) {
+      otherResourceFilteredEndpoints.forEach(
+        ({ resourceName, endpoint, resourceId }) => {
+          if (resourceName && endpoint && otherResourceFilteredPorts) {
+            res.push({
+              label: resourceName,
+              description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
+              valueType: "custom",
+              value: (
+                <ResourceConnectivityEndpoint
+                  key={resourceId}
+                  isPrimaryResource={false}
+                  resourceName={resourceName}
+                  ports={otherResourceFilteredPorts}
+                  viewType="endpoint"
+                  endpointURL={endpoint}
+                  containerStyles={{ marginTop: "16px" }}
+                  ResourceConnectivityCustomDNS={""}
+                />
+              ),
+            });
+          }
+        }
+      );
     }
 
     return res;
   }, [
     context,
-    networkType,
     primaryResourceName,
     primaryResourceEndpoint,
     otherResourceFilteredEndpoints,
     primaryResourcePorts,
     otherResourceFilteredPorts,
-    availabilityZones,
-    publiclyAccessible,
-    privateNetworkCIDR,
-    globalEndpoints,
-    isEndpointsExpanded,
-    isPortsExpanded,
-    privateNetworkId,
-    refetchInstance,
-    queryData,
+    globalEndpoints?.primary?.customDNSEndpoint,
+    addCustomDNSMutation,
+    removeCustomDNSMutation,
   ]);
 
-  if (noConnectivityData) {
-    return (
-      <Card sx={{ minHeight: "500px" }}>
-        <Stack direction="row" justifyContent="center" marginTop="200px">
-          <Text size="xlarge">No Connectivity data</Text>
+  return (
+    <Card
+      sx={{
+        marginTop: "32px",
+        padding: "12px",
+        borderRadius: "8px",
+      }}
+    >
+      <Card
+        sx={{
+          padding: "12px",
+          borderRadius: "8px",
+        }}
+      >
+        <Stack
+          sx={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #E4E7EC",
+            padding: "12px 0px",
+            marginBottom: "12px",
+          }}
+          alignItems="center"
+        >
+          <Box>
+            <Text size="small" weight="semibold" color="rgba(105, 65, 198, 1)">
+              {"Connectivity Details Info"}
+            </Text>
+            <Text size="small" weight="regular" color="#475467">
+              {
+                "Information about the resource instance connectivity options and network settings"
+              }
+            </Text>
+          </Box>
         </Stack>
+        <Box display="flex" flexDirection="row" justifyContent="center">
+          <Box
+            flex="1"
+            p="16px 24px"
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+          >
+            <Text size="small" weight="semibold" color="#101828">
+              {"Network type"}
+            </Text>
+            <Text size="small" weight="regular" color="#475467">
+              {networkType}
+            </Text>
+          </Box>
+          {availabilityZones && (
+            <Box
+              flex="1"
+              borderLeft="1px solid #EAECF0"
+              p="16px 24px"
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+            >
+              <Text size="small" weight="semibold" color="#101828">
+                {"Availability zones"}
+              </Text>
+              <Text size="small" weight="regular" color="#475467">
+                {availabilityZones}
+              </Text>
+            </Box>
+          )}
+          <Box
+            flex="1"
+            borderLeft="1px solid #EAECF0"
+            p="16px 24px"
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+          >
+            <Text size="small" weight="semibold" color="#101828">
+              {"Publicly accessible"}
+            </Text>
+            <Text size="small" weight="regular" color="#475467">
+              {publiclyAccessible ? "Yes" : "No"}
+            </Text>
+          </Box>
+          {privateNetworkCIDR && (
+            <Box
+              flex="1"
+              borderLeft="1px solid #EAECF0"
+              p="16px 24px"
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+            >
+              <Text size="small" weight="semibold" color="#101828">
+                {"Private network CIDR"}
+              </Text>
+              <Text size="small" weight="regular" color="#475467">
+                {privateNetworkCIDR}
+              </Text>
+            </Box>
+          )}
+          {privateNetworkId && (
+            <Box
+              flex="1"
+              borderLeft="1px solid #EAECF0"
+              p="16px 24px"
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+            >
+              <Text size="small" weight="semibold" color="#101828">
+                {"Private network ID"}
+              </Text>
+              <Text size="small" weight="regular" color="#475467">
+                {privateNetworkId}
+              </Text>
+            </Box>
+          )}
+        </Box>
       </Card>
-    );
-  }
-
-  return <PropertyTable rows={rows} />;
+      <>
+        {rows.length > 0 && (
+          <Box>
+            <PropertyTable data-testid="connectivity-table" rows={rows} />
+          </Box>
+        )}
+      </>
+    </Card>
+  );
 }
 
 export default Connectivity;

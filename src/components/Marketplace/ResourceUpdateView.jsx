@@ -610,18 +610,24 @@ function ResourceUpdateView(props) {
           <Box display="flex" justifyContent="flex-end" gap="10px" mt="40px">
             <Button
               variant="contained"
-              size="xsmall"
               bgColor="white"
               fontColor="black"
               onClick={formCancelClick}
-              sx={{ border: " 1px solid #D1D5DB" }}
+              sx={{
+                border: " 1px solid #D1D5DB",
+                height: "40px !important",
+                padding: "10px 14px !important",
+              }}
             >
               Cancel
             </Button>
             <Button
               variant="contained"
-              size="xsmall"
               type="submit"
+              sx={{
+                height: "40px !important",
+                padding: "10px 14px !important",
+              }}
               disabled={isLoading || shouldDisableEdit}
             >
               Update {serviceName} Instance{" "}

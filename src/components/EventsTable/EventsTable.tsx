@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import EventMessageChip from "./EventMessageChip";
 import { createColumnHelper } from "@tanstack/react-table";
 import { AccessEvent, EventType } from "src/types/event";
@@ -17,13 +17,13 @@ import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import DataTable from "src/components/DataTable/DataTable";
-import JSONView from "src/components/JSONView/JSONView";
 import { OnCopyProps } from "react-json-view";
 import { SetState } from "src/types/common/reactGenerics";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
-import AuditLogsEventFilterDropdown from "../ResourceInstance/AuditLogs/components/AuditLogsEventFilterDropdown";
+import AuditLogsEventFilterDropdown from "src/components/ResourceInstance/AuditLogs/components/AuditLogsEventFilterDropdown";
+import JSONView from "../JSONView/JSONView";
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -39,6 +39,10 @@ type EventsTableHeaderProps = {
   setSelectedDateRange: SetState<Range>;
   selectedEventTypes: EventType[];
   setSelectedEventTypes: SetState<EventType[]>;
+  disableTypeFilter?: boolean;
+  entityName: string;
+  filterEventTypes?: EventType[];
+  desc?: string;
 };
 
 const EventsTableHeader: FC<EventsTableHeaderProps> = (props) => {
@@ -52,6 +56,10 @@ const EventsTableHeader: FC<EventsTableHeaderProps> = (props) => {
     setSelectedDateRange,
     selectedEventTypes,
     setSelectedEventTypes,
+    disableTypeFilter = false,
+    entityName = "Event",
+    filterEventTypes,
+    desc = "",
   } = props;
 
   return (
@@ -62,7 +70,26 @@ const EventsTableHeader: FC<EventsTableHeaderProps> = (props) => {
       p="20px 24px 14px"
       borderBottom="1px solid #EAECF0"
     >
-      <DataGridHeaderTitle title="List of Events" count={count} />
+      <DataGridHeaderTitle
+        title={
+          <Typography
+            sx={{
+              fontSize: "18px",
+              fontWeight: 600,
+              lineHeight: "28px",
+              color: "#101828",
+            }}
+          >
+            List of {entityName}s
+          </Typography>
+        }
+        count={count}
+        desc={desc}
+        units={{
+          singular: entityName ? entityName : "",
+          plural: entityName ? `${entityName}s` : "",
+        }}
+      />
       <Stack direction="row" alignItems="center" gap="12px">
         <SearchInput
           searchText={searchText}
@@ -75,10 +102,13 @@ const EventsTableHeader: FC<EventsTableHeaderProps> = (props) => {
           dateRange={selectedDateRange}
           setDateRange={setSelectedDateRange}
         />
-        <AuditLogsEventFilterDropdown
-          selectedEventTypes={selectedEventTypes}
-          setSelectedEventTypes={setSelectedEventTypes}
-        />
+        {!disableTypeFilter && (
+          <AuditLogsEventFilterDropdown
+            selectedEventTypes={selectedEventTypes}
+            setSelectedEventTypes={setSelectedEventTypes}
+            filterEventTypes={filterEventTypes}
+          />
+        )}
       </Stack>
     </Stack>
   );
@@ -118,6 +148,11 @@ type EventsTableProps = {
   refetchEvents: () => void;
   isRefetching: boolean;
   isRootSubscription: boolean;
+  disableTypeFilter?: boolean;
+  hideTypeColumn?: boolean;
+  entityName?: string;
+  filterEventTypes?: EventType[];
+  desc?: string;
 };
 
 const EventsTable: FC<EventsTableProps> = (props) => {
@@ -130,6 +165,11 @@ const EventsTable: FC<EventsTableProps> = (props) => {
     isRefetching,
     refetchEvents,
     isRootSubscription,
+    disableTypeFilter = false,
+    hideTypeColumn = false,
+    entityName,
+    filterEventTypes,
+    desc,
   } = props;
 
   const [searchText, setSearchText] = useState("");
@@ -176,20 +216,24 @@ const EventsTable: FC<EventsTableProps> = (props) => {
         id: "resourceInstanceId",
         header: "Resource Instance ID",
       }),
-      columnHelper.accessor("eventSource", {
-        id: "type",
-        header: "Type",
-        cell: (data) => {
-          return data.row.original.eventSource ? (
-            <EventTypeChip eventType={data.row.original.eventSource} />
-          ) : (
-            "-"
-          );
-        },
-        meta: {
-          flex: 0.8,
-        },
-      }),
+      ...(!hideTypeColumn
+        ? [
+            columnHelper.accessor("eventSource", {
+              id: "type",
+              header: "Type",
+              cell: (data) => {
+                return data.row.original.eventSource ? (
+                  <EventTypeChip eventType={data.row.original.eventSource} />
+                ) : (
+                  "-"
+                );
+              },
+              meta: {
+                flex: 0.8,
+              },
+            }),
+          ]
+        : []),
       columnHelper.accessor((row) => formatDateUTC(row.time), {
         id: "time",
         header: "Time",
@@ -242,11 +286,12 @@ const EventsTable: FC<EventsTableProps> = (props) => {
       }),
     ];
   }, [
+    isRootSubscription,
     serviceId,
     environmentId,
     productTierId,
     subscriptionId,
-    isRootSubscription,
+    hideTypeColumn,
   ]);
 
   const filteredEvents = useMemo(() => {
@@ -310,6 +355,10 @@ const EventsTable: FC<EventsTableProps> = (props) => {
           setSelectedEventTypes: setSelectedEventTypes,
           isRefetching: isRefetching,
           refetchEvents: refetchEvents,
+          disableTypeFilter: disableTypeFilter,
+          entityName: entityName,
+          filterEventTypes: filterEventTypes,
+          desc: desc,
         }}
         isLoading={isRefetching}
       />
