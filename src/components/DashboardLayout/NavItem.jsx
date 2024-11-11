@@ -20,7 +20,7 @@ export const ListItem = styled(Link, {
       "hoverMenuItem",
       "isDrawerExpanded",
     ].includes(prop),
-})(({  clickDisabled, nestingLevel }) => {
+})(({ clickDisabled, nestingLevel }) => {
   const itemLeftPadding = 12;
 
   return {
@@ -34,13 +34,14 @@ export const ListItem = styled(Link, {
     cursor: "pointer",
     "&:hover": {
       color: `${styleConfig.sidebarTextActiveColor} !important`,
-      backgroundColor: "#F9FAFB",
+      backgroundColor: "#F2F4F7",
     },
     paddingLeft: nestingLevel
-        ? `${(nestingLevel + 1) * itemLeftPadding}px`
-        : `${itemLeftPadding}px`,
+      ? `${(nestingLevel + 1) * (itemLeftPadding + 12)}px`
+      : `${itemLeftPadding}px`,
     display: " flex",
     alignItems: "center",
+    borderRadius: 8,
   };
 });
 
@@ -53,7 +54,7 @@ export const NonLinkListItem = styled(Box, {
       "disableHoverEffect",
       "hoverMenuItem",
     ].includes(prop),
-})(({  clickDisabled, nestingLevel }) => {
+})(({ clickDisabled, nestingLevel }) => {
   const itemLeftPadding = 12;
 
   return {
@@ -67,13 +68,14 @@ export const NonLinkListItem = styled(Box, {
     cursor: "pointer",
     "&:hover": {
       color: `${styleConfig.sidebarTextActiveColor} !important`,
-      backgroundColor: "#F9FAFB",
+      backgroundColor: "#F2F4F7",
     },
     paddingLeft: nestingLevel
-        ? `${(nestingLevel + 1) * itemLeftPadding}px`
-        : `${itemLeftPadding}px`,
+      ? `${(nestingLevel + 1) * (itemLeftPadding + 12)}px`
+      : `${itemLeftPadding}px`,
     display: " flex",
     alignItems: "center",
+    borderRadius: 8,
   };
 });
 
@@ -248,8 +250,6 @@ const NavItem = (props) => {
 };
 
 export default NavItem;
-
-
 
 export const StyledLinkContainer = styled(Box)({
   display: "block",

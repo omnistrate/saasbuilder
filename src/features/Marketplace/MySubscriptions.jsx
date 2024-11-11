@@ -2,18 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
-import { Box, IconButton, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import DashboardLayout from "components/DashboardLayout/DashboardLayout";
 import DataGrid, { selectSingleItem } from "components/DataGrid/DataGrid";
-import { Text } from "components/Typography/Typography";
-import Menu from "components/Menu/Menu";
-import MenuItem from "components/MenuItem/MenuItem";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 import formatDateUTC from "src/utils/formatDateUTC";
 import DataGridHeader from "./components/DataGridHeader";
-import BellRingingIcon from "src/components/Icons/BellRinging/BellRingingIcon";
-import SpeedometerIcon from "src/components/Icons/Speedometer/SpeedometerIcon";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { deleteSubscription } from "src/api/subscriptions";
 import useSnackbar from "src/hooks/useSnackbar";
 // import CloudProviderCell from "./components/CloudProviderCell"; - Removed for Now
@@ -34,7 +28,6 @@ import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscription
 import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
 import LogoHeader from "src/components/Headers/LogoHeader";
 
-const ITEM_HEIGHT = 45;
 
 const MySubscriptions = () => {
   const {
@@ -48,7 +41,6 @@ const MySubscriptions = () => {
   const { serviceId, environmentId, productTierId, subscriptionId } =
     router.query;
 
-  const [anchorEl, setAnchorEl] = useState(null);
   const [showUnsubscribeDialog, setShowUnsubscribeDialog] = useState(false);
   const [selectedSubscription, setSelectedSubscription] = useState({});
   const [searchText, setSearchText] = useState("");
@@ -80,10 +72,6 @@ const MySubscriptions = () => {
 
   const snackbar = useSnackbar();
 
-  const onActionMenuClick = (event, subscription) => {
-    setSelectedSubscription(subscription);
-    setAnchorEl(event.currentTarget);
-  };
 
   useEffect(() => {
     if (selectionModel) {
@@ -105,7 +93,6 @@ const MySubscriptions = () => {
       );
     }
   };
-  console.log("check selected ==", selectionModel, selectedSubscription);
 
   const columns = [
     {
@@ -218,74 +205,78 @@ const MySubscriptions = () => {
       flex: 1,
       minWidth: 120,
     },
-    {
-      field: "defaultSubscription",
-      headerName: "Action",
-      width: 100,
-      renderCell: (params) => {
-        return (
-          <>
-            <IconButton
-              onClick={(event) => onActionMenuClick(event, params.row)}
-            >
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              anchorEl={anchorEl}
-              open={
-                Boolean(anchorEl) && params.row.id === selectedSubscription.id
-              }
-              onClose={() => setAnchorEl(null)}
-              PaperProps={{
-                style: {
-                  maxHeight: ITEM_HEIGHT * 4.5,
-                  width: "22ch",
-                },
-              }}
-            >
-              <MenuItem
-                sx={{ gap: "8px" }}
-                onClick={() => {
-                  setAnchorEl(null);
-                  viewResourceInstance();
-                }}
-              >
-                <SpeedometerIcon />
-                <Text size="small" weight="medium">
-                  Go To Dashboard
-                </Text>
-              </MenuItem>
+    // {
+    //   field: "defaultSubscription",
+    //   headerName: "Action",
+    //   width: 100,
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         <IconButton
+    //           onClick={(event) => onActionMenuClick(event, params.row)}
+    //         >
+    //           <MoreVertIcon />
+    //         </IconButton>
+    //         <Menu
+    //           anchorOrigin={{
+    //             vertical: "bottom",
+    //             horizontal: "center",
+    //           }}
+    //           transformOrigin={{
+    //             vertical: "top",
+    //             horizontal: "right",
+    //           }}
+    //           anchorEl={anchorEl}
+    //           open={
+    //             Boolean(anchorEl) && params.row.id === selectedSubscription.id
+    //           }
+    //           onClose={() => setAnchorEl(null)}
+    //           PaperProps={{
+    //             style: {
+    //               maxHeight: ITEM_HEIGHT * 4.5,
+    //               width: "22ch",
+    //             },
+    //           }}
+    //         >
+    //           <MenuItem
+    //             sx={{ gap: "8px" }}
+    //             onClick={() => {
+    //               setAnchorEl(null);
+    //               viewResourceInstance();
+    //             }}
+    //           >
+    //             <SpeedometerIcon />
+    //             <Text size="small" weight="medium">
+    //               Go To Dashboard
+    //             </Text>
+    //           </MenuItem>
 
-              {/* Show Unsubscribe Only When It's Not a Default Subscription */}
-              <MenuItem
-                sx={{
-                  gap: "8px",
-                  display: params.row.defaultSubscription ? "none" : "flex",
-                }}
-                onClick={() => {
-                  setAnchorEl(null);
-                  setShowUnsubscribeDialog(true);
-                }}
-              >
-                <BellRingingIcon />
-                <Text size="small" weight="medium">
-                  Unsubscribe
-                </Text>
-              </MenuItem>
-            </Menu>
-          </>
-        );
-      },
-    },
+    //           {/* Show Unsubscribe Only When It's Not a Default Subscription */}
+    //           <MenuItem
+    //             sx={{
+    //               gap: "8px",
+    //               display: params.row.defaultSubscription ? "none" : "flex",
+    //             }}
+    //             onClick={() => {
+    //               setAnchorEl(null);
+    //               setShowUnsubscribeDialog(true);
+    //             }}
+    //           >
+    //             <BellRingingIcon />
+    //             <Text size="small" weight="medium">
+    //               Unsubscribe
+    //             </Text>
+    //           </MenuItem>
+    //         </Menu>
+    //       </>
+    //     );
+    //   },
+    // },
   ];
+
+  function handleUnsubscribeClick() {
+    setShowUnsubscribeDialog(true);
+  }
 
   const isCustomNetworkEnabled = useMemo(() => {
     let enabled = false;
@@ -396,9 +387,11 @@ const MySubscriptions = () => {
                 typeFilter,
                 setTypeFilter,
                 viewResourceInstance,
-                setAnchorEl,
                 isFetching,
                 handleRefresh: refetchSubscriptions,
+                selectedSubscription: selectedSubscription,
+                handleUnsubscribeClick: handleUnsubscribeClick,
+                isUnsubscribing : unsubscribeMutation.isLoading
               },
             }}
             onSelectionModelChange={(newSelection) => {
