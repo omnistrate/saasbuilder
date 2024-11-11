@@ -49,6 +49,7 @@ import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavaila
 import SearchInput from "src/components/DataGrid/SearchInput";
 import LogoHeader from "src/components/Headers/LogoHeader";
 import AccessControlIcon from "src/components/Icons/AccessControlIcon/AccessControlIcon";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 
 export const getServerSideProps = async () => {
   return {
@@ -710,32 +711,15 @@ function AccessControl() {
                 justifyContent: "space-between",
               }}
             >
-              <Box flexGrow={1}>
-                <Stack direction="row" alignItems="center">
-                  <P size="large" sx={{ color: "#101828", marginRight: 1 }}>
-                    {"Manage Access"}
-                  </P>
-                  {filteredUsers.length > 0 && (
-                    <Chip
-                      size="small"
-                      label={`${filteredUsers.length} Users`}
-                      sx={{
-                        background: "#EFF2FF",
-
-                        [`& .${chipClasses.label}`]: { color: "#5600c9" },
-                      }}
-                    />
-                  )}
-                </Stack>
-
-                <P
-                  size="small"
-                  weight="regular"
-                  sx={{ color: "#475467", marginTop: "4px" }}
-                >
-                  {"Manage your Users and their account permissions here."}
-                </P>
-              </Box>
+              <DataGridHeaderTitle
+                title={`Manage Access`}
+                desc="Manage your Users and their account permissions here."
+                count={filteredUsers.length}
+                units={{
+                  singular: "User",
+                  plural: "Users",
+                }}
+              />
               <Stack direction="row" alignItems="center" gap="12px">
                 <SearchInput
                   placeholder="Search by Name/Email"
