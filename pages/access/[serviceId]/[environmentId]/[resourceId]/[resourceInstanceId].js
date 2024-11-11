@@ -429,6 +429,10 @@ function ResourceInstance() {
           nodes={resourceInstanceData.nodes}
           queryData={queryData}
           refetchInstance={resourceInstanceQuery.refetch}
+          additionalEndpoints={
+            resourceInstanceData.connectivity.additionalEndpoints
+          }
+          resourceName={resourceInstanceData.resourceName}
         />
       )}
       {currentTab === tabs.nodes && (
