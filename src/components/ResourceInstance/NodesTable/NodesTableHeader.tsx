@@ -4,6 +4,7 @@ import Button from "src/components/Button/Button";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import FailoverIcon from "src/components/Icons/Failover/Failover";
+import GenerateTokenIcon from "src/components/Icons/GenerateToken/GenerateTokenIcon";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 
 const NodesTableHeader = ({
@@ -13,8 +14,9 @@ const NodesTableHeader = ({
   isRefetching,
   isFailoverDisabled,
   selectedNode,
-  isAccessSide,
-  isInventoryManageInstance,
+  showFailoverButton,
+  showGenerateTokenButton,
+  onGenerateTokenClick = () => {},
   handleFailover,
   failoverMutation,
 }) => {
@@ -39,7 +41,7 @@ const NodesTableHeader = ({
         <Stack direction="row" alignItems="center" gap="12px">
           <RefreshWithToolTip refetch={refetchData} disabled={isRefetching} />
 
-          {(isAccessSide || isInventoryManageInstance) && (
+          {showFailoverButton && (
             <Button
               variant="outlined"
               sx={{
@@ -60,6 +62,20 @@ const NodesTableHeader = ({
                   sx={{ color: "#7F56D9", marginLeft: "12px" }}
                 />
               )}
+            </Button>
+          )}
+
+          {showGenerateTokenButton && (
+            <Button
+              variant="outlined"
+              sx={{
+                height: "40px !important",
+                padding: "10px 14px !important",
+              }}
+              startIcon={<GenerateTokenIcon />}
+              onClick={onGenerateTokenClick}
+            >
+              Generate Token
             </Button>
           )}
         </Stack>

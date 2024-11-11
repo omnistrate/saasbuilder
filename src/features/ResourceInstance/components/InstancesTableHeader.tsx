@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import { Box, Stack } from "@mui/material";
 
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
@@ -20,6 +20,7 @@ import SearchInput from "src/components/DataGrid/SearchInput";
 import { SetState } from "src/types/common/reactGenerics";
 import { AccessResourceInstance } from "src/types/resourceInstance";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
+import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 
 type InstancesTableHeaderProps = {
   count?: number;
@@ -72,9 +73,10 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
   isVisibleRestore,
   selectedResourceId,
 }) => {
-  let isVisibleCapacity = false;
   const role = getEnumFromUserRoleString(roleType);
   const view = viewEnum.Access_Resources;
+  const [isGenerateTokenDialogOpen, setIsGenerateTokenDialogOpen] =
+    useState(false);
 
   const isCreateAllowedByRBAC = isOperationAllowedByRBAC(
     operationEnum.Create,
@@ -92,6 +94,8 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
       modify: false,
       addCapacity: false,
       removeCapacity: false,
+      isVisibleCapacity: false,
+      generateToken: false,
     };
 
     if (!selectedInstance) {
@@ -133,7 +137,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     ) {
       actionsObj.addCapacity = true;
       actionsObj.removeCapacity = true;
-      isVisibleCapacity = true;
+      actionsObj.isVisibleCapacity = true;
     }
 
     if (
@@ -260,8 +264,13 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
             isLoading={isFetchingInstances || !selectedInstance}
             isModifyDisabled={!actions.modify}
             isVisibleRestore={isVisibleRestore}
-            isVisibleCapacity={isVisibleCapacity}
+            isVisibleCapacity={actions.isVisibleCapacity}
             isVisibleBYOA={isCurrentResourceBYOA}
+            isVisibleGenerateToken={
+              // @ts-ignore
+              selectedInstance?.kubernetesDashboardEndpoint?.dashboardEndpoint
+            }
+            handleGenerateToken={() => setIsGenerateTokenDialogOpen(true)}
           />
         </Stack>
       </Stack>
@@ -277,6 +286,12 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
         <SpeedoMeterLegend color="rgba(247, 144, 9, 1)" label="Medium" />
         <SpeedoMeterLegend color="rgba(240, 68, 56, 1)" label="High" />
       </Stack>
+      <GenerateTokenDialog
+        open={isGenerateTokenDialogOpen}
+        onClose={() => setIsGenerateTokenDialogOpen(false)}
+        selectedInstanceId={selectedInstance?.id}
+        subscriptionId={selectedInstance?.subscriptionId}
+      />
     </Box>
   );
 };
