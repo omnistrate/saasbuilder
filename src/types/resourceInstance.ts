@@ -32,6 +32,7 @@ type ResourceNetworkTopology = {
 
 //Access Resource Instance
 export type AccessResourceInstance = {
+  subscriptionId?: string;
   backupStatus?: {
     earliestRestoreTime: string;
   };
