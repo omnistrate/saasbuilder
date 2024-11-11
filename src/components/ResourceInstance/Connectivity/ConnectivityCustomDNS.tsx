@@ -27,8 +27,11 @@ import StatusChip from "src/components/StatusChip/StatusChip";
 import { getCustomDNSStatusStylesAndLabel } from "src/constants/statusChipStyles/customDNS";
 import { useMutation } from "@tanstack/react-query";
 import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
-import { AddCustomDNSToResourceInstancePayload } from "./ConnectivityEndpoint";
 
+export type AddCustomDNSToResourceInstancePayload = {
+  customDNS: string;
+  targetPort?: number;
+};
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
 });
