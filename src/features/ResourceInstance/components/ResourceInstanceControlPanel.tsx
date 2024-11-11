@@ -198,7 +198,7 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
               disabled={isDisabled || isLoading}
               onClick={onClick}
             >
-              <Icon disabled={isDisabled || isLoading} />
+              <Icon disabled={isDisabled || isLoading} color={"#667085"} />
               {label}
             </MenuItem>
           )

@@ -46,8 +46,8 @@ const DataGridText: FC<DataGridTextProps> = ({
   }, [children]);
 
   const textStyles = {
-    fontSize: "12px",
-    lineHeight: "18px",
+    fontSize: "14px",
+    lineHeight: "20px",
     fontWeight: 500,
     color: colorMap[color],
     textDecoration: isUnderlined
