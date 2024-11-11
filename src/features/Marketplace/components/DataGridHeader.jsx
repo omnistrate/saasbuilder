@@ -6,8 +6,9 @@ import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/S
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import Button from "src/components/Button/Button";
-import SpeedometerIcon from "src/components/Icons/Speedometer/SpeedometerIcon";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
+import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
+import Tooltip from "src/components/Tooltip/Tooltip";
 
 const SUBSCRIPTION_TYPES = {
   all: {
@@ -31,10 +32,13 @@ const DataGridHeader = ({
   typeFilter,
   setTypeFilter,
   viewResourceInstance,
-  setAnchorEl,
   isFetching,
   handleRefresh,
+  selectedSubscription,
+  handleUnsubscribeClick,
+  isUnsubscribing,
 }) => {
+
   return (
     <Box borderBottom="1px solid #EAECF0" p="20px">
       <Stack
@@ -59,10 +63,13 @@ const DataGridHeader = ({
           setSearchText={setSearchText}
           typeFilter={typeFilter}
           setTypeFilter={setTypeFilter}
-          setAnchorEl={setAnchorEl}
           viewResourceInstance={viewResourceInstance}
           isFetching={isFetching}
           handleRefresh={handleRefresh}
+          selectedSubscription={selectedSubscription}
+          numSubscriptions={numSubscriptions}
+          handleUnsubscribeClick={handleUnsubscribeClick}
+          isUnsubscribing={isUnsubscribing}
         />
       </Stack>
     </Box>
@@ -77,11 +84,14 @@ export const Actions = (props) => {
     setSearchText,
     typeFilter,
     setTypeFilter,
-    viewResourceInstance,
-    setAnchorEl,
     isFetching,
     handleRefresh,
+    selectedSubscription,
+    numSubscriptions,
+    handleUnsubscribeClick,
+    isUnsubscribing,
   } = props;
+
   return (
     <Stack
       direction={"row"}
@@ -96,37 +106,46 @@ export const Actions = (props) => {
         width="250px"
       />
       <RefreshWithToolTip refetch={handleRefresh} disabled={isFetching} />
-      <Button
-        sx={{
-          minWidth: "170px",
-          height: "40px",
-          border: "8px",
-          padding: "10px 14px !important",
-          boxShadow:
-            "0px 1px 2px 0px rgba(16, 24, 40, 0.05), 0px -2px 0px 0px rgba(16, 24, 40, 0.05), 0px 0px 0px 1px rgba(16, 24, 40, 0.18)",
-        }}
-        variant="contained"
-        startIcon={<SpeedometerIcon />}
-        // disabled={
-        //   isFetchingInstances ||
-        //   !isResourceParameters ||
-        //   isDeprecated ||
-        //   !isCreateAllowedByRBAC ||
-        //   maxNumberOfInstancesReached
-        // }
-
-        onClick={() => {
-          setAnchorEl(null);
-          viewResourceInstance();
-        }}
+      <Tooltip
+        isVisible={Boolean(
+          selectedSubscription &&
+            selectedSubscription.defaultSubscription === true
+        )}
+        title="Cannot unsubscribe from a direct subscription"
+        placement="top"
       >
-        Go To Dashboard
-      </Button>
+        <Button
+          bgColor="#D92D20"
+          sx={{
+            height: "40px",
+            border: "8px",
+            boxShadow:
+              "0px 1px 2px 0px rgba(16, 24, 40, 0.05), 0px -2px 0px 0px rgba(16, 24, 40, 0.05), 0px 0px 0px 1px rgba(16, 24, 40, 0.18)",
+          }}
+          variant="contained"
+          disabled={
+            !selectedSubscription ||
+            selectedSubscription?.defaultSubscription === true ||
+            numSubscriptions.length === 0 ||
+            isUnsubscribing ||
+            isFetching
+          }
+          onClick={handleUnsubscribeClick}
+        >
+          Unsubscribe {isUnsubscribing && <LoadingSpinnerSmall />}
+        </Button>{" "}
+      </Tooltip>
       <Select
         sx={{
           height: "40px !important",
-          padding: "10px 14px !important",
+          // padding: "10px 14px !important",
           margin: "0px",
+          "& .MuiOutlinedInput-input": {
+            fontSize: "14px",
+            fontWeight: 600,
+            lineHeight: "20px",
+            color: "#344054",
+          },
         }}
         id="type"
         name="type"
