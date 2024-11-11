@@ -449,7 +449,10 @@ function MarketplaceService() {
           );
         },
       },
-      {
+    ];
+
+    if (service?.productTierType !== productTierTypes.CUSTOM_TENANCY) {
+      columnDefinition.push({
         field: "healthStatus",
         headerName: "Health Status",
         flex: 1,
@@ -485,8 +488,8 @@ function MarketplaceService() {
 
           return <GradientProgressBar percentage={healthPercentage} />;
         },
-      },
-    ];
+      });
+    }
 
     // If a resource is BYOA, one of the fields: awsAccountId, gcpProjectID are present for all the instances
     // If present, add a column at the 1st index. Otherwise add a column at the 4th index.
@@ -579,6 +582,7 @@ function MarketplaceService() {
     return columnDefinition;
   }, [
     serviceId,
+    service,
     selectedResource,
     resourceInstanceList,
     environmentId,
