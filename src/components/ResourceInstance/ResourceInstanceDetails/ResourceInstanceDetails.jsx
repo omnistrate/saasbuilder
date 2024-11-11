@@ -290,6 +290,9 @@ function ResourceInstanceDetails(props) {
     subscriptionId,
     nonOmnistrateInternalLogs,
     nonOmnistrateInternalMetrics,
+    cloudProviderAccountInstanceURL,
+    resultParameters?.account_configuration_method,
+    resultParameters.aws_account_id,
   ]);
 
   const CloudPRoviderInstance = useMemo(() => {
