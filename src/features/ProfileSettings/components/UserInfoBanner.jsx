@@ -22,7 +22,7 @@ function UserInfoBanner(props) {
         <Box
           sx={{
             border: "4px solid rgba(255, 255, 255, 1)",
-            borderRadius: "100%",
+            borderRadius: "50%", // Alternative syntax for full circular shape
             background: "#F2F4F7",
             display: "flex",
             alignItems: "center",
@@ -35,7 +35,7 @@ function UserInfoBanner(props) {
             sx={{
               border: "1px solid rgba(0, 0, 0, 0.08)",
               padding: "43px 52px",
-              borderRadius: "100%",
+              borderRadius: "50%",
               background: "#F2F4F7",
               display: "flex",
               alignItems: "center",
@@ -43,7 +43,7 @@ function UserInfoBanner(props) {
             }}
           >
             <DisplayText size="xlarge" weight="medium">
-              {selectUser.name?.toUpperCase().charAt(0)}
+              {selectUser.name ? selectUser.name.charAt(0).toUpperCase() : ""}
             </DisplayText>
           </Box>
         </Box>
