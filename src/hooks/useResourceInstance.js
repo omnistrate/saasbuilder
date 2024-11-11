@@ -329,7 +329,7 @@ export default function useResourceInstance(
           instanceLoadStatus: data?.instanceLoadStatus,
           connectivity: {
             networkType: _.capitalize(data.network_type),
-            additionalEndpoints: topologyDetails.additionalEndpoints,
+            additionalEndpoints: topologyDetails?.additionalEndpoints,
             clusterEndpoint: topologyDetails?.clusterEndpoint,
             nodeEndpoints: nodeEndpoints,
             ports: clusterPorts,

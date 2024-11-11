@@ -11,7 +11,6 @@ const DownloadCLIIcon = (props) => {
     color = styleConfig.sidebarIconDisabledColor;
   }
 
-  console.log("Download CLI color", color);
   return (
     <svg
       width="24"
