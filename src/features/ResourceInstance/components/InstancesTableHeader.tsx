@@ -44,7 +44,6 @@ type InstancesTableHeaderProps = {
   isDeprecated?: boolean;
   isResourceParameters?: boolean;
   isVisibleRestore?: boolean;
-  isVisibleCapacity?: boolean;
   selectedResourceId: string;
 };
 
@@ -71,9 +70,9 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
   isDeprecated,
   isResourceParameters,
   isVisibleRestore,
-  isVisibleCapacity = true,
   selectedResourceId,
 }) => {
+  let isVisibleCapacity = false;
   const role = getEnumFromUserRoleString(roleType);
   const view = viewEnum.Access_Resources;
 
@@ -126,9 +125,15 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
       actionsObj.stop = true;
     }
 
-    if (status === "RUNNING" && isUpdateAllowedByRBAC && !cliManagedResource) {
+    if (
+      status === "RUNNING" &&
+      isUpdateAllowedByRBAC &&
+      !cliManagedResource &&
+      selectedInstance?.autoscalingEnabled
+    ) {
       actionsObj.addCapacity = true;
       actionsObj.removeCapacity = true;
+      isVisibleCapacity = true;
     }
 
     if (
