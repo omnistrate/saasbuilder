@@ -513,13 +513,10 @@ function getTabs(
   };
   if (isMetricsEnabled && !isResourceBYOA && !isCliManagedResource)
     tabs["metrics"] = "Metrics";
-  if (isLogsEnabled && !isResourceBYOA && !isCliManagedResource)
-    tabs["logs"] = "Logs";
+  if (isLogsEnabled && !isResourceBYOA) tabs["logs"] = "Logs";
 
-  if (!isActive || isCliManagedResource) {
-    if (!isActive || resourceType === RESOURCE_TYPES.Terraform) {
-      delete tabs.connectivity;
-    }
+  if (!isActive || resourceType === RESOURCE_TYPES.Terraform) {
+    delete tabs.connectivity;
     delete tabs.nodes;
   }
 
