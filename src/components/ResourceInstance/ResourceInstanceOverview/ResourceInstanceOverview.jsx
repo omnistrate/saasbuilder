@@ -21,9 +21,6 @@ function ResourceInstanceOverview(props) {
     region,
     cloudProvider,
     status,
-    // createdAt,
-    // modifiedAt,
-    // networkType,
     context,
     healthStatusPercent,
     isResourceBYOA,
@@ -72,11 +69,13 @@ function ResourceInstanceOverview(props) {
                 Cloud Provider
               </Text>
             </TableCellCenterText>
-            <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Health Status
-              </Text>
-            </TableCellCenterText>
+            {!isCliManagedResource && (
+              <TableCellCenterText>
+                <Text size="xsmall" weight="medium" color="#475467">
+                  Health Status
+                </Text>
+              </TableCellCenterText>
+            )}
           </TableHead>
 
           <TableRow>
@@ -141,21 +140,23 @@ function ResourceInstanceOverview(props) {
                 )}
               </Stack>
             </TableCell>
-            <TableCell>
-              <Stack
-                direction={"row"}
-                alignItems={"flex-end"}
-                justifyContent={"center"}
-              >
-                {isCliManagedResource ? (
-                  <StatusChip category="unknown" label="Unknown" />
-                ) : status === "STOPPED" ? (
-                  <StatusChip category="unknown" label="N/A" />
-                ) : (
-                  <GradientProgressBar percentage={healthStatusPercent} />
-                )}
-              </Stack>
-            </TableCell>
+            {!isCliManagedResource && (
+              <TableCell>
+                <Stack
+                  direction={"row"}
+                  alignItems={"flex-end"}
+                  justifyContent={"center"}
+                >
+                  {isCliManagedResource ? (
+                    <StatusChip category="unknown" label="Unknown" />
+                  ) : status === "STOPPED" ? (
+                    <StatusChip category="unknown" label="N/A" />
+                  ) : (
+                    <GradientProgressBar percentage={healthStatusPercent} />
+                  )}
+                </Stack>
+              </TableCell>
+            )}
           </TableRow>
         </Table>
       </TableContainer>

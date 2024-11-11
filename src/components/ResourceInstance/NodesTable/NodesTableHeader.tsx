@@ -19,6 +19,7 @@ const NodesTableHeader = ({
   onGenerateTokenClick = () => {},
   handleFailover,
   failoverMutation,
+  isGenerateTokenDisabled,
 }) => {
   return (
     <>
@@ -72,8 +73,11 @@ const NodesTableHeader = ({
                 height: "40px !important",
                 padding: "10px 14px !important",
               }}
-              startIcon={<GenerateTokenIcon />}
+              startIcon={
+                <GenerateTokenIcon disabled={isGenerateTokenDisabled} />
+              }
               onClick={onGenerateTokenClick}
+              disabled={isGenerateTokenDisabled}
             >
               Generate Token
             </Button>

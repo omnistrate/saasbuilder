@@ -393,6 +393,9 @@ export default function NodesTable(props) {
               !isCustomTenancy && (isAccessSide || isInventoryManageInstance),
             showGenerateTokenButton: isCustomTenancy,
             onGenerateTokenClick: () => setIsGenerateTokenDialogOpen(true),
+            isGenerateTokenDisabled: !nodes?.some(
+              (node) => node.kubernetesDashboardEndpoint
+            ),
             handleFailover,
             failoverMutation,
           },
