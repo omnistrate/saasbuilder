@@ -22,11 +22,16 @@ export default function ResourceInstanceDialog(props) {
   } = props;
 
   const isTypeJson = variant === "json";
-  const chunkData = (arr, size) =>
-    arr?.reduce((acc, _, i) => {
-      if (i % size === 0) acc.push(arr.slice(i, i + size));
-      return acc;
-    }, []);
+  const chunkData = (arr, size) => {
+    if (Array.isArray(data)) {
+      return arr?.reduce((acc, _, i) => {
+        if (i % size === 0) acc.push(arr.slice(i, i + size));
+        return acc;
+      }, []);
+    } else {
+      return [];
+    }
+  };
 
   const rows = isTypeJson ? data : chunkData(data, 2);
 

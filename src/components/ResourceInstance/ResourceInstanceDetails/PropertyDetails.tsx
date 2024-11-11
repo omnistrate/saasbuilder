@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Text } from "src/components/Typography/Typography";
 import CopyButton from "src/components/Button/CopyButton";
 import StatusChip from "src/components/StatusChip/StatusChip";
+import { getResourceInstanceDetailsStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceDetailsStatus";
 import { PasswordWithOutBorderField } from "src/components/FormElementsv2/PasswordField/PasswordWithOutBorderField";
 import JsonIcon from "src/components/Icons/RestoreInstance/JsonIcon";
 import ArrayIcon from "src/components/Icons/RestoreInstance/ArrayIcon";
@@ -11,7 +12,7 @@ import ResourceInstanceDialog from "./ResourceInstanceDialog";
 import AwsLogo from "src/components/Logos/AwsLogo/AwsLogo";
 import GcpLogo from "src/components/Logos/GcpLogo/GcpLogo";
 import AzureLogo from "src/components/Logos/AzureLogo/AzureLogo";
-import { getResourceInstanceDetailsStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceDetailsStatus";
+import JSONViewModal from "./JSONViewModal";
 
 export type Row = {
   label: string;
@@ -34,7 +35,9 @@ export type Row = {
     | "secret"
     | "array"
     | "json"
-    | "cloudProvider";
+    | "cloudProvider"
+    | "JSON"
+    | "Any";
   linkProps?: {
     href: string;
     target?: "_blank" | "_self";
@@ -51,23 +54,20 @@ const textType = [
   "secret",
 ];
 
-type DataType = {
-  valueType?: string;
-  value?: any;
-  title?: string;
-  desc?: string;
-};
-
 type PropertyTableProps = {
   rows: { rows: Row[]; title: string; desc: string; flexWrap: boolean };
 } & BoxProps;
 
 const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [data, setData] = useState<DataType>({});
+  const [data, setData] = useState<Row | null>(null);
+  const [jsonViewModalOpen, setJsonViewModalOpen] = useState(false);
+  const [jsonData, setJsonData] = useState<object | null>(null);
+
   function handleDialogClose() {
     setIsDialogOpen(false);
   }
+
   return (
     <Box
       borderRadius="8px"
@@ -102,11 +102,29 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
       >
         {rows?.rows?.map((row, index) => {
           const valueType = row.valueType || "text";
-          let value;
+          let { value } = row;
+
+          let isJSONData = false;
+          let jsonData;
+          //check if data value type is JSON. Treat Any type as JSON data
+          //Check if data is being sent in stringified version and can be parsed as a valid JSON
+          if (valueType === "Any" || valueType === "JSON") {
+            if (typeof value === "string") {
+              try {
+                const parsed = JSON.parse(value);
+                jsonData = parsed;
+                isJSONData = true;
+                //eslint-disable-next-line
+              } catch (error) {}
+            } else if (typeof value === "object") {
+              jsonData = value;
+              isJSONData = true;
+            }
+          }
 
           if (!row.value) {
             value = null;
-          } else if (valueType === "array" || valueType === "json") {
+          } else if (isJSONData) {
             value = (
               <>
                 {valueType === "array" ? <ArrayIcon /> : <JsonIcon />}
@@ -121,8 +139,9 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
                   }}
                   onClick={(event) => {
                     event.preventDefault();
-                    setIsDialogOpen(true);
+                    setJsonViewModalOpen(true);
                     setData(row);
+                    setJsonData(jsonData);
                   }}
                 >
                   {"Click here to view"}
@@ -286,8 +305,18 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
         handleClose={handleDialogClose}
         variant={data?.valueType}
         data={data?.value}
-        title={data?.title}
-        subtitle={data?.title}
+        title={data?.label}
+        subtitle={data?.description}
+      />
+
+      <JSONViewModal
+        open={jsonViewModalOpen}
+        handleClose={() => {
+          setJsonViewModalOpen(false);
+        }}
+        parameterName={data?.label}
+        parameterDescription={data?.description}
+        jsonData={jsonData}
       />
     </Box>
   );
