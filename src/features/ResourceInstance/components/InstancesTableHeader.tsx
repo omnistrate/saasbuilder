@@ -20,7 +20,7 @@ import SearchInput from "src/components/DataGrid/SearchInput";
 import { SetState } from "src/types/common/reactGenerics";
 import { AccessResourceInstance } from "src/types/resourceInstance";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
-import GenerateTokenDialog from "src/components/GenerateTokenDialog/GenerateTokenDialog";
+import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 
 type InstancesTableHeaderProps = {
   count?: number;
