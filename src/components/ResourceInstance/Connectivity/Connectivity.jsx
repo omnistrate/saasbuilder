@@ -153,7 +153,7 @@ function Connectivity(props) {
                   ResourceConnectivityCustomDNS={
                     <ResourceConnectivityCustomDNS
                       context={context}
-                      endpointURL={primaryResourceEndpoint}
+                      endpointURL={endpoint}
                       customDNSData={customDNSEndpoint}
                       queryData={queryData}
                       resourceKey={resourceKey}
