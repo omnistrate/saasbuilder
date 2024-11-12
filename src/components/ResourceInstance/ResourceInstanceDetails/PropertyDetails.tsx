@@ -104,22 +104,34 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           const valueType = row.valueType || "text";
           let { value } = row;
 
+          //check for JSON data types
           let isJSONData = false;
           let jsonData;
-          //check if data value type is JSON. Treat Any type as JSON data
-          //Check if data is being sent in stringified version and can be parsed as a valid JSON
-          if (valueType === "Any" || valueType === "JSON") {
-            if (typeof value === "string") {
-              try {
-                const parsed = JSON.parse(value);
+
+          if (
+            value !== null &&
+            value !== undefined &&
+            typeof value === "object"
+          ) {
+            try {
+              if (value.constructor === {}.constructor) {
+                jsonData = value;
+                isJSONData = true;
+              }
+              //eslint-disable-next-line
+            } catch (err) {}
+          }
+
+          if (typeof value === "string") {
+            try {
+              const parsed = JSON.parse(value);
+              if (typeof parsed === "object") {
                 jsonData = parsed;
                 isJSONData = true;
-                //eslint-disable-next-line
-              } catch (error) {}
-            } else if (typeof value === "object") {
-              jsonData = value;
-              isJSONData = true;
-            }
+              }
+
+              //eslint-disable-next-line
+            } catch (error) {}
           }
 
           if (!row.value) {
