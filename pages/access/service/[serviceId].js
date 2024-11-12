@@ -88,10 +88,6 @@ import SpeedoMeterMedium from "src/components/Icons/RestoreInstance/SpeedoMeter/
 import SpeedoMeterHigh from "src/components/Icons/RestoreInstance/SpeedoMeter/SpeedoMeterHigh";
 import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
 import { productTierTypes } from "src/constants/servicePlan";
-import {
-  CLOUD_ACCOUNT_ID_FIELD_MAP,
-  hideDashboardEndpoint,
-} from "src/utils/deploymentCells";
 
 export const getServerSideProps = async () => {
   return {
@@ -552,18 +548,10 @@ function MarketplaceService() {
         minWidth: 150,
         renderCell: (params) => {
           const { row } = params;
-          const { cloudProvider } = row;
           const dashboardEndpoint =
             row.kubernetesDashboardEndpoint?.dashboardEndpoint;
 
-          const accountID = row[CLOUD_ACCOUNT_ID_FIELD_MAP[cloudProvider]];
-
-          const hideDahboardEndpoint = hideDashboardEndpoint(
-            accountID,
-            selectedUser?.email
-          );
-
-          if (!dashboardEndpoint || hideDahboardEndpoint) {
+          if (!dashboardEndpoint) {
             return "-";
           }
 
@@ -590,7 +578,6 @@ function MarketplaceService() {
     subscriptionData?.id,
     productTierId,
     shouldShowKubernetesDashboardColumn,
-    selectedUser?.email,
   ]);
 
   const snackbar = useSnackbar();

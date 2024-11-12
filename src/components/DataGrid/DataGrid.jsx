@@ -2,6 +2,16 @@ import { Stack, styled } from "@mui/material";
 import { GridCell, GridRow, DataGrid as MuiDataGrid } from "@mui/x-data-grid";
 import DataGridCustomPagination from "./DataGridCustomPagination";
 import CustomCheckbox from "../Checkbox/Checkbox";
+import { memo } from "react";
+
+// Define memoized components outside of the render function
+const MemoizedCell = memo(function Cell(props) {
+  return <GridCell data-testid={props.field} {...props} />;
+});
+
+const MemoizedRow = memo(function Row(props) {
+  return <GridRow data-testid={props.rowId} {...props} />;
+});
 
 const DataGrid = styled(
   ({ components, noRowsText = "No Rows", ...restProps }) => (
@@ -12,8 +22,8 @@ const DataGrid = styled(
       rowHeight={48}
       headerHeight={44}
       components={{
-        Cell: (props) => <GridCell data-testid={props.field} {...props} />,
-        Row: (props) => <GridRow data-testid={props.rowId} {...props} />,
+        Cell: MemoizedCell,
+        Row: MemoizedRow,
         BaseCheckbox: CustomCheckbox,
         Pagination: DataGridCustomPagination,
         NoRowsOverlay: () => (
