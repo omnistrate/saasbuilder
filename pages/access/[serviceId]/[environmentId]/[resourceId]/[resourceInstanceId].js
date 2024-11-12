@@ -432,7 +432,6 @@ function ResourceInstance() {
           additionalEndpoints={
             resourceInstanceData.connectivity.additionalEndpoints
           }
-          resourceName={resourceInstanceData.resourceName}
         />
       )}
       {currentTab === tabs.nodes && (

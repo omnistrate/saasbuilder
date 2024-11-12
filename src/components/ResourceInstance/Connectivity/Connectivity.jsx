@@ -24,7 +24,6 @@ function Connectivity(props) {
     fleetQueryParams,
     refetchInstance,
     additionalEndpoints,
-    resourceName,
   } = props;
 
   const [availabilityZones, setAvailabilityZones] = useState("");
@@ -169,7 +168,7 @@ function Connectivity(props) {
     removeCustomDNSMutation,
   ]);
 
-  if (additionalEndpoints) {
+  if (additionalEndpoints.some((el) => el.additionalEndpoints)) {
     return (
       <Card
         sx={{
@@ -180,7 +179,6 @@ function Connectivity(props) {
       >
         <CLIManagedConnectivityDetails
           additionalEndpoints={additionalEndpoints}
-          resourceName={resourceName}
         />
       </Card>
     );
