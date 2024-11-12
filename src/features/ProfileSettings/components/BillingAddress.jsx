@@ -159,7 +159,7 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "800px !important" }}
+                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>
