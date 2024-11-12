@@ -17,8 +17,6 @@ import { Box } from "@mui/material";
 function DiskUsageChart(props) {
   const { data, labels } = props;
 
-  //   console.log("Disk usage", data);
-  //   console.log("Disk usage paths", labels);
   return (
     <Box>
       <Box sx={{ padding: "10px 20px", borderBottom: "1px solid #EAECF0" }}>

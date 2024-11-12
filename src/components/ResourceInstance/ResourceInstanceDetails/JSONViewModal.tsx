@@ -50,8 +50,6 @@ function JSONViewModal(props) {
     jsonData,
   } = props;
 
-  console.log("JSON data", jsonData);
-
   return (
     <Modal open={open} onClose={handleClose}>
       <StyledContainer>

@@ -128,8 +128,6 @@ function Metrics(props) {
     const metrics = data.Metrics;
 
     const formattedDate = formatDateUTC(messageTime * 1000);
-    // console.log("message time", messageTime);
-    // console.log("socket open time", socketOpenTime.current);
 
     if (isOlderThanFourHours(messageTime)) {
     } else {
@@ -141,7 +139,7 @@ function Metrics(props) {
       ) {
         setIsMetricsDataLoaded(true);
       }
-      //console.log("Data", data);
+
       if (metrics) {
         let loadAverage = null;
         let cpuUsage = null;

@@ -28,10 +28,6 @@ import {
   defaultChipStyles,
 } from "src/constants/statusChipStyles";
 import { productTierTypes } from "src/constants/servicePlan";
-import {
-  CLOUD_ACCOUNT_ID_FIELD_MAP,
-  hideDashboardEndpoint,
-} from "src/utils/deploymentCells";
 import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 
 const getRowBorderStyles = () => {
@@ -140,18 +136,10 @@ export default function NodesTable(props) {
         minWidth: 150,
         renderCell: (params) => {
           const { row } = params;
-          const { cloudProvider } = row;
           const dashboardEndpoint =
             row.kubernetesDashboardEndpoint?.dashboardEndpoint;
 
-          const accountID = row[CLOUD_ACCOUNT_ID_FIELD_MAP[cloudProvider]];
-
-          const hideDahboardEndpoint = hideDashboardEndpoint(
-            accountID,
-            userEmail
-          );
-
-          if (!dashboardEndpoint || hideDahboardEndpoint) {
+          if (!dashboardEndpoint) {
             return "-";
           }
 
@@ -171,8 +159,9 @@ export default function NodesTable(props) {
         flex: 1,
         renderCell: (params) => {
           const status = params.row.status;
-          const statusStylesAndMap =
-            getResourceInstanceStatusStylesAndLabel(status);
+          const statusStylesAndMap = getResourceInstanceStatusStylesAndLabel(
+            status?.toUpperCase()
+          );
           return <StatusChip status={status} {...statusStylesAndMap} />;
         },
         minWidth: 200,
@@ -391,11 +380,11 @@ export default function NodesTable(props) {
             selectedNode,
             showFailoverButton:
               !isCustomTenancy && (isAccessSide || isInventoryManageInstance),
-            showGenerateTokenButton: isCustomTenancy,
-            onGenerateTokenClick: () => setIsGenerateTokenDialogOpen(true),
-            isGenerateTokenDisabled: !nodes?.some(
-              (node) => node.kubernetesDashboardEndpoint
+            showGenerateTokenButton: Boolean(
+              isCustomTenancy &&
+                nodes.some((node) => node.kubernetesDashboardEndpoint)
             ),
+            onGenerateTokenClick: () => setIsGenerateTokenDialogOpen(true),
             handleFailover,
             failoverMutation,
           },
@@ -423,7 +412,7 @@ export default function NodesTable(props) {
           }
         }}
         loading={isRefetching}
-        noRowsText="No containers"
+        noRowsText="No nodes"
       />
       <GenerateTokenDialog
         open={isGenerateTokenDialogOpen}

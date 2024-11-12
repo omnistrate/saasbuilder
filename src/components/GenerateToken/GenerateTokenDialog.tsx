@@ -52,18 +52,23 @@ const GenerateTokenDialog = ({
           position: "relative",
         }}
       >
-        <Box
-          width="48px"
-          height="48px"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          border="1px solid #E4E7EC"
-          borderRadius="10px"
-          boxShadow="0px 1px 2px 0px #1018280D"
-        >
-          <GenerateTokenIcon />
-        </Box>
+        <Stack direction="row" alignItems="center" gap="16px">
+          <Box
+            width="48px"
+            height="48px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            border="1px solid #E4E7EC"
+            borderRadius="10px"
+            boxShadow="0px 1px 2px 0px #1018280D"
+          >
+            <GenerateTokenIcon />
+          </Box>
+          <Text size="large" weight="semibold" color="#101828">
+            Kubernetes Dashboard Token
+          </Text>
+        </Stack>
         <IconButton
           onClick={onClose}
           sx={{
@@ -76,14 +81,6 @@ const GenerateTokenDialog = ({
         </IconButton>
       </DialogTitle>
       <DialogContent sx={{ pb: "32px" }}>
-        <Text
-          size="large"
-          weight="semibold"
-          color="#101828"
-          sx={{ mb: "20px" }}
-        >
-          Generate Token
-        </Text>
         {isFetchingTokenData ? (
           <Box
             height="110px"
