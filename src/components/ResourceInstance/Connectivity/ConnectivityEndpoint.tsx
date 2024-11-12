@@ -48,25 +48,31 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
   const [isEndpointsExpanded, setIsEndpointsExpanded] = useState(false);
   const toggleExpanded = () => setIsEndpointsExpanded((prev) => !prev);
 
-  // Ensure 'ports' is an array of 'PortItem'
   const portsArray = useMemo(() => {
-    const resourcePorts = (Array.isArray(ports) ? ports : []) as PortItem[]; // Type assertion
+    const resourcePorts = (Array.isArray(ports) ? ports : []) as PortItem[];
 
     const selectedPortItem = resourcePorts.find(
       (item) => item.resourceName === resourceName
     );
 
-    return typeof selectedPortItem?.ports === "string"
-      ? selectedPortItem.ports.split(",")
-      : Array.isArray(selectedPortItem?.ports)
-        ? selectedPortItem.ports
-        : [ports];
+    const portValues =
+      typeof selectedPortItem?.ports === "string"
+        ? selectedPortItem.ports.split(",").map((port) => Number(port.trim()))
+        : Array.isArray(selectedPortItem?.ports)
+          ? selectedPortItem.ports.map((port) =>
+              typeof port === "string" ? Number(port.trim()) : port
+            )
+          : typeof ports === "string"
+            ? ports.split(",").map((port) => Number(port.trim()))
+            : [];
+
+    return portValues.filter((port) => !isNaN(port));
   }, [ports, resourceName]);
 
   const portEndpoint = { 443: "https://", 80: "http://" };
 
   const endpointPort = (endpoint, port) => {
-    const endpointURL = portEndpoint[Number(port)];
+    const endpointURL = portEndpoint[Number(String(port).trim())];
     if (endpointURL) return `${endpointURL}${endpoint}`;
     else return `${endpoint}:${port}`;
   };
@@ -101,7 +107,13 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
           <Table>
             <TableBody>
               <TableRow>
-                <TableCell sx={{ paddingRight: "8px", paddingTop: "0px" }}>
+                <TableCell
+                  sx={{
+                    paddingRight: "8px",
+                    paddingTop: "16px",
+                    verticalAlign: "top",
+                  }}
+                >
                   {viewType === "endpoint" ? (
                     <Image src={resourceEndpointIcon} alt="resource-endpoint" />
                   ) : (
@@ -114,7 +126,6 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                     paddingLeft: "8px",
                     paddingRight: "8px",
                     marginBottom: "10px",
-                    paddingTop: "18px",
                   }}
                 >
                   <Text size="small" weight="medium" color="#53389E">
