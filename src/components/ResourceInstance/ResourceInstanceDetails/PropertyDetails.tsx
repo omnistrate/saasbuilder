@@ -111,7 +111,8 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           if (
             value !== null &&
             value !== undefined &&
-            typeof value === "object"
+            typeof value === "object" &&
+            valueType !== "custom"
           ) {
             try {
               if (value.constructor === {}.constructor) {
