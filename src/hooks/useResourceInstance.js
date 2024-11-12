@@ -140,6 +140,7 @@ export default function useResourceInstance(
               const healthStatus = node.healthStatus;
               const detailedHealth = node.detailedHealth;
               nodes.push({
+                ...node,
                 id: nodeId,
                 nodeId: nodeId,
                 endpoint: endpoint,
@@ -224,6 +225,7 @@ export default function useResourceInstance(
                     const resourceKey = topologyDetails.resourceKey;
                     const detailedHealth = node.detailedHealth;
                     nodes.push({
+                      ...node,
                       id: nodeId,
                       nodeId: nodeId,
                       endpoint: endpoint,

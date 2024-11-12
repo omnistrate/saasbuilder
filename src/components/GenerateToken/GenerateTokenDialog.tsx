@@ -40,8 +40,8 @@ const GenerateTokenDialog = ({
       PaperProps={{
         style: {
           borderRadius: "12px",
-          minWidth: "400px",
-          maxWidth: "400px",
+          minWidth: "425px",
+          maxWidth: "425px",
         },
       }}
     >
