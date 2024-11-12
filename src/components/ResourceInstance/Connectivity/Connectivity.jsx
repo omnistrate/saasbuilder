@@ -18,10 +18,7 @@ function Connectivity(props) {
     globalEndpoints,
     context,
     nodes,
-    addCustomDNSMutation,
-    removeCustomDNSMutation,
-    accessQueryParams,
-    fleetQueryParams,
+    queryData,
     refetchInstance,
     additionalEndpoints,
   } = props;
@@ -112,8 +109,7 @@ function Connectivity(props) {
                       customDNSData={
                         globalEndpoints?.primary?.customDNSEndpoint
                       }
-                      fleetQueryParams={fleetQueryParams}
-                      accessQueryParams={accessQueryParams}
+                      queryData={queryData}
                       resourceKey={globalEndpoints?.primary?.resourceKey}
                       resourceId={globalEndpoints?.primary?.resourceId}
                       refetchInstance={refetchInstance}
@@ -131,7 +127,14 @@ function Connectivity(props) {
 
     if (otherResourceFilteredEndpoints?.length > 0) {
       otherResourceFilteredEndpoints.forEach(
-        ({ resourceName, endpoint, resourceId }) => {
+        ({
+          resourceName,
+          endpoint,
+          resourceId,
+          customDNSEndpoint,
+          resourceKey,
+          resourceHasCompute,
+        }) => {
           if (resourceName && endpoint && otherResourceFilteredPorts) {
             res.push({
               label: resourceName,
@@ -146,7 +149,18 @@ function Connectivity(props) {
                   viewType="endpoint"
                   endpointURL={endpoint}
                   containerStyles={{ marginTop: "16px" }}
-                  ResourceConnectivityCustomDNS={""}
+                  ResourceConnectivityCustomDNS={
+                    <ResourceConnectivityCustomDNS
+                      context={context}
+                      endpointURL={endpoint}
+                      customDNSData={customDNSEndpoint}
+                      queryData={queryData}
+                      resourceKey={resourceKey}
+                      resourceId={resourceId}
+                      refetchInstance={refetchInstance}
+                      resourceHasCompute={resourceHasCompute}
+                    />
+                  }
                 />
               ),
             });
@@ -163,9 +177,9 @@ function Connectivity(props) {
     otherResourceFilteredEndpoints,
     primaryResourcePorts,
     otherResourceFilteredPorts,
-    globalEndpoints?.primary?.customDNSEndpoint,
-    addCustomDNSMutation,
-    removeCustomDNSMutation,
+    globalEndpoints,
+    queryData,
+    refetchInstance,
   ]);
 
   if (additionalEndpoints.some((el) => el.additionalEndpoints)) {

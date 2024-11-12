@@ -48,7 +48,7 @@ type ResourceConnectivityEndpointProps = {
     cnameTarget?: string;
     aRecordTarget?: string;
   };
-  accessQueryParams?: {
+  queryData: {
     serviceProviderId: string;
     serviceKey: string;
     serviceAPIVersion: string;
@@ -66,7 +66,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
 ) => {
   const {
     customDNSData = { enabled: false },
-    accessQueryParams,
+    queryData,
     resourceKey,
     resourceId,
     refetchInstance,
@@ -95,15 +95,15 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
   const addCustomDNSMutation = useMutation({
     mutationFn: (payload: AddCustomDNSToResourceInstancePayload) => {
       return addCustomDNSToResourceInstance(
-        accessQueryParams.serviceProviderId,
-        accessQueryParams.serviceKey,
-        accessQueryParams.serviceAPIVersion,
-        accessQueryParams.serviceEnvironmentKey,
-        accessQueryParams.serviceModelKey,
-        accessQueryParams.productTierKey,
+        queryData.serviceProviderId,
+        queryData.serviceKey,
+        queryData.serviceAPIVersion,
+        queryData.serviceEnvironmentKey,
+        queryData.serviceModelKey,
+        queryData.productTierKey,
         resourceKey,
-        accessQueryParams.resourceInstanceId,
-        accessQueryParams.subscriptionId,
+        queryData.resourceInstanceId,
+        queryData.subscriptionId,
         payload
       );
     },
@@ -115,15 +115,15 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
   const removeCustomDNSMutation = useMutation({
     mutationFn: () => {
       return removeCustomDNSFromResourceInstance(
-        accessQueryParams.serviceProviderId,
-        accessQueryParams.serviceKey,
-        accessQueryParams.serviceAPIVersion,
-        accessQueryParams.serviceEnvironmentKey,
-        accessQueryParams.serviceModelKey,
-        accessQueryParams.productTierKey,
+        queryData.serviceProviderId,
+        queryData.serviceKey,
+        queryData.serviceAPIVersion,
+        queryData.serviceEnvironmentKey,
+        queryData.serviceModelKey,
+        queryData.productTierKey,
         resourceKey,
-        accessQueryParams.resourceInstanceId,
-        accessQueryParams.subscriptionId
+        queryData.resourceInstanceId,
+        queryData.subscriptionId
       );
     },
     onSuccess: () => {
@@ -148,15 +148,15 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
         pollCount.current++;
         const id = setTimeout(() => {
           getResourceInstanceDetails(
-            accessQueryParams.serviceProviderId,
-            accessQueryParams.serviceKey,
-            accessQueryParams.serviceAPIVersion,
-            accessQueryParams.serviceEnvironmentKey,
-            accessQueryParams.serviceModelKey,
-            accessQueryParams.productTierKey,
+            queryData.serviceProviderId,
+            queryData.serviceKey,
+            queryData.serviceAPIVersion,
+            queryData.serviceEnvironmentKey,
+            queryData.serviceModelKey,
+            queryData.productTierKey,
             resourceKey,
-            accessQueryParams.resourceInstanceId,
-            accessQueryParams.subscriptionId
+            queryData.resourceInstanceId,
+            queryData.subscriptionId
           )
             .then((response) => {
               const topologyDetails =
@@ -223,7 +223,10 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
       await addCustomDNSMutation?.mutateAsync(payload);
       setShouldShowConfigDialog(true);
       setIsTextFieldDisabled(true);
-    } catch {}
+
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   useEffect(() => {
@@ -301,7 +304,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                 }}
               />
               <TableCell colSpan={2} sx={{ paddingLeft: "4px", paddingTop: 0 }}>
-                <FieldContainer marginTop={0}>
+                <FieldContainer marginTop={0} sx={{maxWidth : "510px"}}>
                   <Stack
                     direction="row"
                     alignItems="center"

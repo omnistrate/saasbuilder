@@ -107,7 +107,7 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
     if (isVisibleRestore) {
       buttonsAction.push({
         isVisible: !!handleRestore,
-        label: "PiTR",
+        label: "Restore",
         onClick: handleRestore,
         icon: RestoreInstanceIcon,
         isDisabled: isRestoreDisabled,
