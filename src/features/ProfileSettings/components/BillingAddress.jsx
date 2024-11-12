@@ -117,7 +117,7 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "800px !important" }}
+                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>
@@ -138,7 +138,7 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "800px !important" }}
+                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>
@@ -159,7 +159,7 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "800px !important" }}
+                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>
@@ -179,7 +179,7 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "800px !important" }}
+                  sx={{ maxWidth: "600px !important" }}
                 />
                 <ErrorLabel>
                   {touched.address?.state && errors.address?.state}
@@ -210,7 +210,7 @@ function ProfileForm(props) {
                   renderInput={(params) => (
                     <TextField {...params} label="Select a country" />
                   )}
-                  sx={{ maxWidth: "800px !important" }}
+                  sx={{ maxWidth: "600px !important" }}
                 />
                 <ErrorLabel>
                   {touched.address?.country && errors.address?.country}
@@ -229,7 +229,7 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "800px !important" }}
+                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>
