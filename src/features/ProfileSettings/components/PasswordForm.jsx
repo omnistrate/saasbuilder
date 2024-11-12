@@ -159,7 +159,7 @@ function ChangePassword() {
                 marginRight: "20px",
               }}
               type="submit"
-              disabled={createChangePasswordMutation.isLoading}
+              disabled={createChangePasswordMutation.isLoading || !formik.dirty}
             >
               Update Password
               {createChangePasswordMutation.isLoading && (

@@ -342,7 +342,15 @@ function ResourceInstance() {
       </Head>
       <Stack direction="row" alignItems="center" justifyContent="flex-end">
         <Link href={resourceInstancesUrl}>
-          <Button startIcon={<RiArrowGoBackFill />} sx={{ color: "#6941C6" }}>
+          <Button
+            startIcon={<RiArrowGoBackFill />}
+            sx={{
+              color: "#6941C6",
+              "&:hover": {
+                background: "#F9F5FF",
+              },
+            }}
+          >
             Back to list of Resource Instances
           </Button>
         </Link>
