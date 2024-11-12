@@ -83,7 +83,6 @@ export default function useResourceInstance(
         if (topologyDetails) {
           globalEndpoints.primary = {
             resourceName: topologyDetails.resourceName,
-            additionalEndpoints: topologyDetails.additionalEndpoints,
             endpoint: topologyDetails.clusterEndpoint
               ? topologyDetails.clusterEndpoint
               : "",
@@ -205,7 +204,6 @@ export default function useResourceInstance(
 
               globalEndpoints.others.push({
                 resourceName: topologyDetails.resourceName,
-                additionalEndpoints: topologyDetails.additionalEndpoints,
                 endpoint: topologyDetails.clusterEndpoint
                   ? topologyDetails.clusterEndpoint
                   : "",
@@ -259,7 +257,6 @@ export default function useResourceInstance(
               }
               globalEndpoints.others.push({
                 resourceName: topologyDetails.resourceName,
-                additionalEndpoints: topologyDetails.additionalEndpoints,
                 endpoint: topologyDetails.clusterEndpoint
                   ? topologyDetails.clusterEndpoint
                   : "",
@@ -296,6 +293,16 @@ export default function useResourceInstance(
           );
         }
 
+        const additionalEndpoints = [];
+        Object.values(data.detailedNetworkTopology || {}).forEach(
+          (resource) => {
+            additionalEndpoints.push({
+              resourceName: resource.resourceName,
+              additionalEndpoints: resource.additionalEndpoints,
+            });
+          }
+        );
+
         const healthStatusPercent = calculateInstanceHealthPercentage(
           data?.detailedNetworkTopology,
           data?.status
@@ -304,7 +311,6 @@ export default function useResourceInstance(
         const final = {
           resourceInstanceId: resourceInstanceId,
           resourceKey: topologyDetails?.resourceKey,
-          resourceName: topologyDetails?.resourceName,
           region: data.region,
           cloudProvider: data.cloud_provider,
           status: data.status,
@@ -329,7 +335,7 @@ export default function useResourceInstance(
           instanceLoadStatus: data?.instanceLoadStatus,
           connectivity: {
             networkType: _.capitalize(data.network_type),
-            additionalEndpoints: topologyDetails?.additionalEndpoints,
+            additionalEndpoints: additionalEndpoints,
             clusterEndpoint: topologyDetails?.clusterEndpoint,
             nodeEndpoints: nodeEndpoints,
             ports: clusterPorts,

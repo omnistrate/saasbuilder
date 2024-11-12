@@ -84,7 +84,6 @@ function Logs(props) {
 
   const { getWebSocket } = useWebSocket(logsSocketEndpoint, {
     onOpen: () => {
-      // console.log("Socket Connection opened", event);
       setConnectionStatus(connectionStatuses.connected);
       setLogs([]);
       // setIsLogsDataLoaded(true);

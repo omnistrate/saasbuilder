@@ -17,9 +17,9 @@ type EndpointCardProps = {
   openPorts?: number[];
 };
 
-const EndpointLine = ({ isPrimary, openPort, endpointURL }) => {
+const EndpointLine = ({ isPrimary, openPort, endpointURL, mt = "0px" }) => {
   return (
-    <Stack direction="row" gap="6px" alignItems="center">
+    <Stack direction="row" gap="6px" alignItems="center" mt={mt}>
       <Text
         size="small"
         weight="regular"
@@ -103,6 +103,19 @@ const EndpointCard: FC<EndpointCardProps> = ({
           openPort={openPorts[0]}
         />
 
+        {isExpanded &&
+          openPorts.map((port, index) =>
+            index >= 1 ? (
+              <EndpointLine
+                key={index}
+                endpointURL={endpointURL}
+                isPrimary={isPrimary}
+                openPort={port}
+                mt="18px"
+              />
+            ) : null
+          )}
+
         {shouldShowViewMoreButton && (
           <Button
             sx={{ color: "#6941C6", marginTop: "8px" }}
@@ -118,18 +131,6 @@ const EndpointCard: FC<EndpointCardProps> = ({
             {isExpanded ? "View Less" : "View More"}
           </Button>
         )}
-
-        {isExpanded &&
-          openPorts.map((port, index) =>
-            index >= 1 ? (
-              <EndpointLine
-                key={index}
-                endpointURL={endpointURL}
-                isPrimary={isPrimary}
-                openPort={port}
-              />
-            ) : null
-          )}
       </Box>
     </Box>
   );
