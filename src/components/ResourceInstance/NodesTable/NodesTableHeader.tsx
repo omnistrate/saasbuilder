@@ -60,7 +60,7 @@ const NodesTableHeader = ({
               Failover
               {failoverMutation.isLoading && (
                 <LoadingSpinnerSmall
-                  sx={{ color: "#7F56D9", marginLeft: "12px" }}
+                  sx={{ marginLeft: "12px" }}
                 />
               )}
             </Button>
