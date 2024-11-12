@@ -111,9 +111,6 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     },
   });
 
-  // console.log("Rows", table.getRowModel().rows);
-  // console.log("Headers", table.getHeaderGroups());
-
   const rowData = table.getRowModel().rows;
 
   const numsColumns = table.getHeaderGroups().reduce((acc, curr) => {

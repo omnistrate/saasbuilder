@@ -10,7 +10,6 @@ export default function SwaggerDocs(props) {
   // const [swaggerUILoading, setSwaggerUILoading] = React.useState(true);
 
   // const onComp = (c)=>{
-  //   // console.log("onComp", c)
   //   setSwaggerUILoading(false);
   // }
 
