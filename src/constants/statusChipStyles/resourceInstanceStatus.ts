@@ -28,7 +28,7 @@ export const resourceInstanceStatusMap: Record<
   HEALTHY: { category: "success", label: "Healthy" },
   UNHEALTHY: { category: "failed", label: "Unhealthy" },
   SCALING_UP: { category: "inProgress", label: "Scaling Up" },
-  SCALING_DOWN: { category: "pending", label: "Scaling Down" },
+  SCALING_DOWN: { category: "inProgress", label: "Scaling Down" },
 };
 
 export const getResourceInstanceStatusStylesAndLabel = (
