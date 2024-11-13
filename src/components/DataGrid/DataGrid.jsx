@@ -47,8 +47,9 @@ const DataGrid = styled(
     "0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06)",
   border: "1px solid #EAECF0",
   "& .MuiDataGrid-main": {
-    height: "591px",
+    minHeight: "524px",
   },
+
   "& .MuiDataGrid-columnHeader": {
     // padding: "0px 24px",
     color: "#475467",

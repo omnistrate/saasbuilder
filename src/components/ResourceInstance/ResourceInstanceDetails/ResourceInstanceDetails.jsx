@@ -340,7 +340,7 @@ function ResourceInstanceDetails(props) {
           title: "Instance Info",
           desc: "Basic information about this resource instance",
           rows: instanceInfoData,
-          flexWrap: false,
+          flexWrap: true,
         }}
       />
       {outputParameterData.length > 0 && (
@@ -366,7 +366,7 @@ function ResourceInstanceDetails(props) {
             title: "Custom Network",
             desc: "Custom network details",
             rows: customNetworkData,
-            flexWrap: false,
+            flexWrap: true,
           }}
           mt="12px"
         />
@@ -379,7 +379,7 @@ function ResourceInstanceDetails(props) {
             title: "Backup",
             desc: "Backup configurations (RTO, RPO etc)",
             rows: backupData,
-            flexWrap: false,
+            flexWrap: true,
           }}
           mt="12px"
         />
@@ -391,7 +391,7 @@ function ResourceInstanceDetails(props) {
             title: "Autoscaling",
             desc: "Autoscaling settings of this instance",
             rows: autoscalingData,
-            flexWrap: false,
+            flexWrap: true,
           }}
           mt="12px"
         />

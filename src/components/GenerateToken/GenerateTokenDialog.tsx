@@ -15,12 +15,14 @@ import {
 } from "@mui/material";
 import useToken from "./useToken";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
+import GridCellExpand from "../GridCellExpand/GridCellExpand";
 
 const GenerateTokenDialog = ({
   open,
   onClose,
   selectedInstanceId,
   subscriptionId,
+  dashboardEndpoint,
 }) => {
   const { data: tokenData, isFetching: isFetchingTokenData } = useToken(
     {
@@ -100,6 +102,14 @@ const GenerateTokenDialog = ({
                   width: "20px",
                   height: "20px",
                 }}
+              />
+            </Stack>
+            <Stack direction="row" alignItems="center" gap="12px" mb="24px">
+              <GridCellExpand
+                value={dashboardEndpoint}
+                href={"https://" + dashboardEndpoint}
+                target="_blank"
+                externalLinkArrow
               />
             </Stack>
             <Text size="small" weight="regular" color="#475467">

@@ -1,5 +1,5 @@
 import { Box, BoxProps, Stack } from "@mui/material";
-import { FC, Fragment, useState } from "react";
+import { FC, useState } from "react";
 import Link from "next/link";
 import { Text } from "src/components/Typography/Typography";
 import CopyButton from "src/components/Button/CopyButton";
@@ -93,13 +93,20 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
         </Text>
       </Stack>
       <Box
-        display="flex"
-        padding={"12px 0px"}
-        flexDirection="row"
-        justifyContent="center"
-        flex={1}
-        flexWrap={rows.flexWrap ? "wrap" : "nowrap"}
+        display="grid"
+        gridTemplateColumns="repeat(auto-fill, minmax(220px, 1fr))"
+        position={"relative"}
+        gap="12px"
+        padding="12px 0"
       >
+        <Box
+          position={"absolute"}
+          right={0}
+          height={"100%"}
+          width={"2px"}
+          bgcolor={"white"}
+        />
+
         {rows?.rows?.map((row, index) => {
           const valueType = row.valueType || "text";
           let { value } = row;
@@ -265,53 +272,27 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
               </Box>
             );
           }
-          const isOutputParameter = rows.flexWrap;
-          const isStartOfRow = isOutputParameter
-            ? index % 4 === 0
-            : index === 0;
-          const needsTopMargin = index >= 4;
 
           return (
-            <Fragment key={index}>
-              <Box
-                p="20px"
-                display="flex"
-                flexDirection="column"
-                borderLeft={!isStartOfRow ? "1px solid #EAECF0" : "none"}
-                marginTop={isOutputParameter && needsTopMargin ? "12px" : "0"}
-                justifyContent="center"
-                flexBasis={"100%"}
-                maxWidth={isOutputParameter ? "calc(100% / 4)" : "none"}
-                boxSizing="border-box"
-                minHeight={isOutputParameter ? "80px" : "auto"}
-              >
-                <Text size="small" weight="medium" color="#101828">
-                  {row.label}
-                </Text>
-
-                <Box
-                  flex="1 1 auto"
-                  display="flex"
-                  alignItems="center"
-                  gap="12px"
-                >
-                  {value}
-                </Box>
+            <Box
+              key={index}
+              p="20px"
+              paddingLeft={"8px"}
+              display="flex"
+              flexDirection="column"
+              borderRight="1px solid #EAECF0"
+              boxSizing="border-box"
+              minHeight="80px"
+            >
+              <Text size="small" weight="medium" color="#101828">
+                {row.label}
+              </Text>
+              <Box flex="1 1 auto" display="flex" alignItems="center">
+                {value}
               </Box>
-            </Fragment>
+            </Box>
           );
         })}
-        {rows.flexWrap &&
-          Array.from({ length: 4 - (rows.rows.length % 4) }).map((_, idx) => (
-            <Box
-              key={`placeholder-${idx}`}
-              p="20px"
-              flexBasis="100%"
-              maxWidth="calc(100% / 4)"
-              boxSizing="border-box"
-              visibility="hidden"
-            />
-          ))}
       </Box>
       <ResourceInstanceDialog
         open={isDialogOpen}
