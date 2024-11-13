@@ -21,8 +21,10 @@ function UserInfoBanner(props) {
       >
         <Box
           sx={{
+            width: "160px",
+            height: "160px",
             border: "4px solid rgba(255, 255, 255, 1)",
-            borderRadius: "50%", // Alternative syntax for full circular shape
+            borderRadius: "50%",
             background: "#F2F4F7",
             display: "flex",
             alignItems: "center",
@@ -31,21 +33,9 @@ function UserInfoBanner(props) {
               "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
           }}
         >
-          <Box
-            sx={{
-              border: "1px solid rgba(0, 0, 0, 0.08)",
-              padding: "43px 52px",
-              borderRadius: "50%",
-              background: "#F2F4F7",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <DisplayText size="xlarge" weight="medium">
-              {selectUser.name ? selectUser.name.charAt(0).toUpperCase() : ""}
-            </DisplayText>
-          </Box>
+          <DisplayText size="xlarge" weight="medium">
+            {selectUser.name ? selectUser.name.charAt(0).toUpperCase() : ""}
+          </DisplayText>
         </Box>
 
         <Box sx={{ marginLeft: "20px" }}>
@@ -63,6 +53,7 @@ function UserInfoBanner(props) {
           <FieldLabel>{selectUser.email}</FieldLabel>
         </Box>
       </Box>
+
       <Box
         display="flex"
         //@ts-ignore
