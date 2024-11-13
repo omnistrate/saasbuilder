@@ -69,6 +69,14 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
     return portValues.filter((port) => !isNaN(port));
   }, [ports, resourceName]);
 
+  const sortedPortsArray = portsArray.sort((a, b) => {
+    if (a === 443) return -1; // Ensure 443 comes first
+    if (b === 443) return 1;
+    if (a === 80) return -1; // Ensure 80 comes after 443
+    if (b === 80) return 1;
+    return 0; // Keep the rest in their original order
+  });
+
   const portEndpoint = { 443: "https://", 80: "http://" };
 
   const endpointPort = (endpoint, port) => {
@@ -144,8 +152,8 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                       iconButtonProps={{ padding: "0px" }}
                     />
                   ) : (
-                    Array.isArray(portsArray) &&
-                    portsArray.map((port, index) => {
+                    Array.isArray(sortedPortsArray) &&
+                    sortedPortsArray.map((port, index) => {
                       if (
                         (index === 0 && !isEndpointsExpanded) ||
                         isEndpointsExpanded
