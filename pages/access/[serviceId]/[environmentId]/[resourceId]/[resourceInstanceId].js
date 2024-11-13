@@ -63,7 +63,7 @@ function ResourceInstance() {
   let resourceType = "";
 
   if (serviceOffering && resourceId) {
-    const resource = serviceOffering.resourceParameters.find(
+    const resource = serviceOffering.resourceParameters?.find(
       (resource) => resource.resourceId === resourceId
     );
     if (resource) {
