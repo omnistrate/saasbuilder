@@ -78,6 +78,7 @@ export default function NodesTable(props) {
   const [selectedNode, setSelectedNode] = useState(null);
   const [isGenerateTokenDialogOpen, setIsGenerateTokenDialogOpen] =
     useState(false);
+  const [dashboardEndpoint, setDashboardEndpoint] = useState("");
 
   const selectUser = useSelector(selectUserrootData);
   const userEmail = selectUser.email;
@@ -96,8 +97,8 @@ export default function NodesTable(props) {
     return nodes.filter((node) => !node.isServerless);
   }, [nodes]);
 
-  const customTenancyColumns = useMemo(
-    () => [
+  const customTenancyColumns = useMemo(() => {
+    const res = [
       {
         field: "nodeId",
         headerName: "Node ID",
@@ -127,48 +128,50 @@ export default function NodesTable(props) {
           );
         },
       },
-      {
-        field: "kubernetesDashboardEndpoint",
-        headerName: "Dashboard Endpoint",
-        flex: 1,
-        headerAlign: "center",
-        align: "center",
-        minWidth: 150,
-        renderCell: (params) => {
-          const { row } = params;
-          const dashboardEndpoint =
-            row.kubernetesDashboardEndpoint?.dashboardEndpoint;
+    ];
+    res.push({
+      field: "kubernetesDashboardEndpoint",
+      headerName: "Dashboard Endpoint",
+      flex: 1,
+      headerAlign: "left",
+      align: "center",
+      minWidth: 150,
+      renderCell: (params) => {
+        const { row } = params;
+        const dashboardEndpointRow =
+          row.kubernetesDashboardEndpoint?.dashboardEndpoint;
+        setDashboardEndpoint(
+          row.kubernetesDashboardEndpoint?.dashboardEndpoint
+        );
+        if (!dashboardEndpointRow) {
+          return "-";
+        }
 
-          if (!dashboardEndpoint) {
-            return "-";
-          }
-
-          return (
-            <GridCellExpand
-              value={dashboardEndpoint}
-              href={"https://" + dashboardEndpoint}
-              target="_blank"
-              externalLinkArrow
-            />
-          );
-        },
+        return (
+          <GridCellExpand
+            value={dashboardEndpointRow}
+            href={"https://" + dashboardEndpointRow}
+            target="_blank"
+            externalLinkArrow
+          />
+        );
       },
-      {
-        field: "status",
-        headerName: "Lifecycle Status",
-        flex: 1,
-        renderCell: (params) => {
-          const status = params.row.status;
-          const statusStylesAndMap = getResourceInstanceStatusStylesAndLabel(
-            status?.toUpperCase()
-          );
-          return <StatusChip status={status} {...statusStylesAndMap} />;
-        },
-        minWidth: 200,
+    });
+    res.push({
+      field: "status",
+      headerName: "Lifecycle Status",
+      flex: 1,
+      renderCell: (params) => {
+        const status = params.row.status;
+        const statusStylesAndMap = getResourceInstanceStatusStylesAndLabel(
+          status?.toUpperCase()
+        );
+        return <StatusChip status={status} {...statusStylesAndMap} />;
       },
-    ],
-    [userEmail]
-  );
+      minWidth: 200,
+    });
+    return res;
+  }, [userEmail]);
 
   const columns = useMemo(
     () => [
@@ -415,6 +418,7 @@ export default function NodesTable(props) {
         noRowsText="No nodes"
       />
       <GenerateTokenDialog
+        dashboardEndpoint={dashboardEndpoint}
         open={isGenerateTokenDialogOpen}
         onClose={() => setIsGenerateTokenDialogOpen(false)}
         selectedInstanceId={resourceInstanceId}
