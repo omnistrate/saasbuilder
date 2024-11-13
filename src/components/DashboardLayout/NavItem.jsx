@@ -100,8 +100,16 @@ const NavItem = (props) => {
     isExpandible = false,
     disableHoverEffect = false,
     hoverMenuItem = false,
+    defaultExpanded = false,
   } = props;
-  const [expanded, setExpanded] = useState(true);
+  
+  const [expanded, setExpanded] = useState(defaultExpanded);
+
+  useEffect(() => {
+    if (defaultExpanded) {
+      setExpanded(true);
+    }
+  }, [defaultExpanded]);
 
   function handleExpandToggle() {
     if (isExpandible) {

@@ -194,6 +194,8 @@ function MarketplaceServiceSidebar(props) {
       IconComponent: ShieldIcon,
       isActive: false,
       isExpandible: true,
+      defaultExpanded:
+        isAccessControlActive || isAuditLogsActive || isNotificationsActive,
       subItems: [
         {
           name: "Access Control",
@@ -221,6 +223,8 @@ function MarketplaceServiceSidebar(props) {
       IconComponent: AccountManagementIcon,
       isActive: false,
       isExpandible: true,
+      defaultExpanded:
+        isSettingsActive || isBillingActive || isSubscriptionsActive,
       subItems: [
         {
           name: "Settings",
