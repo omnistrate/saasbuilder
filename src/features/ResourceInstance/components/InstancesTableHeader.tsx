@@ -96,6 +96,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
       removeCapacity: false,
       isVisibleCapacity: false,
       generateToken: false,
+      isVisibleGenerateToken: false,
     };
 
     if (!selectedInstance) {
@@ -159,6 +160,12 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
 
     if (status !== "DELETING" && isDeleteAllowedByRBAC) {
       actionsObj.delete = true;
+    }
+    if (
+      status !== "DELETING" &&
+      selectedInstance?.kubernetesDashboardEndpoint?.dashboardEndpoint
+    ) {
+      actionsObj.isVisibleGenerateToken = true;
     }
 
     if (
@@ -266,10 +273,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
             isVisibleRestore={isVisibleRestore}
             isVisibleCapacity={actions.isVisibleCapacity}
             isVisibleBYOA={isCurrentResourceBYOA}
-            isVisibleGenerateToken={
-              // @ts-ignore
-              selectedInstance?.kubernetesDashboardEndpoint?.dashboardEndpoint
-            }
+            isVisibleGenerateToken={actions.isVisibleGenerateToken}
             handleGenerateToken={() => setIsGenerateTokenDialogOpen(true)}
           />
         </Stack>
@@ -287,6 +291,9 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
         <SpeedoMeterLegend color="rgba(240, 68, 56, 1)" label="High" />
       </Stack>
       <GenerateTokenDialog
+        dashboardEndpoint={
+          selectedInstance?.kubernetesDashboardEndpoint?.dashboardEndpoint
+        }
         open={isGenerateTokenDialogOpen}
         onClose={() => setIsGenerateTokenDialogOpen(false)}
         selectedInstanceId={selectedInstance?.id}
