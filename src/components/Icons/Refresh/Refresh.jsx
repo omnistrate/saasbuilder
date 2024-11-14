@@ -1,26 +1,27 @@
-import * as React from "react";
 const RefreshIcon = (props) => {
-  const { disabled } = props;
-
-  let color = props.color || "#FDB022";
-  if (disabled) {
-    color = "#D0D5DD";
-  }
+  const {
+    color = "#667085",
+    disabled,
+    width = 24,
+    height = 24,
+    ...restProps
+  } = props;
 
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={20}
-      height={20}
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
       fill="none"
-      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      {...restProps}
     >
       <path
-        stroke={color}
+        d="M20.453 12.893C20.1752 15.5029 18.6964 17.9487 16.2494 19.3614C12.1839 21.7086 6.98539 20.3157 4.63818 16.2502L4.38818 15.8172M3.54613 11.107C3.82393 8.49711 5.30272 6.05138 7.74971 4.63862C11.8152 2.29141 17.0137 3.68434 19.3609 7.74983L19.6109 8.18285M3.49316 18.0661L4.22521 15.334L6.95727 16.0661M17.0424 7.93401L19.7744 8.66606L20.5065 5.93401"
+        stroke={disabled ? "#D0D5DD" : color}
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth={1.667}
-        d="M1.667 11.667s.1.707 3.03 3.636a7.5 7.5 0 0 0 12.617-3.636m-15.647 0v5m0-5h5m11.666-3.334s-.1-.707-3.03-3.636A7.5 7.5 0 0 0 2.687 8.333m15.646 0v-5m0 5h-5"
       />
     </svg>
   );
