@@ -69,6 +69,8 @@ type DataTableProps<TData> = {
   isLoading?: boolean;
   /*eslint-disable-next-line no-unused-vars */
   getRowCanExpand?: (rowData: Row<TData>) => boolean;
+  /*eslint-disable-next-line no-unused-vars */
+  getSubRows?: (orginalRow: TData) => TData[];
   HeaderComponent: FC;
   headerProps: any;
 };
@@ -85,6 +87,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     getRowCanExpand = () => true,
     HeaderComponent,
     headerProps = {},
+    getSubRows,
   } = props;
   const [expanded, setExpanded] = useState<ExpandedState>({});
 
@@ -109,6 +112,8 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     defaultColumn: {
       minSize: 150,
     },
+    getSubRows: getSubRows,
+    paginateExpandedRows: false,
   });
 
   const rowData = table.getRowModel().rows;
@@ -129,7 +134,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     const isFixedColumnSizeSet = Boolean(columnSize);
     const columnFlex = colDef.meta?.flex;
 
-    return columnFlex ? Math.min(columnFlex, 1) : isFixedColumnSizeSet ? 0 : 1;
+    return columnFlex ? Math.min(columnFlex, 2) : isFixedColumnSizeSet ? 0 : 1;
   };
 
   const flexTotal = columns.reduce((acc, curr) => {
@@ -171,8 +176,8 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
   return (
     <TableContainer sx={{ borderRadius: "8px" }}>
       <HeaderComponent {...headerProps} />
-      <Stack minHeight="656px" justifyContent="space-between">
-        <Box sx={{ overflowX: "auto" }}>
+      <Stack minHeight="605px" justifyContent="space-between">
+        <Box sx={{ overflowX: "auto", flexGrow: 1 }}>
           <Table sx={{ tableLayout: "fixed", width: "100%" }}>
             {table.getHeaderGroups().map((headerGroup) => {
               return (
@@ -197,9 +202,11 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       const sortDirection = header.column.getIsSorted();
+                      const columnAlignment =
+                        header.column.columnDef.meta?.align || "center";
                       return (
                         <TableCell
-                          align="center"
+                          align={columnAlignment}
                           key={header.id}
                           onClick={header.column.getToggleSortingHandler()}
                           sx={{
@@ -243,6 +250,8 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                       <TableRow>
                         {row.getVisibleCells().map((cell) => {
                           const cellValue = cell.getValue();
+                          const columnAlignment =
+                            cell.column.columnDef.meta?.align || "center";
                           let title = "";
                           if (
                             ["string", "number", "boolean"].includes(
@@ -254,7 +263,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                           return (
                             <TableCell
                               key={cell.id}
-                              align="center"
+                              align={columnAlignment}
                               title={title}
                             >
                               {flexRender(
@@ -265,7 +274,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                           );
                         })}
                       </TableRow>
-                      {row.getIsExpanded() && (
+                      {row.getIsExpanded() && renderDetailsComponent && (
                         <DetailViewTableRow>
                           <TableCell
                             sx={{
@@ -300,7 +309,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
             alignItems="center"
             fontSize="14px "
             flexGrow={1}
-            height="520px"
+            height="480px"
           >
             {isLoading ? <LoadingSpinner /> : noRowsText}
           </Stack>
@@ -325,6 +334,7 @@ interface ColumnFlex {
   flex?: number;
   width?: number;
   minWidth?: number;
+  align?: "center" | "left" | "right";
 }
 declare module "@tanstack/react-table" {
   /*eslint-disable-next-line*/

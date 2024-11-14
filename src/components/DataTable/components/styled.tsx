@@ -13,12 +13,15 @@ export const TableHead = styled(MuiTableHead)({
     fontWeight: 500,
     lineHeight: "18px",
     background: "#F9FAFB",
-    height: "56px",
+    height: "44px",
+  },
+  "& .MuiTableRow-head": {
+    height: "44px",
   },
 });
 
 export const TableBody = styled(MuiTableBody)({
-  minHeight: "520px",
+  minHeight: "480px",
 });
 
 export const Table = styled(MuiTable)({});
@@ -31,7 +34,7 @@ export const TableContainer = styled(MuiTableContainer)({
 });
 
 export const TableRow = styled(MuiTableRow)({
-  height: "52px",
+  height: "48px",
   "& > *": { borderBottom: "unset" },
 });
 
