@@ -1847,6 +1847,11 @@ function MarketplaceService() {
                 handleClose={() => {
                   setShowCapacityDialog(false);
                 }}
+                autoscaling={{
+                  currentReplicas: selectedResourceInstance?.currentReplicas,
+                  maxReplicas: selectedResourceInstance?.maxReplicas,
+                  minReplicas: selectedResourceInstance?.minReplicas,
+                }}
                 data={capacityData}
                 currentCapacityAction={currentCapacityAction}
                 contextType="access"
