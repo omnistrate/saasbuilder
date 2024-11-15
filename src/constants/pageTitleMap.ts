@@ -14,4 +14,6 @@ export const PAGE_TITLE_MAP = {
   "/billing": "Billing",
   "/subscriptions": "Subscriptions",
   "/service-plans": "Billing Plans",
+  "/access/[serviceId]/[environmentId]/audit-logs": "Audit Logs",
+  "/access/[serviceId]/[environmentId]/notifications": "Notifications",
 };

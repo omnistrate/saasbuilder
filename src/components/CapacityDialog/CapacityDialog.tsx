@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
 import {
   Dialog as MuiDialog,
   DialogActions as MuiDialogActions,
@@ -54,6 +54,11 @@ type CapacityDialogProps = {
   data: AccessCapacityDataType;
   currentCapacityAction: CapacityAction;
   contextType?: ContextType;
+  autoscaling?: {
+    currentReplicas?: string;
+    maxReplicas?: string;
+    minReplicas?: string;
+  };
 };
 
 const CapacityDialog: FC<CapacityDialogProps> = ({
@@ -62,6 +67,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
   data,
   currentCapacityAction,
   refetch,
+  autoscaling,
 }) => {
   const snackbar = useSnackbar();
 
@@ -121,6 +127,24 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
       capacityMutation.mutate(values);
     },
   });
+
+  const isDisabled = useMemo(() => {
+    if (currentCapacityAction === "add") {
+      return Number(autoscaling.currentReplicas) +
+        Number(capacityFormik.values.count) >
+        Number(autoscaling.maxReplicas)
+        ? true
+        : false;
+    }
+    if (currentCapacityAction === "remove") {
+      return Number(autoscaling.currentReplicas) -
+        Number(capacityFormik.values.count) <
+        Number(autoscaling.minReplicas)
+        ? true
+        : false;
+    }
+  }, [autoscaling, capacityFormik.values]);
+
   return (
     <Dialog data-cy="confirmation-dialog" open={open} onClose={handleClose}>
       {/* @ts-ignore */}
@@ -167,6 +191,19 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
               {labelObj.message}
             </Text>
           )}
+          {autoscaling.currentReplicas &&
+            autoscaling.minReplicas &&
+            autoscaling.maxReplicas && (
+              <Text
+                size="small"
+                weight="medium"
+                color="#344054"
+                //@ts-ignore
+                mt="9px"
+              >
+                {`Current Replicas ${autoscaling.currentReplicas} Min Replicas ${autoscaling.minReplicas} or Max Replicas ${autoscaling.maxReplicas}`}
+              </Text>
+            )}
           <TextField
             //@ts-ignore
             id="count"
