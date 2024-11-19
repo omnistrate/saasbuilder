@@ -717,22 +717,12 @@ function AccessControl() {
               }}
               selectionModel={selectionModel}
               onSelectionModelChange={(selection) => {
-                if (selection.length >= 1) {
-                  const selectionSet = new Set(selectionModel);
-
-                  const result = selection.filter((s) => !selectionSet.has(s));
-                  setSelectionModel(result);
-                  const index = selection.length == 1 ? 0 : 1;
-
-                  filteredUsers?.map((rowObj) => {
-                    if (rowObj) {
-                      if (rowObj["id"] == selection[index]) {
-                        setModifyFormikValue(rowObj);
-                      }
-                    }
-                  });
-                } else {
-                  setSelectionModel(selection);
+                setSelectionModel(selection);
+                if (selection.length > 0) {
+                  const selectedUser = filteredUsers.find(
+                    (user) => user.id === selection[selection.length - 1]
+                  );
+                  if (selectedUser) setModifyFormikValue(selectedUser);
                 }
               }}
               getRowId={(row) => row.id}
