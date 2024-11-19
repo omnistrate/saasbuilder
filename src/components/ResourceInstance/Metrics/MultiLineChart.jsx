@@ -1,9 +1,9 @@
 import { Text } from "src/components/Typography/Typography";
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
   Legend,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -25,7 +25,7 @@ function MultiLineChart(props) {
       </Box>
       <ReChartContainer mt={3} debounce={100} height={320}>
         <ResponsiveContainer>
-          <LineChart
+          <AreaChart
             height={320}
             data={data}
             margin={{
@@ -52,12 +52,13 @@ function MultiLineChart(props) {
             <Legend />
             {labels.map((labelName, index) => {
               return (
-                <Line
+                <Area
                   key={labelName}
                   name={labelName}
                   type="monotone"
                   dataKey={labelName}
                   stroke={lineChartColorPalette[index]}
+                  fill={lineChartColorPalette[index]}
                   dot={false}
                   isAnimationActive={false}
                   label={labelName}
@@ -66,7 +67,7 @@ function MultiLineChart(props) {
                 />
               );
             })}
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </ReChartContainer>
     </Box>

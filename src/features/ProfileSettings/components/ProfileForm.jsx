@@ -1,6 +1,7 @@
 import {
   Box,
   CircularProgress,
+  Divider,
   Table,
   TableBody,
   TableCell,
@@ -84,6 +85,9 @@ function ProfileForm(props) {
           Update your personal details here.
         </Text>
       </Box>
+
+      <Divider sx={{ mt: 2.5 }} />
+
       <Form onSubmit={formik.handleSubmit}>
         <Table>
           <TableBody>

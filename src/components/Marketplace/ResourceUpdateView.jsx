@@ -61,13 +61,15 @@ function ResourceUpdateView(props) {
         if (api.verb === "UPDATE") {
           if (api.inputParameters?.length > 0) {
             setCreateSchema(
-              api.inputParameters?.filter((item) => item?.modifiable)
+              api.inputParameters
+                ?.filter((item) => item?.modifiable)
+                ?.sort((a, b) => a?.key.localeCompare(b?.key))
             );
           }
         } else if (api.verb === "CREATE") {
-          const filteredInputParams = api.inputParameters?.filter(
-            (item) => item?.custom && !item?.modifiable
-          );
+          const filteredInputParams = api.inputParameters
+            ?.filter((item) => item?.custom && !item?.modifiable)
+            ?.sort((a, b) => a?.key.localeCompare(b?.key));
           if (filteredInputParams?.length) {
             setNonModifiableParamsSchema(filteredInputParams);
           }

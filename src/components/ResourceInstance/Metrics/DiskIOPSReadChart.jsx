@@ -1,10 +1,10 @@
 import React from "react";
 import { Text } from "../../Typography/Typography";
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
   Legend,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -26,7 +26,7 @@ function DiskIOPSReadChart(props) {
       </Box>
       <ReChartContainer mt={3} debounce={100}>
         <ResponsiveContainer>
-          <LineChart
+          <AreaChart
             height={300}
             data={data}
             margin={{
@@ -49,12 +49,13 @@ function DiskIOPSReadChart(props) {
             <Legend />
             {labels.map((labelName, index) => {
               return (
-                <Line
+                <Area
                   key={labelName}
                   name={labelName}
                   type="monotone"
                   dataKey={labelName}
                   stroke={lineChartColorPalette[index]}
+                  fill={lineChartColorPalette[index]}
                   dot={false}
                   isAnimationActive={false}
                   label={labelName}
@@ -63,7 +64,7 @@ function DiskIOPSReadChart(props) {
                 />
               );
             })}
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </ReChartContainer>
     </Box>

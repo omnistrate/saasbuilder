@@ -208,8 +208,8 @@ function Logs(props) {
           desc="Detailed logs for monitoring and troubleshooting"
         />
         {nodes?.length > 0 && (
-          <Box sx={{ minWidth: "220px" }}>
-            <Text size="small" weight="medium" color="#344054">
+          <Box>
+            <Text size="small" weight="medium" color="#344054" ml="5px">
               Node ID
             </Text>
             <Select
@@ -219,11 +219,20 @@ function Logs(props) {
                 height: "40px !important",
                 padding: "10px 14px !important",
                 minHeight: "40px",
+                maxWidth: "250px",
               }}
               onChange={handleNodeChange}
             >
               {nodes.map((node) => (
-                <MenuItem value={node.id} key={node.id}>
+                <MenuItem
+                  value={node.id}
+                  key={node.id}
+                  sx={{
+                    whiteSpace: "normal",
+                    wordBreak: "break-all",
+                    maxWidth: "255px",
+                  }}
+                >
                   {node.id}
                 </MenuItem>
               ))}

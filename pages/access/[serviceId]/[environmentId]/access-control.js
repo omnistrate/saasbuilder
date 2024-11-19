@@ -8,7 +8,6 @@ import {
   MenuItem,
   Stack,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
 import { useMutation } from "@tanstack/react-query";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import React, { useEffect, useMemo, useState } from "react";
@@ -16,7 +15,6 @@ import Button from "../../../../src/components/Button/Button";
 import DashboardLayout from "../../../../src/components/DashboardLayout/DashboardLayout";
 import Form from "../../../../src/components/FormElements/Form/Form";
 import TextField from "../../../../src/components/FormElements/TextField/TextField";
-import { P } from "../../../../src/components/Typography/Typography";
 import useSnackbar from "../../../../src/hooks/useSnackbar";
 import LoadingSpinnerSmall from "../../../../src/components/CircularProgress/CircularProgress";
 import { useRouter } from "next/router";
@@ -44,10 +42,11 @@ import useSubscriptionUsers from "src/hooks/query/useSubscriptionUsers";
 import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
 import SubscriptionNotFoundUI from "src/components/Access/SubscriptionNotFoundUI";
 import ServiceOfferingUnavailableUI from "src/components/ServiceOfferingUnavailableUI/ServiceOfferingUnavailableUI";
-import SearchInput from "src/components/DataGrid/SearchInput";
 import LogoHeader from "src/components/Headers/LogoHeader";
 import AccessControlIcon from "src/components/Icons/AccessControlIcon/AccessControlIcon";
-import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import { Text } from "src/components/Typography/Typography";
+import DataGrid from "src/components/DataGrid/DataGrid";
+import AccessControlHeader from "src/components/Access/AccessControl/AccessControlHeader";
 
 export const getServerSideProps = async () => {
   return {
@@ -214,14 +213,22 @@ function AccessControl() {
       field: "name",
       headerName: "Name",
       flex: 1,
-      headerClassName: "pl-4",
-      cellClassName: "pl-4",
+      headerAlign: "center",
+      align: "center",
     },
-    { field: "emailAddress", headerName: "Email Address", flex: 1 },
+    {
+      field: "emailAddress",
+      headerName: "Email Address",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "role",
       headerName: "Role",
       flex: 1,
+      headerAlign: "center",
+      align: "center",
       valueGetter: (params) => {
         const role = params.row.role;
         if (role === "editor") {
@@ -235,15 +242,25 @@ function AccessControl() {
         }
       },
     },
-    { field: "resource", headerName: "Resource", flex: 1 },
+    {
+      field: "resource",
+      headerName: "Resource",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "resourceInstance",
       headerName: "Resource Instance",
       flex: 1,
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "action",
       headerName: "Action",
+      headerAlign: "center",
+      align: "center",
       renderCell: (params) => {
         const role = params.row.role;
         if (role !== "root") {
@@ -467,10 +484,8 @@ function AccessControl() {
           <Box
             display="flex"
             //@ts-ignore
-            flexDirection="colunm"
-            marginLeft="10px"
             justifyContent="flex-start"
-            padding={"22px 0px"}
+            paddingBottom={"32px"}
           >
             <Box paddingTop={"5px"}>
               <AccessControlIcon />
@@ -483,7 +498,6 @@ function AccessControl() {
           </Box>
 
           <Box
-            mt="20px"
             mb="32px"
             boxShadow="0 1px 2px 0 #1018280F"
             borderRadius="12px 12px 12px 12px"
@@ -503,20 +517,11 @@ function AccessControl() {
                 }}
               >
                 <Box>
-                  <P
-                    size="large"
-                    sx={{
-                      color: "#101828",
-                      fontWeight: 600,
-                      marginBottom: "4px",
-                    }}
-                  >
-                    Invite Users
-                  </P>
-                  <P size="small" weight="regular" sx={{ color: "#475467" }}>
+                  <Text size="large">Invite Users</Text>
+                  <Text size="small" weight="regular" color="#475467" mt="4px">
                     Get your projects up and running faster by inviting your
                     users to collaborate
-                  </P>
+                  </Text>
                 </Box>
 
                 <Button
@@ -541,12 +546,12 @@ function AccessControl() {
               <Box
                 sx={{
                   width: "100%",
-                  maxWidth: "900px",
-                  margin: "auto",
-                  marginTop: "40px",
+                  marginTop: "30px",
+                  display: "flex",
+                  justifyContent: "center",
                 }}
               >
-                <Box>
+                <Box sx={{ maxWidth: "1100px" }}>
                   <FormikProvider value={formik}>
                     <FieldArray
                       name="userInvite"
@@ -696,78 +701,42 @@ function AccessControl() {
             </Form>
           </Box>
 
-          <Box>
-            <Stack
-              direction="row"
-              sx={{
-                p: 2.5,
-                border: "1px solid #EAECF0",
-                borderBottom: 0,
-                borderRadius: 2,
-                borderBottomLeftRadius: 0,
-                borderBottomRightRadius: 0,
-                justifyContent: "space-between",
+          <Box mt="20px">
+            <DataGrid
+              rows={filteredUsers}
+              columns={inputColumns}
+              components={{
+                Header: AccessControlHeader,
               }}
-            >
-              <DataGridHeaderTitle
-                title={`Manage Access`}
-                desc="Manage your Users and their account permissions here."
-                count={filteredUsers.length}
-                units={{
-                  singular: "User",
-                  plural: "Users",
-                }}
-              />
-              <Stack direction="row" alignItems="center" gap="12px">
-                <SearchInput
-                  placeholder="Search by Name/Email"
-                  searchText={searchText}
-                  setSearchText={setSearchText}
-                  width="250px"
-                />
-              </Stack>
-            </Stack>
-            <div style={{ height: 400, width: "100%" }}>
-              <DataGrid
-                rows={filteredUsers}
-                columns={inputColumns}
-                pageSize={10}
-                rowsPerPageOptions={[10]}
-                selectionModel={selectionModel}
-                hideFooterSelectedRowCount
-                onSelectionModelChange={(selection) => {
-                  if (selection.length >= 1) {
-                    const selectionSet = new Set(selectionModel);
+              componentsProps={{
+                header: {
+                  count: filteredUsers.length,
+                  searchText: searchText,
+                  setSearchText: setSearchText,
+                },
+              }}
+              selectionModel={selectionModel}
+              onSelectionModelChange={(selection) => {
+                if (selection.length >= 1) {
+                  const selectionSet = new Set(selectionModel);
 
-                    const result = selection.filter(
-                      (s) => !selectionSet.has(s)
-                    );
-                    setSelectionModel(result);
-                    const index = selection.length == 1 ? 0 : 1;
+                  const result = selection.filter((s) => !selectionSet.has(s));
+                  setSelectionModel(result);
+                  const index = selection.length == 1 ? 0 : 1;
 
-                    filteredUsers?.map((rowObj) => {
-                      if (rowObj) {
-                        if (rowObj["id"] == selection[index]) {
-                          setModifyFormikValue(rowObj);
-                        }
+                  filteredUsers?.map((rowObj) => {
+                    if (rowObj) {
+                      if (rowObj["id"] == selection[index]) {
+                        setModifyFormikValue(rowObj);
                       }
-                    });
-                  } else {
-                    setSelectionModel(selection);
-                  }
-                }}
-                getRowId={(row) => row.id}
-                sx={{
-                  borderRadius: 2,
-                  borderTopLeftRadius: 0,
-                  borderTopRightRadius: 0,
-                  "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer":
-                    {
-                      display: "none",
-                    },
-                }}
-              />
-            </div>
+                    }
+                  });
+                } else {
+                  setSelectionModel(selection);
+                }
+              }}
+              getRowId={(row) => row.id}
+            />
           </Box>
         </>
       )}

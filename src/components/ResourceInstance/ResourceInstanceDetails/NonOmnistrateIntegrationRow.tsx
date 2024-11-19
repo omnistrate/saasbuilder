@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Stack } from "@mui/material";
 
 import CopyButton from "src/components/Button/CopyButton";
-import { PROVIDER_LOGO_ICON_MAP } from "src/constants/productTierFeatures";
+// import { PROVIDER_LOGO_ICON_MAP } from "src/constants/productTierFeatures";
 
 type NonOmnistrateIntegrationRowProps = {
   integration?: {
@@ -19,7 +19,7 @@ type NonOmnistrateIntegrationRowProps = {
 function NonOmnistrateIntegrationRow({
   integration,
 }: NonOmnistrateIntegrationRowProps) {
-  const { Url, provider } = integration;
+  const { Url } = integration;
   return (
     <Stack
       width="100%"
@@ -28,13 +28,15 @@ function NonOmnistrateIntegrationRow({
       justifyContent="flex-end"
       gap="6px"
     >
-      {PROVIDER_LOGO_ICON_MAP[provider]}
+      {/* {PROVIDER_LOGO_ICON_MAP[provider]} */}
       <Link
         style={{
           fontSize: "18px",
           lineHeight: "28px",
           fontWeight: 600,
           color: "#7F56D9",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
         }}
         href={Url}
         target="_blank"

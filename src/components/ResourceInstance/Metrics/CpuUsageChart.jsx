@@ -1,8 +1,8 @@
 import { Text } from "../../Typography/Typography";
 import {
   CartesianGrid,
-  Line,
-  LineChart,
+  Area,
+  AreaChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -24,7 +24,7 @@ function CpuUsageChart(props) {
 
       <ReChartContainer mt={3} debounce={100}>
         <ResponsiveContainer height={300} width="100%">
-          <LineChart
+          <AreaChart
             height={300}
             data={data}
             margin={{
@@ -44,18 +44,19 @@ function CpuUsageChart(props) {
               isAnimationActive={false}
             />
 
-            <Line
+            <Area
               name="CPU Usage"
               type="monotone"
               dataKey="y"
               stroke="#82ca9d"
+              fill="#82ca9d"
               dot={false}
               isAnimationActive={false}
               label="CPU Usage"
               strokeWidth={2}
               connectNulls
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </ReChartContainer>
     </Box>
