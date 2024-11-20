@@ -47,7 +47,14 @@ const Backup: FC<{
   environmentId: string;
   accessQueryParams?: accessQueryParams;
   resourceName?: string;
-}> = ({ instanceId, backupStatus, accessQueryParams, resourceName }) => {
+  networkType: "PUBLIC";
+}> = ({
+  instanceId,
+  backupStatus,
+  accessQueryParams,
+  resourceName,
+  networkType,
+}) => {
   const snackbar = useSnackbar();
 
   const [selectionModel, setSelectionModel] = useState([]);
@@ -117,7 +124,10 @@ const Backup: FC<{
           productTierKey,
           resourceKey,
           snapshotId,
-          subscriptionId
+          subscriptionId,
+          {
+            network_type: networkType,
+          }
         );
       }
     },

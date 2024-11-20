@@ -497,6 +497,11 @@ function ResourceInstance() {
           instanceId={resourceInstanceId}
           accessQueryParams={queryData}
           resourceName={resourceName}
+          networkType={
+            resourceInstanceData?.connectivity?.networkType
+              ? resourceInstanceData?.connectivity?.networkType.toUpperCase()
+              : "PUBLIC"
+          }
         />
       )}
       <SideDrawerRight
