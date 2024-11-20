@@ -8,6 +8,7 @@ type QueryParams = {
   environmentId?: string;
   instanceId?: string;
   accessQueryParams?: accessQueryParams;
+  isEnable?: boolean;
 };
 
 // Shared properties between fleet and access responses
@@ -39,9 +40,9 @@ function useBackup(
   queryParams: QueryParams = {},
   queryOptions: QueryOptions = {}
 ) {
-  const { instanceId, accessQueryParams } = queryParams;
+  const { instanceId, accessQueryParams, isEnable } = queryParams;
 
-  const enabled = Boolean(instanceId);
+  const enabled = Boolean(instanceId && isEnable);
 
   const query: UseQueryResult<RestoreResponse[]> = useQuery(
     ["instanceRestore", instanceId],

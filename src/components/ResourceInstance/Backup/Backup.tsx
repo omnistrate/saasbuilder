@@ -19,6 +19,7 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import RestoreInstanceSuccessStep from "src/components/RestoreInstance/RestoreInstanceSuccessStep";
 import { getResourceInstanceBackupStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceBackupStatus";
 import LinearProgress from "src/components/LinearProgress/LinearProgress";
+import InformationDialogTopCenter from "src/components/Dialog/InformationDialogTopCenter";
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 
@@ -61,9 +62,17 @@ const Backup: FC<{
   const [searchText, setSearchText] = useState("");
   const [isRestoreInstanceSuccess, setRestoreInstanceSuccess] = useState(false);
   const [restoredInstanceID, setRestoredInstanceID] = useState("");
+  const isEnable = useMemo(() => {
+    if (backupStatus?.earliestRestoreTime) {
+      return true;
+    }
+    return false;
+  }, [backupStatus?.earliestRestoreTime]);
+
   const restoreQuery = useBackup({
     accessQueryParams,
     instanceId,
+    isEnable,
   });
   const { data: restoreData = [], isRefetching, refetch } = restoreQuery;
   const [selectedDateRange, setSelectedDateRange] =
@@ -258,12 +267,16 @@ const Backup: FC<{
           noRowsText="No Backups"
         />
       </Box>
-      {isRestoreInstanceSuccess && (
+      <InformationDialogTopCenter
+        open={isRestoreInstanceSuccess}
+        handleClose={handleClose}
+        maxWidth={"550px"}
+      >
         <RestoreInstanceSuccessStep
           handleClose={handleClose}
           restoredInstanceID={restoredInstanceID}
         />
-      )}
+      </InformationDialogTopCenter>
     </>
   );
 };
