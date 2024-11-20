@@ -278,6 +278,38 @@ export const removeCustomDNSFromResourceInstance = (
   );
 };
 
+export const postInstanceRestoreAccess = (
+  serviceProviderId,
+  serviceKey,
+  serviceAPIVersion,
+  serviceEnvironmentKey,
+  serviceModelKey,
+  productTierKey,
+  resourceKey,
+  snapshotId,
+  subscriptionId
+) => {
+  return axios.post(
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/snapshot/${snapshotId}/restore?subscriptionId=${subscriptionId}`
+  );
+};
+
+export const getInstanceRestoreAccess = (
+  serviceProviderId,
+  serviceKey,
+  serviceAPIVersion,
+  serviceEnvironmentKey,
+  serviceModelKey,
+  productTierKey,
+  resourceKey,
+  instanceId,
+  subscriptionId
+) => {
+  return axios.get(
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/snapshot?subscriptionId${subscriptionId}`
+  );
+};
+
 //Add Capacity to resource instance
 export const addCapacityResourceInstanceAccess = ({ data, count }) => {
   const {

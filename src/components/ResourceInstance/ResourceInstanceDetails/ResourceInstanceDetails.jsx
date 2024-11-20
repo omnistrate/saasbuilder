@@ -131,14 +131,14 @@ function ResourceInstanceDetails(props) {
       {
         label: "Earliest Restore Time",
         value: backupStatus?.earliestRestoreTime
-          ? backupStatus?.earliestRestoreTime
+          ? formatDateUTC(backupStatus?.earliestRestoreTime)
           : "-",
         valueType: backupStatus?.earliestRestoreTime ? "text" : "custom",
       },
       {
         label: "Last Backup Time",
         value: backupStatus?.lastBackupTime
-          ? backupStatus?.lastBackupTime
+          ? formatDateUTC(backupStatus?.lastBackupTime)
           : "-",
         valueType: backupStatus?.lastBackupTime ? "text" : "custom",
       },
