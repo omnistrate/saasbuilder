@@ -83,9 +83,9 @@ import CapacityDialog from "src/components/CapacityDialog/CapacityDialog";
 import InstancesTableHeader from "src/features/ResourceInstance/components/InstancesTableHeader";
 import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
-import SpeedoMeterLow from "src/components/Icons/RestoreInstance/SpeedoMeter/SpeedoMeterLow";
-import SpeedoMeterMedium from "src/components/Icons/RestoreInstance/SpeedoMeter/SpeedoMeterMedium";
-import SpeedoMeterHigh from "src/components/Icons/RestoreInstance/SpeedoMeter/SpeedoMeterHigh";
+import SpeedoMeterLow from "../../../public/assets/images/dashboard/resource-instance-speedo-meter/idle.png";
+import SpeedoMeterMedium from "../../../public/assets/images/dashboard/resource-instance-speedo-meter/normal.png";
+import SpeedoMeterHigh from "../../../public/assets/images/dashboard/resource-instance-speedo-meter/high.png";
 import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
 import { productTierTypes } from "src/constants/servicePlan";
 
@@ -397,9 +397,30 @@ function MarketplaceService() {
               gap="4px"
             >
               {instanceLoadStatus === "UNKNOWN" && "-"}
-              {instanceLoadStatus === "POD_IDLE" && <SpeedoMeterLow />}
-              {instanceLoadStatus === "POD_NORMAL" && <SpeedoMeterMedium />}
-              {instanceLoadStatus === "POD_OVERLOAD" && <SpeedoMeterHigh />}
+              {instanceLoadStatus === "POD_IDLE" && (
+                <Image
+                  src={SpeedoMeterLow}
+                  width={54}
+                  height={54}
+                  style={{ marginBottom: "-25px" }}
+                />
+              )}
+              {instanceLoadStatus === "POD_NORMAL" && (
+                <Image
+                  src={SpeedoMeterMedium}
+                  width={54}
+                  height={54}
+                  style={{ marginBottom: "-25px" }}
+                />
+              )}
+              {instanceLoadStatus === "POD_OVERLOAD" && (
+                <Image
+                  src={SpeedoMeterHigh}
+                  width={54}
+                  height={54}
+                  style={{ marginBottom: "-25px" }}
+                />
+              )}
             </Stack>
           );
         },
