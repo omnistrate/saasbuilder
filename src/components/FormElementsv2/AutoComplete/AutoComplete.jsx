@@ -77,7 +77,7 @@ const StyledTag = styled(Chip)(({ theme }) => ({
   height: "24px",
   borderRadius: "6px",
   border: `1px solid ${theme.palette.gray["300"]}`,
-  padding: "0px !importan",
+  padding: "0px !important",
   margin: "0px !important",
   gap: "3px",
   ".MuiChip-label": {
