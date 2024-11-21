@@ -23,7 +23,7 @@ const BackupSummary: FC<BackupStatus> = (props) => {
     const res: Row[] = [
       {
         label: "Recovery Point Objective",
-        value: `${backupPeriodInHours} ${Number(backupRetentionInDays) > 1 ? " hrs" : " hr"}`,
+        value: `${backupPeriodInHours} ${Number(backupPeriodInHours) > 1 ? " hrs" : " hr"}`,
         valueType: "text",
       },
       {
