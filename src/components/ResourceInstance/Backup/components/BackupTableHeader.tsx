@@ -47,7 +47,7 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
         borderBottom="1px solid #EAECF0"
       >
         <DataGridHeaderTitle
-          title={`List of Completed backups ${resourceName ? `for ${resourceName}` : ""}`}
+          title={`List of completed backups ${resourceName ? `for ${resourceName}` : ""}`}
           desc="View and manage your backups"
           count={count}
           units={{
