@@ -3,7 +3,7 @@ import Slider, { SliderThumb, sliderClasses } from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import { IconButton, Stack } from "@mui/material";
-import ArrowLeftCircleBrokenIcon from "../Icons/ArrowLeftClrcleBroken/ArrowLeftCircleBroken";
+import ArrowLeftCircleBrokenIcon from "../Icons/ArrowLeftCircleBroken/ArrowLeftCircleBroken";
 import ArrowRightCircleBrokenIcon from "../Icons/ArrowRightCircleBroken/ArrowRightCircleBrokenIcon";
 import {
   checkHHMMFormatting,
