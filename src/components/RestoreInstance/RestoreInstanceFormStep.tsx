@@ -1,4 +1,3 @@
-import React from "react";
 import {
   DialogContent,
   DialogFooter,
@@ -10,11 +9,19 @@ import { Text } from "../Typography/Typography";
 import Button from "../Button/Button";
 import RestoreInstanceDateTime from "./RestoreInstanceDateTime";
 
+type RestoreInstanceFormStepProps = {
+  restoreMutation: any;
+  restoreFormik: any;
+  handleClose: () => void;
+  earliestRestoreTime: string;
+};
+
 function RestoreInstanceFormStep({
   restoreMutation,
   restoreFormik,
   handleClose,
-}) {
+  earliestRestoreTime,
+}: RestoreInstanceFormStepProps) {
   return (
     <>
       <DialogHeader>
@@ -37,7 +44,10 @@ function RestoreInstanceFormStep({
         </Stack>
       </DialogHeader>
       <DialogContent>
-        <RestoreInstanceDateTime formData={restoreFormik} />
+        <RestoreInstanceDateTime
+          formData={restoreFormik}
+          earliestRestoreTime={earliestRestoreTime}
+        />
       </DialogContent>
       <DialogFooter>
         <Button

@@ -1,17 +1,26 @@
 import FieldContainer from "../FormElementsv2/FieldContainer/FieldContainer";
 import FieldTitle from "../FormElementsv2/FieldTitle/FieldTitle";
 import DateSelectComponent from "./DateSelectComponent";
-import { Text } from "../Typography/Typography";
 import FieldError from "../FormElementsv2/FieldError/FieldError";
 import { Box } from "@mui/material";
 import TimeSelectComponent from "./TimeSelectComponent";
 import FieldDescription from "../FormElementsv2/FieldDescription/FieldDescription";
+import { FC } from "react";
+import AlertText from "../AlertText/AlertText";
 
-function RestoreInstanceDateTime({ formData }) {
+type ResourceInstanceDateTimeProps = {
+  formData: any;
+  earliestRestoreTime: string;
+};
+
+const RestoreInstanceDateTime: FC<ResourceInstanceDateTimeProps> = ({
+  formData,
+  earliestRestoreTime,
+}) => {
   const { errors, touched } = formData;
 
   return (
-    <Box>
+    <Box position="relative">
       <FieldContainer>
         <FieldTitle>Select Date</FieldTitle>
         <FieldDescription sx={{ marginBottom: "6px" }}>
@@ -26,20 +35,21 @@ function RestoreInstanceDateTime({ formData }) {
         <FieldDescription sx={{ marginBottom: "6px" }}>
           Specify the exact time to restore your instance
         </FieldDescription>
-        <TimeSelectComponent formData={formData} />
-
-        <FieldError>{touched.time && errors.time}</FieldError>
+        <TimeSelectComponent
+          formData={formData}
+          earliestRestoreTime={earliestRestoreTime}
+        />
       </FieldContainer>
 
-      <Box sx={{ marginTop: "24px" }}>
-        <Text size="small" weight="medium" color="#344054">
-          <strong>Note :- </strong> Creating a new instance from a backup may
+      <Box sx={{ marginTop: "48px" }}>
+        <AlertText>
+          <strong>Note : </strong> Creating a new instance from a backup may
           take a few minutes. However this process will not affect your current
           instance.
-        </Text>
+        </AlertText>
       </Box>
     </Box>
   );
-}
+};
 
 export default RestoreInstanceDateTime;
