@@ -6,7 +6,7 @@ const nextConfig = {
     return [
       {
         source: "/",
-        destination: "/service-plans",
+        destination: "/redirect",
         permanent: true,
       },
     ];

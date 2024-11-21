@@ -12,8 +12,11 @@ const useProductTierRedirect = () => {
   const [isClientRendered, setIsClientRendered] = useState(false);
   const [serviceNotFound, setServiceNotFound] = useState(false);
 
-  const { data: serviceOfferingsData, isFetched: areServiceOfferingsFetched } =
-    useOrgServiceOfferings({ refetchOnMount: false });
+  const {
+    data: serviceOfferingsData,
+    isFetching: isFetchingServiceOfferings,
+    isFetched: areServiceOfferingsFetched,
+  } = useOrgServiceOfferings({ refetchOnMount: false });
 
   useEffect(() => {
     setIsClientRendered(true);
@@ -70,10 +73,12 @@ const useProductTierRedirect = () => {
     areServiceOfferingsFetched,
     isClientRendered,
     router,
-    serviceOfferingsData
+    serviceOfferingsData,
   ]);
 
   return {
+    serviceOfferingsData,
+    isFetchingServiceOfferings,
     shouldDisplayNoServicesUI: noServicesPresent,
     shouldDisplayServiceNotFoundUI: serviceNotFound,
     isClientRendered: isClientRendered,
