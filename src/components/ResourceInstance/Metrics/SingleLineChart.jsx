@@ -1,8 +1,8 @@
 import { Text } from "src/components/Typography/Typography";
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -22,7 +22,7 @@ function SingleLineChart(props) {
       </Box>
       <ReChartContainer mt={3} debounce={100}>
         <ResponsiveContainer height={300} width="100%">
-          <LineChart
+          <AreaChart
             height={300}
             data={data}
             margin={{
@@ -47,18 +47,19 @@ function SingleLineChart(props) {
               isAnimationActive={false}
             />
 
-            <Line
+            <Area
               name={chartName}
               type="monotone"
               dataKey="y"
               stroke="#82ca9d"
+              fill="#82ca9d"
               dot={false}
               isAnimationActive={false}
               label={chartName}
               strokeWidth={2}
               connectNulls
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </ReChartContainer>
     </Box>

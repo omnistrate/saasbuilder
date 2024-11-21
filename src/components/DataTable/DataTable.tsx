@@ -211,13 +211,19 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                           onClick={header.column.getToggleSortingHandler()}
                           sx={{
                             cursor: "pointer",
-                            "& svg": {
-                              display: sortDirection ? "inline-block" : "none",
+                            "& .MuiIconButton-root": {
+                              display: sortDirection ? "inline-flex" : "none",
                             },
+                            // "& svg": {
+                            //   display: sortDirection ? "inline-block" : "none",
+                            // },
                             "&:hover": {
-                              "& svg": {
-                                display: "inline-block",
+                              "& .MuiIconButton-root": {
+                                display: "inline-flex",
                               },
+                              // "& svg": {
+                              //   display: "inline-block",
+                              // },
                             },
                           }}
                         >

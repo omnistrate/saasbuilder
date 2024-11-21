@@ -1,6 +1,7 @@
 import {
   Box,
   CircularProgress,
+  Divider,
   Table,
   TableBody,
   TableCell,
@@ -103,6 +104,8 @@ function ProfileForm(props) {
         <Text size="small" weight="regular">
           Update your billing address
         </Text>
+        <Divider sx={{ mt: 2.5 }} />
+
         <Table>
           <TableBody>
             <TableRow>
@@ -201,15 +204,13 @@ function ProfileForm(props) {
                   onChange={(e, newValue) => {
                     formik.setFieldValue(
                       "address.country",
-                      newValue["alpha-3"].toLowerCase()
+                      newValue?.["alpha-3"]?.toLowerCase()
                     );
                   }}
                   // onBlur={(e) => {
                   //   formik.setFieldTouched("address.country", true);
                   // }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Select a country" />
-                  )}
+                  placeholder="Select a country"
                   sx={{ maxWidth: "600px !important" }}
                 />
                 <ErrorLabel>

@@ -59,14 +59,14 @@ function UserInfoBanner(props) {
         //@ts-ignore
         flexDirection="colunm"
         justifyContent="flex-start"
-        paddingBottom={"24px"}
+        paddingBottom={"16px"}
         marginLeft="22px"
-        marginTop="48px"
+        marginTop="36px"
       >
         <LogoHeader margin={0} title={"Settings"} desc="" />
       </Box>
 
-      <Box sx={{ marginBottom: "24px", padding: "0px 32px" }}>
+      <Box sx={{ marginBottom: "48px", padding: "0px 32px" }}>
         <SettingsTab currentTab={currentTab} router={router} />
       </Box>
     </>

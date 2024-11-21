@@ -142,7 +142,9 @@ function CreateResourceInstanceForm(props) {
               )
             );
 
-            setCreateSchema(sortedInputParams);
+            setCreateSchema(
+              sortedInputParams?.sort((a, b) => a?.key.localeCompare(b?.key))
+            );
             const createSchemaForDefValue = {};
             api.inputParameters.forEach((kv) => {
               if (kv.defaultValue)
