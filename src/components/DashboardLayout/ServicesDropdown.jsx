@@ -14,7 +14,9 @@ import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 const ServicesDropdown = () => {
   const router = useRouter();
   const { serviceId } = router.query;
-  const { data: serviceOfferingsData, isFetching } = useOrgServiceOfferings();
+  const { data: serviceOfferingsData, isFetching } = useOrgServiceOfferings({
+    refetchOnMount: false,
+  });
   const [anchorEl, setAnchorEl] = useState(null);
 
   // Filter Service Offerings to Remove Duplicates - Case when Same Service Has Multiple Plans

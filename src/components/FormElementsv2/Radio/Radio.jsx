@@ -7,7 +7,7 @@ const RadioUncheckedIcon = styled("span")(() => ({
   border: "1px solid #D0D5DD",
   height: 16,
   width: 16,
-  background : "#FFF"
+  background: "#FFF",
 }));
 
 const RadioCheckedIcon = (props) => (

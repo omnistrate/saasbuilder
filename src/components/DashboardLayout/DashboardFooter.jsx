@@ -1,9 +1,5 @@
 import { styled } from "@mui/material";
-// import Link from "next/link";
-import React from "react";
-// import { websiteRoot } from "../../utils/constants";
 import { closedWidth, drawerWidth } from "./SideDrawer";
-// import providerConfig from "src/providerConfig";
 
 const Footer = styled("footer", {
   shouldForwardProp: (prop) => prop !== "open" && prop !== "noSidebar",
@@ -38,6 +34,11 @@ const Footer = styled("footer", {
     }),
   }),
 }));
+
+// const Copyright = styled("span")(({ theme }) => ({
+//   fontWeight: 400,
+//   color: "#9CA3AF",
+// }));
 
 function DashboardFooter(props) {
   const { noSidebar, isNotShow } = props;

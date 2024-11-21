@@ -32,7 +32,7 @@ function IDPAuth() {
           ) {
             router.replace(decodeURIComponent(destination));
           } else {
-            router.replace("/service-plans");
+            router.replace("/redirect");
           }
         }
       } catch (error) {
