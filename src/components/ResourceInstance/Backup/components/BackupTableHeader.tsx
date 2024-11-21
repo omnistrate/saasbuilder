@@ -10,6 +10,7 @@ import DateRangePicker from "src/components/DateRangePicker/DateRangePicker";
 import { FC } from "react";
 import { SetState } from "src/types/common/reactGenerics";
 import { Range } from "react-date-range";
+import { UseMutationResult } from "@tanstack/react-query";
 
 type BackupsTableHeaderProps = {
   resourceName: string;
@@ -17,7 +18,7 @@ type BackupsTableHeaderProps = {
   searchText: string;
   setSearchText: SetState<string>;
   refetch: () => void;
-  restoreMutation: any;
+  restoreMutation: UseMutationResult<void, Error, void, unknown>;
   isRefetching: boolean;
   selectedDateRange: Range;
   setSelectedDateRange: SetState<Range>;
