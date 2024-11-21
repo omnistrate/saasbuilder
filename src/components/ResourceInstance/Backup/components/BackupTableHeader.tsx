@@ -82,7 +82,7 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
             }}
           >
             Restore
-            {(isRefetching || restoreMutation.isLoading) && (
+            {restoreMutation.isLoading && (
               <LoadingSpinnerSmall
                 sx={{ color: "#7F56D9", marginLeft: "12px" }}
               />
