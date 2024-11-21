@@ -1,7 +1,7 @@
+import Link from "next/link";
 import { Box, Tooltip } from "@mui/material";
 import { FC, Fragment } from "react";
 import { Text } from "../Typography/Typography";
-import Link from "next/link";
 import CopyButton from "../Button/CopyButton";
 
 export type Row = {

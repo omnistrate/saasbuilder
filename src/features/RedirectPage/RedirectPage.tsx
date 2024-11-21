@@ -89,6 +89,7 @@ const RedirectPage = () => {
                 )
               );
             }
+            return;
           },
         }
       );
@@ -119,6 +120,9 @@ const RedirectPage = () => {
       );
       setIsRedirecting(true);
       router.push(route);
+    } else {
+      setIsRedirecting(true);
+      router.push("/service-plans");
     }
   }, [
     isFetchingSubscriptions,
