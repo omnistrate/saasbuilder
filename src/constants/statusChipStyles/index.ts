@@ -3,46 +3,49 @@ export type Category =
   | "inProgress"
   | "pending"
   | "info"
-  | "terminated"
   | "failed"
   | "unknown";
 export type ColorObject = {
   bgColor: string;
   color: string;
+  borderColor: string;
 };
 
 export const defaultChipStyles: ColorObject = {
-  bgColor: "#f2f4f7",
-  color: "#667085",
+  bgColor: "#F8F9FC",
+  color: "#363F72",
+  borderColor: "#D5D9EB",
 };
 
 export const chipCategoryColors: Record<Category, ColorObject> = {
   success: {
-    bgColor: "#ecfdf3",
-    color: "#039855",
+    bgColor: "#ECFDF3",
+    color: "#067647",
+    borderColor: "#ABEFC6",
   },
   inProgress: {
-    bgColor: "#e0f2fe",
-    color: "#1570ef",
+    bgColor: "#F0F9FF",
+    color: "#026AA2",
+    borderColor: "#B9E6FE",
   },
   pending: {
-    bgColor: "#faf5e7",
-    color: "#f79009",
+    bgColor: "#FFFAEB",
+    color: "#B54708",
+    borderColor: "#FEDF89",
   },
   info: {
-    bgColor: "#e0eaff",
-    color: "#444ce7",
-  },
-  terminated: {
-    bgColor: "#fef3f2",
-    color: "#b42318",
+    bgColor: "#EEF4FF",
+    color: "#3538CD",
+    borderColor: "#C7D7FE",
   },
   failed: {
-    bgColor: "#fee4e2",
-    color: "#f04438",
+    bgColor: "#FEF3F2",
+    color: "#B42318",
+    borderColor: "#FECDCA",
   },
   unknown: {
-    bgColor: "#f2f4f7",
-    color: "#667085",
+    bgColor: "#F8F9FC",
+    color: "#363F72",
+    borderColor: "#D5D9EB",
   },
 };

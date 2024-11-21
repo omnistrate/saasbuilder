@@ -3,18 +3,21 @@ import { ColorObject } from "./index";
 
 const stylesMap: Record<EventType, ColorObject & { label: string }> = {
   Customer: {
-    color: "#6941C6",
-    bgColor: "#F9F5FF",
+    color: "#5925DC",
+    bgColor: "#F4F3FF",
+    borderColor: "#D9D6FE",
     label: "Customer",
   },
   Infra: {
     color: "#C11574",
-    bgColor: "#F9F5FF",
+    bgColor: "#FDF2FA",
+    borderColor: "#FCCEEE",
     label: "Infra",
   },
   Maintenance: {
     color: "#026AA2",
     bgColor: "#F0F9FF",
+    borderColor: "#B9E6FE",
     label: "Maintenance",
   },
 };
