@@ -57,7 +57,7 @@ function useBackup(
         productTierKey,
         resourceKey,
         subscriptionId,
-      } = accessQueryParams;
+      } = accessQueryParams ?? {};
       return getInstanceRestoreAccess(
         serviceProviderId,
         serviceKey,

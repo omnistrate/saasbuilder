@@ -123,7 +123,7 @@ const Backup: FC<{
           productTierKey,
           resourceKey,
           subscriptionId,
-        } = accessQueryParams;
+        } = accessQueryParams ?? {};
 
         return await postInstanceRestoreAccess(
           serviceProviderId,
