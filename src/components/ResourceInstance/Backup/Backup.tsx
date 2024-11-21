@@ -7,9 +7,11 @@ import DataGrid, { selectSingleItem } from "src/components/DataGrid/DataGrid";
 import StatusChip from "src/components/StatusChip/StatusChip";
 import { postInstanceRestoreAccess } from "src/api/resourceInstance";
 import formatDateUTC from "src/utils/formatDateUTC";
-import useBackup from "./hooks/useBackup";
+import useBackup, { SnapshotBase } from "./hooks/useBackup";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import { getResourceInstanceBackupStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceBackupStatus";
 import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
+import LinearProgress from "src/components/LinearProgress/LinearProgress";
 import { initialRangeState } from "src/components/DateRangePicker/DateRangePicker";
 import BackupsTableHeader from "./components/BackupTableHeader";
 import { Range } from "react-date-range";
@@ -17,9 +19,8 @@ import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import RestoreInstanceSuccessStep from "src/components/RestoreInstance/RestoreInstanceSuccessStep";
-import { getResourceInstanceBackupStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceBackupStatus";
-import LinearProgress from "src/components/LinearProgress/LinearProgress";
 import InformationDialogTopCenter from "src/components/Dialog/InformationDialogTopCenter";
+import { GridSelectionModel } from "@mui/x-data-grid";
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 
@@ -143,7 +144,7 @@ const Backup: FC<{
     {
       onSuccess: (response) => {
         setRestoreInstanceSuccess(true);
-        setRestoredInstanceID(response?.data);
+        setRestoredInstanceID(response?.data?.id);
         snackbar.showSuccess(`Restore successfully`);
       },
     }
@@ -161,7 +162,7 @@ const Backup: FC<{
         field: "status",
         headerName: "Status",
         flex: 0.5,
-        renderCell: (params) => {
+        renderCell: (params: { row: SnapshotBase }) => {
           const status = params.row.status;
           const statusStylesAndMap =
             getResourceInstanceStatusStylesAndLabel(status);
@@ -174,14 +175,16 @@ const Backup: FC<{
         headerName: "Created On",
         flex: 1,
         minWidth: 170,
-        valueGetter: (params) => formatDateUTC(params.row.createdTime),
+        valueGetter: (params: { row: SnapshotBase }) =>
+          formatDateUTC(params.row.createdTime),
       },
       {
         field: "completeTime",
         headerName: "Completion Time",
         flex: 1,
         minWidth: 170,
-        valueGetter: (params) => formatDateUTC(params.row.completeTime),
+        valueGetter: (params: { row: SnapshotBase }) =>
+          formatDateUTC(params.row.completeTime),
       },
       {
         field: "progress",
@@ -206,11 +209,14 @@ const Backup: FC<{
         field: "encrypted",
         headerName: "Encryption Status",
         flex: 0.7,
-        renderCell: (params) => {
+        renderCell: (params: { row: SnapshotBase }) => {
           const encrypted = params.row.encrypted;
+          const encryptionStatus = encrypted ? "Encrypted" : "Not Encrypted";
           const statusStylesAndMap =
-            getResourceInstanceBackupStatusStylesAndLabel(encrypted);
-          return <StatusChip status={encrypted} {...statusStylesAndMap} />;
+            getResourceInstanceBackupStatusStylesAndLabel(encryptionStatus);
+          return (
+            <StatusChip status={encryptionStatus} {...statusStylesAndMap} />
+          );
         },
         minWidth: 150,
       },
@@ -229,7 +235,7 @@ const Backup: FC<{
         />
         <DataGrid
           checkboxSelection
-          getRowId={(row) => row.snapshotId}
+          getRowId={(row: SnapshotBase) => row.snapshotId}
           disableColumnMenu
           disableSelectionOnClick
           hideFooterSelectedRowCount
@@ -251,7 +257,9 @@ const Backup: FC<{
               setSelectedDateRange,
             },
           }}
-          getRowClassName={(params) => `${params.row.status}`}
+          getRowClassName={(params: { row: SnapshotBase }) =>
+            `${params.row.status}`
+          }
           sx={{
             "& .node-ports": {
               color: "#101828",
@@ -260,7 +268,7 @@ const Backup: FC<{
             borderRadius: "8px",
           }}
           selectionModel={selectionModel}
-          onSelectionModelChange={(newSelection) => {
+          onSelectionModelChange={(newSelection: GridSelectionModel) => {
             selectSingleItem(newSelection, selectionModel, setSelectionModel);
           }}
           loading={isRefetching}

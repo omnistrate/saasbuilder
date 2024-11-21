@@ -9,8 +9,8 @@ export const resourceInstanceStatusMap: Record<
   string,
   { category: Category; label: string }
 > = {
-  true: { category: "unknown", label: "Encrypted" },
-  false: { category: "terminated", label: "Not Encrypted" },
+  Encrypted: { category: "unknown", label: "Encrypted" },
+  "Not Encrypted": { category: "terminated", label: "Not Encrypted" },
 };
 
 export const getResourceInstanceBackupStatusStylesAndLabel = (
