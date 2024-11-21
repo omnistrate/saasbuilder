@@ -2,10 +2,18 @@ export type CloudProvider = "aws" | "gcp" | "azure";
 
 export type FormMode = "view" | "edit" | "create" | "delete";
 
-export type ResourceType = "OperatorCRD" | "Kustomize" | "HelmChart" | "Terraform";
+export type ResourceType =
+  | "OperatorCRD"
+  | "Kustomize"
+  | "HelmChart"
+  | "Terraform";
 
 // Network Types
-export type NetworkType = "PUBLIC" | "PRIVATE_VPC_PEERING" | "PRIVATE_LINK";
+export type NetworkType =
+  | "PUBLIC"
+  | "PRIVATE_VPC_PEERING"
+  | "PRIVATE_LINK"
+  | "INTERNAL";
 
 export type InstanceStatus =
   | "FAILED"
