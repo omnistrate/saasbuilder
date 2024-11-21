@@ -34,7 +34,7 @@ function RestoreInstanceModal({
   const initialDateValue = useMemo(() => {
     if (earliestRestoreTime) {
       const date = dayjs
-        .utc(new Date("2024-11-16T10:43:19Z"))
+        .utc(new Date(earliestRestoreTime))
         .add(1, "minute")
         .toDate();
       return date;
@@ -45,8 +45,8 @@ function RestoreInstanceModal({
 
   const restoreFormik = useFormik({
     initialValues: {
-      earliestRestoreTime: "2024-11-16T10:43:19Z"
-        ? dayjs.utc("2024-11-16T10:43:19Z")
+      earliestRestoreTime: earliestRestoreTime
+        ? dayjs.utc(earliestRestoreTime)
         : null,
       date: dayjs.utc(initialDateValue).startOf("day"),
       time: dateToTimeString(initialDateValue),
@@ -84,7 +84,7 @@ function RestoreInstanceModal({
           restoreFormik={restoreFormik}
           restoreMutation={restoreMutation}
           handleClose={handleClose}
-          earliestRestoreTime={"2024-11-16T10:43:19Z"}
+          earliestRestoreTime={earliestRestoreTime}
         />
       )}
       {step === 2 && (
