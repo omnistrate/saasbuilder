@@ -1,6 +1,10 @@
 import { roundNumberToInteger } from "./formatNumber";
 
-export function getPercent(value, total, roundOff = true) {
+export const getPercent = (
+  value: number,
+  total: number,
+  roundOff = true
+): number => {
   if (isNaN(value)) {
     return 0;
   }
@@ -22,4 +26,4 @@ export function getPercent(value, total, roundOff = true) {
       ? percentage
       : parseFloat(percentage.toFixed(2));
   }
-}
+};

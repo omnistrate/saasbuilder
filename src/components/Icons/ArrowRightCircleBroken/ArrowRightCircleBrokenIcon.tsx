@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { SVGIconProps } from "src/types/common/generalTypes";
-import { DisabledColor } from "src/utils/color";
 
 const ArrowRightCircleBrokenIcon: FC<SVGIconProps> = (props) => {
   const { disabled, color = "#7F56D9", ...restProps } = props;
@@ -15,7 +14,7 @@ const ArrowRightCircleBrokenIcon: FC<SVGIconProps> = (props) => {
     >
       <g clipPath="url(#a)">
         <path
-          stroke={disabled ? DisabledColor : color}
+          stroke={disabled ? "#a3a6ac" : color}
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth={1.5}
