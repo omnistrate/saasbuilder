@@ -21,6 +21,7 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import RestoreInstanceSuccessStep from "src/components/RestoreInstance/RestoreInstanceSuccessStep";
 import InformationDialogTopCenter from "src/components/Dialog/InformationDialogTopCenter";
 import { GridSelectionModel } from "@mui/x-data-grid";
+import { NetworkType } from "src/types/common/enums";
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 
@@ -49,7 +50,7 @@ const Backup: FC<{
   environmentId: string;
   accessQueryParams?: accessQueryParams;
   resourceName?: string;
-  networkType: "PUBLIC";
+  networkType: NetworkType;
 }> = ({
   instanceId,
   backupStatus,
@@ -59,7 +60,7 @@ const Backup: FC<{
 }) => {
   const snackbar = useSnackbar();
 
-  const [selectionModel, setSelectionModel] = useState([]);
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
   const [searchText, setSearchText] = useState("");
   const [isRestoreInstanceSuccess, setRestoreInstanceSuccess] = useState(false);
   const [restoredInstanceID, setRestoredInstanceID] = useState("");
@@ -255,6 +256,7 @@ const Backup: FC<{
               resourceName,
               selectedDateRange,
               setSelectedDateRange,
+              isRestoreDisabled: selectionModel.length === 0,
             },
           }}
           getRowClassName={(params: { row: SnapshotBase }) =>

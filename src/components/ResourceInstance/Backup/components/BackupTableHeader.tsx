@@ -21,6 +21,7 @@ type BackupsTableHeaderProps = {
   isRefetching: boolean;
   selectedDateRange: Range;
   setSelectedDateRange: SetState<Range>;
+  isRestoreDisabled: boolean;
 };
 
 const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
@@ -33,6 +34,7 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
   resourceName,
   selectedDateRange,
   setSelectedDateRange,
+  isRestoreDisabled,
 }) => {
   return (
     <>
@@ -71,7 +73,9 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
               padding: "10px 14px !important",
             }}
             startIcon={<RefreshIcon />}
-            disabled={isRefetching || restoreMutation.isLoading}
+            disabled={
+              isRefetching || restoreMutation.isLoading || isRestoreDisabled
+            }
             onClick={() => {
               restoreMutation.mutate();
             }}
