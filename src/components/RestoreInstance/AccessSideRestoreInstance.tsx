@@ -3,6 +3,29 @@ import RestoreInstanceModal from "./RestoreInstanceModal";
 import { useMutation } from "@tanstack/react-query";
 import { restoreResourceInstance } from "src/api/resourceInstance";
 import useSnackbar from "src/hooks/useSnackbar";
+import { SetState } from "src/types/common/reactGenerics";
+
+type serviceSchema = {
+  serviceProviderId: string;
+  serviceURLKey: string;
+  serviceAPIVersion: string;
+  serviceEnvironmentURLKey: string;
+  serviceModelURLKey: string;
+  productTierURLKey: string;
+};
+
+type AccessSideRestoreInstanceProps = {
+  open: boolean;
+  handleClose: () => void;
+  earliestRestoreTime: string;
+  service: serviceSchema;
+  subscriptionId: string;
+  selectedInstanceId: string;
+  setSelectionModel: SetState<string[]>;
+  fetchResourceInstances: (value) => void;
+  selectedResource: any;
+  networkType: string;
+};
 
 function AccessSideRestoreInstance({
   open,
@@ -15,13 +38,13 @@ function AccessSideRestoreInstance({
   fetchResourceInstances,
   selectedResource,
   networkType,
-}) {
+}: AccessSideRestoreInstanceProps) {
   const [step, setStep] = useState(1);
   const [restoredInstanceID, setRestoredInstanceID] = useState(null);
 
   const snackbar = useSnackbar();
   const restoreMutation = useMutation(
-    (values) => {
+    (values: { targetRestoreTime: string; network_type: string }) => {
       const payload = {
         targetRestoreTime: values.targetRestoreTime,
         network_type: values.network_type,
@@ -38,7 +61,7 @@ function AccessSideRestoreInstance({
       return restoreResourceInstance(payload);
     },
     {
-      onSuccess: (res) => {
+      onSuccess: (res: any) => {
         snackbar.showSuccess("Restore initiated successfully!");
         setSelectionModel([]);
         fetchResourceInstances(selectedResource);

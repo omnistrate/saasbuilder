@@ -11,12 +11,12 @@ function SubscriptionSuspendedSnack() {
         alignItems: "center",
         justifyContent: "center",
         gap: "12px",
-        padding: "4px 14px",
+        padding: "6px 14px",
         background: "#FEF3F2",
         borderRadius: "16px",
       }}
     >
-      <AlertTriangle />
+      <AlertTriangle style={{height: 16, width :20 }} />
       <Typography
         sx={{
           fontSize: "14px",
