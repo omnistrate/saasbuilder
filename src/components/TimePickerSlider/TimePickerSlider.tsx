@@ -336,9 +336,6 @@ const TimePickerSlider: React.FC<TimePickerSliderProps> = (props) => {
       <Box flexBasis={547} flexGrow={1} position="relative">
         <TimeSlider
           slots={{ thumb: TimeSliderThumbComponent }}
-          getAriaLabel={(index) =>
-            index === 0 ? "Minimum price" : "Maximum price"
-          }
           min={0}
           max={1439}
           marks={marks}
