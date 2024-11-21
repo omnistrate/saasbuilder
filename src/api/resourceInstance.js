@@ -307,10 +307,12 @@ export const getInstanceRestoreAccess = (
   productTierKey,
   resourceKey,
   instanceId,
-  subscriptionId
+  subscriptionId,
+  config = {}
 ) => {
   return axios.get(
-    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/snapshot?subscriptionId${subscriptionId}`
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/snapshot?subscriptionId${subscriptionId}`,
+    { ...config }
   );
 };
 
