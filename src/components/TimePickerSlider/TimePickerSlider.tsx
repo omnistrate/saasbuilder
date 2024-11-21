@@ -313,13 +313,12 @@ const TimePickerSlider: React.FC<TimePickerSliderProps> = (props) => {
       ) {
         return minutes <= utcMinutes;
       }
+      return false;
     }
     if (checkHHMMFormatting(timeInput)) {
       const minutes = formattedTimeStringToMinutes(timeInput);
       return checkIfMinutesAreValid(minutes);
     }
-
-    return false;
   }
 
   return (
