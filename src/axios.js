@@ -11,6 +11,7 @@ const axios = Axios.create({
   headers: {
     Authorization: "Bearer " + Cookies.get("token"),
   },
+  ignoreGlobalErrorSnack: false,
 });
 
 module.exports = axios;

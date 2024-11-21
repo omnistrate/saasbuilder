@@ -67,7 +67,10 @@ function useBackup(
         productTierKey,
         resourceKey,
         instanceId,
-        subscriptionId
+        subscriptionId,
+        {
+          ignoreGlobalErrorSnack: true,
+        }
       );
     },
     {
