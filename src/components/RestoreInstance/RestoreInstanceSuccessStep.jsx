@@ -1,4 +1,3 @@
-import React from "react";
 import {
   DialogContent,
   DialogFooter,
@@ -11,15 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SuccessIcon from "src/components/Icons/SuccessIcon/SuccessIcon";
 import CopyButton from "../Button/CopyButton";
 
-type RestoreInstanceSuccessStepProps = {
-  handleClose: () => void;
-  restoredInstanceID: string;
-};
-
-function RestoreInstanceSuccessStep({
-  handleClose,
-  restoredInstanceID,
-}: RestoreInstanceSuccessStepProps) {
+function RestoreInstanceSuccessStep({ handleClose, restoredInstanceID }) {
   return (
     <>
       <DialogHeader>

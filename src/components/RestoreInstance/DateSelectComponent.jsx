@@ -4,14 +4,8 @@ import { Text } from "../Typography/Typography";
 import { Box, Popover, Stack, styled } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import {
-  DateCalendar,
-  DateView,
-  PickersDay,
-  PickersDayProps,
-} from "@mui/x-date-pickers";
-import { PickerSelectionState } from "@mui/x-date-pickers/internals";
-import dayjs, { Dayjs } from "dayjs";
+import { DateCalendar, PickersDay } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { shouldDisableDate } from "src/utils/restore";
 dayjs.extend(utc);
@@ -21,11 +15,11 @@ const HighlightedDay = styled(PickersDay)(({ theme }) => ({
     backgroundColor: "#F4EBFF",
   },
   "&.Mui-highlighted.Mui-selected": {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: "#9E77ED",
     color: theme.palette.primary.contrastText,
   },
   "&.Mui-today": {
-    border: `1px solid ${theme.palette.primary.main}`,
+    border: `1px solid #9E77ED`,
   },
   "&.MuiPickersDay-root.Mui-disabled:not(.Mui-selected)": {
     color: "rgba(0, 0, 0, 0.22)",
@@ -58,9 +52,7 @@ const StyledDateInput = styled(Box)(({ theme }) => ({
 }));
 
 //highlight the dates between earliest date and current date in UTC
-const ServerDay = (
-  props: PickersDayProps<Dayjs> & { earliestRestoreTime: Dayjs }
-) => {
+const ServerDay = (props) => {
   const { earliestRestoreTime, day, outsideCurrentMonth, ...other } = props;
   const isHighlighted = !shouldDisableDate(day, earliestRestoreTime);
   const now = dayjs.utc();
@@ -94,11 +86,7 @@ function DateSelectComponent({ formData }) {
     setAnchorEl(null);
   };
 
-  const handleDateChange = (
-    newValue,
-    selectionState: PickerSelectionState,
-    selectedView: DateView
-  ) => {
+  const handleDateChange = (newValue, selectionState, selectedView) => {
     setFieldValue("date", newValue);
     if (selectedView === "day") {
       handleClose();
@@ -162,7 +150,6 @@ function DateSelectComponent({ formData }) {
               }}
               slotProps={{
                 day: {
-                  //@ts-ignore
                   earliestRestoreTime: earliestRestoreTime,
                 },
               }}
