@@ -32,6 +32,7 @@ import Link from "next/link";
 import { CLI_MANAGED_RESOURCES, RESOURCE_TYPES } from "src/constants/resource";
 import AuditLogs from "src/components/ResourceInstance/AuditLogs/AuditLogs";
 import ResourceInstanceOverview from "src/components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
+import Backup from "src/components/ResourceInstance/Backup/Backup";
 
 export const getServerSideProps = async () => {
   return {
@@ -141,7 +142,8 @@ function ResourceInstance() {
     resourceInstanceData?.active,
     isResourceBYOA,
     isCliManagedResource,
-    resourceType
+    resourceType,
+    { isBackup: resourceInstanceData?.backupStatus?.backupPeriodInHours }
   );
 
   let pageTitle = "Resource";
@@ -210,6 +212,7 @@ function ResourceInstance() {
     productTierKey: serviceOffering?.productTierURLKey,
     subscriptionId: subscriptionData?.id,
     resourceInstanceId: resourceInstanceId,
+    resourceKey: resourceKey,
   };
 
   const isCustomNetworkEnabled = useMemo(() => {
@@ -488,6 +491,19 @@ function ResourceInstance() {
           productTierId={productTierId}
         />
       )}
+      {currentTab === tabs.backups && (
+        <Backup
+          backupStatus={resourceInstanceData?.backupStatus}
+          instanceId={resourceInstanceId}
+          accessQueryParams={queryData}
+          resourceName={resourceName}
+          networkType={
+            resourceInstanceData?.connectivity?.networkType
+              ? resourceInstanceData?.connectivity?.networkType.toUpperCase()
+              : "PUBLIC"
+          }
+        />
+      )}
       <SideDrawerRight
         size="xlarge"
         open={supportDrawerOpen}
@@ -511,7 +527,8 @@ function getTabs(
   isActive,
   isResourceBYOA,
   isCliManagedResource,
-  resourceType
+  resourceType,
+  isBackup
 ) {
   const tabs = {
     resourceInstanceDetails: "Resource Instance Details",
@@ -528,6 +545,9 @@ function getTabs(
   }
 
   tabs["auditLogs"] = "Events";
+  if (isBackup) {
+    tabs["backups"] = "Backups";
+  }
 
   return tabs;
 }

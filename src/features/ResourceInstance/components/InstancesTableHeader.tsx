@@ -287,8 +287,8 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
         gap="12px"
       >
         <SpeedoMeterLegend />
-        <SpeedoMeterLegend color="rgba(247, 144, 9, 1)" label="Medium" />
-        <SpeedoMeterLegend color="rgba(240, 68, 56, 1)" label="High" />
+        <SpeedoMeterLegend color="#f5d716" label="Medium" />
+        <SpeedoMeterLegend color="#f04438" label="High" />
       </Stack>
       <GenerateTokenDialog
         dashboardEndpoint={
