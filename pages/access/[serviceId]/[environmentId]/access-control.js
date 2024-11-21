@@ -137,7 +137,9 @@ function AccessControl() {
           return inviteSubscriptionUser(subscriptionData?.id, payload);
         })
       );
-      snackbar.showSuccess("Invites Sent");
+      snackbar.showSuccess(
+        "Invitations sent successfully! If the user doesn't see the email, remind them to check their spam folder"
+      );
       /*eslint-disable-next-line no-use-before-define*/
       formik.resetForm();
       refetch();
