@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
 import {
   Dialog as MuiDialog,
   DialogActions as MuiDialogActions,
@@ -54,6 +54,11 @@ type CapacityDialogProps = {
   data: AccessCapacityDataType;
   currentCapacityAction: CapacityAction;
   contextType?: ContextType;
+  autoscaling?: {
+    currentReplicas?: string;
+    maxReplicas?: string;
+    minReplicas?: string;
+  };
 };
 
 const CapacityDialog: FC<CapacityDialogProps> = ({
@@ -62,25 +67,12 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
   data,
   currentCapacityAction,
   refetch,
+  autoscaling,
 }) => {
   const snackbar = useSnackbar();
-
-  const labelObj = {
-    title: "Remove Capacity",
-    subtitle: "Number of Replicas to Remove",
-    message:
-      "Enter the number of replicas you want to remove from your capacity",
-    buttonLabel: "Remove",
-    successLabel: "removed",
-  };
-  if (currentCapacityAction === "add") {
-    labelObj.title = "Add Capacity";
-    labelObj.subtitle = "Number of Replicas to Add";
-    labelObj.message =
-      "Enter the number of replicas you want to add to your capacity";
-    labelObj.buttonLabel = "Add";
-    labelObj.successLabel = "added";
-  }
+  const currentReplicas = Number(autoscaling.currentReplicas);
+  const maxReplicas = Number(autoscaling.maxReplicas);
+  const minReplicas = Number(autoscaling.minReplicas);
 
   const capacityMutation = useMutation(
     async (payload: { count: number }) => {
@@ -107,20 +99,76 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     }
   );
 
+  const errorMessage = useMemo(() => {
+    if (currentCapacityAction === "add") {
+      return maxReplicas - currentReplicas === 0
+        ? `Error: Replicas already at maximum, cannot add capacity.`
+        : `Error: Number of replicas must be between 1 and ${
+            maxReplicas - currentReplicas
+          }`;
+    } else {
+      return minReplicas - currentReplicas === 0
+        ? `Error: Replicas already at minimum, cannot reduce capacity.`
+        : `Error: Number of replicas must be between 1 and ${
+            currentReplicas - minReplicas
+          }`;
+    }
+  }, [currentCapacityAction, currentReplicas, minReplicas, maxReplicas]);
+
   const capacityFormik = useFormik({
     initialValues: {
       count: 1,
     },
-    validationSchema: Yup.object({
+    validationSchema: Yup.object().shape({
       count: Yup.number()
-        .required("Capacity count is required")
-        .min(1, "Capacity count must be at least 1"),
-      // .max(5, "Capacity count must be at gretered 5"),
+        .required("Number of replicas is required")
+        .min(1, errorMessage)
+        .test("max-capacity", function (value) {
+          if (value === undefined || value === null) return false;
+
+          if (currentCapacityAction === "add") {
+            if (value > maxReplicas || currentReplicas + value > maxReplicas) {
+              return this.createError({ message: errorMessage });
+            }
+          } else {
+            if (
+              currentReplicas - value < minReplicas ||
+              currentReplicas - value < 0
+            ) {
+              return this.createError({ message: errorMessage });
+            }
+          }
+
+          return true;
+        }),
     }),
     onSubmit: (values) => {
       capacityMutation.mutate(values);
     },
   });
+  const labelObj = useMemo(() => {
+    const isAddingCapacity = currentCapacityAction === "add";
+
+    const title = isAddingCapacity ? "Add Capacity" : "Remove Capacity";
+    const subtitle = isAddingCapacity
+      ? "Number of Replicas to Add"
+      : "Number of Replicas to Remove";
+
+    const buttonLabel = isAddingCapacity ? "Add" : "Remove";
+    const buttonColor = isAddingCapacity ? "#7F56D9" : "#D92D20";
+    const successLabel = isAddingCapacity ? "added" : "removed";
+
+    const message = isAddingCapacity
+      ? `You can add up to ${maxReplicas - currentReplicas} more ${
+          maxReplicas - currentReplicas > 1 ? "replicas" : "replica"
+        }. You currently have ${currentReplicas} out of a maximum of ${maxReplicas}`
+      : `You can remove ${currentReplicas - minReplicas} ${
+          currentReplicas - minReplicas > 1 ? "replicas" : "replica"
+        }. You currently have ${currentReplicas}, and the minimum required is ${minReplicas}`;
+
+    return { title, subtitle, message, buttonLabel, buttonColor, successLabel };
+  }, [currentCapacityAction, currentReplicas, minReplicas, maxReplicas]);
+
   return (
     <Dialog data-cy="confirmation-dialog" open={open} onClose={handleClose}>
       {/* @ts-ignore */}
@@ -167,6 +215,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
               {labelObj.message}
             </Text>
           )}
+
           <TextField
             //@ts-ignore
             id="count"
@@ -195,7 +244,10 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
             variant="outlined"
             sx={{ height: "40px !important", padding: "10px 14px !important" }}
             disabled={capacityMutation.isLoading}
-            onClick={handleClose}
+            onClick={() => {
+              handleClose();
+              capacityFormik.resetForm();
+            }}
           >
             Cancel
           </Button>
