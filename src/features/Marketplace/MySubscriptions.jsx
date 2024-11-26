@@ -359,7 +359,6 @@ const MySubscriptions = () => {
           <Box
             display="flex"
             //@ts-ignore
-            flexDirection="colunm"
             justifyContent="flex-start"
             paddingBottom={"32px"}
           >
