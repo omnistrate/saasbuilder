@@ -241,7 +241,7 @@ export const addCustomDNSToResourceInstance = (
   const queryParams = {};
 
   if (subscriptionID) {
-    queryParams.subscriptionID = subscriptionID;
+    queryParams.subscriptionId = subscriptionID;
   }
 
   return axios.post(
@@ -267,7 +267,7 @@ export const removeCustomDNSFromResourceInstance = (
   const queryParams = {};
 
   if (subscriptionID) {
-    queryParams.subscriptionID = subscriptionID;
+    queryParams.subscriptionId = subscriptionID;
   }
 
   return axios.delete(
