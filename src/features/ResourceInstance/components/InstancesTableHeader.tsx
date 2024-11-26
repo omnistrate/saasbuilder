@@ -197,45 +197,76 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
             plural: "Instances",
           }}
         />
-
-        <Stack direction="row" alignItems="center" gap="12px">
-          <SearchInput
-            placeholder="Search by Instance ID"
-            searchText={searchText}
-            setSearchText={setSearchText}
-            width="250px"
-          />
-          <RefreshWithToolTip
-            refetch={handleRefresh}
-            disabled={isFetchingInstances}
-          />
-
-          <Button
-            sx={{ height: "40px", padding: "10px 14px !important" }}
-            variant="contained"
-            startIcon={<AddIcon />}
-            disabled={
-              isFetchingInstances ||
-              !isResourceParameters ||
-              isDeprecated ||
-              !isCreateAllowedByRBAC ||
-              maxNumberOfInstancesReached
-            }
-            disabledMessage={
-              maxNumberOfInstancesReached
-                ? `You have reached the maximum number of instances allowed`
-                : !isCreateAllowedByRBAC
-                  ? "You do not have permission to create instances"
-                  : isDeprecated
-                    ? "Resource deprecated, instance creation not allowed"
-                    : ""
-            }
-            onClick={handleCreate}
+        <Stack direction="column" justifyContent="right">
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="right"
+            gap="12px"
           >
-            Create
-          </Button>
+            <SearchInput
+              placeholder="Search by Instance ID"
+              searchText={searchText}
+              setSearchText={setSearchText}
+              width="250px"
+            />
+            <RefreshWithToolTip
+              refetch={handleRefresh}
+              disabled={isFetchingInstances}
+            />
+
+            <Button
+              sx={{ height: "40px", padding: "10px 14px !important" }}
+              variant="contained"
+              startIcon={<AddIcon />}
+              disabled={
+                isFetchingInstances ||
+                !isResourceParameters ||
+                isDeprecated ||
+                !isCreateAllowedByRBAC ||
+                maxNumberOfInstancesReached
+              }
+              disabledMessage={
+                maxNumberOfInstancesReached
+                  ? `You have reached the maximum number of instances allowed`
+                  : !isCreateAllowedByRBAC
+                    ? "You do not have permission to create instances"
+                    : isDeprecated
+                      ? "Resource deprecated, instance creation not allowed"
+                      : ""
+              }
+              onClick={handleCreate}
+            >
+              Create
+            </Button>
+
+            <ResourceInstanceControlPanel
+              handleRestart={handleRestart}
+              handleStart={handleStart}
+              handleStop={handleStop}
+              handleDelete={handleDelete}
+              handleRestore={handleRestore}
+              handleModify={handleModify}
+              handleRemoveCapacity={handleRemoveCapacity}
+              handleAddCapacity={handleAddCapacity}
+              isAddCapacity={!actions.addCapacity}
+              isRemoveCapacity={!actions.removeCapacity}
+              isRestartDisabled={!actions.restart}
+              isStartDisabled={!actions.start}
+              isStopDisabled={!actions.stop}
+              isDeleteDisabled={!actions.delete}
+              isRestoreDisabled={!actions.restore}
+              isLoading={isFetchingInstances || !selectedInstance}
+              isModifyDisabled={!actions.modify}
+              isVisibleRestore={isVisibleRestore}
+              isVisibleCapacity={actions.isVisibleCapacity}
+              isVisibleBYOA={isCurrentResourceBYOA}
+              isVisibleGenerateToken={actions.isVisibleGenerateToken}
+              handleGenerateToken={() => setIsGenerateTokenDialogOpen(true)}
+            />
+          </Stack>
           {isDeprecated && (
-            <Box display="flex" sx={{ marginTop: "15px" }}>
+            <Box display="flex">
               <Box>
                 <DeprecateIcon />
               </Box>
@@ -252,32 +283,9 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
               </Text>
             </Box>
           )}
-          <ResourceInstanceControlPanel
-            handleRestart={handleRestart}
-            handleStart={handleStart}
-            handleStop={handleStop}
-            handleDelete={handleDelete}
-            handleRestore={handleRestore}
-            handleModify={handleModify}
-            handleRemoveCapacity={handleRemoveCapacity}
-            handleAddCapacity={handleAddCapacity}
-            isAddCapacity={!actions.addCapacity}
-            isRemoveCapacity={!actions.removeCapacity}
-            isRestartDisabled={!actions.restart}
-            isStartDisabled={!actions.start}
-            isStopDisabled={!actions.stop}
-            isDeleteDisabled={!actions.delete}
-            isRestoreDisabled={!actions.restore}
-            isLoading={isFetchingInstances || !selectedInstance}
-            isModifyDisabled={!actions.modify}
-            isVisibleRestore={isVisibleRestore}
-            isVisibleCapacity={actions.isVisibleCapacity}
-            isVisibleBYOA={isCurrentResourceBYOA}
-            isVisibleGenerateToken={actions.isVisibleGenerateToken}
-            handleGenerateToken={() => setIsGenerateTokenDialogOpen(true)}
-          />
         </Stack>
       </Stack>
+
       <Stack
         direction="row"
         justifyContent="right"
