@@ -19,7 +19,7 @@ import Tooltip from "../../Tooltip/Tooltip";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import Select from "src/components/FormElementsv2/Select/Select";
-import MenuItem from "src/components/MenuItem/MenuItem";
+import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 
 const logsPerPage = 50;
 
