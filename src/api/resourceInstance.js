@@ -288,10 +288,12 @@ export const postInstanceRestoreAccess = (
   resourceKey,
   snapshotId,
   subscriptionId,
+  data = {},
   queryParams = {}
 ) => {
   return axios.post(
     `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/snapshot/${snapshotId}/restore?subscriptionId=${subscriptionId}`,
+    data,
     {
       params: queryParams,
     }
@@ -311,7 +313,7 @@ export const getInstanceRestoreAccess = (
   config = {}
 ) => {
   return axios.get(
-    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/snapshot?subscriptionId${subscriptionId}`,
+    `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/snapshot?subscriptionId=${subscriptionId}`,
     { ...config }
   );
 };
