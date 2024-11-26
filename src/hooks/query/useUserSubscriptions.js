@@ -6,8 +6,9 @@ const useUserSubscriptions = (queryParams = {}, queryOptions = {}) => {
   const { serviceId } = queryParams;
   const environmentType = useEnvironmentType();
 
+
   const subscriptionData = useQuery({
-    queryKey: ["user-subscriptions"],
+    queryKey: ["user-subscriptions", serviceId, environmentType],
     queryFn: () => listSubscriptions({ serviceId, environmentType }),
     select: (response) => {
       const subscriptions = response.data.subscriptions || [];
