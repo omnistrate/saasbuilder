@@ -42,6 +42,7 @@ export default function DashboardLayout(props) {
     dispatch(toggleDrawer());
   };
 
+
   return (
     <Box>
       {notificationBar.isVisible && <NotificationBar />}
