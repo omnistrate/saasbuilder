@@ -3,7 +3,7 @@ import MuiList from "@mui/material/List";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HoverSubMenu from "./HoverSubMenu";
 import MuiTooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -83,6 +83,8 @@ const NavItem = (props) => {
   const router = useRouter();
   const [currentURL, setCurrentURL] = useState("");
   const currentPath = router.pathname;
+  const textRef = useRef(null);
+  const [isEllipsisActive, setIsEllipsisActive] = useState(false);
 
   const {
     isActive,
@@ -102,8 +104,25 @@ const NavItem = (props) => {
     hoverMenuItem = false,
     defaultExpanded = false,
   } = props;
-  
+
   const [expanded, setExpanded] = useState(defaultExpanded);
+
+  // Check if the text overflows
+  useEffect(() => {
+    const checkEllipsis = () => {
+      if (textRef.current) {
+        const { offsetWidth, scrollWidth } = textRef.current;
+        setIsEllipsisActive(scrollWidth > offsetWidth);
+      }
+    };
+
+    checkEllipsis();
+    window.addEventListener("resize", checkEllipsis);
+
+    return () => {
+      window.removeEventListener("resize", checkEllipsis);
+    };
+  }, []);
 
   useEffect(() => {
     if (defaultExpanded) {
@@ -159,7 +178,9 @@ const NavItem = (props) => {
           />
         }
         arrow={false}
-        isVisible={!isDrawerExpanded && nestingLevel === 0}
+        isVisible={
+          (!isDrawerExpanded && nestingLevel === 0) || isEllipsisActive
+        }
         // open={name === "Build Services"}
       >
         <ListItemComponent
@@ -184,6 +205,7 @@ const NavItem = (props) => {
               </Box>
 
               <ListItemText
+                ref={textRef}
                 clickDisabled={disabled}
                 active={isActive}
                 visible={isDrawerExpanded || nestingLevel === 1}
