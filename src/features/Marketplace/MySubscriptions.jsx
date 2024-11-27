@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import DashboardLayout from "components/DashboardLayout/DashboardLayout";
 import DataGrid, { selectSingleItem } from "components/DataGrid/DataGrid";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
@@ -356,11 +356,9 @@ const MySubscriptions = () => {
   return (
     <>
       <DashboardLayout {...dashboardLayoutProps}>
-        <Stack sx={{ minHeight: "calc(100vh - 180px)" }}>
           <Box
             display="flex"
             //@ts-ignore
-            flexDirection="colunm"
             justifyContent="flex-start"
             paddingBottom={"32px"}
           >
@@ -412,7 +410,6 @@ const MySubscriptions = () => {
             }}
             hideFooterSelectedRowCount
           />
-        </Stack>
 
         <TextConfirmationDialog
           open={showUnsubscribeDialog}
