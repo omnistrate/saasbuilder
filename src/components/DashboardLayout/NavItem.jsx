@@ -109,18 +109,24 @@ const NavItem = (props) => {
 
   // Check if the text overflows
   useEffect(() => {
+    const element = textRef.current;
+
     const checkEllipsis = () => {
-      if (textRef.current) {
-        const { offsetWidth, scrollWidth } = textRef.current;
+      if (element) {
+        const { offsetWidth, scrollWidth } = element;
         setIsEllipsisActive(scrollWidth > offsetWidth);
       }
     };
 
-    checkEllipsis();
-    window.addEventListener("resize", checkEllipsis);
+    const observer = new ResizeObserver(() => checkEllipsis());
+    if (element) {
+      observer.observe(element);
+    }
 
     return () => {
-      window.removeEventListener("resize", checkEllipsis);
+      if (element) {
+        observer.unobserve(element);
+      }
     };
   }, []);
 
