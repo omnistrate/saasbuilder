@@ -109,7 +109,7 @@ const NavItem = (props) => {
   const isOverflow = useMemo(() => {
     const element = textRef.current;
     if (element) return element.scrollWidth > element.offsetWidth;
-    return false;
+    else return false;
   }, [textRef.current]);
 
   useEffect(() => {
@@ -166,7 +166,7 @@ const NavItem = (props) => {
           />
         }
         arrow={false}
-        isVisible={(!isDrawerExpanded && nestingLevel === 0) || isOverflow}
+        isVisible={isOverflow}
         // open={name === "Build Services"}
       >
         <ListItemComponent
@@ -296,6 +296,9 @@ export const ListItemText = styled("span", {
   fontSize: 14,
   lineHeight: "20px",
   whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  maxWidth: "180px",
 }));
 
 const SubList = styled(MuiList, {
@@ -332,6 +335,7 @@ export const MenuHoverTooltip = styled(
     padding: 0,
     borderRadius: "0px 8px 8px 0px",
     borderLeft: "1px solid #737373",
+    marginLeft: "24px",
   },
 }));
 
