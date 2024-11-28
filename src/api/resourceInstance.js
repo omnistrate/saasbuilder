@@ -329,11 +329,17 @@ export const addCapacityResourceInstanceAccess = ({ data, count }) => {
     productTierKey,
     resourceKey,
     instanceId,
+    subscriptionId,
   } = data;
 
   return axios.post(
     `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/add-capacity`,
-    { capacityToBeAdded: count }
+    { capacityToBeAdded: count },
+    {
+      params: {
+        subscriptionId,
+      },
+    }
   );
 };
 
@@ -348,11 +354,17 @@ export const removeCapacityResourceInstanceAccess = ({ data, count }) => {
     productTierKey,
     resourceKey,
     instanceId,
+    subscriptionId,
   } = data;
   return axios.post(
     `/resource-instance/${serviceProviderId}/${serviceKey}/${serviceAPIVersion}/${serviceEnvironmentKey}/${serviceModelKey}/${productTierKey}/${resourceKey}/${instanceId}/remove-capacity`,
     {
       capacityToBeRemoved: count,
+    },
+    {
+      params: {
+        subscriptionId,
+      },
     }
   );
 };
