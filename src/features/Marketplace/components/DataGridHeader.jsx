@@ -91,8 +91,6 @@ export const Actions = (props) => {
     isUnsubscribing,
   } = props;
 
-  console.log("selectedSubscription ===", selectedSubscription);
-
   return (
     <Stack
       direction={"row"}
