@@ -80,7 +80,7 @@ export default function Billing({ orgLogoURL, orgName }) {
     apiDocsurl: serviceAPIDocsLink,
     servicePlanUrlLink: servicePlanUrlLink,
     serviceId: serviceId,
-    environmentId : environmentId,
+    environmentId: environmentId,
     serviceApiId: serviceOffering?.serviceAPIID,
     SidebarUI: (
       <MarketplaceServiceSidebar
@@ -99,12 +99,11 @@ export default function Billing({ orgLogoURL, orgName }) {
     serviceName: serviceOffering?.serviceName,
     customLogo: true,
     serviceLogoURL: serviceOffering?.serviceLogoURL,
+    pageType: sidebarActiveOptions.billing,
   };
 
   return (
-    <DashboardLayout
-      {...dashboardLayoutProps}
-    >
+    <DashboardLayout {...dashboardLayoutProps}>
       <BillingPage orgLogoURL={orgLogoURL} orgName={orgName} />
     </DashboardLayout>
   );

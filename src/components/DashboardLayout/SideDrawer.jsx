@@ -24,7 +24,10 @@ export default function SideDrawer(props) {
     subscriptionId,
     environmentId,
     activePage,
+    pageType,
   } = props;
+
+  console.log("Active page", activePage);
 
   return (
     <Stack
@@ -49,10 +52,11 @@ export default function SideDrawer(props) {
       }}
     >
       <Box mt="32px">
-        {(marketplacePage || accessPage) && enableConsumptionLinks && (
+        {SidebarUI && (
           <SubscriptionsDropdown
             serviceId={serviceId}
             subscriptionId={subscriptionId}
+            pageType={pageType}
           />
         )}
 

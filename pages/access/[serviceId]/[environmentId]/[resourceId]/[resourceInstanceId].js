@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
-import MarketplaceServiceSidebar from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
+import MarketplaceServiceSidebar, {
+  sidebarActiveOptions,
+} from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import useServiceOffering from "src/hooks/useServiceOffering";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import { Tabs, Tab } from "src/components/Tab/Tab";
@@ -252,6 +254,7 @@ function ResourceInstance() {
         serviceName={serviceOffering?.serviceName}
         customLogo
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.instancesList}
       >
         <Head>
           <title>{pageTitle}</title>
@@ -285,6 +288,7 @@ function ResourceInstance() {
         serviceName={serviceOffering?.serviceName}
         customLogo
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.instancesList}
       >
         <Head>
           <title>{pageTitle}</title>
@@ -339,6 +343,7 @@ function ResourceInstance() {
       serviceName={serviceOffering?.serviceName}
       customLogo
       serviceLogoURL={serviceOffering?.serviceLogoURL}
+      pageType={sidebarActiveOptions.instancesList}
     >
       <Head>
         <title>{pageTitle}</title>
@@ -370,6 +375,7 @@ function ResourceInstance() {
         healthStatusPercent={resourceInstanceData?.healthStatusPercent}
         isResourceBYOA={isResourceBYOA}
         isCliManagedResource={isCliManagedResource}
+        subscriptionOwner={subscriptionData?.subscriptionOwnerName}
       />
       <Tabs value={currentTab} sx={{ marginTop: "32px" }}>
         {Object.entries(tabs).map(([key, value]) => {

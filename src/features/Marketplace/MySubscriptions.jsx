@@ -325,10 +325,10 @@ const MySubscriptions = () => {
         isCustomNetworkEnabled={isCustomNetworkEnabled}
       />
     ),
-
     serviceName: serviceOffering?.serviceName,
     customLogo: true,
     serviceLogoURL: serviceOffering?.serviceLogoURL,
+    pageType: sidebarActiveOptions.subscriptions,
   };
 
   const unsubsscribeFormik = useFormik({
@@ -356,60 +356,60 @@ const MySubscriptions = () => {
   return (
     <>
       <DashboardLayout {...dashboardLayoutProps}>
-          <Box
-            display="flex"
-            //@ts-ignore
-            justifyContent="flex-start"
-            paddingBottom={"32px"}
-          >
-            <Box paddingTop={"5px"}>
-              <DashboardHeaderIcon />
-            </Box>
-            <LogoHeader
-              margin={0}
-              title="My Subscriptions"
-              desc="Explore your current service subscriptions here"
-            />
+        <Box
+          display="flex"
+          //@ts-ignore
+          justifyContent="flex-start"
+          paddingBottom={"32px"}
+        >
+          <Box paddingTop={"5px"}>
+            <DashboardHeaderIcon />
           </Box>
-          <DataGrid
-            components={{
-              Header: DataGridHeader,
-            }}
-            componentsProps={{
-              header: {
-                numSubscriptions: filteredSubscriptions?.length,
-                searchText,
-                setSearchText,
-                typeFilter,
-                setTypeFilter,
-                viewResourceInstance,
-                isFetching,
-                handleRefresh: refetchSubscriptions,
-                selectedSubscription: selectedSubscription,
-                handleUnsubscribeClick: handleUnsubscribeClick,
-                isUnsubscribing: unsubscribeMutation.isLoading,
-              },
-            }}
-            onSelectionModelChange={(newSelection) => {
-              selectSingleItem(newSelection, selectionModel, setSelectionModel);
-            }}
-            loading={isFetching}
-            checkboxSelection
-            disableColumnMenu
-            selectionModel={selectionModel}
-            disableSelectionOnClick
-            columns={columns}
-            rows={isFetching ? [] : filteredSubscriptions}
-            rowsPerPageOptions={[10]}
-            pageSize={10}
-            getRowId={(row) => row.id}
-            sx={{
-              flex: 1,
-              boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
-              border: "1px solid  rgba(228, 231, 236, 1)",
-            }}
-            hideFooterSelectedRowCount
+          <LogoHeader
+            margin={0}
+            title="My Subscriptions"
+            desc="Explore your current service subscriptions here"
           />
+        </Box>
+        <DataGrid
+          components={{
+            Header: DataGridHeader,
+          }}
+          componentsProps={{
+            header: {
+              numSubscriptions: filteredSubscriptions?.length,
+              searchText,
+              setSearchText,
+              typeFilter,
+              setTypeFilter,
+              viewResourceInstance,
+              isFetching,
+              handleRefresh: refetchSubscriptions,
+              selectedSubscription: selectedSubscription,
+              handleUnsubscribeClick: handleUnsubscribeClick,
+              isUnsubscribing: unsubscribeMutation.isLoading,
+            },
+          }}
+          onSelectionModelChange={(newSelection) => {
+            selectSingleItem(newSelection, selectionModel, setSelectionModel);
+          }}
+          loading={isFetching}
+          checkboxSelection
+          disableColumnMenu
+          selectionModel={selectionModel}
+          disableSelectionOnClick
+          columns={columns}
+          rows={isFetching ? [] : filteredSubscriptions}
+          rowsPerPageOptions={[10]}
+          pageSize={10}
+          getRowId={(row) => row.id}
+          sx={{
+            flex: 1,
+            boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+            border: "1px solid  rgba(228, 231, 236, 1)",
+          }}
+          hideFooterSelectedRowCount
+        />
 
         <TextConfirmationDialog
           open={showUnsubscribeDialog}

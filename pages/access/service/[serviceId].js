@@ -51,7 +51,9 @@ import {
 } from "../../../src/slices/resourceInstanceListSlice";
 import loadingStatuses from "../../../src/utils/constants/loadingStatuses";
 import formatDateUTC from "../../../src/utils/formatDateUTC";
-import MarketplaceServiceSidebar from "../../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
+import MarketplaceServiceSidebar, {
+  sidebarActiveOptions,
+} from "../../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import AccessHeaderCard from "src/components/AccessHeader/AccessHeaderCard";
 import { AccessSupport } from "src/components/Access/AccessSupport";
 import {
@@ -1478,6 +1480,7 @@ function MarketplaceService() {
         SidebarUI={""}
         customLogo
         currentSubscription={subscriptionData}
+        pageType={sidebarActiveOptions.instancesList}
       >
         <Box
           display="flex"
@@ -1521,6 +1524,7 @@ function MarketplaceService() {
         servicePlanUrlLink={servicePlanUrlLink}
         accessPage
         currentSubscription={subscriptionData}
+        pageType={sidebarActiveOptions.instancesList}
       >
         <OfferingUnavailableUI />
       </DashboardLayout>
@@ -1562,6 +1566,7 @@ function MarketplaceService() {
             currentSubscription={subscriptionData}
           />
         }
+        pageType={sidebarActiveOptions.instancesList}
       >
         <Card mt={3} style={{ height: "700px", width: "100%" }}>
           <Box>
@@ -1671,6 +1676,7 @@ function MarketplaceService() {
         customLogo
         accessPage
         currentSubscription={subscriptionData}
+        pageType={sidebarActiveOptions.instancesList}
       >
         <>
           <SubscriptionNotFoundUI />
@@ -1718,6 +1724,7 @@ function MarketplaceService() {
             isCustomNetworkActive={isCustomNetworksView}
           />
         }
+        pageType={sidebarActiveOptions.instancesList}
       >
         <Stack direction="row" justifyContent={"space-between"}>
           <Box

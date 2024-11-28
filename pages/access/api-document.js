@@ -4,7 +4,9 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import apiDocsIcon from "../../public/assets/images/marketplace/APIDocs.svg";
 import DashboardLayout from "../../src/components/DashboardLayout/DashboardLayout";
-import MarketplaceServiceSidebar from "../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
+import MarketplaceServiceSidebar, {
+  sidebarActiveOptions,
+} from "../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import { DisplayText } from "../../src/components/Typography/Typography";
 import useServiceApiDocsData from "../../src/hooks/useServiceApiDocsData";
 import useServiceOffering from "../../src/hooks/useServiceOffering";
@@ -49,8 +51,6 @@ export default function ApiDocument() {
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);
   };
-
-
 
   const subscriptionForAccessQuery = useSubscriptionForProductTierAccess(
     serviceId,
@@ -110,7 +110,7 @@ export default function ApiDocument() {
             isLoading={false}
             environmentId={environmentId}
             serviceName={serviceOffering?.serviceName}
-            // active={sidebarActiveOptions.accessControl}
+            active={sidebarActiveOptions.apiDocument}
             productTierId={productTierId}
             currentSource={currentSource}
             currentSubscription={subscriptionData}
@@ -120,6 +120,7 @@ export default function ApiDocument() {
         serviceName={serviceOffering?.serviceName}
         customLogo
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.apiDocument}
       >
         {isLoading || isLoadingSubscription ? (
           <LoadingSpinner />
