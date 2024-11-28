@@ -84,7 +84,6 @@ const NavItem = (props) => {
   const [currentURL, setCurrentURL] = useState("");
   const currentPath = router.pathname;
   const textRef = useRef(null);
-  const [isEllipsisActive, setIsEllipsisActive] = useState(false);
 
   const {
     isActive,
@@ -107,28 +106,11 @@ const NavItem = (props) => {
 
   const [expanded, setExpanded] = useState(defaultExpanded);
 
-  // Check if the text overflows
-  useEffect(() => {
+  const isOverflow = useMemo(() => {
     const element = textRef.current;
-
-    const checkEllipsis = () => {
-      if (element) {
-        const { offsetWidth, scrollWidth } = element;
-        setIsEllipsisActive(scrollWidth > offsetWidth);
-      }
-    };
-
-    const observer = new ResizeObserver(() => checkEllipsis());
-    if (element) {
-      observer.observe(element);
-    }
-
-    return () => {
-      if (element) {
-        observer.unobserve(element);
-      }
-    };
-  }, []);
+    if (element) return element.scrollWidth > element.offsetWidth;
+    return false;
+  }, [textRef.current]);
 
   useEffect(() => {
     if (defaultExpanded) {
@@ -184,9 +166,7 @@ const NavItem = (props) => {
           />
         }
         arrow={false}
-        isVisible={
-          (!isDrawerExpanded && nestingLevel === 0) || isEllipsisActive
-        }
+        isVisible={(!isDrawerExpanded && nestingLevel === 0) || isOverflow}
         // open={name === "Build Services"}
       >
         <ListItemComponent
@@ -358,7 +338,7 @@ export const MenuHoverTooltip = styled(
 export const MenuHoverTooltipTitle = styled(Box)(() => ({
   padding: "12px 14px",
   borderBottom: "1px solid rgba(127, 129, 148, 0.19)",
-  height: "46px",
+  minHeight: "46px",
   fontWeight: 600,
   fontSize: "14px",
   lineHeight: "26px",
