@@ -38,7 +38,6 @@ const DataGridHeader = ({
   handleUnsubscribeClick,
   isUnsubscribing,
 }) => {
-
   return (
     <Box borderBottom="1px solid #EAECF0" p="20px">
       <Stack
@@ -92,6 +91,8 @@ export const Actions = (props) => {
     isUnsubscribing,
   } = props;
 
+  console.log("selectedSubscription ===", selectedSubscription);
+
   return (
     <Stack
       direction={"row"}
@@ -128,7 +129,8 @@ export const Actions = (props) => {
             selectedSubscription?.defaultSubscription === true ||
             numSubscriptions.length === 0 ||
             isUnsubscribing ||
-            isFetching
+            isFetching ||
+            selectedSubscription?.roleType !== "root"
           }
           onClick={handleUnsubscribeClick}
         >
