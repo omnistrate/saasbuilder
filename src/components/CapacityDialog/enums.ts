@@ -8,6 +8,7 @@ export type AccessCapacityDataType = {
   productTierKey: string;
   resourceKey: string;
   instanceId: string;
+  subscriptionId : string;
 };
 
 export type FleetCapacityDataType = {
