@@ -49,10 +49,13 @@ export default function SideDrawer(props) {
       }}
     >
       <Box mt="32px">
-        <SubscriptionsDropdown
-          serviceId={serviceId}
-          subscriptionId={subscriptionId}
-        />
+        {(marketplacePage || accessPage) && enableConsumptionLinks && (
+          <SubscriptionsDropdown
+            serviceId={serviceId}
+            subscriptionId={subscriptionId}
+          />
+        )}
+
         <Box>{SidebarUI ? SidebarUI : ""}</Box>
       </Box>
 

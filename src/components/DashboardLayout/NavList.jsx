@@ -5,4 +5,5 @@ export const List = styled(MuiList, {
   shouldForwardProp: (prop) => prop !== "open",
 })(() => ({
   marginTop: "24px",
+  padding: "0px",
 }));
