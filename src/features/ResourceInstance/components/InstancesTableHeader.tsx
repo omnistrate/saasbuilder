@@ -197,7 +197,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
             plural: "Instances",
           }}
         />
-        <Stack direction="column" justifyContent="right">
+        <Stack direction="column" justifyContent="right" gap="4px">
           <Stack
             direction="row"
             alignItems="center"
