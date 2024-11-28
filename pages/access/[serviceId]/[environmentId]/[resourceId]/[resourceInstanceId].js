@@ -143,7 +143,7 @@ function ResourceInstance() {
     isResourceBYOA,
     isCliManagedResource,
     resourceType,
-    { isBackup: resourceInstanceData?.backupStatus?.backupPeriodInHours }
+    resourceInstanceData?.backupStatus?.backupPeriodInHours
   );
 
   let pageTitle = "Resource";
