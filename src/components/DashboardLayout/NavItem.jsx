@@ -3,7 +3,7 @@ import MuiList from "@mui/material/List";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import HoverSubMenu from "./HoverSubMenu";
 import MuiTooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -83,6 +83,7 @@ const NavItem = (props) => {
   const router = useRouter();
   const [currentURL, setCurrentURL] = useState("");
   const currentPath = router.pathname;
+  const textRef = useRef(null);
 
   const {
     isActive,
@@ -102,8 +103,14 @@ const NavItem = (props) => {
     hoverMenuItem = false,
     defaultExpanded = false,
   } = props;
-  
+
   const [expanded, setExpanded] = useState(defaultExpanded);
+
+  const isOverflow = useMemo(() => {
+    const element = textRef.current;
+    if (element) return element.scrollWidth > element.offsetWidth;
+    return false;
+  }, [textRef.current]);
 
   useEffect(() => {
     if (defaultExpanded) {
@@ -159,7 +166,7 @@ const NavItem = (props) => {
           />
         }
         arrow={false}
-        isVisible={!isDrawerExpanded && nestingLevel === 0}
+        isVisible={(!isDrawerExpanded && nestingLevel === 0) || isOverflow}
         // open={name === "Build Services"}
       >
         <ListItemComponent
@@ -184,6 +191,7 @@ const NavItem = (props) => {
               </Box>
 
               <ListItemText
+                ref={textRef}
                 clickDisabled={disabled}
                 active={isActive}
                 visible={isDrawerExpanded || nestingLevel === 1}
@@ -330,7 +338,7 @@ export const MenuHoverTooltip = styled(
 export const MenuHoverTooltipTitle = styled(Box)(() => ({
   padding: "12px 14px",
   borderBottom: "1px solid rgba(127, 129, 148, 0.19)",
-  height: "46px",
+  minHeight: "46px",
   fontWeight: 600,
   fontSize: "14px",
   lineHeight: "26px",
