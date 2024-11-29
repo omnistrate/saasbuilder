@@ -8,7 +8,7 @@ import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import { Tabs, Tab } from "src/components/Tab/Tab";
 import { useEffect, useMemo, useState } from "react";
 import NodesTable from "src/components/ResourceInstance/NodesTable/NodesTable";
-import { Stack } from "@mui/material";
+import { Collapse, Stack } from "@mui/material";
 import Button from "src/components/Button/Button";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import Connectivity from "src/components/ResourceInstance/Connectivity/Connectivity";
@@ -35,6 +35,8 @@ import { CLI_MANAGED_RESOURCES, RESOURCE_TYPES } from "src/constants/resource";
 import AuditLogs from "src/components/ResourceInstance/AuditLogs/AuditLogs";
 import ResourceInstanceOverview from "src/components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
 import Backup from "src/components/ResourceInstance/Backup/Backup";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 export const getServerSideProps = async () => {
   return {
@@ -60,6 +62,7 @@ function ResourceInstance() {
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [currentSource, setCurrentSource] = useState("");
+  const [insightsVisible, setInsightsVisible] = useState(true);
 
   let resourceName = "";
   let resourceKey = "";
@@ -348,7 +351,7 @@ function ResourceInstance() {
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      <Stack direction="row" alignItems="center" justifyContent="flex-end">
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Link href={resourceInstancesUrl}>
           <Button
             startIcon={<RiArrowGoBackFill />}
@@ -362,22 +365,44 @@ function ResourceInstance() {
             Back to list of Resource Instances
           </Button>
         </Link>
+        <Button
+          startIcon={
+            insightsVisible ? (
+              <KeyboardArrowUpIcon />
+            ) : (
+              <KeyboardArrowDownIcon />
+            )
+          }
+          sx={{
+            color: "#6941C6",
+            "&:hover": {
+              background: "#F9F5FF",
+            },
+          }}
+          onClick={() => setInsightsVisible((prev) => !prev)}
+        >
+          {insightsVisible ? "Hide Insights" : "View Insights"}{" "}
+        </Button>
       </Stack>
-
-      <ResourceInstanceOverview
-        resourceInstanceId={resourceInstanceId}
-        region={resourceInstanceData?.region}
-        cloudProvider={cloudProvider}
-        status={resourceInstanceData?.status}
-        createdAt={resourceInstanceData?.createdAt}
-        modifiedAt={resourceInstanceData?.modifiedAt}
-        networkType={resourceInstanceData?.networkType}
-        healthStatusPercent={resourceInstanceData?.healthStatusPercent}
-        isResourceBYOA={isResourceBYOA}
-        isCliManagedResource={isCliManagedResource}
-        subscriptionOwner={subscriptionData?.subscriptionOwnerName}
-      />
-      <Tabs value={currentTab} sx={{ marginTop: "32px" }}>
+      <Collapse in={insightsVisible}>
+        <ResourceInstanceOverview
+          resourceInstanceId={resourceInstanceId}
+          region={resourceInstanceData?.region}
+          cloudProvider={cloudProvider}
+          status={resourceInstanceData?.status}
+          createdAt={resourceInstanceData?.createdAt}
+          modifiedAt={resourceInstanceData?.modifiedAt}
+          networkType={resourceInstanceData?.networkType}
+          healthStatusPercent={resourceInstanceData?.healthStatusPercent}
+          isResourceBYOA={isResourceBYOA}
+          isCliManagedResource={isCliManagedResource}
+          subscriptionOwner={subscriptionData?.subscriptionOwnerName}
+        />
+      </Collapse>
+      <Tabs
+        value={currentTab}
+        sx={{ marginTop: insightsVisible ? "10px" : "24px" }}
+      >
         {Object.entries(tabs).map(([key, value]) => {
           return (
             <Tab

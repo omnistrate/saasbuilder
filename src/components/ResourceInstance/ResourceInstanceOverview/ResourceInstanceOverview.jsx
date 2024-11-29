@@ -44,7 +44,7 @@ function ResourceInstanceOverview(props) {
     <>
       <TableContainer
         sx={{
-          mt: "32px",
+          mt: "10px",
           padding: "0px 0px",
         }}
       >

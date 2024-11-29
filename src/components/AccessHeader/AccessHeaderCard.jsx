@@ -37,6 +37,7 @@ function AccessHeaderCard(props) {
     <TableContainer
       sx={{
         padding: "0px 0px",
+        marginTop: "10px",
       }}
     >
       <Table sx={{ tableLayout: "fixed" }}>
