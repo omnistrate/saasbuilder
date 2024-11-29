@@ -106,6 +106,7 @@ function SettingsMarketplace() {
     serviceName: serviceOffering?.serviceName,
     customLogo: true,
     serviceLogoURL: serviceOffering?.serviceLogoURL,
+    pageType: sidebarActiveOptions.settings,
   };
 
   return (

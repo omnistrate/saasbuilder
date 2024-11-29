@@ -32,6 +32,7 @@ export default function DashboardLayout(props) {
     noServicesAvailable,
     environmentId,
     activePage,
+    pageType,
     p = "32px",
   } = props;
   const open = useSelector(selectDrawerExpandedState);
@@ -83,6 +84,7 @@ export default function DashboardLayout(props) {
           subscriptionId={currentSubscription?.id}
           environmentId={environmentId}
           activePage={activePage}
+          pageType={pageType}
         />
       )}
       <Box

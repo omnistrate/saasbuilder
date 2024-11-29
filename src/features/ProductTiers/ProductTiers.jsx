@@ -148,7 +148,7 @@ function ProductTiers(props) {
                 fontSize: "30px",
               }}
             >
-              No Billing Plans
+              No Subscription Plans
             </div>
             <div
               justifyContent="center"
@@ -191,7 +191,7 @@ function ProductTiers(props) {
   return (
     <Box>
       <Stack justifyContent="center">
-        <ProductTiersHeading>Billing Plans</ProductTiersHeading>
+        <ProductTiersHeading>Subscription Plans</ProductTiersHeading>
       </Stack>
 
       <Box marginTop={"30px"}>

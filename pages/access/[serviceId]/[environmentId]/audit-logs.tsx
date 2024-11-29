@@ -125,6 +125,7 @@ function Events() {
         }
         serviceName={serviceOffering?.serviceName}
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.auditLogs}
       >
         <LoadingSpinner />
       </DashboardLayout>
@@ -156,6 +157,7 @@ function Events() {
         }
         serviceName={serviceOffering?.serviceName}
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.auditLogs}
       >
         <SubscriptionNotFoundUI />
       </DashboardLayout>
@@ -192,6 +194,7 @@ function Events() {
         accessPage
         currentSubscription={subscriptionData}
         environmentId={environmentId}
+        pageType={sidebarActiveOptions.auditLogs}
       >
         <OfferingUnavailableUI />
       </DashboardLayout>
@@ -227,6 +230,7 @@ function Events() {
       serviceName={serviceOffering?.serviceName}
       customLogo
       serviceLogoURL={serviceOffering?.serviceLogoURL}
+      pageType={sidebarActiveOptions.auditLogs}
     >
       <Box
         display="flex"

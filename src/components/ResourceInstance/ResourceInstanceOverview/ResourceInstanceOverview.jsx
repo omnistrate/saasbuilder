@@ -25,6 +25,7 @@ function ResourceInstanceOverview(props) {
     healthStatusPercent,
     isResourceBYOA,
     isCliManagedResource,
+    subscriptionOwner,
   } = props;
 
   let sectionLabel = "Resource";
@@ -43,7 +44,7 @@ function ResourceInstanceOverview(props) {
     <>
       <TableContainer
         sx={{
-          mt: "32px",
+          mt: "10px",
           padding: "0px 0px",
         }}
       >
@@ -52,6 +53,11 @@ function ResourceInstanceOverview(props) {
             <TableCellCenterText>
               <Text size="xsmall" weight="medium" color="#475467">
                 {`${sectionLabel} Instance ID`}{" "}
+              </Text>
+            </TableCellCenterText>
+            <TableCellCenterText>
+              <Text size="xsmall" weight="medium" color="#475467">
+                Subscription Owner
               </Text>
             </TableCellCenterText>
             <TableCellCenterText>
@@ -87,6 +93,17 @@ function ResourceInstanceOverview(props) {
               >
                 <Text size="small" weight="medium" color="#101828">
                   {resourceInstanceId}
+                </Text>
+              </Box>
+            </TableCell>
+            <TableCell>
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
+                <Text size="small" weight="medium" color="#101828">
+                  {subscriptionOwner}
                 </Text>
               </Box>
             </TableCell>

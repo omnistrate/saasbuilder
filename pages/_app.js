@@ -29,11 +29,11 @@ NProgress.configure({
   trickleSpeed: 50,
 });
 
-const startProgressBar = (url) => {
-  const newUrlPath = url?.split("?")[0];
-  if (newUrlPath !== Router.pathname) {
+const startProgressBar = () => {
+ // const newUrlPath = url?.split("?")[0];
+  //if (newUrlPath !== Router.pathname) {
     NProgress.start();
-  }
+  //}
 };
 
 const stopProgressBar = () => {
