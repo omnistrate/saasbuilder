@@ -331,7 +331,6 @@ export const MenuHoverTooltip = styled(
     lineHeight: "18px",
     fontWeight: 600,
     margin: 0,
-    marginLeft: "0px !important",
     padding: 0,
     borderRadius: "0px 8px 8px 0px",
     borderLeft: "1px solid #737373",
