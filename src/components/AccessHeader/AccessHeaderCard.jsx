@@ -114,7 +114,12 @@ function AccessHeaderCard(props) {
               gap={"10px"}
               title={currentSubscription?.subscriptionOwnerName}
             >
-              <Text size="small" weight="medium" color="rgba(16, 24, 40, 1)">
+              <Text
+                size="small"
+                weight="medium"
+                color="rgba(16, 24, 40, 1)"
+                sx={textStyles}
+              >
                 {currentSubscription?.subscriptionOwnerName}
               </Text>
             </Stack>

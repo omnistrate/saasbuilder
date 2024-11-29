@@ -24,7 +24,7 @@ import {
 import { getBillingRoute } from "src/utils/route/billing";
 import { getSettingsRoute } from "src/utils/route/settings";
 import { getSubscriptionsRoute } from "src/utils/route/subscriptions";
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 
 type SubscriptionDropdownProps = {
   serviceId: string;
@@ -66,6 +66,8 @@ const SubscriptionsDropdown: FC<SubscriptionDropdownProps> = (props) => {
     const subscription = subscriptions.find(
       (subscription) => subscription.id === newSubscriptionId
     );
+
+    if (!subscription) return;
     const productTierId = subscription.productTierId;
     let newRoute = "";
     if (pageType === sidebarActiveOptions.accessControl) {
