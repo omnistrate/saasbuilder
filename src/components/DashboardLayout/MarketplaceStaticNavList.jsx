@@ -72,7 +72,7 @@ const MarketplaceStaticNavList = (props) => {
 
   const navItems = [
     {
-      name: "Billing Plans",
+      name: "Subscription Plans",
       IconComponent: BillingPlansIcon,
       href: servicePlansLink,
       isActive: isServicePlansActive,
