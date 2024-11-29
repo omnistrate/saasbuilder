@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { Stack } from "@mui/material";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import useSnackbar from "src/hooks/useSnackbar";
+import { Text } from "src/components/Typography/Typography";
 
 function IDPAuth() {
   const router = useRouter();
@@ -99,6 +100,16 @@ function IDPAuth() {
       justifyContent="center"
       alignItems="center"
     >
+      <Text
+        sx={{
+          fontSize: "32px",
+          fontWeight: 600,
+          lineHeight: "38px",
+          textAlign: "center",
+        }}
+      >
+        Logging you in, please wait...
+      </Text>
       <LoadingSpinner />
     </Stack>
   );
