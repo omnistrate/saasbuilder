@@ -26,7 +26,7 @@ async function fetchServiceOffering(serviceId, productTierId, environmentType) {
 function useServiceOffering(serviceId, productTierId) {
   const environmentType = useEnvironmentType();
   const query = useQuery(
-    ["marketplace-service", serviceId],
+    ["marketplace-service", serviceId, productTierId],
     () => fetchServiceOffering(serviceId, productTierId, environmentType),
     {
       enabled: Boolean(serviceId),

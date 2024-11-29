@@ -140,125 +140,128 @@ const SubscriptionsDropdown: FC<SubscriptionDropdownProps> = (props) => {
   }
 
   return (
-    <Select
-      displayEmpty={true}
-      disabled={isLoadingSubscriptions}
-      value={subscriptionId || ""}
-      onChange={handleChange}
-      MenuProps={{
-        PaperProps: {
-          sx: {
-            maxWidth: 247, // Set the max width for the menu
-            padding: "11px 0px",
-            borderRadius: "8px",
+    <>
+      <Select
+        displayEmpty={true}
+        disabled={isLoadingSubscriptions}
+        value={subscriptionId || ""}
+        onChange={handleChange}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              maxWidth: 247, // Set the max width for the menu
+              padding: "11px 0px",
+              borderRadius: "8px",
+            },
           },
-        },
-      }}
-      renderValue={() => {
-
-        if (isLoadingSubscriptions) {
-          return (
-            <Stack justifyContent="center" alignItems="center" mt="3px">
-              <LoadingSpinnerSmall />
-            </Stack>
-          );
-        }
-
-        let subscriptionIcon: ReactNode = null;
-        if (selectedSubscription) {
-          if (selectedSubscription.defaultSubscription) {
-            subscriptionIcon = (
-              <SubscriptionTypeDirectIcon
-                style={{ flexShrink: 0 }}
-                height={20}
-                width={20}
-              />
-            );
-          } else {
-            subscriptionIcon = (
-              <SubscriptionTypeInvitedIcon
-                style={{ flexShrink: 0 }}
-                height={20}
-                width={20}
-              />
+        }}
+        renderValue={() => {
+          if (isLoadingSubscriptions) {
+            return (
+              <Stack justifyContent="center" alignItems="center" mt="3px">
+                <LoadingSpinnerSmall />
+              </Stack>
             );
           }
-        }
-        return (
-          <Stack direction="row" alignItems="center" gap="3px">
-            {subscriptionIcon}
 
-            <Text
-              size="medium"
-              weight="medium"
-              color="#101828"
-              sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
-            >
-              {selectedSubscription?.productTierName}
-            </Text>
-          </Stack>
-        );
-      }}
-    >
-      {subscriptions.map((subscription) => {
-        const SubscriptionTypeIcon = subscription.defaultSubscription
-          ? SubscriptionTypeDirectIcon
-          : SubscriptionTypeInvitedIcon;
-
-        return (
-          <MenuItem
-            value={subscription.id}
-            key={subscription.id}
-            sx={{
-              "& + &": {
-                marginTop: "0px",
-              },
-              padding: "5px 12px",
-            }}
-          >
-            <Tooltip
-              title={subscription?.productTierName}
-              placement="right"
-              sx={{ marginLeft: "4px" }}
-            >
-              <Stack
-                direction="row"
-                alignItems="flexStart"
-                gap="3px"
-                width="100%"
-              >
-                <SubscriptionTypeIcon
-                  style={{ flexShrink: 0, marginTop: "2px" }}
+          let subscriptionIcon: ReactNode = null;
+          if (selectedSubscription) {
+            if (selectedSubscription.roleType === "root") {
+              subscriptionIcon = (
+                <SubscriptionTypeDirectIcon
+                  style={{ flexShrink: 0 }}
                   height={20}
                   width={20}
                 />
-                <Stack alignItems="flex-start" gap="6px">
-                  <Text
-                    size="small"
-                    weight="medium"
-                    color="#101828"
-                    sx={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: "199px",
-                    }}
-                  >
-                    {subscription?.productTierName}
-                  </Text>
-                  <Chip
-                    label={subscription.id}
-                    fontColor="#067647"
-                    bgColor="#ECFDF3"
-                    borderColor="#ABEFC6"
-                    size="small"
+              );
+            } else {
+              subscriptionIcon = (
+                <SubscriptionTypeInvitedIcon
+                  style={{ flexShrink: 0 }}
+                  height={20}
+                  width={20}
+                />
+              );
+            }
+          }
+          return (
+            <Stack direction="row" alignItems="center" gap="3px">
+              {subscriptionIcon}
+
+              <Text
+                size="medium"
+                weight="medium"
+                color="#101828"
+                sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+              >
+                {selectedSubscription?.productTierName}
+              </Text>
+            </Stack>
+          );
+        }}
+      >
+        {subscriptions.map((subscription) => {
+          const SubscriptionTypeIcon =
+            subscription.roleType === "root"
+              ? SubscriptionTypeDirectIcon
+              : SubscriptionTypeInvitedIcon;
+
+          return (
+            <MenuItem
+              value={subscription.id}
+              key={subscription.id}
+              sx={{
+                "& + &": {
+                  marginTop: "0px",
+                },
+                padding: "5px 12px",
+              }}
+            >
+              <Tooltip
+                title={subscription?.productTierName}
+                placement="right"
+                sx={{ marginLeft: "4px" }}
+              >
+                <Stack
+                  direction="row"
+                  alignItems="flexStart"
+                  gap="3px"
+                  width="100%"
+                >
+                  <SubscriptionTypeIcon
+                    style={{ flexShrink: 0, marginTop: "2px" }}
+                    height={20}
+                    width={20}
                   />
+                  <Stack alignItems="flex-start" gap="6px">
+                    <Text
+                      size="small"
+                      weight="medium"
+                      color="#101828"
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        maxWidth: "199px",
+                      }}
+                    >
+                      {subscription?.productTierName}
+                    </Text>
+                    <Chip
+                      label={subscription.id}
+                      fontColor="#067647"
+                      bgColor="#ECFDF3"
+                      borderColor="#ABEFC6"
+                      size="small"
+                    />
+                  </Stack>
                 </Stack>
-              </Stack>
-            </Tooltip>
-          </MenuItem>
-        );
-      })}
-    </Select>
+              </Tooltip>
+            </MenuItem>
+          );
+        })}
+      </Select>
+      {/* <SubscriptionTypeInvitedIcon /> */}
+    </>
   );
 };
 
