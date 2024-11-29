@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, ReactNode, useMemo } from "react";
 import Select from "../FormElementsv2/Select/Select";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useUserSubscriptions from "src/hooks/query/useUserSubscriptions";
@@ -139,12 +139,10 @@ const SubscriptionsDropdown: FC<SubscriptionDropdownProps> = (props) => {
     router.push(newRoute);
   }
 
-  console.log("Subscription id", subscriptionId);
-  console.log("Subscriptions", subscriptions);
-  console.log("Selected subscription", selectedSubscription);
-
   return (
     <Select
+      displayEmpty={true}
+      disabled={isLoadingSubscriptions}
       value={subscriptionId || ""}
       onChange={handleChange}
       MenuProps={{
@@ -157,20 +155,39 @@ const SubscriptionsDropdown: FC<SubscriptionDropdownProps> = (props) => {
         },
       }}
       renderValue={() => {
+
         if (isLoadingSubscriptions) {
           return (
-            <Stack justifyContent="center" alignItems="center">
+            <Stack justifyContent="center" alignItems="center" mt="3px">
               <LoadingSpinnerSmall />
             </Stack>
           );
         }
+
+        let subscriptionIcon: ReactNode = null;
+        if (selectedSubscription) {
+          if (selectedSubscription.defaultSubscription) {
+            subscriptionIcon = (
+              <SubscriptionTypeDirectIcon
+                style={{ flexShrink: 0 }}
+                height={20}
+                width={20}
+              />
+            );
+          } else {
+            subscriptionIcon = (
+              <SubscriptionTypeInvitedIcon
+                style={{ flexShrink: 0 }}
+                height={20}
+                width={20}
+              />
+            );
+          }
+        }
         return (
           <Stack direction="row" alignItems="center" gap="3px">
-            <SubscriptionTypeDirectIcon
-              style={{ flexShrink: 0 }}
-              height={20}
-              width={20}
-            />
+            {subscriptionIcon}
+
             <Text
               size="medium"
               weight="medium"
