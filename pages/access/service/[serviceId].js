@@ -1471,8 +1471,14 @@ function MarketplaceService() {
       serviceModelKey: service?.serviceModelURLKey,
       productTierKey: service?.productTierURLKey,
       resourceKey: selectedResource?.key,
+      subscriptionId: subscriptionData?.id,
     };
-  }, [selectedResourceInstance, service, selectedResource]);
+  }, [
+    selectedResourceInstance,
+    service,
+    selectedResource,
+    subscriptionData?.id,
+  ]);
 
   if (isServiceLoading || isLoadingSubscription) {
     return (

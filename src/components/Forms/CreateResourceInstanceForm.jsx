@@ -297,7 +297,7 @@ function CreateResourceInstanceForm(props) {
               onChange={formData.handleChange}
               sx={{ marginTop: "16px" }}
             >
-              {["PUBLIC"].map((option) => (
+              {["PUBLIC", "INTERNAL"].map((option) => (
                 <MenuItem key={option} value={option}>
                   {option}
                 </MenuItem>
