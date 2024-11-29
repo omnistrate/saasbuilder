@@ -21,7 +21,7 @@ function HoverSubMenu(props) {
               IconComponent,
               icon,
               isActive,
-              activeRoutes=[],
+              activeRoutes = [],
               href,
               disabled,
               hidden,
