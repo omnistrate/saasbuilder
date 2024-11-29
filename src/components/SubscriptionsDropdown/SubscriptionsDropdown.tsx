@@ -155,6 +155,7 @@ const SubscriptionsDropdown: FC<SubscriptionDropdownProps> = (props) => {
         },
       }}
       renderValue={() => {
+
         if (isLoadingSubscriptions) {
           return (
             <Stack justifyContent="center" alignItems="center" mt="3px">

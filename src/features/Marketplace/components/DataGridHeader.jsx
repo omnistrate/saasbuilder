@@ -48,8 +48,8 @@ const DataGridHeader = ({
         gap="20px"
       >
         <DataGridHeaderTitle
-          title={`Detailed list of your service subscriptions`}
-          desc="View and manage your Nodes"
+          title={`Detailed list of your subscriptions`}
+          desc="View and manage your subscriptions"
           count={numSubscriptions}
           units={{
             singular: "Subscription",
