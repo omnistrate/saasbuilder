@@ -1069,6 +1069,21 @@ function MarketplaceService() {
       </Box>
     );
   };
+//reset states when product tier id/ subscription id changes
+  useEffect(() => {
+    dispatch(setResourceInstanceList([]));
+    setSelectedResource({
+      key: "",
+      id: "",
+      name: "",
+      isDeprecated: false,
+      isBackupEnabled: false,
+      resourceType: "",
+    });
+    setViewResourceInfo({});
+    setSelectedResourceInstances([]);
+    setRequestParams([]);
+  }, [productTierId, subscriptionId, dispatch]);
 
   useEffect(() => {
     if (
@@ -1090,6 +1105,8 @@ function MarketplaceService() {
             isDeprecated: cloudProviderRes[0].isDeprecated,
           };
           setCloudProviderResource(cloudProviderResourceInfo);
+        } else {
+          setCloudProviderResource(null);
         }
 
         let selectedResourceInfo = {};
@@ -1126,10 +1143,28 @@ function MarketplaceService() {
         fetchResourceInstances(selectedResourceInfo);
         setCreationDrawerOpen(false);
         setViewInfoDrawerOpen(false);
+      } else {
+        dispatch(setResourceInstanceList([]));
+        setSelectedResource({
+          key: "",
+          id: "",
+          name: "",
+          isDeprecated: false,
+          isBackupEnabled: false,
+          resourceType: "",
+        });
+        setViewResourceInfo({});
+        setSelectedResourceInstances([]);
+        setRequestParams([]);
       }
     }
     /*eslint-disable-next-line react-hooks/exhaustive-deps*/
-  }, [servicesLoadingStatus, resourceId, isSubscriptionDataFetched]);
+  }, [
+    servicesLoadingStatus,
+    resourceId,
+    isSubscriptionDataFetched,
+    subscriptionId,
+  ]);
 
   async function fetchCloudProviderResourceInstances(
     cloudProviderResourceInfo
@@ -1196,6 +1231,9 @@ function MarketplaceService() {
 
   async function fetchResourceInstances(resourceInfo, isRefetching = false) {
     clearExistingTimeout();
+    if (selectedResource.key !== resourceInfo?.key) {
+      dispatch(setResourceInstanceList([]));
+    }
 
     try {
       const status = isRefetching
