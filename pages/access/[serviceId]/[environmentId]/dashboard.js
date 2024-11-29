@@ -104,6 +104,8 @@ function Dashboard() {
         marketplacePage={currentSource === "access" ? false : true}
         accessPage
         customLogo
+        serviceId={serviceId}
+        currentSubscription={subscriptionData}
         SidebarUI={
           <MarketplaceServiceSidebar
             serviceId={serviceId}
@@ -136,6 +138,8 @@ function Dashboard() {
         marketplacePage={currentSource === "access" ? false : true}
         accessPage
         customLogo
+        serviceId={serviceId}
+        currentSubscription={subscriptionData}
         SidebarUI={
           <MarketplaceServiceSidebar
             serviceId={serviceId}
