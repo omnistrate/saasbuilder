@@ -24,6 +24,7 @@ import {
 import { getBillingRoute } from "src/utils/route/billing";
 import { getSettingsRoute } from "src/utils/route/settings";
 import { getSubscriptionsRoute } from "src/utils/route/subscriptions";
+import DOMPurify from 'dompurify';
 
 type SubscriptionDropdownProps = {
   serviceId: string;
@@ -61,7 +62,7 @@ const SubscriptionsDropdown: FC<SubscriptionDropdownProps> = (props) => {
   );
 
   function handleChange(e: SelectChangeEvent) {
-    const newSubscriptionId = e.target.value;
+    const newSubscriptionId = DOMPurify.sanitize(e.target.value);
     const subscription = subscriptions.find(
       (subscription) => subscription.id === newSubscriptionId
     );
