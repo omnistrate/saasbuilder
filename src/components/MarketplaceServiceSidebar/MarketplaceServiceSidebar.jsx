@@ -31,6 +31,8 @@ export const sidebarActiveOptions = {
   settings: "settings",
   billing: "billing",
   subscriptions: "subscriptions",
+  instancesList: "instancesList",
+  apiDocument: "apiDocument",
 };
 
 function MarketplaceServiceSidebar(props) {

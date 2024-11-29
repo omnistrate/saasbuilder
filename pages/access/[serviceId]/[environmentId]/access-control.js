@@ -379,6 +379,7 @@ function AccessControl() {
         }
         serviceName={service?.serviceName}
         serviceLogoURL={service?.serviceLogoURL}
+        pageType={sidebarActiveOptions.accessControl}
       >
         <LoadingSpinner />
       </DashboardLayout>
@@ -417,6 +418,7 @@ function AccessControl() {
         }
         serviceName={service?.serviceName}
         serviceLogoURL={service?.serviceLogoURL}
+        pageType={sidebarActiveOptions.accessControl}
       >
         <SubscriptionNotFoundUI />
       </DashboardLayout>
@@ -439,6 +441,7 @@ function AccessControl() {
         currentSubscription={subscriptionData}
         isCustomNetworkEnabled={isCustomNetworkEnabled}
         environmentId={environmentId}
+        pageType={sidebarActiveOptions.accessControl}
       >
         <ServiceOfferingUnavailableUI />
       </DashboardLayout>
@@ -476,6 +479,7 @@ function AccessControl() {
       serviceName={service?.serviceName}
       customLogo
       serviceLogoURL={service?.serviceLogoURL}
+      pageType={sidebarActiveOptions.accessControl}
     >
       {isFetchingUsers || isLoadingSubscription ? (
         <Box display="flex" justifyContent="center" mt="200px">
