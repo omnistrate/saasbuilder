@@ -1,48 +1,36 @@
 const RegionIcon = (props) => {
   return (
     <svg
-      width={40.909}
-      height={40}
-      viewBox="0 0 40.909 40"
+      width={32}
+      height={32}
+      viewBox="0 0 32 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <g filter="url(#filter0_d_4635_21590)">
+      <g filter="url(#filter0_dii_3115_241)">
         <path
-          x={2.5}
-          y={1}
-          width={40}
-          height={40}
-          rx={8}
+          d="M2 5C2 2.79086 3.79086 1 6 1H26C28.2091 1 30 2.79086 30 5V25C30 27.2091 28.2091 29 26 29H6C3.79086 29 2 27.2091 2 25V5Z"
           fill="white"
-          d="M9.545 0.909H31.364A7.273 7.273 0 0 1 38.636 8.182V30A7.273 7.273 0 0 1 31.364 37.273H9.545A7.273 7.273 0 0 1 2.273 30V8.182A7.273 7.273 0 0 1 9.545 0.909z"
         />
         <path
-          d="M12.879 19.091h15.151m-15.151 0a7.575 7.575 0 0 0 7.575 7.575M12.879 19.091a7.575 7.575 0 0 1 7.575 -7.575M28.03 19.091a7.575 7.575 0 0 1 -7.575 7.575M28.03 19.091a7.575 7.575 0 0 0 -7.575 -7.575m0 0A11.591 11.591 0 0 1 23.484 19.091a11.591 11.591 0 0 1 -3.03 7.575m0 -15.151A11.591 11.591 0 0 0 17.425 19.091a11.591 11.591 0 0 0 3.03 7.575"
+          d="M2.5 5C2.5 3.067 4.067 1.5 6 1.5H26C27.933 1.5 29.5 3.067 29.5 5V25C29.5 26.933 27.933 28.5 26 28.5H6C4.067 28.5 2.5 26.933 2.5 25V5Z"
+          stroke="#D0D5DD"
+        />
+        <path
+          d="M16 6.66666C18.0844 8.94862 19.269 11.91 19.3334 15C19.269 18.09 18.0844 21.0514 16 23.3333M16 6.66666C13.9156 8.94862 12.7311 11.91 12.6667 15C12.7311 18.09 13.9156 21.0514 16 23.3333M16 6.66666C11.3976 6.66666 7.66669 10.3976 7.66669 15C7.66669 19.6024 11.3976 23.3333 16 23.3333M16 6.66666C20.6024 6.66666 24.3334 10.3976 24.3334 15C24.3334 19.6024 20.6024 23.3333 16 23.3333M8.08337 12.5H23.9167M8.08335 17.5H23.9167"
           stroke="#7F56D9"
-          strokeWidth={1.8181777777777777}
           strokeLinecap="round"
           strokeLinejoin="round"
-        />
-        <path
-          x={3}
-          y={1.5}
-          width={39}
-          height={39}
-          rx={7.5}
-          stroke="#EAECF0"
-          d="M9.545 1.364H31.364A6.818 6.818 0 0 1 38.182 8.182V30A6.818 6.818 0 0 1 31.364 36.818H9.545A6.818 6.818 0 0 1 2.727 30V8.182A6.818 6.818 0 0 1 9.545 1.364z"
-          strokeWidth={0.9090888888888888}
         />
       </g>
       <defs>
         <filter
-          id="filter0_d_4635_21590"
-          x={0.5}
+          id="filter0_dii_3115_241"
+          x={0}
           y={0}
-          width={44}
-          height={44}
+          width={32}
+          height={32}
           filterUnits="userSpaceOnUse"
           colorInterpolationFilters="sRGB"
         >
@@ -55,6 +43,7 @@ const RegionIcon = (props) => {
           />
           <feOffset dy={1} />
           <feGaussianBlur stdDeviation={1} />
+          <feComposite in2="hardAlpha" operator="out" />
           <feColorMatrix
             type="matrix"
             values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.05 0"
@@ -62,13 +51,53 @@ const RegionIcon = (props) => {
           <feBlend
             mode="normal"
             in2="BackgroundImageFix"
-            result="effect1_dropShadow_4635_21590"
+            result="effect1_dropShadow_3115_241"
           />
           <feBlend
             mode="normal"
             in="SourceGraphic"
-            in2="effect1_dropShadow_4635_21590"
+            in2="effect1_dropShadow_3115_241"
             result="shape"
+          />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dy={-2} />
+          <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.05 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="shape"
+            result="effect2_innerShadow_3115_241"
+          />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feMorphology
+            radius={1}
+            operator="erode"
+            in="SourceAlpha"
+            result="effect3_innerShadow_3115_241"
+          />
+          <feOffset />
+          <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.18 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="effect2_innerShadow_3115_241"
+            result="effect3_innerShadow_3115_241"
           />
         </filter>
       </defs>

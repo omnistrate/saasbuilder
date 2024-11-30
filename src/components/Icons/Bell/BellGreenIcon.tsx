@@ -1,11 +1,12 @@
 import { FC } from "react";
+import { styleConfig } from "src/providerConfig";
 
 type BellIconProps = {
   color?: string;
 };
 
 const BellGreenIcon: FC<BellIconProps> = ({
-  color = "#17B26A",
+  color = styleConfig.headerIconColor,
   ...otherProps
 }) => {
   return (

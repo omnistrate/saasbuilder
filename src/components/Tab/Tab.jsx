@@ -1,6 +1,7 @@
 import MuiTabs, { tabsClasses } from "@mui/material/Tabs";
 import MuiTab, { tabClasses } from "@mui/material/Tab";
 import styled from "@emotion/styled";
+import { styleConfig } from "src/providerConfig";
 
 export const Tabs = styled(MuiTabs)({
   borderBottom: "1px solid #E1E3EA",
@@ -26,11 +27,11 @@ export const Tab = styled(MuiTab)({
   // marginRight: "16px",
   minWidth: "auto",
   [`&.${tabClasses.selected}`]: {
-    borderBottom: "2px solid #6941C6",
-    color: "#6941C6",
+    borderBottom: `2px solid ${styleConfig.secondaryColor}`,
+    color: styleConfig.secondaryColor,
   },
   "&:hover": {
-    borderBottom: "2px solid #6941C6",
-    color: "#6941C6",
+    borderBottom: `2px solid ${styleConfig.secondaryColor}`,
+    color: styleConfig.secondaryColor,
   },
 });

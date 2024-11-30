@@ -37,6 +37,7 @@ import ResourceInstanceOverview from "src/components/ResourceInstance/ResourceIn
 import Backup from "src/components/ResourceInstance/Backup/Backup";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { styleConfig } from "src/providerConfig";
 
 export const getServerSideProps = async () => {
   return {
@@ -356,9 +357,9 @@ function ResourceInstance() {
           <Button
             startIcon={<RiArrowGoBackFill />}
             sx={{
-              color: "#6941C6",
+              color: `${styleConfig.secondaryColor} !important`,
               "&:hover": {
-                background: "#F9F5FF",
+                background: styleConfig.secondaryHoverLight,
               },
             }}
           >
@@ -374,9 +375,9 @@ function ResourceInstance() {
             )
           }
           sx={{
-            color: "#6941C6",
+            color: `${styleConfig.secondaryColor} !important`,
             "&:hover": {
-              background: "#F9F5FF",
+              background: styleConfig.secondaryHoverLight,
             },
           }}
           onClick={() => setInsightsVisible((prev) => !prev)}
