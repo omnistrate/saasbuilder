@@ -54,12 +54,20 @@ const MySubscriptions = () => {
     subscriptionId
   );
 
+  useEffect(() => {
+    if (serviceId) {
+      setSearchText(serviceId);
+    }
+  }, [serviceId]);
+
   const { data: subscriptionData = {} } = subscriptionQuery;
 
   const filteredSubscriptions = useMemo(() => {
     let list = subscriptions;
-    list = subscriptions?.filter((item) =>
-      item?.serviceName?.toLowerCase()?.includes(searchText?.toLowerCase())
+    list = subscriptions?.filter(
+      (item) =>
+        item?.serviceName?.toLowerCase()?.includes(searchText?.toLowerCase()) ||
+        item?.serviceId?.toLowerCase()?.includes(searchText?.toLowerCase())
     );
     if (typeFilter === "direct") {
       list = list?.filter((item) => item?.roleType === "root");
@@ -95,7 +103,7 @@ const MySubscriptions = () => {
   const columns = [
     {
       field: "serviceName",
-      headerName: "Name",
+      headerName: "Service Name",
       flex: 1,
       minWidth: 230,
       renderCell: (params) => {
@@ -368,7 +376,7 @@ const MySubscriptions = () => {
           <LogoHeader
             margin={0}
             title="My Subscriptions"
-            desc="Explore your current service subscriptions here"
+            desc="Explore your current subscriptions here"
           />
         </Box>
         <DataGrid
@@ -388,6 +396,7 @@ const MySubscriptions = () => {
               selectedSubscription: selectedSubscription,
               handleUnsubscribeClick: handleUnsubscribeClick,
               isUnsubscribing: unsubscribeMutation.isLoading,
+              serviceId: serviceId,
             },
           }}
           onSelectionModelChange={(newSelection) => {

@@ -166,7 +166,7 @@ const SubscriptionsDropdown: FC<SubscriptionDropdownProps> = (props) => {
 
         let subscriptionIcon: ReactNode = null;
         if (selectedSubscription) {
-          if (selectedSubscription.defaultSubscription) {
+          if (selectedSubscription.roleType === "root") {
             subscriptionIcon = (
               <SubscriptionTypeDirectIcon
                 style={{ flexShrink: 0 }}
@@ -201,9 +201,10 @@ const SubscriptionsDropdown: FC<SubscriptionDropdownProps> = (props) => {
       }}
     >
       {subscriptions.map((subscription) => {
-        const SubscriptionTypeIcon = subscription.defaultSubscription
-          ? SubscriptionTypeDirectIcon
-          : SubscriptionTypeInvitedIcon;
+        const SubscriptionTypeIcon =
+          subscription.roleType === "root"
+            ? SubscriptionTypeDirectIcon
+            : SubscriptionTypeInvitedIcon;
 
         return (
           <MenuItem
