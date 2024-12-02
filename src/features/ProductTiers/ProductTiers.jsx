@@ -128,6 +128,7 @@ function ProductTiers(props) {
     }
   }, [serviceOfferingData]);
 
+
   if (!serviceOfferingData?.offerings?.length && environmentId) {
     if (source === "access") return <NoProductTierUI />;
     return (
