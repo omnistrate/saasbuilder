@@ -18,6 +18,10 @@ export const styleConfig = {
   // secondaryColor: "#F5F5FF", // Outlined Button Background
   // primaryTextColor: "#FFFFFF", // Outlined Button Text
   // primaryHoverColor: "#7F56D9", // Outlined Button Hover
+  secondaryColor: "#6941C6",
+  secondaryHoverLight: "#6941C60d",
+  linkColor: "#7F56D9",
+  headerIconColor: "#17B26A",
 };
 
 // Dark Mode - Sidebar and Navbar

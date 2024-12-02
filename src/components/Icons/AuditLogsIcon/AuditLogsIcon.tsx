@@ -1,11 +1,12 @@
 import { FC } from "react";
+import { styleConfig } from "src/providerConfig";
 
 type AuditLogsIconProps = {
   color?: string;
 };
 
 const AuditLogsIcon: FC<AuditLogsIconProps> = ({
-  color = "#17B26A",
+  color = styleConfig.headerIconColor,
   ...otherProps
 }) => {
   return (

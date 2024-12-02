@@ -5,6 +5,7 @@ import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import type * as CSS from "csstype";
 
 import DataGridCopyIcon from "../Icons/CopyIcon/DataGridCopyIcon";
+import { styleConfig } from "src/providerConfig";
 
 type LinkProps = {
   href: string;
@@ -14,7 +15,7 @@ type LinkProps = {
 
 const colorMap = {
   default: "#475467",
-  primary: "#7F56D9",
+  primary: styleConfig.linkColor,
 };
 
 type DataGridTextProps = {
