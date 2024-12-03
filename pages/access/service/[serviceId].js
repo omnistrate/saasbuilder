@@ -94,6 +94,10 @@ import Button from "src/components/Button/Button";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { styleConfig } from "src/providerConfig";
+import {
+  selectInstanceListSummaryVisibililty,
+  toggleInstanceListSummaryVisibility,
+} from "src/slices/genericSlice";
 
 export const getServerSideProps = async () => {
   return {
@@ -226,7 +230,7 @@ function MarketplaceService() {
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [viewInfoDrawerOpen, setViewInfoDrawerOpen] = useState(false);
   const [updateDrawerOpen, setUpdateDrawerOpen] = useState(false);
-  const [insightsVisible, setInsightsVisible] = useState(true);
+  const insightsVisible = useSelector(selectInstanceListSummaryVisibililty);
 
   const timeoutID = useRef(null);
   const currentResourceInfo = useRef({ resourceKey: null, resourceId: null });
@@ -1070,7 +1074,7 @@ function MarketplaceService() {
       </Box>
     );
   };
-//reset states when product tier id/ subscription id changes
+  //reset states when product tier id/ subscription id changes
   useEffect(() => {
     dispatch(setResourceInstanceList([]));
     setSelectedResource({
@@ -1813,7 +1817,7 @@ function MarketplaceService() {
                 background: styleConfig.secondaryHoverLight,
               },
             }}
-            onClick={() => setInsightsVisible((prev) => !prev)}
+            onClick={() => dispatch(toggleInstanceListSummaryVisibility())}
           >
             {insightsVisible ? "Hide Insights" : "View Insights"}{" "}
           </Button>

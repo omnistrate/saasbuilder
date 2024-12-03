@@ -204,13 +204,13 @@ function MarketplaceServiceSidebar(props) {
           IconComponent: SidebarDotIcon,
           href: accessControlUrlLink,
           isActive: isAccessControlActive,
+          disabled: !listingAllowedForAccessService,
         },
         {
           name: "Audit Logs",
           IconComponent: SidebarDotIcon,
           href: auditLogsUrlLink,
           isActive: isAuditLogsActive,
-          disabled: !listingAllowedForAccessService,
         },
         {
           name: "Notifications",

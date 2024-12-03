@@ -38,6 +38,11 @@ import Backup from "src/components/ResourceInstance/Backup/Backup";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { styleConfig } from "src/providerConfig";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectInstanceDetailsSummaryVisibililty,
+  toggleInstanceDetailsSummaryVisibility,
+} from "src/slices/genericSlice";
 
 export const getServerSideProps = async () => {
   return {
@@ -63,7 +68,8 @@ function ResourceInstance() {
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [currentSource, setCurrentSource] = useState("");
-  const [insightsVisible, setInsightsVisible] = useState(true);
+  const insightsVisible = useSelector(selectInstanceDetailsSummaryVisibililty);
+  const dispatch = useDispatch();
 
   let resourceName = "";
   let resourceKey = "";
@@ -380,7 +386,7 @@ function ResourceInstance() {
               background: styleConfig.secondaryHoverLight,
             },
           }}
-          onClick={() => setInsightsVisible((prev) => !prev)}
+          onClick={() => dispatch(toggleInstanceDetailsSummaryVisibility())}
         >
           {insightsVisible ? "Hide Insights" : "View Insights"}{" "}
         </Button>

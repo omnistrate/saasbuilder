@@ -8,6 +8,7 @@ import dashboardSidebarSlice from "./slices/dashboardSideDrawerSlice";
 import eventsSlice from "./slices/eventsSlice";
 import subscriptionsSlice from "./slices/subscriptionsSlice";
 import userDataSlice from "./slices/userDataSlice";
+import genericSlice from "./slices/genericSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,5 +21,6 @@ export const store = configureStore({
     events: eventsSlice,
     subscriptions: subscriptionsSlice,
     user: userDataSlice,
+    generic: genericSlice,
   },
 });

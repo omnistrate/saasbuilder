@@ -142,6 +142,7 @@ const NavItem = (props) => {
   let iconColor = styleConfig.sidebarIconColor;
   if (disabled) {
     iconColor = styleConfig.sidebarIconDisabledColor;
+    IconComponentProps.disabled = true;
   }
   if (isActive) {
     iconColor = styleConfig.sidebarIconActiveColor;
