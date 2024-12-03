@@ -40,7 +40,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { styleConfig } from "src/providerConfig";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  selectInstanceDetailsSummaryVisibililty,
+  selectInstanceDetailsSummaryVisibility,
   toggleInstanceDetailsSummaryVisibility,
 } from "src/slices/genericSlice";
 
@@ -68,7 +68,7 @@ function ResourceInstance() {
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [currentSource, setCurrentSource] = useState("");
-  const insightsVisible = useSelector(selectInstanceDetailsSummaryVisibililty);
+  const insightsVisible = useSelector(selectInstanceDetailsSummaryVisibility);
   const dispatch = useDispatch();
 
   let resourceName = "";

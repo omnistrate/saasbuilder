@@ -95,7 +95,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { styleConfig } from "src/providerConfig";
 import {
-  selectInstanceListSummaryVisibililty,
+  selectInstanceListSummaryVisibility,
   toggleInstanceListSummaryVisibility,
 } from "src/slices/genericSlice";
 
@@ -230,11 +230,11 @@ function MarketplaceService() {
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [viewInfoDrawerOpen, setViewInfoDrawerOpen] = useState(false);
   const [updateDrawerOpen, setUpdateDrawerOpen] = useState(false);
-  const insightsVisible = useSelector(selectInstanceListSummaryVisibililty);
+  const insightsVisible = useSelector(selectInstanceListSummaryVisibility);
 
   const timeoutID = useRef(null);
   const currentResourceInfo = useRef({ resourceKey: null, resourceId: null });
-  useEffect(() => {
+useEffect(() => {
     if (source) {
       setCurrentSource(source);
     }
