@@ -48,6 +48,14 @@ export default function SettingsTab(props) {
           }}
           sx={{ padding: "4px !important", marginRight: "16px !important" }}
         />
+        <Tab
+          label={tabLabel[tabs.billing]}
+          value={tabs.billing}
+          onClick={() => {
+            handleChangeTab(tabs.billing);
+          }}
+          sx={{ padding: "4px !important", marginRight: "16px !important" }}
+        />
       </Tabs>
     </Box>
   );

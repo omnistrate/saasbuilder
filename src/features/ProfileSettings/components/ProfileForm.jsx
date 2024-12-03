@@ -92,7 +92,7 @@ function ProfileForm(props) {
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell sx={{ width: "280px !important" }}>
+              <TableCell sx={{ width: "312px !important" }}>
                 <FieldLabel required>Name</FieldLabel>
               </TableCell>
               <TableCell>
@@ -104,13 +104,12 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "600px !important" }}
                 />
                 <ErrorLabel>{touched.name && errors.name}</ErrorLabel>
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ width: "280px !important" }}>
+              <TableCell sx={{ width: "312px !important" }}>
                 <FieldLabel required>Organization ID</FieldLabel>
               </TableCell>
               <TableCell>
@@ -119,12 +118,11 @@ function ProfileForm(props) {
                   disabled
                   value={values.orgId}
                   mt="12px"
-                  sx={{ maxWidth: "600px !important" }}
                 />
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ width: "280px !important" }}>
+              <TableCell sx={{ width: "312px !important" }}>
                 <FieldLabel required>Organization Name</FieldLabel>
               </TableCell>
               <TableCell>
@@ -136,14 +134,13 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>{touched.orgName && errors.orgName}</ErrorLabel>
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ width: "280px !important" }}>
+              <TableCell sx={{ width: "312px !important" }}>
                 <FieldLabel>Organization Website URL</FieldLabel>
               </TableCell>
               <TableCell>
@@ -155,7 +152,6 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>{touched.orgURL && errors.orgURL}</ErrorLabel>

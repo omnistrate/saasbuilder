@@ -5,7 +5,6 @@ import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
 import Image from "next/image";
 import newserviceImg from "public/assets/images/dashboard/settings.jpg";
 import SettingsTab from "./SettingsTab";
-import LogoHeader from "src/components/Headers/LogoHeader";
 
 function UserInfoBanner(props) {
   const { selectUser, currentTab, router, setCurrentTab } = props;

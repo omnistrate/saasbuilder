@@ -11,12 +11,13 @@ import { tabs } from "./constants";
 import BillingAddress from "./components/BillingAddress";
 import { Box } from "@mui/material";
 import MySubscriptions from "../Marketplace/MySubscriptions";
+import BillingPage from "../Billing/BillingPage";
 
-function SettingsMarketplace() {
+function SettingsMarketplace(props) {
+  const { currentTab, setCurrentTab } = props;
   const router = useRouter();
   const selectUser = useSelector(selectUserrootData);
   const { query, refetch } = useUserData();
-  const [currentTab, setCurrentTab] = React.useState(tabs.profile);
   const isLoading = query.isRefetching === true || query.isLoading === true;
 
   return (
@@ -31,7 +32,7 @@ function SettingsMarketplace() {
             setCurrentTab={setCurrentTab}
             router={router}
           />
-          <Box >
+          <Box>
             {currentTab === tabs.profile && (
               <ProfileForm refetch={refetch} selectUser={selectUser} />
             )}
@@ -40,6 +41,7 @@ function SettingsMarketplace() {
               <BillingAddress refetch={refetch} selectUser={selectUser} />
             )}
             {currentTab === tabs.subscriptions && <MySubscriptions />}
+            {currentTab === tabs.billing && <BillingPage />}
           </Box>
         </>
       )}

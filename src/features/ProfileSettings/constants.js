@@ -3,6 +3,7 @@ export const tabs = {
   password: "password",
   billingAddress: "billingAddress",
   subscriptions: "subscriptions",
+  billing: "billing",
 };
 
 export const tabLabel = {
@@ -10,4 +11,5 @@ export const tabLabel = {
   password: "Password",
   billingAddress: "Billing Address",
   subscriptions: "My Subscriptions",
+  billing: "Billing",
 };

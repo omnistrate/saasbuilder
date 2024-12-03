@@ -17,10 +17,10 @@ import ResourcesIcon from "../Icons/SideNavbar/Resources/Resources";
 import ShieldIcon from "../Icons/SideNavbar/Shield/Shield";
 import { List } from "../DashboardLayout/NavList";
 import NavItem from "../DashboardLayout/NavItem";
-import { getSettingsRoute } from "src/utils/route/settings";
-import { getSubscriptionsRoute } from "src/utils/route/subscriptions";
-import { getBillingRoute } from "src/utils/route/billing";
-import AccountManagementIcon from "../Icons/SideNavbar/AccountManagement/AccountManagement";
+// import { getSettingsRoute } from "src/utils/route/settings";
+// import { getSubscriptionsRoute } from "src/utils/route/subscriptions";
+// import { getBillingRoute } from "src/utils/route/billing";
+// import AccountManagementIcon from "../Icons/SideNavbar/AccountManagement/AccountManagement";
 
 export const sidebarActiveOptions = {
   accessControl: "accessControl",
@@ -53,9 +53,9 @@ function MarketplaceServiceSidebar(props) {
   const isAuditLogsActive = active === sidebarActiveOptions.auditLogs;
   const isNotificationsActive = active === sidebarActiveOptions.notifications;
   const isDashboardActive = active === sidebarActiveOptions.dashboard;
-  const isBillingActive = active === sidebarActiveOptions.billing;
-  const isSubscriptionsActive = active === sidebarActiveOptions.subscriptions;
-  const isSettingsActive = active === sidebarActiveOptions.settings;
+  // const isBillingActive = active === sidebarActiveOptions.billing;
+  // const isSubscriptionsActive = active === sidebarActiveOptions.subscriptions;
+  // const isSettingsActive = active === sidebarActiveOptions.settings;
 
   const role = getEnumFromUserRoleString(currentSubscription?.roleType);
 
@@ -100,27 +100,27 @@ function MarketplaceServiceSidebar(props) {
     currentSubscription?.id
   );
 
-  const settingsLink = getSettingsRoute(
-    serviceId,
-    environmentId,
-    productTierId,
-    currentSubscription?.id,
-    "profile"
-  );
+  // const settingsLink = getSettingsRoute(
+  //   serviceId,
+  //   environmentId,
+  //   productTierId,
+  //   currentSubscription?.id,
+  //   "profile"
+  // );
 
-  const subscriptionsRoute = getSubscriptionsRoute(
-    serviceId,
-    environmentId,
-    productTierId,
-    currentSubscription?.id
-  );
+  // const subscriptionsRoute = getSubscriptionsRoute(
+  //   serviceId,
+  //   environmentId,
+  //   productTierId,
+  //   currentSubscription?.id
+  // );
 
-  const billingRoute = getBillingRoute(
-    serviceId,
-    environmentId,
-    productTierId,
-    currentSubscription?.id
-  );
+  // const billingRoute = getBillingRoute(
+  //   serviceId,
+  //   environmentId,
+  //   productTierId,
+  //   currentSubscription?.id
+  // );
 
   const resourceParametersList =
     resourceParameters
@@ -220,35 +220,35 @@ function MarketplaceServiceSidebar(props) {
         },
       ],
     },
-    {
-      name: "Account Management",
-      IconComponent: AccountManagementIcon,
-      isActive: false,
-      isExpandible: true,
-      defaultExpanded:
-        isSettingsActive || isBillingActive || isSubscriptionsActive,
-      subItems: [
-        {
-          name: "Settings",
-          IconComponent: SidebarDotIcon,
-          href: settingsLink,
-          isActive: isSettingsActive,
-        },
-        {
-          name: "Billing",
-          IconComponent: SidebarDotIcon,
-          href: billingRoute,
-          isActive: isBillingActive,
-          disabled: !listingAllowedForAccessService,
-        },
-        {
-          name: "Subscriptions",
-          IconComponent: SidebarDotIcon,
-          href: subscriptionsRoute,
-          isActive: isSubscriptionsActive,
-        },
-      ],
-    },
+    // {
+    //   name: "Account Management",
+    //   IconComponent: AccountManagementIcon,
+    //   isActive: false,
+    //   isExpandible: true,
+    //   defaultExpanded:
+    //     isSettingsActive || isBillingActive || isSubscriptionsActive,
+    //   subItems: [
+    //     {
+    //       name: "Settings",
+    //       IconComponent: SidebarDotIcon,
+    //       href: settingsLink,
+    //       isActive: isSettingsActive,
+    //     },
+    //     {
+    //       name: "Billing",
+    //       IconComponent: SidebarDotIcon,
+    //       href: billingRoute,
+    //       isActive: isBillingActive,
+    //       disabled: !listingAllowedForAccessService,
+    //     },
+    //     {
+    //       name: "Subscriptions",
+    //       IconComponent: SidebarDotIcon,
+    //       href: subscriptionsRoute,
+    //       isActive: isSubscriptionsActive,
+    //     },
+    //   ],
+    // },
   ];
 
   return (

@@ -109,7 +109,7 @@ function ProfileForm(props) {
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell sx={{ width: "280px !important" }}>
+              <TableCell sx={{ width: "312px !important" }}>
                 <FieldLabel required>Address Line 1</FieldLabel>
               </TableCell>
               <TableCell>
@@ -120,7 +120,6 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>
@@ -130,7 +129,7 @@ function ProfileForm(props) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ width: "280px !important" }}>
+              <TableCell sx={{ width: "312px !important" }}>
                 <FieldLabel>Address Line 2</FieldLabel>
               </TableCell>
               <TableCell>
@@ -141,7 +140,6 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>
@@ -151,7 +149,7 @@ function ProfileForm(props) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ width: "280px !important" }}>
+              <TableCell sx={{ width: "312px !important" }}>
                 <FieldLabel required>City</FieldLabel>
               </TableCell>
               <TableCell>
@@ -162,7 +160,6 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>
@@ -171,7 +168,7 @@ function ProfileForm(props) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ width: "280px !important" }}>
+              <TableCell sx={{ width: "312px !important" }}>
                 <FieldLabel required>State</FieldLabel>
               </TableCell>
               <TableCell>
@@ -182,7 +179,6 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "600px !important" }}
                 />
                 <ErrorLabel>
                   {touched.address?.state && errors.address?.state}
@@ -190,7 +186,7 @@ function ProfileForm(props) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ width: "280px !important" }}>
+              <TableCell sx={{ width: "312px !important" }}>
                 <FieldLabel required>Country</FieldLabel>
               </TableCell>
               <TableCell>
@@ -211,7 +207,6 @@ function ProfileForm(props) {
                   //   formik.setFieldTouched("address.country", true);
                   // }}
                   placeholder="Select a country"
-                  sx={{ maxWidth: "600px !important" }}
                 />
                 <ErrorLabel>
                   {touched.address?.country && errors.address?.country}
@@ -219,7 +214,7 @@ function ProfileForm(props) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell sx={{ width: "280px !important" }}>
+              <TableCell sx={{ width: "312px !important" }}>
                 <FieldLabel required>Zipcode</FieldLabel>
               </TableCell>
               <TableCell>
@@ -230,7 +225,6 @@ function ProfileForm(props) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   mt="12px"
-                  sx={{ maxWidth: "600px !important" }}
                   disabled={selectUser.roleType !== "root"}
                 />
                 <ErrorLabel>

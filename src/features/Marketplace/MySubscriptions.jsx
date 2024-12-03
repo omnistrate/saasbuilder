@@ -17,8 +17,6 @@ import {
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
-import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
-import LogoHeader from "src/components/Headers/LogoHeader";
 
 const MySubscriptions = () => {
   const {
@@ -319,9 +317,6 @@ const MySubscriptions = () => {
           flex: 1,
           boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
           border: "1px solid  rgba(228, 231, 236, 1)",
-          "& .MuiDataGrid-main": {
-            minHeight: "544px",
-          },
         }}
         hideFooterSelectedRowCount
       />
