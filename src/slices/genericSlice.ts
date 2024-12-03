@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface GenericState {
+  instanceListSummaryVisible: boolean;
+  instanceDetailsSummaryVisible: boolean;
+}
+
+const initialState: GenericState = {
   instanceListSummaryVisible: true,
   instanceDetailsSummaryVisible: true,
 };
@@ -26,8 +31,8 @@ export const {
 
 export default genericSlice.reducer;
 
-export const selectInstanceListSummaryVisibililty = (state) =>
+export const selectInstanceListSummaryVisibility = (state) =>
   state.generic.instanceListSummaryVisible;
 
-export const selectInstanceDetailsSummaryVisibililty = (state) =>
+export const selectInstanceDetailsSummaryVisibility = (state) =>
   state.generic.instanceDetailsSummaryVisible;
