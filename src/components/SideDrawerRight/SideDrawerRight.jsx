@@ -3,7 +3,13 @@ import { ButtonBase, styled } from "@mui/material";
 import MuiDrawer, { drawerClasses } from "@mui/material/Drawer";
 
 export default function SideDrawerRight(props) {
-  const { open = false, closeDrawer, RenderUI, size = "small" } = props;
+  const {
+    open = false,
+    closeDrawer,
+    RenderUI,
+    size = "small",
+    containerStyles = {},
+  } = props;
 
   return (
     <Drawer anchor="right" open={open} onClose={closeDrawer}>
@@ -11,7 +17,11 @@ export default function SideDrawerRight(props) {
         <ChevronRightIcon />
       </CloseButton>
 
-      <ContentContainer size={size} role="presentation">
+      <ContentContainer
+        size={size}
+        role="presentation"
+        sx={{ ...containerStyles }}
+      >
         {RenderUI ? RenderUI : ""}
       </ContentContainer>
     </Drawer>

@@ -8,13 +8,13 @@ import Image from "next/image";
 import { useState } from "react";
 import {
   getEnumFromUserRoleString,
-  // isOperationAllowedByRBAC,
-  // operationEnum,
-  // viewEnum,
+  isOperationAllowedByRBAC,
+  operationEnum,
+  viewEnum,
 } from "src/utils/isAllowedByRBAC";
 // import Link from "next/link";
-// import { selectUserrootData } from "src/slices/userDataSlice";
-// import { useSelector } from "react-redux";
+import { selectUserrootData } from "src/slices/userDataSlice";
+import { useSelector } from "react-redux";
 import { Text } from "../Typography/Typography";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
@@ -25,6 +25,11 @@ import { styleConfig } from "src/providerConfig";
 // import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
+import SideDrawerRight from "../SideDrawerRight/SideDrawerRight";
+import SettingsMarketplace from "pages/settings";
+import ProfileUser from "../Icons/ProfileDropDown/ProfileUser";
+import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
+import BillingIcon from "../Icons/Billing/BillingIcon";
 // import { getSettingsRoute } from "src/utils/route/settings";
 
 function ProfileDropdown(props) {
@@ -36,14 +41,16 @@ function ProfileDropdown(props) {
     currentSubscription,
   } = props;
 
-  // const selectUser = useSelector(selectUserrootData);
-  // const role = getEnumFromUserRoleString(selectUser.roleType);
-  // const view = viewEnum.BillingPricing;
-  // const isReadAllowed = isOperationAllowedByRBAC(
-  //   operationEnum.Read,
-  //   role,
-  //   view
-  // );
+  const [sideDrawerOpen, setSideDrawerOpen] = useState(true);
+
+  const selectUser = useSelector(selectUserrootData);
+  const role = getEnumFromUserRoleString(selectUser.roleType);
+  const view = viewEnum.BillingPricing;
+  const isReadAllowed = isOperationAllowedByRBAC(
+    operationEnum.Read,
+    role,
+    view
+  );
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -131,14 +138,34 @@ function ProfileDropdown(props) {
             </Stack>
           </Stack>
         </MenuItem>
-        {/* <MenuItem key="Profile">
-          <DropdownMenuLink href={`${settingsPath}?view=Profile`}>
-            <ProfileUser />
-            <Text weight="medium" size="small" color="#344054">
-              Profile
-            </Text>
-          </DropdownMenuLink>
-        </MenuItem> */}
+        <MenuItem key="Profile">
+          {/* <DropdownMenuLink href={`${settingsPath}?view=Profile`}> */}
+          <ProfileUser />
+          <Text weight="medium" size="small" color="#344054">
+            Profile
+          </Text>
+          {/* </DropdownMenuLink> */}
+        </MenuItem>
+        <MenuItem key="Subscriptions">
+          {/* <DropdownMenuLink href="/subscriptions"> */}
+          <SubscriptionsIcon />
+          <Text weight="medium" size="small" color="#344054">
+            Subscriptions
+          </Text>
+          {/* </DropdownMenuLink> */}
+        </MenuItem>
+        <MenuItem
+          key="Billing"
+          sx={{ borderBottom: "1px solid #EAECF0" }}
+          disabled={!isReadAllowed}
+        >
+          {/* <DropdownMenuLink href="/billing"> */}
+          <BillingIcon />
+          <Text weight="medium" size="small" color="#344054">
+            Billing
+          </Text>
+          {/* </DropdownMenuLink> */}
+        </MenuItem>
         {/* <MenuItem key="Change Password">
           <DropdownMenuLink
             sx={{ display: "contents" }}
@@ -152,11 +179,15 @@ function ProfileDropdown(props) {
           </DropdownMenuLink>
         </MenuItem> */}
 
-        {/* <MenuItem key="Subscriptions">
-          <DropdownMenuLink href="/subscriptions">
-            <SubscriptionsIcon />
+        {/* <MenuItem
+          key="Billing"
+          sx={{ borderBottom: "1px solid #EAECF0" }}
+          disabled={!isReadAllowed}
+        >
+          <DropdownMenuLink href="/billing">
+            <BillingIcon />
             <Text weight="medium" size="small" color="#344054">
-              Subscriptions
+              Billing
             </Text>
           </DropdownMenuLink>
         </MenuItem> */}
@@ -195,18 +226,7 @@ function ProfileDropdown(props) {
             </Box>
           </MenuItem>
         )}
-        {/* <MenuItem
-          key="Billing"
-          sx={{ borderBottom: "1px solid #EAECF0" }}
-          disabled={!isReadAllowed}
-        >
-          <DropdownMenuLink href="/billing">
-            <BillingIcon />
-            <Text weight="medium" size="small" color="#344054">
-              Billing
-            </Text>
-          </DropdownMenuLink>
-        </MenuItem> */}
+
         <MenuItem
           onClick={() => {
             logout();
@@ -225,6 +245,15 @@ function ProfileDropdown(props) {
           </Text>
         </MenuItem>
       </Menu>
+      <SideDrawerRight
+        size="xlarge"
+        open={sideDrawerOpen}
+        closeDrawer={() => {
+          setSideDrawerOpen(false);
+        }}
+        RenderUI={<SettingsMarketplace />}
+        containerStyles={{ padding: "12px 32px" }}
+      />
     </Box>
   );
 }
@@ -250,6 +279,14 @@ const MenuItem = styled(MuiMenuItem)({
   fontWeight: 500,
   lineHeight: "20px",
   padding: 0,
+});
+
+const MenuItemContainer = styled(Box)({
+  display: "flex !important",
+  alignItems: "center",
+  gap: 8,
+  width: "100%",
+  padding: "12px 16px",
 });
 
 // const DropdownMenuLink = styled(Link)(() => ({

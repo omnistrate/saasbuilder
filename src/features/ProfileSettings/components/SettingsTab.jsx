@@ -1,27 +1,13 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-
 import { tabLabel, tabs } from "../constants";
-import { useRouter } from "next/router";
-import { getSettingsRoute } from "src/utils/route/settings";
 import { Tab, Tabs } from "src/components/Tab/Tab";
 
 export default function SettingsTab(props) {
-  const { currentTab } = props;
-  const router = useRouter();
-  const { serviceId, environmentId, productTierId, subscriptionId } =
-    router.query;
+  const { currentTab, setCurrentTab } = props;
 
   const handleChangeTab = (view) => {
-    router.push(
-      getSettingsRoute(
-        serviceId,
-        environmentId,
-        productTierId,
-        subscriptionId,
-        view
-      )
-    );
+    setCurrentTab(view);
   };
 
   return (
@@ -51,6 +37,14 @@ export default function SettingsTab(props) {
           value={tabs.password}
           onClick={() => {
             handleChangeTab(tabs.password);
+          }}
+          sx={{ padding: "4px !important", marginRight: "16px !important" }}
+        />
+        <Tab
+          label={tabLabel[tabs.subscriptions]}
+          value={tabs.subscriptions}
+          onClick={() => {
+            handleChangeTab(tabs.subscriptions);
           }}
           sx={{ padding: "4px !important", marginRight: "16px !important" }}
         />

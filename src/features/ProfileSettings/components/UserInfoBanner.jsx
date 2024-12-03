@@ -8,7 +8,7 @@ import SettingsTab from "./SettingsTab";
 import LogoHeader from "src/components/Headers/LogoHeader";
 
 function UserInfoBanner(props) {
-  const { selectUser, currentTab, router } = props;
+  const { selectUser, currentTab, router, setCurrentTab } = props;
 
   return (
     <>
@@ -55,19 +55,13 @@ function UserInfoBanner(props) {
       </Box>
 
       <Box
-        display="flex"
-        //@ts-ignore
-        flexDirection="colunm"
-        justifyContent="flex-start"
-        paddingBottom={"16px"}
-        marginLeft="22px"
-        marginTop="36px"
+        sx={{ marginBottom: "32px", marginTop: "32px" }}
       >
-        <LogoHeader margin={0} title={"Settings"} desc="" />
-      </Box>
-
-      <Box sx={{ marginBottom: "48px", padding: "0px 32px" }}>
-        <SettingsTab currentTab={currentTab} router={router} />
+        <SettingsTab
+          currentTab={currentTab}
+          router={router}
+          setCurrentTab={setCurrentTab}
+        />
       </Box>
     </>
   );
