@@ -1,5 +1,5 @@
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { ButtonBase, styled } from "@mui/material";
+import { Box, ButtonBase, styled } from "@mui/material";
 import MuiDrawer, { drawerClasses } from "@mui/material/Drawer";
 
 export default function SideDrawerRight(props) {
@@ -44,7 +44,7 @@ const drawerSizes = {
   xlarge: "1300px",
 };
 
-const ContentContainer = styled("div", {
+const ContentContainer = styled(Box, {
   shouldForwardProp: (prop) => !["size"].includes(prop),
 })(({ size }) => {
   let drawerWidth = drawerSizes.small;
