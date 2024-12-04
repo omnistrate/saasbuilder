@@ -21,11 +21,11 @@ import EllipsisTooltipText from "../Tooltip/EllipsisTooltip";
 import { styleConfig } from "src/providerConfig";
 // import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
 import SideDrawerRight from "../SideDrawerRight/SideDrawerRight";
-import SettingsMarketplace from "pages/settings";
 import ProfileUser from "../Icons/ProfileDropDown/ProfileUser";
 import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
 import BillingIcon from "../Icons/Billing/BillingIcon";
 import { tabs } from "src/features/ProfileSettings/constants";
+import SettingsMarketplace from "src/features/ProfileSettings/SettingsMarketplace";
 // import { getSettingsRoute } from "src/utils/route/settings";
 
 function ProfileDropdown(props) {
