@@ -86,10 +86,15 @@ const DataGrid = styled(
   "& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within": {
     outline: "none",
   },
-  "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer":
-    {
+  "& .MuiDataGrid-columnHeaderCheckbox": {
+    paddingRight: "0px",
+    "& .MuiDataGrid-columnHeaderTitleContainer": {
       display: enableSelectAll ? "flex" : "none",
+      "& .MuiDataGrid-columnHeaderTitleContainerContent": {
+        overflow: "visible",
+      },
     },
+  },
   "& .MuiTablePagination-root": {
     flex: 1,
   },

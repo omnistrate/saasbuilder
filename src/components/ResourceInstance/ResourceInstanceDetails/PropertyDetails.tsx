@@ -13,6 +13,7 @@ import AwsLogo from "src/components/Logos/AwsLogo/AwsLogo";
 import GcpLogo from "src/components/Logos/GcpLogo/GcpLogo";
 import AzureLogo from "src/components/Logos/AzureLogo/AzureLogo";
 import JSONViewModal from "./JSONViewModal";
+import Tooltip from "src/components/Tooltip/Tooltip";
 
 export type Row = {
   label: string;
@@ -171,9 +172,18 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           } else if (textType.includes(valueType)) {
             value = (
               <>
-                <Text ellipsis size="small" weight="regular" color="#475467">
-                  {row.value}
-                </Text>
+                <Tooltip title={row.value} placement="top">
+                  <Box maxWidth="calc(100% - 36px)">
+                    <Text
+                      ellipsis
+                      size="small"
+                      weight="regular"
+                      color="#475467"
+                    >
+                      {row.value}
+                    </Text>
+                  </Box>
+                </Tooltip>
                 <CopyButton
                   text={row.value}
                   iconProps={{ color: "#6941C6", width: 20, height: 20 }}
