@@ -4,7 +4,7 @@ import { tabLabel, tabs } from "../constants";
 import { Tab, Tabs } from "src/components/Tab/Tab";
 
 export default function SettingsTab(props) {
-  const { currentTab, setCurrentTab } = props;
+  const { currentTab, setCurrentTab, isBillingEnabled } = props;
 
   const handleChangeTab = (view) => {
     setCurrentTab(view);
@@ -48,14 +48,16 @@ export default function SettingsTab(props) {
           }}
           sx={{ padding: "4px !important", marginRight: "16px !important" }}
         />
-        <Tab
-          label={tabLabel[tabs.billing]}
-          value={tabs.billing}
-          onClick={() => {
-            handleChangeTab(tabs.billing);
-          }}
-          sx={{ padding: "4px !important", marginRight: "16px !important" }}
-        />
+        {isBillingEnabled && (
+          <Tab
+            label={tabLabel[tabs.billing]}
+            value={tabs.billing}
+            onClick={() => {
+              handleChangeTab(tabs.billing);
+            }}
+            sx={{ padding: "4px !important", marginRight: "16px !important" }}
+          />
+        )}
       </Tabs>
     </Box>
   );

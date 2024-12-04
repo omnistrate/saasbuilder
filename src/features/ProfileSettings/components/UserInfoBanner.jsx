@@ -7,7 +7,8 @@ import newserviceImg from "public/assets/images/dashboard/settings.jpg";
 import SettingsTab from "./SettingsTab";
 
 function UserInfoBanner(props) {
-  const { selectUser, currentTab, router, setCurrentTab } = props;
+  const { selectUser, currentTab, router, setCurrentTab, isBillingEnabled } =
+    props;
 
   return (
     <>
@@ -53,13 +54,12 @@ function UserInfoBanner(props) {
         </Box>
       </Box>
 
-      <Box
-        sx={{ marginBottom: "32px", marginTop: "32px" }}
-      >
+      <Box sx={{ marginBottom: "32px", marginTop: "32px" }}>
         <SettingsTab
           currentTab={currentTab}
           router={router}
           setCurrentTab={setCurrentTab}
+          isBillingEnabled={isBillingEnabled}
         />
       </Box>
     </>

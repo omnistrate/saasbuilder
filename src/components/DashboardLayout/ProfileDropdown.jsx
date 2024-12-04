@@ -29,7 +29,7 @@ import { tabs } from "src/features/ProfileSettings/constants";
 // import { getSettingsRoute } from "src/utils/route/settings";
 
 function ProfileDropdown(props) {
-  const { userAllData, logout } = props;
+  const { userAllData, logout, isBillingEnabled } = props;
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const selectUser = useSelector(selectUserrootData);
   const role = getEnumFromUserRoleString(selectUser.roleType);
@@ -156,22 +156,23 @@ function ProfileDropdown(props) {
           </MenuItemContainer>
           {/* </DropdownMenuLink> */}
         </MenuItem>
+        {isBillingEnabled && (
+          <MenuItem
+            key="Billing"
+            disabled={!isReadAllowed}
+            onClick={() => handleSideDrawerOpen(tabs.billing)}
+          >
+            <MenuItemContainer>
+              {/* <DropdownMenuLink href="/billing"> */}
+              <BillingIcon />
+              <Text weight="medium" size="small" color="#344054">
+                Billing
+              </Text>
+            </MenuItemContainer>
+            {/* </DropdownMenuLink> */}
+          </MenuItem>
+        )}
 
-        <MenuItem
-          key="Billing"
-          sx={{ borderBottom: "1px solid #EAECF0" }}
-          disabled={!isReadAllowed}
-          onClick={() => handleSideDrawerOpen(tabs.billing)}
-        >
-          <MenuItemContainer>
-            {/* <DropdownMenuLink href="/billing"> */}
-            <BillingIcon />
-            <Text weight="medium" size="small" color="#344054">
-              Billing
-            </Text>
-          </MenuItemContainer>
-          {/* </DropdownMenuLink> */}
-        </MenuItem>
         {/* <MenuItem key="Change Password">
           <DropdownMenuLink
             sx={{ display: "contents" }}
@@ -243,6 +244,7 @@ function ProfileDropdown(props) {
             justifyContent: "flex-start",
             alignItems: "center",
             gap: "8px",
+            borderTop: "1px solid #EAECF0",
           }}
         >
           <LogoutIcon />
@@ -261,6 +263,7 @@ function ProfileDropdown(props) {
           <SettingsMarketplace
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
+            isBillingEnabled={isBillingEnabled}
           />
         }
         containerStyles={{ padding: "12px 32px" }}
