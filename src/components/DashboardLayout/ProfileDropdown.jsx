@@ -8,46 +8,42 @@ import Image from "next/image";
 import { useState } from "react";
 import {
   getEnumFromUserRoleString,
-  // isOperationAllowedByRBAC,
-  // operationEnum,
-  // viewEnum,
+  isOperationAllowedByRBAC,
+  operationEnum,
+  viewEnum,
 } from "src/utils/isAllowedByRBAC";
 // import Link from "next/link";
-// import { selectUserrootData } from "src/slices/userDataSlice";
-// import { useSelector } from "react-redux";
+import { selectUserrootData } from "src/slices/userDataSlice";
+import { useSelector } from "react-redux";
 import { Text } from "../Typography/Typography";
-import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
-import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
 // import ProfileUser from "../Icons/ProfileDropDown/ProfileUser";
 import EllipsisTooltipText from "../Tooltip/EllipsisTooltip";
-
 import { styleConfig } from "src/providerConfig";
 // import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
-import useEnvironmentType from "src/hooks/useEnvironmentType";
-import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
+import SideDrawerRight from "../SideDrawerRight/SideDrawerRight";
+import ProfileUser from "../Icons/ProfileDropDown/ProfileUser";
+import SubscriptionsIcon from "../Icons/Subscriptions/SubscriptionsIcon";
+import BillingIcon from "../Icons/Billing/BillingIcon";
+import { tabs } from "src/features/ProfileSettings/constants";
+import SettingsMarketplace from "src/features/ProfileSettings/SettingsMarketplace";
 // import { getSettingsRoute } from "src/utils/route/settings";
 
 function ProfileDropdown(props) {
-  const {
-    userAllData,
-    logout,
-    accessPage,
-    // marketplacePage,
-    currentSubscription,
-  } = props;
-
-  // const selectUser = useSelector(selectUserrootData);
-  // const role = getEnumFromUserRoleString(selectUser.roleType);
-  // const view = viewEnum.BillingPricing;
-  // const isReadAllowed = isOperationAllowedByRBAC(
-  //   operationEnum.Read,
-  //   role,
-  //   view
-  // );
+  const { userAllData, logout, isBillingEnabled } = props;
+  const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
+  const selectUser = useSelector(selectUserrootData);
+  const role = getEnumFromUserRoleString(selectUser.roleType);
+  const view = viewEnum.BillingPricing;
+  const isReadAllowed = isOperationAllowedByRBAC(
+    operationEnum.Read,
+    role,
+    view
+  );
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const environmentType = useEnvironmentType();
+  const [currentTab, setCurrentTab] = useState(tabs.profile);
+
   // const settingsPath = getSettingsRoute(accessPage, marketplacePage);
 
   const handleMenuOpen = (e) => {
@@ -59,7 +55,10 @@ function ProfileDropdown(props) {
     setAnchorEl(null);
   };
 
-  const isProdEnvironment = environmentType === ENVIRONMENT_TYPES.PROD;
+  function handleSideDrawerOpen(view) {
+    setCurrentTab(view);
+    setSideDrawerOpen(true);
+  }
 
   return (
     <Box sx={{ display: "flex", gap: "11px", alignItems: "center" }}>
@@ -131,14 +130,49 @@ function ProfileDropdown(props) {
             </Stack>
           </Stack>
         </MenuItem>
-        {/* <MenuItem key="Profile">
-          <DropdownMenuLink href={`${settingsPath}?view=Profile`}>
+        <MenuItem
+          key="Profile"
+          onClick={() => handleSideDrawerOpen(tabs.profile)}
+        >
+          {/* <DropdownMenuLink href={`${settingsPath}?view=Profile`}> */}
+          <MenuItemContainer>
             <ProfileUser />
             <Text weight="medium" size="small" color="#344054">
               Profile
             </Text>
-          </DropdownMenuLink>
-        </MenuItem> */}
+          </MenuItemContainer>
+          {/* </DropdownMenuLink> */}
+        </MenuItem>
+        <MenuItem
+          key="Subscriptions"
+          onClick={() => handleSideDrawerOpen(tabs.subscriptions)}
+        >
+          {/* <DropdownMenuLink href="/subscriptions"> */}
+          <MenuItemContainer>
+            <SubscriptionsIcon />
+            <Text weight="medium" size="small" color="#344054">
+              Subscriptions
+            </Text>
+          </MenuItemContainer>
+          {/* </DropdownMenuLink> */}
+        </MenuItem>
+        {isBillingEnabled && (
+          <MenuItem
+            key="Billing"
+            disabled={!isReadAllowed}
+            onClick={() => handleSideDrawerOpen(tabs.billing)}
+          >
+            <MenuItemContainer>
+              {/* <DropdownMenuLink href="/billing"> */}
+              <BillingIcon />
+              <Text weight="medium" size="small" color="#344054">
+                Billing
+              </Text>
+            </MenuItemContainer>
+            {/* </DropdownMenuLink> */}
+          </MenuItem>
+        )}
+
         {/* <MenuItem key="Change Password">
           <DropdownMenuLink
             sx={{ display: "contents" }}
@@ -152,16 +186,20 @@ function ProfileDropdown(props) {
           </DropdownMenuLink>
         </MenuItem> */}
 
-        {/* <MenuItem key="Subscriptions">
-          <DropdownMenuLink href="/subscriptions">
-            <SubscriptionsIcon />
+        {/* <MenuItem
+          key="Billing"
+          sx={{ borderBottom: "1px solid #EAECF0" }}
+          disabled={!isReadAllowed}
+        >
+          <DropdownMenuLink href="/billing">
+            <BillingIcon />
             <Text weight="medium" size="small" color="#344054">
-              Subscriptions
+              Billing
             </Text>
           </DropdownMenuLink>
         </MenuItem> */}
 
-        {isProdEnvironment && accessPage && currentSubscription?.id && (
+        {/* {isProdEnvironment && accessPage && currentSubscription?.id && (
           <MenuItem
             sx={{
               borderBottom: "1px solid #EAECF0",
@@ -194,19 +232,8 @@ function ProfileDropdown(props) {
               </Stack>
             </Box>
           </MenuItem>
-        )}
-        {/* <MenuItem
-          key="Billing"
-          sx={{ borderBottom: "1px solid #EAECF0" }}
-          disabled={!isReadAllowed}
-        >
-          <DropdownMenuLink href="/billing">
-            <BillingIcon />
-            <Text weight="medium" size="small" color="#344054">
-              Billing
-            </Text>
-          </DropdownMenuLink>
-        </MenuItem> */}
+        )} */}
+
         <MenuItem
           onClick={() => {
             logout();
@@ -217,6 +244,7 @@ function ProfileDropdown(props) {
             justifyContent: "flex-start",
             alignItems: "center",
             gap: "8px",
+            borderTop: "1px solid #EAECF0",
           }}
         >
           <LogoutIcon />
@@ -225,6 +253,21 @@ function ProfileDropdown(props) {
           </Text>
         </MenuItem>
       </Menu>
+      <SideDrawerRight
+        size="xlarge"
+        open={sideDrawerOpen}
+        closeDrawer={() => {
+          setSideDrawerOpen(false);
+        }}
+        RenderUI={
+          <SettingsMarketplace
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            isBillingEnabled={isBillingEnabled}
+          />
+        }
+        containerStyles={{ padding: "12px 32px" }}
+      />
     </Box>
   );
 }
@@ -250,6 +293,14 @@ const MenuItem = styled(MuiMenuItem)({
   fontWeight: 500,
   lineHeight: "20px",
   padding: 0,
+});
+
+const MenuItemContainer = styled(Box)({
+  display: "flex !important",
+  alignItems: "center",
+  gap: 8,
+  width: "100%",
+  padding: "12px 16px",
 });
 
 // const DropdownMenuLink = styled(Link)(() => ({

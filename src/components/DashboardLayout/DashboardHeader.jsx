@@ -25,7 +25,11 @@ function DashboardHeader(props) {
   const serviceNameRef = useRef();
   useUserData();
   //prefetch billing data
-  useBillingDetails();
+  const billingDetailsQuery = useBillingDetails();
+
+  const isBillingEnabled = Boolean(
+    billingDetailsQuery.isFetched && billingDetailsQuery.data
+  );
   const userAllData = useSelector(selectUserData);
   const { logout } = useLogout();
   const environmentType = useEnvironmentType();
@@ -115,6 +119,7 @@ function DashboardHeader(props) {
         accessPage={accessPage}
         marketplacePage={marketplacePage}
         currentSubscription={currentSubscription}
+        isBillingEnabled={isBillingEnabled}
       />
     </Box>
   );
