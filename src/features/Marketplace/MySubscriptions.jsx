@@ -274,7 +274,7 @@ const MySubscriptions = (props) => {
 
   const unsubscribeMutation = useMutation(deleteSubscription, {
     onSuccess: () => {
-      if (subscriptionId == selectedSubscription.id) {
+      if (subscriptionId === selectedSubscription.id) {
         router.push(
           getMarketplaceProductTierRoute(
             serviceId,
