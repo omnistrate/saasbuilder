@@ -1,9 +1,10 @@
-import { Box, ButtonBase, Tooltip, styled } from "@mui/material";
+import { Box, ButtonBase, styled } from "@mui/material";
 import MuiInputAdornment from "@mui/material/InputAdornment";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useState } from "react";
 import clipboard from "clipboardy";
 import { Text } from "../../Typography/Typography";
+import Tooltip from "src/components/Tooltip/Tooltip";
 
 const TextCopy = (props) => {
   const { copyButton, ...restProps } = props;

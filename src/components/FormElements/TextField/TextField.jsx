@@ -1,4 +1,4 @@
-import { Box, ButtonBase,Tooltip, styled } from "@mui/material";
+import { Box, ButtonBase, styled } from "@mui/material";
 import MuiInputAdornment from "@mui/material/InputAdornment";
 import MuiTextField from "@mui/material/TextField";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -6,12 +6,13 @@ import { forwardRef, useState } from "react";
 import clipboard from "clipboardy";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import SearchIcon from "@mui/icons-material/Search";
+import Tooltip from "src/components/Tooltip/Tooltip";
 
 const StyledTextField = styled(MuiTextField, {
   shouldForwardProp: (prop) => {
     return prop !== "readonly";
   },
-})(({  readonly }) => ({
+})(({ readonly }) => ({
   boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
   borderRadius: 8,
   flexGrow: 1,

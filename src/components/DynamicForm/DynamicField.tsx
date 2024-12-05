@@ -1,12 +1,5 @@
 import { FC, useState } from "react";
-import {
-  SxProps,
-  Theme,
-  Stack,
-  InputAdornment,
-  Box,
-  Tooltip,
-} from "@mui/material";
+import { SxProps, Theme, Stack, InputAdornment, Box } from "@mui/material";
 import Generator from "generate-password";
 import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
 import Autocomplete from "src/components/FormElementsv2/AutoComplete/AutoComplete";
@@ -20,6 +13,7 @@ import TextField from "src/components/FormElementsv2/TextField/TextField";
 import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
 import { Text } from "src/components/Typography/Typography";
 import KeyIcon from "src/components/Icons/Key/KeyIcon";
+import Tooltip from "../Tooltip/Tooltip";
 
 type DynamicFieldProps = {
   field: any;
