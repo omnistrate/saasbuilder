@@ -197,6 +197,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
   }, [
     selectedInstance,
     cliManagedResource,
+    isManagedResource,
     role,
     isCurrentResourceBYOA,
     view,
