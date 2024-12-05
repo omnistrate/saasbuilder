@@ -33,7 +33,7 @@ function ProfileForm(props) {
         /*eslint-disable-next-line no-use-before-define*/
         formik.resetForm();
         refetch();
-        snackbar.showSuccess("Update Billing Address Successfully");
+        snackbar.showSuccess("Updated Billing Address Successfully!");
       })
       .catch((error) => {
         if (

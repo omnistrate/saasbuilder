@@ -30,7 +30,7 @@ function ProfileForm(props) {
         /*eslint-disable-next-line no-use-before-define*/
         formik.resetForm();
         refetch();
-        snackbar.showSuccess("Update Profile Successfully");
+        snackbar.showSuccess("Updated Profile Successfully!");
       })
       .catch((error) => {
         if (
@@ -113,12 +113,7 @@ function ProfileForm(props) {
                 <FieldLabel required>Organization ID</FieldLabel>
               </TableCell>
               <TableCell>
-                <TextField
-                  readonly
-                  disabled
-                  value={values.orgId}
-                  mt="12px"
-                />
+                <TextField readonly disabled value={values.orgId} mt="12px" />
               </TableCell>
             </TableRow>
             <TableRow>
