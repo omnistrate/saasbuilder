@@ -148,6 +148,7 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
     handleStart,
     handleStop,
     handleRestore,
+    isCliManagedResource,
     isCurrentResourceBYOA,
     isDeleteDisabled,
     isModifyDisabled,

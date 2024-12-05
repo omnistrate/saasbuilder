@@ -290,14 +290,24 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
               paddingLeft={"8px"}
               display="flex"
               flexDirection="column"
+              alignItems="flex-start"
               borderRight="1px solid #EAECF0"
               boxSizing="border-box"
               minHeight="80px"
             >
-              <Text size="small" weight="medium" color="#101828">
-                {row.label}
-              </Text>
-              <Box flex="1 1 auto" display="flex" alignItems="center">
+              <Tooltip title={row.label} placement="top">
+                <Box maxWidth="100%">
+                  <Text ellipsis size="small" weight="medium" color="#101828">
+                    {row.label}
+                  </Text>
+                </Box>
+              </Tooltip>
+              <Box
+                flex="1 1 auto"
+                display="flex"
+                alignItems="center"
+                maxWidth="100%"
+              >
                 {value}
               </Box>
             </Box>
