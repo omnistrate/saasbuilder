@@ -60,6 +60,10 @@ function ProfileDropdown(props) {
     setSideDrawerOpen(true);
   }
 
+  function closeSideDrawer() {
+    setSideDrawerOpen(false);
+  }
+
   return (
     <Box sx={{ display: "flex", gap: "11px", alignItems: "center" }}>
       <UserName>{Object.values(userAllData)[0]?.name}</UserName>
@@ -256,14 +260,13 @@ function ProfileDropdown(props) {
       <SideDrawerRight
         size="xlarge"
         open={sideDrawerOpen}
-        closeDrawer={() => {
-          setSideDrawerOpen(false);
-        }}
+        closeDrawer={closeSideDrawer}
         RenderUI={
           <SettingsMarketplace
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             isBillingEnabled={isBillingEnabled}
+            closeSideDrawer={closeSideDrawer}
           />
         }
         containerStyles={{ padding: "12px 32px" }}
