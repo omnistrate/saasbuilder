@@ -12,13 +12,16 @@ import useSnackbar from "src/hooks/useSnackbar";
 // import CloudProviderCell from "./components/CloudProviderCell"; - Removed for Now
 import useUserSubscriptions from "src/hooks/query/useUserSubscriptions";
 import {
+  getMarketplaceProductTierRoute,
   getResourceRouteWithoutEnv,
 } from "src/utils/route/access/accessRoute";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
+import { marketplaceServicePageTypes } from "./constants/marketplaceServicePageTypes";
 
-const MySubscriptions = () => {
+const MySubscriptions = (props) => {
+  const { closeSideDrawer } = props;
   const {
     data: subscriptions = [],
     isFetching,
@@ -27,6 +30,7 @@ const MySubscriptions = () => {
 
   const router = useRouter();
 
+  const { serviceId, environmentId, subscriptionId } = router.query;
 
   const [showUnsubscribeDialog, setShowUnsubscribeDialog] = useState(false);
   const [selectedSubscription, setSelectedSubscription] = useState({});
@@ -36,9 +40,8 @@ const MySubscriptions = () => {
 
   const filteredSubscriptions = useMemo(() => {
     let list = subscriptions;
-    list = subscriptions?.filter(
-      (item) =>
-        item?.serviceName?.toLowerCase()?.includes(searchText?.toLowerCase())
+    list = subscriptions?.filter((item) =>
+      item?.serviceName?.toLowerCase()?.includes(searchText?.toLowerCase())
     );
     if (typeFilter === "direct") {
       list = list?.filter((item) => item?.roleType === "root");
@@ -95,6 +98,7 @@ const MySubscriptions = () => {
               router.push(
                 getResourceRouteWithoutEnv(serviceId, productTierId, id)
               );
+              closeSideDrawer();
             }}
             startIcon={
               <Box
@@ -255,7 +259,6 @@ const MySubscriptions = () => {
     setShowUnsubscribeDialog(true);
   }
 
-
   const unsubsscribeFormik = useFormik({
     initialValues: {
       confirmationText: "",
@@ -271,6 +274,15 @@ const MySubscriptions = () => {
 
   const unsubscribeMutation = useMutation(deleteSubscription, {
     onSuccess: () => {
+      if (subscriptionId === selectedSubscription.id) {
+        router.push(
+          getMarketplaceProductTierRoute(
+            serviceId,
+            environmentId,
+            marketplaceServicePageTypes.public
+          )
+        );
+      }
       refetchSubscriptions();
       setShowUnsubscribeDialog(false);
       unsubsscribeFormik.resetForm();
