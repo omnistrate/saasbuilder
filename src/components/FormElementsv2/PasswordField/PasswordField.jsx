@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Generator from "generate-password";
-import { InputAdornment, Tooltip, Box } from "@mui/material";
+import { InputAdornment, Box } from "@mui/material";
 
 import TextField from "../TextField/TextField";
 import KeyIcon from "src/components/Icons/Key/KeyIcon";
 import { Text } from "src/components/Typography/Typography";
+import Tooltip from "src/components/Tooltip/Tooltip";
 
 export const PasswordField = (props) => {
   const {
