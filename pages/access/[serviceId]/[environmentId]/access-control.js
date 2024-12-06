@@ -47,7 +47,6 @@ import { Text } from "src/components/Typography/Typography";
 import DataGrid from "src/components/DataGrid/DataGrid";
 import AccessControlHeader from "src/components/Access/AccessControl/AccessControlHeader";
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
-import { styleConfig } from "src/providerConfig";
 
 export const getServerSideProps = async () => {
   return {
