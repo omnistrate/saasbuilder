@@ -928,13 +928,13 @@ function MarketplaceService() {
             }
           }
 
+          let cloud_provider = false;
           for (const param of schemaArray) {
-            if (
-              !["cloud_provider"].includes(param.key) ||
-              isCustomNetworkEnabled
-            ) {
-              delete data["network_type"];
-            }
+            cloud_provider = ["cloud_provider"].includes(param.key);
+          }
+
+          if (!cloud_provider || isCustomNetworkEnabled) {
+            delete data["network_type"];
           }
 
           if (!isTypeError) {
