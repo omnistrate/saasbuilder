@@ -744,6 +744,8 @@ function MarketplaceService() {
       defaultCloudProvider = "gcp";
     }
   }
+
+  console.log("check service ===", service);
   //create resource instance
   const createformik = useFormik({
     initialValues: {
@@ -923,6 +925,15 @@ function MarketplaceService() {
 
               data.requestParams.account_configuration_method =
                 values.configMethod;
+            }
+          }
+
+          for (const param of schemaArray) {
+            if (
+              !["cloud_provider"].includes(param.key) ||
+              isCustomNetworkEnabled
+            ) {
+              delete data["network_type"];
             }
           }
 
