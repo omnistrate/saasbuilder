@@ -408,7 +408,10 @@ function ResourceInstance() {
       </Collapse>
       <Tabs
         value={currentTab}
-        sx={{ marginTop: insightsVisible ? "10px" : "24px" }}
+        sx={{
+          marginTop: "24px",
+          transition: "margin-top 0.5s ease-in-out",
+        }}
       >
         {Object.entries(tabs).map(([key, value]) => {
           return (

@@ -1844,7 +1844,12 @@ function MarketplaceService() {
           />
         ) : (
           <>
-            <Box mt={insightsVisible ? "32px" : "10px"}>
+            <Box
+              mt={insightsVisible ? "32px" : "10px"}
+              sx={{
+                transition: "margin-top 0.5s ease-in-out",
+              }}
+            >
               <DataGrid
                 components={{
                   Header: InstancesTableHeader,
