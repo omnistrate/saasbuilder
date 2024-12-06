@@ -295,33 +295,7 @@ function CreateResourceInstanceForm(props) {
             </ErrorLabel>
           </FieldContainer>
         )}
-        {networkTypeFieldExists && (
-          <FieldContainer>
-            <FieldLabel required>Network Type</FieldLabel>
-            <FieldDescription sx={{ mt: "5px" }}>
-              Type of Network
-            </FieldDescription>
-            <TextField
-              select
-              id="network_type"
-              name="network_type"
-              value={formData.values.network_type ?? ""}
-              onChange={formData.handleChange}
-              sx={{ marginTop: "16px" }}
-            >
-              {[{ Public: "PUBLIC" }, { Internal: "INTERNAL" }].map((item) =>
-                Object.entries(item).map(([key, value]) => (
-                  <MenuItem key={value} value={value}>
-                    {key}
-                  </MenuItem>
-                ))
-              )}
-            </TextField>
-            <ErrorLabel>
-              {formData.touched.network_type && formData.errors.network_type}
-            </ErrorLabel>
-          </FieldContainer>
-        )}
+
         {regionFieldExists && (
           <FieldContainer>
             <FieldLabel required>Region</FieldLabel>
@@ -354,6 +328,34 @@ function CreateResourceInstanceForm(props) {
                 </MenuItem>
               ))}
             </TextField>
+          </FieldContainer>
+        )}
+
+        {networkTypeFieldExists && (
+          <FieldContainer>
+            <FieldLabel required>Network Type</FieldLabel>
+            <FieldDescription sx={{ mt: "5px" }}>
+              Type of Network
+            </FieldDescription>
+            <TextField
+              select
+              id="network_type"
+              name="network_type"
+              value={formData.values.network_type ?? ""}
+              onChange={formData.handleChange}
+              sx={{ marginTop: "16px" }}
+            >
+              {[{ Public: "PUBLIC" }, { Internal: "INTERNAL" }].map((item) =>
+                Object.entries(item).map(([key, value]) => (
+                  <MenuItem key={value} value={value}>
+                    {key}
+                  </MenuItem>
+                ))
+              )}
+            </TextField>
+            <ErrorLabel>
+              {formData.touched.network_type && formData.errors.network_type}
+            </ErrorLabel>
           </FieldContainer>
         )}
 
