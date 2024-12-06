@@ -927,12 +927,14 @@ function MarketplaceService() {
             }
           }
 
-          let cloud_provider = false;
+          let isCloudProvider = false;
           for (const param of schemaArray) {
-            cloud_provider = ["cloud_provider"].includes(param.key);
+            if (["cloud_provider"].includes(param.key)) {
+              isCloudProvider = true;
+            }
           }
 
-          if (!cloud_provider || isCustomNetworkEnabled) {
+          if (!isCloudProvider || isCustomNetworkEnabled) {
             delete data["network_type"];
           }
 
