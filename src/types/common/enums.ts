@@ -6,7 +6,8 @@ export type ResourceType =
   | "OperatorCRD"
   | "Kustomize"
   | "HelmChart"
-  | "Terraform";
+  | "Terraform"
+  | "PortsBasedProxy";
 
 // Network Types
 export type NetworkType =

@@ -20,7 +20,7 @@ function NoProductTierUI() {
         }}
       >
         <Text size="xlarge" color="#98A2B3" weight="medium" textAlign="center">
-          No Billing plans were found.
+          No Subscription plans were found.
           <br />
         </Text>
         <Image src={noProductTierIcon} alt="no-services-available" />

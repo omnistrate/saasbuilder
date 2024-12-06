@@ -25,6 +25,7 @@ function MultiProductTierPlanCard(props) {
     isMarketplacePage,
     subscriptionRequests,
     cancelSubscriptionRequestMutation,
+    reRenderCarousel,
   } = props;
 
   const isSelected = selectedProductTierId === offering?.productTierID;
@@ -48,15 +49,17 @@ function MultiProductTierPlanCard(props) {
 
   const isSubscriptionSuspended = existingSubscription?.status === "SUSPENDED";
 
-  const handleSubscribeClick = () => {
-    subscribeMutation.mutate({
+  const handleSubscribeClick = async () => {
+    await subscribeMutation.mutateAsync({
       productTierId: offering?.productTierID,
       serviceId,
     });
+    reRenderCarousel();
   };
 
-  const handleCancelPendingRequest = () => {
-    cancelSubscriptionRequestMutation.mutate(pendingRequest?.id);
+  const handleCancelPendingRequest = async () => {
+    await cancelSubscriptionRequestMutation.mutateAsync(pendingRequest?.id);
+    reRenderCarousel();
   };
 
   const handleSelectProductTier = () => {
@@ -252,7 +255,7 @@ function MultiProductTierPlanCard(props) {
                 disabled={
                   subscribeMutation?.isLoading ||
                   unSubscribeMutation?.isLoading ||
-                  (!hasAlreadySubscribedAsRoot && !isUserFromServiceOrg) ||
+                  (!existingSubscription && !isUserFromServiceOrg) ||
                   !isServiceModelReady
                 }
               >

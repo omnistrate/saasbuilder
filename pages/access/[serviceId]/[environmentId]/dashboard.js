@@ -104,6 +104,8 @@ function Dashboard() {
         marketplacePage={currentSource === "access" ? false : true}
         accessPage
         customLogo
+        serviceId={serviceId}
+        currentSubscription={subscriptionData}
         SidebarUI={
           <MarketplaceServiceSidebar
             serviceId={serviceId}
@@ -120,6 +122,7 @@ function Dashboard() {
         }
         serviceName={serviceOffering?.serviceName}
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.dashboard}
       >
         <LoadingSpinner />
       </DashboardLayout>
@@ -135,6 +138,8 @@ function Dashboard() {
         marketplacePage={currentSource === "access" ? false : true}
         accessPage
         customLogo
+        serviceId={serviceId}
+        currentSubscription={subscriptionData}
         SidebarUI={
           <MarketplaceServiceSidebar
             serviceId={serviceId}
@@ -151,6 +156,7 @@ function Dashboard() {
         }
         serviceName={serviceOffering?.serviceName}
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.dashboard}
       >
         <SubscriptionNotFoundUI />
       </DashboardLayout>
@@ -189,6 +195,7 @@ function Dashboard() {
         servicePlanUrlLink={servicePlanUrlLink}
         accessPage
         currentSubscription={subscriptionData}
+        pageType={sidebarActiveOptions.dashboard}
       >
         <OfferingUnavailableUI />
       </DashboardLayout>
@@ -225,6 +232,7 @@ function Dashboard() {
       serviceName={serviceOffering?.serviceName}
       customLogo
       serviceLogoURL={serviceOffering?.serviceLogoURL}
+      pageType={sidebarActiveOptions.dashboard}
     >
       <Box
         display="flex"

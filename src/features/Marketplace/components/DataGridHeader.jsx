@@ -38,7 +38,6 @@ const DataGridHeader = ({
   handleUnsubscribeClick,
   isUnsubscribing,
 }) => {
-
   return (
     <Box borderBottom="1px solid #EAECF0" p="20px">
       <Stack
@@ -49,8 +48,8 @@ const DataGridHeader = ({
         gap="20px"
       >
         <DataGridHeaderTitle
-          title={`Detailed list of your service subscriptions`}
-          desc="View and manage your Nodes"
+          title={`Detailed list of your subscriptions`}
+          desc="View and manage your subscriptions"
           count={numSubscriptions}
           units={{
             singular: "Subscription",
@@ -128,7 +127,8 @@ export const Actions = (props) => {
             selectedSubscription?.defaultSubscription === true ||
             numSubscriptions.length === 0 ||
             isUnsubscribing ||
-            isFetching
+            isFetching ||
+            selectedSubscription?.roleType !== "root"
           }
           onClick={handleUnsubscribeClick}
         >

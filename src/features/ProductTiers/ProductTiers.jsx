@@ -128,6 +128,7 @@ function ProductTiers(props) {
     }
   }, [serviceOfferingData]);
 
+
   if (!serviceOfferingData?.offerings?.length && environmentId) {
     if (source === "access") return <NoProductTierUI />;
     return (
@@ -148,7 +149,7 @@ function ProductTiers(props) {
                 fontSize: "30px",
               }}
             >
-              No Billing Plans
+              No Subscription Plans
             </div>
             <div
               justifyContent="center"
@@ -191,7 +192,7 @@ function ProductTiers(props) {
   return (
     <Box>
       <Stack justifyContent="center">
-        <ProductTiersHeading>Billing Plans</ProductTiersHeading>
+        <ProductTiersHeading>Subscription Plans</ProductTiersHeading>
       </Stack>
 
       <Box marginTop={"30px"}>

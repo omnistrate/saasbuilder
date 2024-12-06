@@ -1,5 +1,7 @@
+import { styleConfig } from "src/providerConfig";
+
 const DashboardHeaderIcon = (props) => {
-  const { color = "#17B26A" } = props;
+  const { color = styleConfig.headerIconColor } = props;
   return (
     <svg
       width="38"

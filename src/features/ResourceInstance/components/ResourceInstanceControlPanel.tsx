@@ -21,6 +21,7 @@ type ResourceInstanceControlPanelProps = {
   handleAddCapacity?: () => void;
   handleRemoveCapacity?: () => void;
   handleRestore?: () => void;
+  isCliManagedResource?: boolean;
   isRestartDisabled?: boolean;
   isStartDisabled?: boolean;
   isStopDisabled?: boolean;
@@ -48,6 +49,7 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
   handleModify,
   handleDelete,
   handleGenerateToken = () => {},
+  isCliManagedResource,
   isRestartDisabled,
   isStartDisabled,
   isStopDisabled,
@@ -72,7 +74,7 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
         icon: GenerateTokenIcon,
       },
       {
-        isVisible: !isCurrentResourceBYOA,
+        isVisible: !isCurrentResourceBYOA && !isCliManagedResource,
         label: "Reboot",
         onClick: handleRestart,
         icon: RestartIcon,
@@ -82,14 +84,14 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
     if (!isVisibleBYOA) {
       buttonsAction.push(
         {
-          isVisible: !isCurrentResourceBYOA,
+          isVisible: !isCurrentResourceBYOA && !isCliManagedResource,
           label: "Start",
           onClick: handleStart,
           icon: StartIcon,
           isDisabled: isStartDisabled,
         },
         {
-          isVisible: !isCurrentResourceBYOA,
+          isVisible: !isCurrentResourceBYOA && !isCliManagedResource,
           label: "Stop",
           onClick: handleStop,
           icon: StopIcon,
@@ -146,6 +148,7 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
     handleStart,
     handleStop,
     handleRestore,
+    isCliManagedResource,
     isCurrentResourceBYOA,
     isDeleteDisabled,
     isModifyDisabled,
@@ -176,11 +179,8 @@ const ResourceInstanceControlPanel: FC<ResourceInstanceControlPanelProps> = ({
       displayEmpty
       disabled={isLoading}
       sx={{
-        width: "auto",
         margin: "0px",
-        height: "40px !important",
-        padding: "10px 14px !important",
-        minHeight: "40px",
+        height: "40px",
       }}
     >
       {buttons.map(({ label, icon: Icon, onClick, isDisabled, isVisible }) => {

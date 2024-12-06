@@ -1,9 +1,10 @@
-import { Box, BoxProps, Tooltip } from "@mui/material";
+import { Box, BoxProps } from "@mui/material";
 import { FC, Fragment } from "react";
 
 import Link from "next/link";
 import { Text } from "src/components/Typography/Typography";
 import CopyButton from "src/components/Button/CopyButton";
+import Tooltip from "src/components/Tooltip/Tooltip";
 
 export type Row = {
   label: string;

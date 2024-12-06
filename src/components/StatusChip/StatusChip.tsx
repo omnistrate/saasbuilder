@@ -166,8 +166,9 @@ export const statusStyles = {
     color: "#B42318",
   },
   UNKNOWN: {
-    backgroundColor: "#F2F4F7",
-    color: "#808080",
+    color: "#363F72",
+    borderColor: "#D5D9EB",
+    backgroundColor: "#F8F9FC",
   },
   Voided: {
     backgroundColor: "#FEF3F2",
@@ -187,6 +188,7 @@ type StatusChipProps = {
   capitalize?: boolean;
   label?: string;
   category?: Category;
+  borderColor?: string;
 };
 
 type ChipProps = Omit<MuiChipProps, "color">;
@@ -204,6 +206,7 @@ const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
     capitalize = true,
     label = statuses[status],
     category,
+    borderColor,
     ...restProps
   } = props;
   let chipStyles = null;
@@ -243,6 +246,7 @@ const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
         },
         ...sx,
       }}
+      borderColor={borderColor || chipStyles.borderColor}
       {...restProps}
     />
   );

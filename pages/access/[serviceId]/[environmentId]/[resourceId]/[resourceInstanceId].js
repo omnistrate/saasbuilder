@@ -1,12 +1,14 @@
 import { useRouter } from "next/router";
 import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
-import MarketplaceServiceSidebar from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
+import MarketplaceServiceSidebar, {
+  sidebarActiveOptions,
+} from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import useServiceOffering from "src/hooks/useServiceOffering";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import { Tabs, Tab } from "src/components/Tab/Tab";
 import { useEffect, useMemo, useState } from "react";
 import NodesTable from "src/components/ResourceInstance/NodesTable/NodesTable";
-import { Stack } from "@mui/material";
+import { Collapse, Stack } from "@mui/material";
 import Button from "src/components/Button/Button";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import Connectivity from "src/components/ResourceInstance/Connectivity/Connectivity";
@@ -33,6 +35,14 @@ import { CLI_MANAGED_RESOURCES, RESOURCE_TYPES } from "src/constants/resource";
 import AuditLogs from "src/components/ResourceInstance/AuditLogs/AuditLogs";
 import ResourceInstanceOverview from "src/components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
 import Backup from "src/components/ResourceInstance/Backup/Backup";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { styleConfig } from "src/providerConfig";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectInstanceDetailsSummaryVisibility,
+  toggleInstanceDetailsSummaryVisibility,
+} from "src/slices/genericSlice";
 
 export const getServerSideProps = async () => {
   return {
@@ -58,6 +68,8 @@ function ResourceInstance() {
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [currentSource, setCurrentSource] = useState("");
+  const insightsVisible = useSelector(selectInstanceDetailsSummaryVisibility);
+  const dispatch = useDispatch();
 
   let resourceName = "";
   let resourceKey = "";
@@ -143,7 +155,7 @@ function ResourceInstance() {
     isResourceBYOA,
     isCliManagedResource,
     resourceType,
-    { isBackup: resourceInstanceData?.backupStatus?.backupPeriodInHours }
+    resourceInstanceData?.backupStatus?.backupPeriodInHours
   );
 
   let pageTitle = "Resource";
@@ -252,6 +264,7 @@ function ResourceInstance() {
         serviceName={serviceOffering?.serviceName}
         customLogo
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.instancesList}
       >
         <Head>
           <title>{pageTitle}</title>
@@ -285,6 +298,7 @@ function ResourceInstance() {
         serviceName={serviceOffering?.serviceName}
         customLogo
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.instancesList}
       >
         <Head>
           <title>{pageTitle}</title>
@@ -339,39 +353,63 @@ function ResourceInstance() {
       serviceName={serviceOffering?.serviceName}
       customLogo
       serviceLogoURL={serviceOffering?.serviceLogoURL}
+      pageType={sidebarActiveOptions.instancesList}
     >
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      <Stack direction="row" alignItems="center" justifyContent="flex-end">
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Link href={resourceInstancesUrl}>
           <Button
             startIcon={<RiArrowGoBackFill />}
             sx={{
-              color: "#6941C6",
+              color: `${styleConfig.secondaryColor} !important`,
               "&:hover": {
-                background: "#F9F5FF",
+                background: styleConfig.secondaryHoverLight,
               },
             }}
           >
             Back to list of Resource Instances
           </Button>
         </Link>
+        <Button
+          startIcon={
+            insightsVisible ? (
+              <KeyboardArrowUpIcon />
+            ) : (
+              <KeyboardArrowDownIcon />
+            )
+          }
+          sx={{
+            color: `${styleConfig.secondaryColor} !important`,
+            "&:hover": {
+              background: styleConfig.secondaryHoverLight,
+            },
+          }}
+          onClick={() => dispatch(toggleInstanceDetailsSummaryVisibility())}
+        >
+          {insightsVisible ? "Hide Insights" : "View Insights"}{" "}
+        </Button>
       </Stack>
-
-      <ResourceInstanceOverview
-        resourceInstanceId={resourceInstanceId}
-        region={resourceInstanceData?.region}
-        cloudProvider={cloudProvider}
-        status={resourceInstanceData?.status}
-        createdAt={resourceInstanceData?.createdAt}
-        modifiedAt={resourceInstanceData?.modifiedAt}
-        networkType={resourceInstanceData?.networkType}
-        healthStatusPercent={resourceInstanceData?.healthStatusPercent}
-        isResourceBYOA={isResourceBYOA}
-        isCliManagedResource={isCliManagedResource}
-      />
-      <Tabs value={currentTab} sx={{ marginTop: "32px" }}>
+      <Collapse in={insightsVisible}>
+        <ResourceInstanceOverview
+          resourceInstanceId={resourceInstanceId}
+          region={resourceInstanceData?.region}
+          cloudProvider={cloudProvider}
+          status={resourceInstanceData?.status}
+          createdAt={resourceInstanceData?.createdAt}
+          modifiedAt={resourceInstanceData?.modifiedAt}
+          networkType={resourceInstanceData?.networkType}
+          healthStatusPercent={resourceInstanceData?.healthStatusPercent}
+          isResourceBYOA={isResourceBYOA}
+          isCliManagedResource={isCliManagedResource}
+          subscriptionOwner={subscriptionData?.subscriptionOwnerName}
+        />
+      </Collapse>
+      <Tabs
+        value={currentTab}
+        sx={{ marginTop: insightsVisible ? "10px" : "24px" }}
+      >
         {Object.entries(tabs).map(([key, value]) => {
           return (
             <Tab

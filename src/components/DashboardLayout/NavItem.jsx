@@ -3,7 +3,7 @@ import MuiList from "@mui/material/List";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import HoverSubMenu from "./HoverSubMenu";
 import MuiTooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -83,6 +83,7 @@ const NavItem = (props) => {
   const router = useRouter();
   const [currentURL, setCurrentURL] = useState("");
   const currentPath = router.pathname;
+  const textRef = useRef(null);
 
   const {
     isActive,
@@ -102,8 +103,14 @@ const NavItem = (props) => {
     hoverMenuItem = false,
     defaultExpanded = false,
   } = props;
-  
+
   const [expanded, setExpanded] = useState(defaultExpanded);
+
+  const isOverflow = useMemo(() => {
+    const element = textRef.current;
+    if (element) return element.scrollWidth > element.offsetWidth;
+    else return false;
+  }, [textRef.current]);
 
   useEffect(() => {
     if (defaultExpanded) {
@@ -135,6 +142,7 @@ const NavItem = (props) => {
   let iconColor = styleConfig.sidebarIconColor;
   if (disabled) {
     iconColor = styleConfig.sidebarIconDisabledColor;
+    IconComponentProps.disabled = true;
   }
   if (isActive) {
     iconColor = styleConfig.sidebarIconActiveColor;
@@ -159,7 +167,7 @@ const NavItem = (props) => {
           />
         }
         arrow={false}
-        isVisible={!isDrawerExpanded && nestingLevel === 0}
+        isVisible={isOverflow}
         // open={name === "Build Services"}
       >
         <ListItemComponent
@@ -184,6 +192,7 @@ const NavItem = (props) => {
               </Box>
 
               <ListItemText
+                ref={textRef}
                 clickDisabled={disabled}
                 active={isActive}
                 visible={isDrawerExpanded || nestingLevel === 1}
@@ -288,6 +297,9 @@ export const ListItemText = styled("span", {
   fontSize: 14,
   lineHeight: "20px",
   whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  maxWidth: "180px",
 }));
 
 const SubList = styled(MuiList, {
@@ -320,17 +332,17 @@ export const MenuHoverTooltip = styled(
     lineHeight: "18px",
     fontWeight: 600,
     margin: 0,
-    marginLeft: "0px !important",
     padding: 0,
     borderRadius: "0px 8px 8px 0px",
     borderLeft: "1px solid #737373",
+    marginLeft: "24px",
   },
 }));
 
 export const MenuHoverTooltipTitle = styled(Box)(() => ({
   padding: "12px 14px",
   borderBottom: "1px solid rgba(127, 129, 148, 0.19)",
-  height: "46px",
+  minHeight: "46px",
   fontWeight: 600,
   fontSize: "14px",
   lineHeight: "26px",

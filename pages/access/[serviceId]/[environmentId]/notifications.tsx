@@ -31,7 +31,6 @@ export const getServerSideProps = async () => {
   };
 };
 
-
 function Events() {
   const router = useRouter();
   const { serviceId, environmentId, productTierId, subscriptionId } =
@@ -125,6 +124,7 @@ function Events() {
         }
         serviceName={serviceOffering?.serviceName}
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.notifications}
       >
         <LoadingSpinner />
       </DashboardLayout>
@@ -156,6 +156,7 @@ function Events() {
         }
         serviceName={serviceOffering?.serviceName}
         serviceLogoURL={serviceOffering?.serviceLogoURL}
+        pageType={sidebarActiveOptions.notifications}
       >
         <SubscriptionNotFoundUI />
       </DashboardLayout>
@@ -192,6 +193,7 @@ function Events() {
         servicePlanUrlLink={servicePlanUrlLink}
         accessPage
         currentSubscription={subscriptionData}
+        pageType={sidebarActiveOptions.notifications}
       >
         <OfferingUnavailableUI />
       </DashboardLayout>
@@ -227,6 +229,7 @@ function Events() {
       serviceName={serviceOffering?.serviceName}
       customLogo
       serviceLogoURL={serviceOffering?.serviceLogoURL}
+      pageType={sidebarActiveOptions.notifications}
     >
       <Box
         display="flex"

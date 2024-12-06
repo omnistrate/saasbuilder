@@ -84,6 +84,11 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     view
   );
 
+  const cliManagedResource = CLI_MANAGED_RESOURCES.includes(
+    selectedInstance?.detailedNetworkTopology?.[selectedResourceId]
+      ?.resourceType
+  );
+
   const actions = useMemo(() => {
     const actionsObj = {
       start: false,
@@ -103,9 +108,10 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
       return actionsObj;
     }
 
-    const cliManagedResource = CLI_MANAGED_RESOURCES.includes(
+    //Action disabled in Resource Type is Proxy
+    const isManagedResource = Boolean(
       selectedInstance?.detailedNetworkTopology?.[selectedResourceId]
-        ?.resourceType
+        ?.resourceType === "PortsBasedProxy"
     );
 
     const isUpdateAllowedByRBAC = isOperationAllowedByRBAC(
@@ -122,11 +128,21 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
 
     const { status, backupStatus } = selectedInstance || {};
 
-    if (status === "STOPPED" && isUpdateAllowedByRBAC && !cliManagedResource) {
+    if (
+      status === "STOPPED" &&
+      isUpdateAllowedByRBAC &&
+      !cliManagedResource &&
+      !isManagedResource
+    ) {
       actionsObj.start = true;
     }
 
-    if (status === "RUNNING" && isUpdateAllowedByRBAC && !cliManagedResource) {
+    if (
+      status === "RUNNING" &&
+      isUpdateAllowedByRBAC &&
+      !cliManagedResource &&
+      !isManagedResource
+    ) {
       actionsObj.stop = true;
     }
 
@@ -145,7 +161,8 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
       (status === "RUNNING" || status === "FAILED") &&
       isUpdateAllowedByRBAC &&
       !cliManagedResource &&
-      !isCurrentResourceBYOA
+      !isCurrentResourceBYOA &&
+      !isManagedResource
     ) {
       actionsObj.restart = true;
     }
@@ -158,7 +175,7 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
       actionsObj.modify = true;
     }
 
-    if (status !== "DELETING" && isDeleteAllowedByRBAC) {
+    if (status !== "DELETING" && isDeleteAllowedByRBAC && !isManagedResource) {
       actionsObj.delete = true;
     }
     if (
@@ -177,7 +194,14 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     }
 
     return actionsObj;
-  }, [selectedInstance, role, isCurrentResourceBYOA, view, selectedResourceId]);
+  }, [
+    selectedInstance,
+    cliManagedResource,
+    role,
+    isCurrentResourceBYOA,
+    view,
+    selectedResourceId,
+  ]);
 
   return (
     <Box>
@@ -197,45 +221,77 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
             plural: "Instances",
           }}
         />
-
-        <Stack direction="row" alignItems="center" gap="12px">
-          <SearchInput
-            placeholder="Search by Instance ID"
-            searchText={searchText}
-            setSearchText={setSearchText}
-            width="250px"
-          />
-          <RefreshWithToolTip
-            refetch={handleRefresh}
-            disabled={isFetchingInstances}
-          />
-
-          <Button
-            sx={{ height: "40px", padding: "10px 14px !important" }}
-            variant="contained"
-            startIcon={<AddIcon />}
-            disabled={
-              isFetchingInstances ||
-              !isResourceParameters ||
-              isDeprecated ||
-              !isCreateAllowedByRBAC ||
-              maxNumberOfInstancesReached
-            }
-            disabledMessage={
-              maxNumberOfInstancesReached
-                ? `You have reached the maximum number of instances allowed`
-                : !isCreateAllowedByRBAC
-                  ? "You do not have permission to create instances"
-                  : isDeprecated
-                    ? "Resource deprecated, instance creation not allowed"
-                    : ""
-            }
-            onClick={handleCreate}
+        <Stack direction="column" justifyContent="right" gap="4px">
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="right"
+            gap="12px"
           >
-            Create
-          </Button>
+            <SearchInput
+              placeholder="Search by Instance ID"
+              searchText={searchText}
+              setSearchText={setSearchText}
+              width="250px"
+            />
+            <RefreshWithToolTip
+              refetch={handleRefresh}
+              disabled={isFetchingInstances}
+            />
+
+            <Button
+              sx={{ height: "40px", padding: "10px 14px !important" }}
+              variant="contained"
+              startIcon={<AddIcon />}
+              disabled={
+                isFetchingInstances ||
+                !isResourceParameters ||
+                isDeprecated ||
+                !isCreateAllowedByRBAC ||
+                maxNumberOfInstancesReached
+              }
+              disabledMessage={
+                maxNumberOfInstancesReached
+                  ? `You have reached the maximum number of instances allowed`
+                  : !isCreateAllowedByRBAC
+                    ? "You do not have permission to create instances"
+                    : isDeprecated
+                      ? "Resource deprecated, instance creation not allowed"
+                      : ""
+              }
+              onClick={handleCreate}
+            >
+              Create
+            </Button>
+
+            <ResourceInstanceControlPanel
+              handleRestart={handleRestart}
+              handleStart={handleStart}
+              handleStop={handleStop}
+              handleDelete={handleDelete}
+              handleRestore={handleRestore}
+              handleModify={handleModify}
+              handleRemoveCapacity={handleRemoveCapacity}
+              handleAddCapacity={handleAddCapacity}
+              isCliManagedResource={cliManagedResource}
+              isAddCapacity={!actions.addCapacity}
+              isRemoveCapacity={!actions.removeCapacity}
+              isRestartDisabled={!actions.restart}
+              isStartDisabled={!actions.start}
+              isStopDisabled={!actions.stop}
+              isDeleteDisabled={!actions.delete}
+              isRestoreDisabled={!actions.restore}
+              isLoading={isFetchingInstances || !selectedInstance}
+              isModifyDisabled={!actions.modify}
+              isVisibleRestore={isVisibleRestore}
+              isVisibleCapacity={actions.isVisibleCapacity}
+              isVisibleBYOA={isCurrentResourceBYOA}
+              isVisibleGenerateToken={actions.isVisibleGenerateToken}
+              handleGenerateToken={() => setIsGenerateTokenDialogOpen(true)}
+            />
+          </Stack>
           {isDeprecated && (
-            <Box display="flex" sx={{ marginTop: "15px" }}>
+            <Box display="flex">
               <Box>
                 <DeprecateIcon />
               </Box>
@@ -252,32 +308,9 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
               </Text>
             </Box>
           )}
-          <ResourceInstanceControlPanel
-            handleRestart={handleRestart}
-            handleStart={handleStart}
-            handleStop={handleStop}
-            handleDelete={handleDelete}
-            handleRestore={handleRestore}
-            handleModify={handleModify}
-            handleRemoveCapacity={handleRemoveCapacity}
-            handleAddCapacity={handleAddCapacity}
-            isAddCapacity={!actions.addCapacity}
-            isRemoveCapacity={!actions.removeCapacity}
-            isRestartDisabled={!actions.restart}
-            isStartDisabled={!actions.start}
-            isStopDisabled={!actions.stop}
-            isDeleteDisabled={!actions.delete}
-            isRestoreDisabled={!actions.restore}
-            isLoading={isFetchingInstances || !selectedInstance}
-            isModifyDisabled={!actions.modify}
-            isVisibleRestore={isVisibleRestore}
-            isVisibleCapacity={actions.isVisibleCapacity}
-            isVisibleBYOA={isCurrentResourceBYOA}
-            isVisibleGenerateToken={actions.isVisibleGenerateToken}
-            handleGenerateToken={() => setIsGenerateTokenDialogOpen(true)}
-          />
         </Stack>
       </Stack>
+
       <Stack
         direction="row"
         justifyContent="right"

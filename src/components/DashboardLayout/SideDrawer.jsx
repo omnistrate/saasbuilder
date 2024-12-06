@@ -3,6 +3,7 @@ import { styled } from "@mui/material/styles";
 import React from "react";
 import MarketplaceStaticNavList from "./MarketplaceStaticNavList";
 import { styleConfig } from "src/providerConfig";
+import SubscriptionsDropdown from "../SubscriptionsDropdown/SubscriptionsDropdown";
 
 export const drawerWidth = 265;
 export const closedWidth = 70;
@@ -23,8 +24,8 @@ export default function SideDrawer(props) {
     subscriptionId,
     environmentId,
     activePage,
+    pageType,
   } = props;
-
 
   return (
     <Stack
@@ -48,7 +49,18 @@ export default function SideDrawer(props) {
         padding: "0px 16px",
       }}
     >
-      <Box>{SidebarUI ? SidebarUI : ""}</Box>
+      <Box mt="32px">
+        {SidebarUI && (
+          <SubscriptionsDropdown
+            serviceId={serviceId}
+            subscriptionId={subscriptionId}
+            pageType={pageType}
+          />
+        )}
+
+        <Box>{SidebarUI ? SidebarUI : ""}</Box>
+      </Box>
+
       {(marketplacePage || accessPage) && enableConsumptionLinks && (
         <MarketplaceStaticNavList
           servicePlanUrlLink={servicePlanUrlLink}

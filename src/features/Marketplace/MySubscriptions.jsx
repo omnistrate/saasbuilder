@@ -2,8 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
-import { Box, Stack } from "@mui/material";
-import DashboardLayout from "components/DashboardLayout/DashboardLayout";
+import { Box } from "@mui/material";
 import DataGrid, { selectSingleItem } from "components/DataGrid/DataGrid";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 import formatDateUTC from "src/utils/formatDateUTC";
@@ -13,22 +12,16 @@ import useSnackbar from "src/hooks/useSnackbar";
 // import CloudProviderCell from "./components/CloudProviderCell"; - Removed for Now
 import useUserSubscriptions from "src/hooks/query/useUserSubscriptions";
 import {
+  getMarketplaceProductTierRoute,
   getResourceRouteWithoutEnv,
-  getAPIDocsRoute,
-  getMarketplaceRoute,
 } from "src/utils/route/access/accessRoute";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
-import MarketplaceServiceSidebar, {
-  sidebarActiveOptions,
-} from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
-import useServiceOffering from "src/hooks/useServiceOffering";
-import useSubscriptionForProductTierAccess from "src/hooks/query/useSubscriptionForProductTierAccess";
-import DashboardHeaderIcon from "src/components/Icons/Dashboard/DashboardHeaderIcon";
-import LogoHeader from "src/components/Headers/LogoHeader";
+import { marketplaceServicePageTypes } from "./constants/marketplaceServicePageTypes";
 
-const MySubscriptions = () => {
+const MySubscriptions = (props) => {
+  const { closeSideDrawer } = props;
   const {
     data: subscriptions = [],
     isFetching,
@@ -37,24 +30,13 @@ const MySubscriptions = () => {
 
   const router = useRouter();
 
-  const { serviceId, environmentId, productTierId, subscriptionId } =
-    router.query;
+  const { serviceId, environmentId, subscriptionId } = router.query;
 
   const [showUnsubscribeDialog, setShowUnsubscribeDialog] = useState(false);
   const [selectedSubscription, setSelectedSubscription] = useState({});
   const [searchText, setSearchText] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [selectionModel, setSelectionModel] = useState([]);
-  const { data: serviceOffering, isLoading: isServiceOfferingLoading } =
-    useServiceOffering(serviceId, productTierId);
-
-  const subscriptionQuery = useSubscriptionForProductTierAccess(
-    serviceId,
-    productTierId,
-    subscriptionId
-  );
-
-  const { data: subscriptionData = {} } = subscriptionQuery;
 
   const filteredSubscriptions = useMemo(() => {
     let list = subscriptions;
@@ -95,7 +77,7 @@ const MySubscriptions = () => {
   const columns = [
     {
       field: "serviceName",
-      headerName: "Name",
+      headerName: "Service Name",
       flex: 1,
       minWidth: 230,
       renderCell: (params) => {
@@ -116,6 +98,7 @@ const MySubscriptions = () => {
               router.push(
                 getResourceRouteWithoutEnv(serviceId, productTierId, id)
               );
+              closeSideDrawer();
             }}
             startIcon={
               <Box
@@ -276,61 +259,6 @@ const MySubscriptions = () => {
     setShowUnsubscribeDialog(true);
   }
 
-  const isCustomNetworkEnabled = useMemo(() => {
-    let enabled = false;
-
-    if (
-      serviceOffering?.serviceModelFeatures?.find((featureObj) => {
-        return featureObj.feature === "CUSTOM_NETWORKS";
-      })
-    )
-      enabled = true;
-
-    return enabled;
-  }, [serviceOffering]);
-
-  const servicePlanUrlLink = getMarketplaceRoute(
-    serviceId,
-    environmentId,
-    productTierId
-  );
-
-  const serviceAPIDocsLink = getAPIDocsRoute(
-    serviceId,
-    environmentId,
-    productTierId,
-    subscriptionData?.id
-  );
-
-  const dashboardLayoutProps = {
-    accessPage: true,
-    currentSubscription: subscriptionData,
-    isNotShow: true,
-    enableConsumptionLinks: true,
-    apiDocsurl: serviceAPIDocsLink,
-    servicePlanUrlLink: servicePlanUrlLink,
-    serviceId: serviceId,
-    environmentId: environmentId,
-    serviceApiId: serviceOffering?.serviceAPIID,
-    SidebarUI: (
-      <MarketplaceServiceSidebar
-        serviceId={serviceId}
-        environmentId={environmentId}
-        resourceParameters={serviceOffering?.resourceParameters}
-        isLoading={isServiceOfferingLoading}
-        serviceName={serviceOffering?.serviceName}
-        productTierId={productTierId}
-        active={sidebarActiveOptions.subscriptions}
-        currentSubscription={subscriptionData}
-        isCustomNetworkEnabled={isCustomNetworkEnabled}
-      />
-    ),
-
-    serviceName: serviceOffering?.serviceName,
-    customLogo: true,
-    serviceLogoURL: serviceOffering?.serviceLogoURL,
-  };
-
   const unsubsscribeFormik = useFormik({
     initialValues: {
       confirmationText: "",
@@ -346,6 +274,15 @@ const MySubscriptions = () => {
 
   const unsubscribeMutation = useMutation(deleteSubscription, {
     onSuccess: () => {
+      if (subscriptionId === selectedSubscription.id) {
+        router.push(
+          getMarketplaceProductTierRoute(
+            serviceId,
+            environmentId,
+            marketplaceServicePageTypes.public
+          )
+        );
+      }
       refetchSubscriptions();
       setShowUnsubscribeDialog(false);
       unsubsscribeFormik.resetForm();
@@ -355,82 +292,63 @@ const MySubscriptions = () => {
 
   return (
     <>
-      <DashboardLayout {...dashboardLayoutProps}>
-        <Stack sx={{ minHeight: "calc(100vh - 180px)" }}>
-          <Box
-            display="flex"
-            //@ts-ignore
-            flexDirection="colunm"
-            justifyContent="flex-start"
-            paddingBottom={"32px"}
-          >
-            <Box paddingTop={"5px"}>
-              <DashboardHeaderIcon />
-            </Box>
-            <LogoHeader
-              margin={0}
-              title="My Subscriptions"
-              desc="Explore your current service subscriptions here"
-            />
-          </Box>
-          <DataGrid
-            components={{
-              Header: DataGridHeader,
-            }}
-            componentsProps={{
-              header: {
-                numSubscriptions: filteredSubscriptions?.length,
-                searchText,
-                setSearchText,
-                typeFilter,
-                setTypeFilter,
-                viewResourceInstance,
-                isFetching,
-                handleRefresh: refetchSubscriptions,
-                selectedSubscription: selectedSubscription,
-                handleUnsubscribeClick: handleUnsubscribeClick,
-                isUnsubscribing: unsubscribeMutation.isLoading,
-              },
-            }}
-            onSelectionModelChange={(newSelection) => {
-              selectSingleItem(newSelection, selectionModel, setSelectionModel);
-            }}
-            loading={isFetching}
-            checkboxSelection
-            disableColumnMenu
-            selectionModel={selectionModel}
-            disableSelectionOnClick
-            columns={columns}
-            rows={isFetching ? [] : filteredSubscriptions}
-            rowsPerPageOptions={[10]}
-            pageSize={10}
-            getRowId={(row) => row.id}
-            sx={{
-              flex: 1,
-              boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
-              border: "1px solid  rgba(228, 231, 236, 1)",
-            }}
-            hideFooterSelectedRowCount
-          />
-        </Stack>
+      <DataGrid
+        components={{
+          Header: DataGridHeader,
+        }}
+        componentsProps={{
+          header: {
+            numSubscriptions: filteredSubscriptions?.length,
+            searchText,
+            setSearchText,
+            typeFilter,
+            setTypeFilter,
+            viewResourceInstance,
+            isFetching,
+            handleRefresh: refetchSubscriptions,
+            selectedSubscription: selectedSubscription,
+            handleUnsubscribeClick: handleUnsubscribeClick,
+            isUnsubscribing: unsubscribeMutation.isLoading,
+            // serviceId: serviceId,
+          },
+        }}
+        onSelectionModelChange={(newSelection) => {
+          selectSingleItem(newSelection, selectionModel, setSelectionModel);
+        }}
+        loading={isFetching}
+        checkboxSelection
+        disableColumnMenu
+        selectionModel={selectionModel}
+        disableSelectionOnClick
+        columns={columns}
+        rows={isFetching ? [] : filteredSubscriptions}
+        rowsPerPageOptions={[10]}
+        pageSize={10}
+        getRowId={(row) => row.id}
+        sx={{
+          flex: 1,
+          boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+          border: "1px solid  rgba(228, 231, 236, 1)",
+        }}
+        hideFooterSelectedRowCount
+      />
 
-        <TextConfirmationDialog
-          open={showUnsubscribeDialog}
-          handleClose={() => {
-            setShowUnsubscribeDialog(false);
-            unsubsscribeFormik.resetForm();
-          }}
-          formData={unsubsscribeFormik}
-          title={`Unsubscribe Service`}
-          buttonLabel={"Unsubscribe"}
-          buttonColour={"red"}
-          isLoading={unsubscribeMutation.isLoading}
-          subtitle={`Are you sure you want to unsubscribe from ${selectedSubscription?.serviceName}?`}
-          message={
-            "To confirm, please enter <b>unsubscribe</b>, in the field below:"
-          }
-        />
-      </DashboardLayout>
+      <TextConfirmationDialog
+        open={showUnsubscribeDialog}
+        handleClose={() => {
+          setShowUnsubscribeDialog(false);
+          unsubsscribeFormik.resetForm();
+        }}
+        formData={unsubsscribeFormik}
+        title={`Unsubscribe Service`}
+        buttonLabel={"Unsubscribe"}
+        buttonColour={"red"}
+        isLoading={unsubscribeMutation.isLoading}
+        subtitle={`Are you sure you want to unsubscribe from ${selectedSubscription?.serviceName}?`}
+        message={
+          "To confirm, please enter <b>unsubscribe</b>, in the field below:"
+        }
+      />
     </>
   );
 };

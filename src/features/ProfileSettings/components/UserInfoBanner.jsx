@@ -5,10 +5,10 @@ import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
 import Image from "next/image";
 import newserviceImg from "public/assets/images/dashboard/settings.jpg";
 import SettingsTab from "./SettingsTab";
-import LogoHeader from "src/components/Headers/LogoHeader";
 
 function UserInfoBanner(props) {
-  const { selectUser, currentTab, router } = props;
+  const { selectUser, currentTab, router, setCurrentTab, isBillingEnabled } =
+    props;
 
   return (
     <>
@@ -54,20 +54,13 @@ function UserInfoBanner(props) {
         </Box>
       </Box>
 
-      <Box
-        display="flex"
-        //@ts-ignore
-        flexDirection="colunm"
-        justifyContent="flex-start"
-        paddingBottom={"16px"}
-        marginLeft="22px"
-        marginTop="36px"
-      >
-        <LogoHeader margin={0} title={"Settings"} desc="" />
-      </Box>
-
-      <Box sx={{ marginBottom: "48px", padding: "0px 32px" }}>
-        <SettingsTab currentTab={currentTab} router={router} />
+      <Box sx={{ marginBottom: "32px", marginTop: "32px" }}>
+        <SettingsTab
+          currentTab={currentTab}
+          router={router}
+          setCurrentTab={setCurrentTab}
+          isBillingEnabled={isBillingEnabled}
+        />
       </Box>
     </>
   );

@@ -1,7 +1,8 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import Carousel from "react-material-ui-carousel";
 import MultiProductTierPlanCard from "./MultiProductTierPlanCard";
 import { Box } from "@mui/material";
+import _ from "lodash";
 
 const CarouselMultiProductTierPlan = (props) => {
   const {
@@ -22,6 +23,12 @@ const CarouselMultiProductTierPlan = (props) => {
   const data = serviceOfferingData?.offerings || [];
   const sliderItems = data.length > 3 ? 3 : data.length;
   const items = [];
+  //used to force rerender carousel component
+  const [carouselKey, setCarouselKey] = useState(_.random(1000));
+
+  function reRenderCarousel() {
+    setCarouselKey(_.random(1000));
+  }
 
   for (let i = 0; i < data.length; i += sliderItems) {
     if (i % sliderItems === 0) {
@@ -56,6 +63,7 @@ const CarouselMultiProductTierPlan = (props) => {
                   cancelSubscriptionRequestMutation={
                     cancelSubscriptionRequestMutation
                   }
+                  reRenderCarousel={reRenderCarousel}
                 />
               </Fragment>
             );
@@ -72,6 +80,8 @@ const CarouselMultiProductTierPlan = (props) => {
       cycleNavigation
       timeout={300}
       sx={{ justifyContent: "center" }}
+      key={carouselKey}
+      swipe={false}
     >
       {items}
     </Carousel>

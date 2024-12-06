@@ -219,7 +219,7 @@ function SingleProductTierPlanCard(props) {
                 disabled={
                   subscribeMutation?.isLoading ||
                   unSubscribeMutation?.isLoading ||
-                  (!hasAlreadySubscribedAsRoot && !isUserFromServiceOrg) ||
+                  (!existingSubscription && !isUserFromServiceOrg) ||
                   !isServiceModelReady
                 }
               >
