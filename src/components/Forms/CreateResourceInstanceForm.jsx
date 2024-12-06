@@ -235,17 +235,6 @@ function CreateResourceInstanceForm(props) {
   const networkTypeFieldExists =
     cloudProviderFieldExists && !isCustomNetworkEnabled;
 
-  useEffect(() => {
-    if (networkTypeFieldExists && formData) {
-      if (!networkTypeFieldExists) {
-        formData.setFieldValue("network_type", "");
-      } else {
-        formData.setFieldValue("network_type", "PUBLIC");
-      }
-    }
-    //eslint-disable-next-line
-  }, [networkTypeFieldExists]);
-
   if (isSchemaLoading)
     return (
       <Stack alignItems="center" sx={{ mt: "300px" }}>
