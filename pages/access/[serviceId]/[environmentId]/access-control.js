@@ -13,7 +13,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import Button from "../../../../src/components/Button/Button";
 import DashboardLayout from "../../../../src/components/DashboardLayout/DashboardLayout";
 import Form from "../../../../src/components/FormElements/Form/Form";
-import TextField from "../../../../src/components/FormElements/TextField/TextField";
 import useSnackbar from "../../../../src/hooks/useSnackbar";
 import LoadingSpinnerSmall from "../../../../src/components/CircularProgress/CircularProgress";
 import { useRouter } from "next/router";
@@ -46,6 +45,8 @@ import AccessControlIcon from "src/components/Icons/AccessControlIcon/AccessCont
 import { Text } from "src/components/Typography/Typography";
 import DataGrid from "src/components/DataGrid/DataGrid";
 import AccessControlHeader from "src/components/Access/AccessControl/AccessControlHeader";
+import Select from "src/components/FormElementsv2/Select/Select";
+import TextField from "src/components/FormElementsv2/TextField/TextField";
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 
 export const getServerSideProps = async () => {
@@ -598,6 +599,8 @@ function AccessControl() {
                                             position="start"
                                             sx={{
                                               marginRight: "0px",
+                                              paddingRight: "0px !important",
+                                              borderLeft: "none !important",
                                               "& .MuiIconButton-root": {
                                                 padding: 0,
                                               },
@@ -610,27 +613,21 @@ function AccessControl() {
                                         ),
                                       }}
                                     />
-                                    <TextField
+                                    <Select
                                       required
-                                      select
+                                      displayEmpty
                                       name={`userInvite[${index}].roleType`}
                                       value={invite.roleType}
                                       onChange={formik.handleChange}
                                       sx={{ width: "400px", flex: 1 }}
-                                      SelectProps={{
-                                        displayEmpty: true,
-                                        renderValue: function (value) {
-                                          if (value) return value;
-                                          return "Role";
-                                        },
-                                      }}
+                                      renderValue={(value) => value || "Role"}
                                     >
                                       {["Editor", "Reader"].map((option) => (
                                         <MenuItem key={option} value={option}>
                                           {option}
                                         </MenuItem>
                                       ))}
-                                    </TextField>
+                                    </Select>
                                   </Box>
                                   <Box
                                     sx={{
