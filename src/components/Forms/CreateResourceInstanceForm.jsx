@@ -170,9 +170,7 @@ function CreateResourceInstanceForm(props) {
   const cloudProviderFieldExists = createSchema.find(
     (field) => field.key === "cloud_provider"
   );
-  const networkTypeFieldExists = createSchema.find(
-    (field) => field.key === "network_type"
-  );
+
   const regionFieldExists = createSchema.find(
     (field) => field.key === "region"
   );
@@ -233,6 +231,9 @@ function CreateResourceInstanceForm(props) {
   }, [customAvailabilityZoneData?.availabilityZones]);
 
   const selectedCustomNetworkId = formData.values?.custom_network_id ?? "";
+
+  const networkTypeFieldExists =
+    cloudProviderFieldExists && !isCustomNetworkEnabled;
 
   if (isSchemaLoading)
     return (
@@ -297,11 +298,13 @@ function CreateResourceInstanceForm(props) {
               onChange={formData.handleChange}
               sx={{ marginTop: "16px" }}
             >
-              {["PUBLIC", "INTERNAL"].map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
+              {[{ Public: "PUBLIC" }, { Internal: "INTERNAL" }].map((item) =>
+                Object.entries(item).map(([key, value]) => (
+                  <MenuItem key={value} value={value}>
+                    {key}
+                  </MenuItem>
+                ))
+              )}
             </TextField>
             <ErrorLabel>
               {formData.touched.network_type && formData.errors.network_type}

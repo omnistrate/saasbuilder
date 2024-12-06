@@ -234,7 +234,7 @@ function MarketplaceService() {
 
   const timeoutID = useRef(null);
   const currentResourceInfo = useRef({ resourceKey: null, resourceId: null });
-useEffect(() => {
+  useEffect(() => {
     if (source) {
       setCurrentSource(source);
     }
@@ -749,7 +749,7 @@ useEffect(() => {
     initialValues: {
       serviceId: serviceId,
       cloud_provider: defaultCloudProvider,
-      network_type: "",
+      network_type: "PUBLIC",
       region: "",
       requestParams: { ...requestParams },
       serviceProviderId: service?.serviceProviderId,
