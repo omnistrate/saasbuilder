@@ -234,7 +234,7 @@ function MarketplaceService() {
 
   const timeoutID = useRef(null);
   const currentResourceInfo = useRef({ resourceKey: null, resourceId: null });
-useEffect(() => {
+  useEffect(() => {
     if (source) {
       setCurrentSource(source);
     }
