@@ -128,7 +128,7 @@ export default function ConfirmationDialog(props) {
             }}
             type="submit"
             variant="contained"
-            style={{ backgroundColor: buttonColour }}
+            bgColor={buttonColour}
             // disabled={isDeleteEnable}
             disabled={isLoading}
           >

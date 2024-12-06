@@ -34,7 +34,7 @@ function SettingsMarketplace(props) {
             router={router}
             isBillingEnabled={isBillingEnabled}
           />
-          <Box>
+          <Box marginBottom="40px">
             {currentTab === tabs.profile && (
               <ProfileForm refetch={refetch} selectUser={selectUser} />
             )}

@@ -5,7 +5,6 @@ import {
   CircularProgress,
   IconButton,
   InputAdornment,
-  MenuItem,
   Stack,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
@@ -47,6 +46,7 @@ import AccessControlIcon from "src/components/Icons/AccessControlIcon/AccessCont
 import { Text } from "src/components/Typography/Typography";
 import DataGrid from "src/components/DataGrid/DataGrid";
 import AccessControlHeader from "src/components/Access/AccessControl/AccessControlHeader";
+import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 
 export const getServerSideProps = async () => {
   return {
@@ -632,18 +632,21 @@ function AccessControl() {
                                       ))}
                                     </TextField>
                                   </Box>
-                                  {index !== 0 && (
-                                    <Box>
-                                      <IconButton
-                                        size="small"
-                                        onClick={() => {
-                                          remove(index);
-                                        }}
-                                      >
-                                        <RiDeleteBinLine />
-                                      </IconButton>
-                                    </Box>
-                                  )}
+                                  <Box
+                                    sx={{
+                                      visibility:
+                                        index === 0 ? "hidden" : "visible",
+                                    }}
+                                  >
+                                    <IconButton
+                                      size="small"
+                                      onClick={() => {
+                                        remove(index);
+                                      }}
+                                    >
+                                      <RiDeleteBinLine />
+                                    </IconButton>
+                                  </Box>
                                 </Box>
                               );
                             })}
@@ -743,11 +746,12 @@ function AccessControl() {
         formData={deleteformik}
         title={`Delete User`}
         buttonLabel={"Delete"}
-        buttonColour={"red"}
+        buttonColour={"#D92D20"}
         subtitle={`Are you sure you want to Delete ${modifyFormikValue.emailAddress}?`}
         message={
           "To confirm deletion, please enter <b> deleteme </b>, in the field below:"
         }
+        isLoading={deleteUserMutation.isLoading}
       />
       <SideDrawerRight
         size="xlarge"
