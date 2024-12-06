@@ -745,7 +745,6 @@ function MarketplaceService() {
     }
   }
 
-  console.log("check service ===", service);
   //create resource instance
   const createformik = useFormik({
     initialValues: {
