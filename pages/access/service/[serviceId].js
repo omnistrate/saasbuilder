@@ -234,7 +234,7 @@ function MarketplaceService() {
 
   const timeoutID = useRef(null);
   const currentResourceInfo = useRef({ resourceKey: null, resourceId: null });
-useEffect(() => {
+  useEffect(() => {
     if (source) {
       setCurrentSource(source);
     }
@@ -744,12 +744,13 @@ useEffect(() => {
       defaultCloudProvider = "gcp";
     }
   }
+
   //create resource instance
   const createformik = useFormik({
     initialValues: {
       serviceId: serviceId,
       cloud_provider: defaultCloudProvider,
-      network_type: "",
+      network_type: "PUBLIC",
       region: "",
       requestParams: { ...requestParams },
       serviceProviderId: service?.serviceProviderId,
@@ -924,6 +925,15 @@ useEffect(() => {
               data.requestParams.account_configuration_method =
                 values.configMethod;
             }
+          }
+
+          let cloud_provider = false;
+          for (const param of schemaArray) {
+            cloud_provider = ["cloud_provider"].includes(param.key);
+          }
+
+          if (!cloud_provider || isCustomNetworkEnabled) {
+            delete data["network_type"];
           }
 
           if (!isTypeError) {
@@ -1844,7 +1854,12 @@ useEffect(() => {
           />
         ) : (
           <>
-            <Box mt={insightsVisible ? "32px" : "10px"}>
+            <Box
+              mt={insightsVisible ? "32px" : "10px"}
+              sx={{
+                transition: "margin-top 0.5s ease-in-out",
+              }}
+            >
               <DataGrid
                 components={{
                   Header: InstancesTableHeader,

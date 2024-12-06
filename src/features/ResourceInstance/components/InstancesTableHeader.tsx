@@ -22,6 +22,25 @@ import { AccessResourceInstance } from "src/types/resourceInstance";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 
+const SpeedoMeterLegend = ({
+  label = "Low",
+  color = "rgba(23, 178, 106, 1)",
+}) => (
+  <Box gap="6px" display="flex" alignItems="center">
+    <Box
+      sx={{
+        width: "8px",
+        height: "8px",
+        borderRadius: "100%",
+        background: color,
+      }}
+    />
+    <Text size="small" weight="regular" color="rgba(71, 84, 103, 1)">
+      {label}
+    </Text>
+  </Box>
+);
+
 type InstancesTableHeaderProps = {
   count?: number;
   selectedResourceName?: string;
@@ -147,13 +166,15 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     }
 
     if (
-      status === "RUNNING" &&
       isUpdateAllowedByRBAC &&
       !cliManagedResource &&
+      !isManagedResource &&
       selectedInstance?.autoscalingEnabled
     ) {
-      actionsObj.addCapacity = true;
-      actionsObj.removeCapacity = true;
+      if (status === "RUNNING") {
+        actionsObj.addCapacity = true;
+        actionsObj.removeCapacity = true;
+      }
       actionsObj.isVisibleCapacity = true;
     }
 
@@ -170,7 +191,8 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     if (
       (status === "RUNNING" || status === "FAILED") &&
       isUpdateAllowedByRBAC &&
-      !isCurrentResourceBYOA
+      !isCurrentResourceBYOA &&
+      !isManagedResource
     ) {
       actionsObj.modify = true;
     }
@@ -188,7 +210,8 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
     if (
       backupStatus?.earliestRestoreTime &&
       isUpdateAllowedByRBAC &&
-      !cliManagedResource
+      !cliManagedResource &&
+      !isManagedResource
     ) {
       actionsObj.restore = true;
     }
@@ -337,22 +360,3 @@ const InstancesTableHeader: FC<InstancesTableHeaderProps> = ({
 };
 
 export default InstancesTableHeader;
-
-const SpeedoMeterLegend = ({
-  label = "Low",
-  color = "rgba(23, 178, 106, 1)",
-}) => (
-  <Box gap="6px" display="flex" alignItems="center">
-    <Box
-      sx={{
-        width: "8px",
-        height: "8px",
-        borderRadius: "100%",
-        background: color,
-      }}
-    />
-    <Text size="small" weight="regular" color="rgba(71, 84, 103, 1)">
-      {label}
-    </Text>
-  </Box>
-);
