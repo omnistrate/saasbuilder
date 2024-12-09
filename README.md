@@ -161,6 +161,14 @@ For a video guide covering all the below steps, you can follow it [here](https:/
 
 Ensure your node and yarn versions meet the project's requirements. Try clearing your yarn cache with yarn cache clean and reinstalling dependencies.
 
+
+#### Why do I need to specify a environment type?
+
+SaaSBuilder runs in an environment scope. The services and subscription plans that are made available to the users depend on the environment type that you specify when running the application. SaaSBuilder supports DEV, STAGING, QA, CANARY, PRIVATE and PROD environment types.
+User sign ups are supported in *PROD*, while other environments are meant for internal use.
+
+Learn more about environments [here](https://docs.omnistrate.com/operate-guides/pipelines/) 
+
 #### How to configure Google Account for sending out emails?
 
 Configuring Google Account for sending out emails is a two step process. First the account must have a 2-Step Verification enabled, and second, the app password needs to be set. If the Google Account you are using, already has 2-Step Verification configured, you may skip Step 1, and start with Step 2.
