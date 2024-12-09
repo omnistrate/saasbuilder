@@ -80,7 +80,9 @@ yarn install
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | PROVIDER_EMAIL        | Service provider's Omnistrate email address                                                                                                                                                                                                           |
 | PROVIDER_PASSWORD     | Service provider's Omnistrate account password                                                                                                                                                                                                        |
+| ENVIRONMENT_TYPE  | The environment type for your application. Defaults to *PROD*. Learn more about environments [here](https://docs.omnistrate.com/operate-guides/pipelines/) 
 | YOUR_SAAS_DOMAIN_URL  | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000 
+| YOUR_SAAS_DOMAIN_ALIAS  | The domain alias for your deployment 
 | MAIL_SMTP_HOST    | The the hostname or IP address of the mail service provider. Defaults to *smtp.gmail.com* |                                                                                                |
 | MAIL_SMTP_PORT    | The port to be used for creating the SMTP connection. Defaults to *587* |                                                                                                |
 | MAIL_USER_EMAIL       | The email account to be used to authenticate to send mails (signup, reset password etc) to your customers. Check the following [section](#how-to-configure-google-account-for-sending-out-emails) for instructions to configure gmail account for sending out the emails. |
