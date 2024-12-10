@@ -345,7 +345,7 @@ function CloudProviderAccountOrgIdModal(props) {
           cursor: "pointer",
           textDecoration: "underline",
           color: "#7F56D9",
-          fontWeight: 700,
+          fontWeight: 600,
         }}
         component="span"
         onClick={() => {
