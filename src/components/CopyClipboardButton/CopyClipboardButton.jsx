@@ -4,7 +4,7 @@ import Tooltip from "../Tooltip/Tooltip";
 import { IconButton } from "@mui/material";
 import DataGridCopyIcon from "../Icons/CopyIcon/DataGridCopyIcon";
 
-const CopyToClipbpoardButton = (props) => {
+const CopyToClipboardButton = (props) => {
   const { text = "", iconProps, buttonStyles = {} } = props;
   const [tooltipText, setTooltipText] = useState("Click to copy");
 
@@ -38,4 +38,4 @@ const CopyToClipbpoardButton = (props) => {
   );
 };
 
-export default CopyToClipbpoardButton;
+export default CopyToClipboardButton;

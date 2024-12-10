@@ -5,7 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import InstructionsModalIcon from "../Icons/AccountConfig/InstructionsModalIcon";
-import CopyToClipbpoardButton from "../CopyClipboardButton/CopyClipboardButton";
+import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
 import ArrowBulletIcon from "../Icons/ArrowIcon/ArrowBulletIcon";
 
 const STATUS_TITLE_MAP = {
@@ -122,7 +122,7 @@ const OrgIdContainer = (props) => {
           {orgId}
         </Text>
 
-        <CopyToClipbpoardButton text={orgId} iconProps={{ color: "#98A2B3" }} />
+        <CopyToClipboardButton text={orgId} iconProps={{ color: "#98A2B3" }} />
       </Box>
     </Box>
   );
