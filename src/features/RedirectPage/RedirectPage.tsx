@@ -56,7 +56,9 @@ const RedirectPage = () => {
 
     // No Subscriptions, Subscribe to the First Service Offering
     if (subscriptions?.length === 0 && subscriptionRequestIds?.length === 0) {
-      const offering = serviceOfferingsData?.[0];
+      const offering = serviceOfferingsData?.find(
+        (offering) => offering.AutoApproveSubscription
+      ); // Find the First Service Offering with AutoApproveSubscription Enabled
       if (!offering) {
         setIsRedirecting(true);
         router.push("/service-plans");
@@ -78,7 +80,7 @@ const RedirectPage = () => {
                   offering.serviceId,
                   offering.serviceEnvironmentID,
                   offering.productTierID,
-                  Object.values(res.data).join("")
+                  Object.values(res.data).join("") // The Subscription ID
                 )
               );
             } else {
