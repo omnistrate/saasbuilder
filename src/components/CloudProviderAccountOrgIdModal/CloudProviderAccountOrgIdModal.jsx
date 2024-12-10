@@ -71,8 +71,8 @@ const StyledLink = styled(Link)({
 const List = styled(Box)({
   display: "flex",
   flexDirection: "column",
-  gap: "8px",
-  marginTop: "8px",
+  gap: "12px",
+  marginTop: "12px",
 });
 
 const ListItem = styled(Box)({
