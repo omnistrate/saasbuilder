@@ -109,7 +109,6 @@ const OrgIdContainer = (props) => {
         sx={{
           width: "100%",
           padding: "6px 14px",
-          background: "#F9FAFB",
           borderRadius: "8px",
           border: "1px solid #D0D5DD",
           background: "#F9FAFB",
