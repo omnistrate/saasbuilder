@@ -132,8 +132,6 @@ const GridCellExpand = React.memo(function GridCellExpand(
   return (
     <Box
       ref={wrapper}
-      // onMouseEnter={handleMouseEnter}
-      // onMouseLeave={handleMouseLeave}
       sx={{
         alignItems: "center",
         lineHeight: "24px",

@@ -271,6 +271,10 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                               key={cell.id}
                               align={columnAlignment}
                               title={title}
+                              sx={{
+                                fontSize: "14px",
+                                fontWeight: "500",
+                              }}
                             >
                               {flexRender(
                                 cell.column.columnDef.cell,

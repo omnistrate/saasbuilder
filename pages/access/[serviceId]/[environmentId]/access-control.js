@@ -216,22 +216,16 @@ function AccessControl() {
       field: "name",
       headerName: "Name",
       flex: 1,
-      headerAlign: "center",
-      align: "center",
     },
     {
       field: "emailAddress",
       headerName: "Email Address",
       flex: 1,
-      headerAlign: "center",
-      align: "center",
     },
     {
       field: "role",
       headerName: "Role",
       flex: 1,
-      headerAlign: "center",
-      align: "center",
       valueGetter: (params) => {
         const role = params.row.role;
         if (role === "editor") {
@@ -249,21 +243,15 @@ function AccessControl() {
       field: "resource",
       headerName: "Resource",
       flex: 1,
-      headerAlign: "center",
-      align: "center",
     },
     {
       field: "resourceInstance",
       headerName: "Resource Instance",
       flex: 1,
-      headerAlign: "center",
-      align: "center",
     },
     {
       field: "action",
       headerName: "Action",
-      headerAlign: "center",
-      align: "center",
       renderCell: (params) => {
         const role = params.row.role;
         if (role !== "root") {
