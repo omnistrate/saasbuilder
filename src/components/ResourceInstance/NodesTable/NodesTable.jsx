@@ -115,14 +115,13 @@ export default function NodesTable(props) {
                   style={{ width: "24px", height: "24px" }}
                 />
               }
-              justifyContent="left"
+              justifyContent="start"
               value={nodeId}
               textStyles={{
                 color: "#475467",
                 marginLeft: "4px",
                 fontSize: "14px",
                 lineHeight: "20px",
-                fontWeight: 400,
               }}
             />
           );
@@ -134,7 +133,6 @@ export default function NodesTable(props) {
       headerName: "Dashboard Endpoint",
       flex: 1,
       headerAlign: "left",
-      align: "center",
       minWidth: 150,
       renderCell: (params) => {
         const { row } = params;
@@ -153,6 +151,7 @@ export default function NodesTable(props) {
             href={"https://" + dashboardEndpointRow}
             target="_blank"
             externalLinkArrow
+            justifyContent="start"
           />
         );
       },
@@ -191,7 +190,7 @@ export default function NodesTable(props) {
                   style={{ width: "24px", height: "24px" }}
                 />
               }
-              justifyContent="left"
+              justifyContent="start"
               value={nodeId}
               textStyles={{
                 color: "#475467",
@@ -236,20 +235,19 @@ export default function NodesTable(props) {
         field: "availabilityZone",
         headerName: "Availability Zone",
         flex: 1,
-        minWidth: 100,
+        minWidth: 140,
         renderCell: (params) => {
           const availabilityZone = params.row.availabilityZone;
           return (
             <GridCellExpand
               startIcon={<Image src={zoneIcon} alt="zone" />}
               value={availabilityZone}
-              justifyContent="left"
+              justifyContent="start"
               textStyles={{
                 color: "#475467",
                 marginLeft: "4px",
                 fontSize: "14px",
                 lineHeight: "20px",
-                fontWeight: 400,
               }}
             />
           );

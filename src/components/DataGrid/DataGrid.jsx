@@ -77,7 +77,7 @@ const DataGrid = styled(
   "& .MuiDataGrid-cell": {
     color: "#475467",
     fontSize: "14px",
-    fontWeight: 400,
+    fontWeight: 500,
     lineHeight: "20px",
   },
   "& .MuiDataGrid-columnHeader:focus": {
