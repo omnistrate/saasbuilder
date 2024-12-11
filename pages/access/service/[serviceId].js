@@ -298,8 +298,6 @@ function MarketplaceService() {
         headerName: "ID",
         flex: 0.9,
         minWidth: 200,
-        align: "center",
-        headerAlign: "center",
         renderCell: (params) => {
           const instanceId = params.row.id;
           const instanceIdDisplay = isCurrentResourceBYOA
@@ -333,16 +331,12 @@ function MarketplaceService() {
         headerName: "Resource Name",
         flex: 1,
         minWidth: 235,
-        align: "center",
-        headerAlign: "center",
         renderCell: () => selectedResource?.name,
       },
       {
         field: "status",
         headerName: "Lifecycle Status",
         flex: 0.9,
-        align: "center",
-        headerAlign: "center",
         minWidth: 160,
         renderCell: (params) => {
           const status = params.row.status;
@@ -360,12 +354,7 @@ function MarketplaceService() {
           const statusSytlesAndLabel =
             getResourceInstanceStatusStylesAndLabel(status);
           return (
-            <Stack
-              direction={"row"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              gap="4px"
-            >
+            <Stack direction={"row"} alignItems={"center"} gap="4px">
               <StatusChip status={status} {...statusSytlesAndLabel} />
               {showInstructions && (
                 <Tooltip
@@ -400,24 +389,18 @@ function MarketplaceService() {
         headerName: "Load",
         flex: 0.9,
         minWidth: 100,
-        align: "center",
-        headerAlign: "center",
         renderCell: (params) => {
           const instanceLoadStatus = params.row.instanceLoadStatus;
 
           return (
-            <Stack
-              direction={"row"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              gap="4px"
-            >
+            <Stack direction={"row"} alignItems={"center"} gap="4px">
               {instanceLoadStatus === "UNKNOWN" && "-"}
               {instanceLoadStatus === "POD_IDLE" && (
                 <Image
                   src={SpeedoMeterLow}
                   width={54}
                   height={54}
+                  alt="Low"
                   style={{ marginBottom: "-25px" }}
                 />
               )}
@@ -426,6 +409,7 @@ function MarketplaceService() {
                   src={SpeedoMeterMedium}
                   width={54}
                   height={54}
+                  alt="Medium"
                   style={{ marginBottom: "-25px" }}
                 />
               )}
@@ -434,6 +418,7 @@ function MarketplaceService() {
                   src={SpeedoMeterHigh}
                   width={54}
                   height={54}
+                  alt="High"
                   style={{ marginBottom: "-25px" }}
                 />
               )}
@@ -446,8 +431,6 @@ function MarketplaceService() {
         headerName: "Created On",
         flex: 1,
         minWidth: 235,
-        align: "center",
-        headerAlign: "center",
         valueGetter: (params) => {
           const value = formatDateUTC(params.row.created_at);
           return value;
@@ -458,8 +441,6 @@ function MarketplaceService() {
         headerName: "Last Modified",
         flex: 1,
         minWidth: 225,
-        align: "center",
-        headerAlign: "center",
         valueGetter: (params) => {
           const value = formatDateUTC(params.row.last_modified_at);
           return value;
@@ -469,8 +450,6 @@ function MarketplaceService() {
         field: "region",
         headerName: "Region",
         flex: 1,
-        align: "center",
-        headerAlign: "center",
         minWidth: 155,
         renderCell: (params) => {
           const region = params.row.region;
@@ -478,6 +457,7 @@ function MarketplaceService() {
             <GridCellExpand
               value={region || "Global"}
               startIcon={<RegionIcon />}
+              justifyContent="start"
             />
           );
         },
@@ -490,8 +470,6 @@ function MarketplaceService() {
         headerName: "Health Status",
         flex: 1,
         minWidth: 200,
-        align: "center",
-        headerAlign: "center",
         renderCell: (params) => {
           const status = params?.row?.status;
           let mainResource = [];
@@ -534,8 +512,6 @@ function MarketplaceService() {
         field: "cloud_provider",
         headerName: "Account ID",
         flex: 0.8,
-        align: "center",
-        headerAlign: "center",
         renderCell: (params) => {
           let Logo;
           const provider = params.row.cloud_provider;
@@ -554,8 +530,6 @@ function MarketplaceService() {
         field: "cloud_provider",
         headerName: "☁️ Provider(s)",
         flex: 0.8,
-        align: "center",
-        headerAlign: "center",
         minWidth: 130,
         renderCell: (params) => {
           const cloudProvider = isCurrentResourceBYOA
@@ -580,8 +554,6 @@ function MarketplaceService() {
         field: "kubernetesDashboardEndpoint",
         headerName: "Dashboard Endpoint",
         flex: 1,
-        headerAlign: "center",
-        align: "center",
         minWidth: 150,
         renderCell: (params) => {
           const { row } = params;
@@ -598,6 +570,7 @@ function MarketplaceService() {
               href={"https://" + dashboardEndpoint}
               target="_blank"
               externalLinkArrow
+              justifyContent="start"
             />
           );
         },
