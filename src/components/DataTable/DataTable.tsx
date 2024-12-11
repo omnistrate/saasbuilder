@@ -203,7 +203,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                     {headerGroup.headers.map((header) => {
                       const sortDirection = header.column.getIsSorted();
                       const columnAlignment =
-                        header.column.columnDef.meta?.align || "center";
+                        header.column.columnDef.meta?.align || "left";
                       return (
                         <TableCell
                           align={columnAlignment}
@@ -257,7 +257,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                         {row.getVisibleCells().map((cell) => {
                           const cellValue = cell.getValue();
                           const columnAlignment =
-                            cell.column.columnDef.meta?.align || "center";
+                            cell.column.columnDef.meta?.align || "left";
                           let title = "";
                           if (
                             ["string", "number", "boolean"].includes(

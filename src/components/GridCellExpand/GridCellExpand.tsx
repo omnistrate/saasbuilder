@@ -38,7 +38,7 @@ const GridCellExpand = React.memo(function GridCellExpand(
     onClick = () => {},
     href,
     target = "_self",
-    justifyContent = "center",
+    justifyContent = "start",
     externalLinkArrow,
   } = props;
   const wrapper = React.useRef(null);
