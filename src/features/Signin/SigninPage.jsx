@@ -24,6 +24,7 @@ import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import ReCAPTCHA from "react-google-recaptcha";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 import { Text } from "src/components/Typography/Typography";
+import { getMarketplaceProductTierRoute } from "src/utils/route/access/accessRoute";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -49,6 +50,7 @@ const SigninPage = (props) => {
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
   const reCaptchaRef = useRef(null);
   const snackbar = useSnackbar();
+
   useEffect(() => {
     if (redirect_reason === "idp_auth_error") {
       snackbar.showError("Something went wrong. Please retry");
@@ -64,12 +66,31 @@ const SigninPage = (props) => {
 
   function handleSignInSuccess(jwtToken) {
     function isValidDestination(destination) {
-      const allowedPaths = [
-        "/service-plans",
-        "%2Fservice-plans",
-        "service-plans",
-      ];
-      return allowedPaths.some((path) => destination.startsWith(path));
+      const decodedURL = decodeURIComponent(destination);
+      const allowedPaths = ["/service-plans", "service-plans"];
+      const isAllowedPath = allowedPaths.some((path) =>
+        decodedURL.startsWith(path)
+      );
+
+      if (isAllowedPath) {
+        const { serviceId } = extractQueryParams(decodedURL);
+        if (serviceId) return true;
+      }
+
+      return false;
+    }
+
+    function extractQueryParams(decodedURL) {
+      const queryString = decodedURL.split("?")[1];
+      const queryParams = new URLSearchParams(queryString);
+
+      const serviceId = queryParams.get("serviceId");
+      const environmentId = queryParams.get("environmentId");
+
+      return {
+        serviceId,
+        environmentId,
+      };
     }
 
     if (jwtToken) {
@@ -78,7 +99,12 @@ const SigninPage = (props) => {
 
       // Redirect to the Destination URL
       if (destination && isValidDestination(destination)) {
-        router.replace(decodeURIComponent(destination));
+        const decodedDestination = decodeURIComponent(destination);
+        const { serviceId, environmentId } =
+          extractQueryParams(decodedDestination);
+
+        const route = getMarketplaceProductTierRoute(serviceId, environmentId);
+        router.replace(route);
       } else {
         router.replace("/redirect");
       }
