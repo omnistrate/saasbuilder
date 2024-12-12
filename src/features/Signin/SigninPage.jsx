@@ -101,11 +101,10 @@ const SigninPage = (props) => {
           environmentId: sanitizedEnvironmentId || null,
         };
       } catch (error) {
-        console.error("Error extracting query parameters:", error);
         return { serviceId: null, environmentId: null };
       }
     }
-    }
+    
 
     if (jwtToken) {
       Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
