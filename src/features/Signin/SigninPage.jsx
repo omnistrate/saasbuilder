@@ -81,16 +81,30 @@ const SigninPage = (props) => {
     }
 
     function extractQueryParams(decodedURL) {
-      const queryString = decodedURL.split("?")[1];
-      const queryParams = new URLSearchParams(queryString);
+      try {
+        if (!decodedURL) return { serviceId: null, environmentId: null };
 
-      const serviceId = queryParams.get("serviceId");
-      const environmentId = queryParams.get("environmentId");
+        const queryString = decodedURL.split("?")[1];
+        if (!queryString) return { serviceId: null, environmentId: null };
 
-      return {
-        serviceId,
-        environmentId,
-      };
+        const queryParams = new URLSearchParams(queryString);
+
+        const serviceId = queryParams.get("serviceId");
+        const environmentId = queryParams.get("environmentId");
+
+        // Sanitize parameters
+        const sanitizedServiceId = serviceId?.trim();
+        const sanitizedEnvironmentId = environmentId?.trim();
+
+        return {
+          serviceId: sanitizedServiceId || null,
+          environmentId: sanitizedEnvironmentId || null,
+        };
+      } catch (error) {
+        console.error("Error extracting query parameters:", error);
+        return { serviceId: null, environmentId: null };
+      }
+    }
     }
 
     if (jwtToken) {
