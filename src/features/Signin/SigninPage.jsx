@@ -63,16 +63,21 @@ const SigninPage = (props) => {
   }, [redirect_reason]);
 
   function handleSignInSuccess(jwtToken) {
+    function isValidDestination(destination) {
+      const allowedPaths = [
+        "/service-plans",
+        "%2Fservice-plans",
+        "service-plans",
+      ];
+      return allowedPaths.some((path) => destination.startsWith(path));
+    }
+
     if (jwtToken) {
       Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
       axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
 
       // Redirect to the Destination URL
-      if (
-        destination &&
-        (destination.startsWith("/service-plans") ||
-          destination.startsWith("%2Fservice-plans"))
-      ) {
+      if (destination && isValidDestination(destination)) {
         router.replace(decodeURIComponent(destination));
       } else {
         router.replace("/redirect");
