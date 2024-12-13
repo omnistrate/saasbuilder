@@ -16,9 +16,9 @@ import useUserSubscriptions from "src/hooks/query/useUserSubscriptions";
 
 const createSubscription = async (payload) => {
   if (payload.AutoApproveSubscription) {
-    return createSubscriptions(payload);
+    return createSubscriptions(payload, true);
   }
-  return createSubscriptionRequest(payload);
+  return createSubscriptionRequest(payload, true);
 };
 
 const getServicePlansRoute = (offerings) => {
