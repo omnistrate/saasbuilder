@@ -21,6 +21,15 @@ const createSubscription = async (payload) => {
   return createSubscriptionRequest(payload);
 };
 
+const getServicePlansRoute = (offerings) => {
+  if (!offerings?.length) return getMarketplaceProductTierRoute();
+  const offering = offerings[0];
+  return getMarketplaceProductTierRoute(
+    offering.serviceId,
+    offering.serviceEnvironmentID
+  );
+};
+
 const RedirectPage = () => {
   const router = useRouter();
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -85,12 +94,7 @@ const RedirectPage = () => {
 
     if (!serviceOfferingsToSubscribe?.length) {
       setIsRedirecting(true);
-      router.push(
-        getMarketplaceProductTierRoute(
-          serviceOfferingsData[0].serviceId,
-          serviceOfferingsData[0].serviceEnvironmentID
-        )
-      );
+      router.push(getServicePlansRoute(serviceOfferingsData));
       return;
     }
 
@@ -138,18 +142,16 @@ const RedirectPage = () => {
             );
           })
           .catch((err) => {
-            router.push(
-              getMarketplaceProductTierRoute(
-                serviceOfferingsData[0].serviceId,
-                serviceOfferingsData[0].serviceEnvironmentID
-              )
-            );
+            router.push(getServicePlansRoute(serviceOfferingsData));
             console.error(err);
           });
       } else {
         // Find Service Offering with a Subscription and Redirect them To the Corresponding Instances List Page
         const serviceOfferingsObj = serviceOfferingsData?.reduce(
-          (acc, curr) => ({ ...acc, [curr.productTierID]: curr }),
+          (acc, curr) => {
+            acc[curr.productTierID] = curr;
+            return acc;
+          },
           {}
         );
 
@@ -175,12 +177,7 @@ const RedirectPage = () => {
           router.push(route);
         } else {
           setIsRedirecting(true);
-          router.push(
-            getMarketplaceProductTierRoute(
-              serviceOfferingsData[0].serviceId,
-              serviceOfferingsData[0].serviceEnvironmentID
-            )
-          );
+          router.push(getServicePlansRoute(serviceOfferingsData));
         }
       }
     };
