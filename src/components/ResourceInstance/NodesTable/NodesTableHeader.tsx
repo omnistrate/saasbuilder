@@ -8,7 +8,23 @@ import FailoverIcon from "src/components/Icons/Failover/Failover";
 import GenerateTokenIcon from "src/components/Icons/GenerateToken/GenerateTokenIcon";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 
-const NodesTableHeader = ({
+type NodesTableHeaderProps = {
+  resourceName?: string;
+  count: number;
+  refetchData: () => void;
+  isRefetching: boolean;
+  isFailoverDisabled: boolean;
+  selectedNode?: { nodeId: string; resourceKey: string };
+  showFailoverButton: boolean;
+  showGenerateTokenButton: boolean;
+  onGenerateTokenClick?: () => void;
+  handleFailover: (nodeId: string, resourceKey: string) => void;
+  failoverMutation: { isLoading: boolean };
+  searchText: string;
+  setSearchText: (text: string) => void;
+};
+
+const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
   resourceName,
   count,
   refetchData,
