@@ -2,6 +2,7 @@ import { Stack } from "@mui/material";
 
 import Button from "src/components/Button/Button";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
+import SearchInput from "src/components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import FailoverIcon from "src/components/Icons/Failover/Failover";
 import GenerateTokenIcon from "src/components/Icons/GenerateToken/GenerateTokenIcon";
@@ -19,6 +20,8 @@ const NodesTableHeader = ({
   onGenerateTokenClick = () => {},
   handleFailover,
   failoverMutation,
+  searchText,
+  setSearchText,
 }) => {
   return (
     <>
@@ -39,6 +42,12 @@ const NodesTableHeader = ({
           }}
         />
         <Stack direction="row" alignItems="center" gap="12px">
+          <SearchInput
+            searchText={searchText}
+            setSearchText={setSearchText}
+            placeholder="Search by Node ID"
+            width="250px"
+          />
           <RefreshWithToolTip refetch={refetchData} disabled={isRefetching} />
 
           {showFailoverButton && (
@@ -58,9 +67,7 @@ const NodesTableHeader = ({
             >
               Failover
               {failoverMutation.isLoading && (
-                <LoadingSpinnerSmall
-                  sx={{ marginLeft: "12px" }}
-                />
+                <LoadingSpinnerSmall sx={{ marginLeft: "12px" }} />
               )}
             </Button>
           )}
