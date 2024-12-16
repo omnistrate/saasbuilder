@@ -114,7 +114,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
 
           //check for JSON data types
           let isJSONData = false;
-          let jsonData;
+          let jsonData: any;
 
           if (
             value !== null &&
