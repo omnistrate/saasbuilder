@@ -95,7 +95,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
       </Stack>
       <Box
         display="grid"
-        gridTemplateColumns="repeat(auto-fill, minmax(220px, 1fr))"
+        gridTemplateColumns="repeat(auto-fit, minmax(220px, 1fr))"
         position={"relative"}
         gap="12px"
         padding="12px 0"
