@@ -252,6 +252,7 @@ function AccessControl() {
     {
       field: "action",
       headerName: "Action",
+      sortable: false,
       renderCell: (params) => {
         const role = params.row.role;
         if (role !== "root") {

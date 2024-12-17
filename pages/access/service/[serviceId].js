@@ -298,6 +298,11 @@ function MarketplaceService() {
         headerName: "ID",
         flex: 0.9,
         minWidth: 200,
+        valueGetter: (params) => {
+          return isCurrentResourceBYOA
+            ? "account-" + params.row.id
+            : params.row.id;
+        },
         renderCell: (params) => {
           const instanceId = params.row.id;
           const instanceIdDisplay = isCurrentResourceBYOA
@@ -331,7 +336,7 @@ function MarketplaceService() {
         headerName: "Resource Name",
         flex: 1,
         minWidth: 235,
-        renderCell: () => selectedResource?.name,
+        valueGetter: () => selectedResource?.name,
       },
       {
         field: "status",
@@ -354,7 +359,13 @@ function MarketplaceService() {
           const statusSytlesAndLabel =
             getResourceInstanceStatusStylesAndLabel(status);
           return (
-            <Stack direction={"row"} alignItems={"center"} gap="4px">
+            <Stack
+              direction="row"
+              alignItems="center"
+              gap="6px"
+              minWidth="94px"
+              justifyContent="space-between"
+            >
               <StatusChip status={status} {...statusSytlesAndLabel} />
               {showInstructions && (
                 <Tooltip
@@ -457,7 +468,6 @@ function MarketplaceService() {
             <GridCellExpand
               value={region || "Global"}
               startIcon={<RegionIcon />}
-              justifyContent="start"
             />
           );
         },
@@ -470,8 +480,8 @@ function MarketplaceService() {
         headerName: "Health Status",
         flex: 1,
         minWidth: 200,
-        renderCell: (params) => {
-          const status = params?.row?.status;
+        valueGetter: (params) => {
+          const status = params.row.status;
           let mainResource = [];
           if (params.row?.detailedNetworkTopology) {
             const detailedNetworkTopologyEntries = Object.entries(
@@ -487,17 +497,25 @@ function MarketplaceService() {
           const [, topologyDetails] = mainResource ?? [];
 
           if (CLI_MANAGED_RESOURCES.includes(topologyDetails?.resourceType))
-            return <StatusChip category="unknown" label="Unknown" />;
+            return "Unknown";
 
-          if (status === "STOPPED")
-            return <StatusChip category="unknown" label="N/A" />;
+          if (status === "STOPPED") return "N/A";
 
           const healthPercentage = calculateInstanceHealthPercentage(
             params.row.detailedNetworkTopology,
             status
           );
 
-          return <GradientProgressBar percentage={healthPercentage} />;
+          return healthPercentage;
+        },
+        renderCell: (params) => {
+          if (params.value === "Unknown")
+            return <StatusChip category="unknown" label="Unknown" />;
+
+          if (params.value === "N/A")
+            return <StatusChip category="unknown" label="N/A" />;
+
+          return <GradientProgressBar percentage={params.value} />;
         },
       });
     }
@@ -512,6 +530,8 @@ function MarketplaceService() {
         field: "cloud_provider",
         headerName: "Account ID",
         flex: 0.8,
+        valueGetter: (params) =>
+          params.row.awsAccountId || params.row.gcpProjectID,
         renderCell: (params) => {
           let Logo;
           const provider = params.row.cloud_provider;
@@ -531,10 +551,15 @@ function MarketplaceService() {
         headerName: "☁️ Provider(s)",
         flex: 0.8,
         minWidth: 130,
-        renderCell: (params) => {
+        valueGetter: (params) => {
           const cloudProvider = isCurrentResourceBYOA
             ? params.row.result_params.cloud_provider
             : params.row.cloud_provider;
+
+          return cloudProvider;
+        },
+        renderCell: (params) => {
+          const cloudProvider = params.value;
 
           return cloudProvider === "aws" ? (
             <AwsLogo />
@@ -555,6 +580,8 @@ function MarketplaceService() {
         headerName: "Dashboard Endpoint",
         flex: 1,
         minWidth: 150,
+        valueGetter: (params) =>
+          params.row.kubernetesDashboardEndpoint?.dashboardEndpoint || "-",
         renderCell: (params) => {
           const { row } = params;
           const dashboardEndpoint =
@@ -570,7 +597,6 @@ function MarketplaceService() {
               href={"https://" + dashboardEndpoint}
               target="_blank"
               externalLinkArrow
-              justifyContent="start"
             />
           );
         },
@@ -1843,8 +1869,6 @@ function MarketplaceService() {
                 components={{
                   Header: InstancesTableHeader,
                 }}
-                hideFooterSelectedRowCount
-                disableColumnMenu
                 columns={columns}
                 rows={isLoading ? [] : filteredInstances}
                 checkboxSelection

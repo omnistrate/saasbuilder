@@ -273,13 +273,11 @@ const EventsTable: FC<EventsTableProps> = (props) => {
             );
           }
 
-          const userDisplayLabel = userName;
-
           return (
             <GridCellExpand
               href={isRootSubscription ? pageLink : ""}
               target="_blank"
-              value={userDisplayLabel || "-"}
+              value={userName || "-"}
             />
           );
         },

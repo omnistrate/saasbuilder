@@ -206,6 +206,9 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
             "-"
           );
         },
+        meta: {
+          flex: 1.5,
+        },
       }),
       columnHelper.accessor("userName", {
         id: "userName",
