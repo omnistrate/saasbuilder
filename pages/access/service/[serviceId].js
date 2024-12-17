@@ -1628,7 +1628,7 @@ function MarketplaceService() {
                   fontSize: "30px",
                 }}
               >
-                No Resources
+                No resources
               </div>
               <div
                 justifyContent="center"
