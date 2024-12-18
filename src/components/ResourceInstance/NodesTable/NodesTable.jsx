@@ -82,7 +82,6 @@ export default function NodesTable(props) {
   const [dashboardEndpoint, setDashboardEndpoint] = useState("");
 
   const selectUser = useSelector(selectUserrootData);
-  const userEmail = selectUser.email;
   const role = getEnumFromUserRoleString(
     isAccessSide ? subscriptionData?.roleType : selectUser.roleType
   );
@@ -120,13 +119,10 @@ export default function NodesTable(props) {
                   style={{ width: "24px", height: "24px" }}
                 />
               }
-              justifyContent="start"
               value={nodeId}
               textStyles={{
                 color: "#475467",
                 marginLeft: "4px",
-                fontSize: "14px",
-                lineHeight: "20px",
               }}
             />
           );
@@ -137,8 +133,9 @@ export default function NodesTable(props) {
       field: "kubernetesDashboardEndpoint",
       headerName: "Dashboard Endpoint",
       flex: 1,
-      headerAlign: "left",
       minWidth: 150,
+      valueGetter: (params) =>
+        params.row.kubernetesDashboardEndpoint?.dashboardEndpoint || "-",
       renderCell: (params) => {
         const { row } = params;
         const dashboardEndpointRow =
@@ -156,7 +153,6 @@ export default function NodesTable(props) {
             href={"https://" + dashboardEndpointRow}
             target="_blank"
             externalLinkArrow
-            justifyContent="start"
           />
         );
       },
@@ -175,7 +171,7 @@ export default function NodesTable(props) {
       minWidth: 200,
     });
     return res;
-  }, [userEmail]);
+  }, []);
 
   const columns = useMemo(
     () => [
@@ -195,14 +191,10 @@ export default function NodesTable(props) {
                   style={{ width: "24px", height: "24px" }}
                 />
               }
-              justifyContent="start"
               value={nodeId}
               textStyles={{
                 color: "#475467",
                 marginLeft: "4px",
-                fontSize: "14px",
-                lineHeight: "20px",
-                fontWeight: 400,
               }}
             />
           );
@@ -247,12 +239,9 @@ export default function NodesTable(props) {
             <GridCellExpand
               startIcon={<Image src={zoneIcon} alt="zone" />}
               value={availabilityZone}
-              justifyContent="start"
               textStyles={{
                 color: "#475467",
                 marginLeft: "4px",
-                fontSize: "14px",
-                lineHeight: "20px",
               }}
             />
           );
@@ -284,24 +273,16 @@ export default function NodesTable(props) {
           if (lifecycleStatus === "STOPPED")
             return <StatusChip category="unknown" label="N/A" />;
 
-          return (
-            <>
-              {params.row?.detailedHealth ? (
-                <>
-                  <NodeStatus
-                    detailedHealth={params.row?.detailedHealth}
-                    isStopped={params.row.healthStatus === "STOPPED"}
-                  />
-                </>
-              ) : (
-                <StatusChip
-                  status={status}
-                  {...(status === "HEALTHY"
-                    ? { pulsateDot: true }
-                    : { dot: true })}
-                />
-              )}
-            </>
+          return params.row?.detailedHealth ? (
+            <NodeStatus
+              detailedHealth={params.row?.detailedHealth}
+              isStopped={params.row.healthStatus === "STOPPED"}
+            />
+          ) : (
+            <StatusChip
+              status={status}
+              {...(status === "HEALTHY" ? { pulsateDot: true } : { dot: true })}
+            />
           );
         },
         minWidth: 180,
@@ -364,9 +345,7 @@ export default function NodesTable(props) {
     <Box mt={"32px"}>
       <DataGrid
         checkboxSelection={!isCustomTenancy}
-        disableColumnMenu
         disableSelectionOnClick
-        hideFooterSelectedRowCount
         columns={isCustomTenancy ? customTenancyColumns : columns}
         rows={isRefetching ? [] : filteredNodes}
         components={{

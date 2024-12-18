@@ -34,6 +34,7 @@ const DataGrid = styled(
         ...components,
       }}
       hideFooterSelectedRowCount
+      disableColumnMenu
       {...restProps}
     />
   ),

@@ -189,8 +189,6 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
         headerName: "Network ID",
         flex: 1,
         minWidth: 170,
-        valueGetter: (params: GridCellParams<any, CustomNetwork>) =>
-          params.row.id,
         renderCell: (params: GridCellParams<any, CustomNetwork>) => (
           <DataGridText
             onClick={() => {
@@ -235,7 +233,6 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
           <GridCellExpand
             value={params.row.cloudProviderRegion}
             startIcon={<RegionIcon />}
-            justifyContent="start"
           />
         ),
       },
@@ -259,7 +256,6 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
         <DataGrid
           checkboxSelection
           disableColumnMenu
-          hideFooterSelectedRowCount
           disableSelectionOnClick
           selectionModel={selectedCustomNetworkIds}
           onSelectionModelChange={(newSelection) => {
