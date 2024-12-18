@@ -126,28 +126,47 @@ function AccessControl() {
     }
   }, [searchUserId]);
 
-  const createUserInvitesMutation = useMutation(async (data) => {
-    try {
-      await Promise.all(
+  const createUserInvitesMutation = useMutation(
+    async (data) => {
+      return Promise.all(
         data.userInvite.map((d) => {
           const payload = {
             email: d.email,
             roleType: d.roleType,
           };
 
-          return inviteSubscriptionUser(subscriptionData?.id, payload);
+          return inviteSubscriptionUser(subscriptionData?.id, payload, true);
         })
       );
-      snackbar.showSuccess(
-        "Invitations sent successfully! If the user doesn't see the email, remind them to check their spam folder"
-      );
-      /*eslint-disable-next-line no-use-before-define*/
-      formik.resetForm();
-      refetch();
-    } catch (error) {
-      snackbar.showError("Failed to send invites");
+    },
+    {
+      onSuccess: () => {
+        snackbar.showSuccess(
+          "Invitations sent successfully! If the user doesn't see the email, remind them to check their spam folder"
+        );
+        //eslint-disable-next-line no-use-before-define
+        formik.resetForm();
+        refetch();
+      },
+      onError: (error) => {
+        refetch();
+        const backendErrorMessage = error?.response?.data?.message;
+        snackbar.showError(
+          <>
+            Some invites were not sent. Please retry
+            {backendErrorMessage ? (
+              <>
+                <br />
+                Error details: {backendErrorMessage}{" "}
+              </>
+            ) : (
+              ""
+            )}
+          </>
+        );
+      },
     }
-  });
+  );
 
   const deleteUserMutation = useMutation(
     (payload) => revokeSubscriptionUser(subscriptionData?.id, payload),

@@ -8,10 +8,17 @@ export const revokeSubscriptionUser = (subscriptionId, payload) =>
     }
   );
 
-export const inviteSubscriptionUser = (subscriptionId, payload) =>
+export const inviteSubscriptionUser = (
+  subscriptionId,
+  payload,
+  suppressErrorSnackbar = false
+) =>
   axios.post(
     `/resource-instance/subscription/${subscriptionId}/invite-user`,
-    payload
+    payload,
+    {
+      ignoreGlobalErrorSnack: suppressErrorSnackbar,
+    }
   );
 
 export const getUsersBySubscription = (subscriptionId) =>
