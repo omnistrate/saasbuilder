@@ -14,7 +14,7 @@ const MemoizedRow = memo(function Row(props) {
 });
 
 const DataGrid = styled(
-  ({ components, noRowsText = "No Rows", ...restProps }) => (
+  ({ components, noRowsText = "No rows", ...restProps }) => (
     <MuiDataGrid
       disableVirtualization // To Allow Vitest To Query All Columns
       rowsPerPageOptions={[10]}
