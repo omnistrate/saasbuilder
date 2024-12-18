@@ -273,7 +273,7 @@ const Backup: FC<{
             selectSingleItem(newSelection, selectionModel, setSelectionModel);
           }}
           loading={isRefetching}
-          noRowsText="No Backups"
+          noRowsText="No backups"
         />
       </Box>
       <InformationDialogTopCenter
