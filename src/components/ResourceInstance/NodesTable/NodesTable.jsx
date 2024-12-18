@@ -74,6 +74,7 @@ export default function NodesTable(props) {
   if (context === "inventory") {
     sectionLabel = "Service Component";
   }
+  const [searchText, setSearchText] = useState("");
   const [selectionModel, setSelectionModel] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isGenerateTokenDialogOpen, setIsGenerateTokenDialogOpen] =
@@ -91,11 +92,15 @@ export default function NodesTable(props) {
     role,
     view
   );
-  //remove serverless nodes added on frontend
+  //remove serverless nodes added on frontend or search by node ID
   const filteredNodes = useMemo(() => {
-    return nodes.filter((node) => !node.isServerless);
-  }, [nodes]);
+    let list = nodes.filter((node) => !node.isServerless);
+    list = list?.filter((item) =>
+      item?.nodeId?.toLowerCase()?.includes(searchText?.toLowerCase())
+    );
 
+    return list ?? [];
+  }, [searchText, nodes]);
   const customTenancyColumns = useMemo(() => {
     const res = [
       {
@@ -367,6 +372,8 @@ export default function NodesTable(props) {
             onGenerateTokenClick: () => setIsGenerateTokenDialogOpen(true),
             handleFailover,
             failoverMutation,
+            searchText,
+            setSearchText,
           },
         }}
         getRowClassName={(params) => `${params.row.status}`}
