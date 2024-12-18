@@ -59,6 +59,10 @@ type PropertyTableProps = {
   rows: { rows: Row[]; title: string; desc: string; flexWrap: boolean };
 } & BoxProps;
 
+interface JsonDataType {
+  [key: string]: unknown;
+}
+
 const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [data, setData] = useState<Row | null>(null);
@@ -114,7 +118,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
 
           //check for JSON data types
           let isJSONData = false;
-          let jsonData: any;
+          let jsonData: JsonDataType;
 
           if (
             value !== null &&
