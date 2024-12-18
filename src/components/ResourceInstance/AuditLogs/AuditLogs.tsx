@@ -303,7 +303,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
         columns={dataTableColumns}
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}
-        noRowsText="No Events available"
+        noRowsText="No events"
         getRowCanExpand={(rowData) =>
           Boolean(rowData.original.workflowFailures?.length > 0)
         }
