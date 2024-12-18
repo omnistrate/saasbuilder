@@ -553,7 +553,7 @@ function MarketplaceService() {
         minWidth: 130,
         valueGetter: (params) => {
           const cloudProvider = isCurrentResourceBYOA
-            ? params.row.result_params.cloud_provider
+            ? params.row.result_params?.cloud_provider
             : params.row.cloud_provider;
 
           return cloudProvider;
