@@ -337,7 +337,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
         columns={dataTableColumns}
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}
-        noRowsText={`No ${entityName}s available`}
+        noRowsText={`No ${entityName?.toLowerCase()}s`}
         getRowCanExpand={(rowData) =>
           Boolean(rowData.original.workflowFailures?.length > 0)
         }

@@ -740,6 +740,7 @@ function AccessControl() {
                 }
               }}
               getRowId={(row) => row.id}
+              noRowsText="No users"
             />
           </Box>
         </>
