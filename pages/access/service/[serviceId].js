@@ -283,7 +283,8 @@ function MarketplaceService() {
     setViewInstructionsItem(row);
     const result_params = row.result_params;
     setCloudProvider(
-      result_params?.cloud_provider || !!result_params?.aws_account_id
+      result_params?.cloud_provider === CLOUD_PROVIDERS.aws ||
+        !!result_params?.aws_account_id
         ? "aws"
         : "gcp"
     );
